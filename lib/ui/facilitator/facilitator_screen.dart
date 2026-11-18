@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -6,9 +7,7 @@ import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/launch_utils.dart';
-import 'package:mhad/utils/nav_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart';
@@ -48,23 +47,19 @@ class FacilitatorScreen extends StatelessWidget {
       // alone." 32pt headline owns the visual title.
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowFacilitator,
                   eyebrow: context.l10n.facilitatorGetHelpEvidenceBased,
-                  title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo, size: 32),
+                  title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo),
                   lead: context.l10n.facilitatorPickTheKindOfSupport(
                       appData.fact('facilitatorCompletionStat')),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 1 — Referral to PA partners
                 _PathwayCard(
@@ -95,7 +90,7 @@ class FacilitatorScreen extends StatelessWidget {
                         : () => _open(context, partner.contact.web!),
                   ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 1b — guided session in the app (V4-L12): the AI assistant
                 // leads the facilitation interview (reflection → crisis history →
@@ -104,10 +99,10 @@ class FacilitatorScreen extends StatelessWidget {
                 _PathwayCard(
                   tag: context.l10n.facilitatorGuidedTag,
                   title: context.l10n.facilitatorGuidedTitle,
-                  body: context.l10n.facilitatorGuidedBody,
+                  body: (appData.ai.apiModeVisible ? context.l10n.facilitatorGuidedBody : context.l10n.facilitatorGuidedBodyHandoff),
                   meta: [
                     context.l10n.facilitatorGuidedMetaPace,
-                    context.l10n.facilitatorGuidedMetaAi,
+                    (appData.ai.apiModeVisible ? context.l10n.facilitatorGuidedMetaAi : context.l10n.facilitatorGuidedMetaAiHandoff),
                   ],
                   actions: [
                     FilledButton(
@@ -136,7 +131,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 2 — print + review in person
                 _PathwayCard(
@@ -149,7 +144,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
                 // Pathway 3 — email draft to clinician
                 _PathwayCard(
@@ -162,7 +157,7 @@ class FacilitatorScreen extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 InfoBanner(
                   icon: Icons.info_outline,
                   variant: InfoBannerVariant.info,
@@ -209,8 +204,7 @@ class _PathwayCard extends StatelessWidget {
               tag,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.6,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                 color: primary ? cs.onPrimary : cs.onSurfaceVariant,
               ),
             ),
@@ -218,7 +212,6 @@ class _PathwayCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: primary ? cs.onPrimary : cs.onSurface,
@@ -228,13 +221,11 @@ class _PathwayCard extends StatelessWidget {
             Text(
               body,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.45,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: primary ? cs.onPrimary : cs.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -256,8 +247,7 @@ class _PathwayCard extends StatelessWidget {
                     child: Text(
                       m,
                       style: TextStyle(
-                        fontSize: 12,
-                        letterSpacing: 0.4,
+                        fontSize: 12, letterSpacing: MhadType.trackingLabel,
                         color: primary ? cs.onPrimary : cs.onSurfaceVariant,
                       ),
                     ),
@@ -265,7 +255,7 @@ class _PathwayCard extends StatelessWidget {
               ],
             ),
             if (actions.isNotEmpty) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Wrap(spacing: 10, runSpacing: 8, children: actions),
             ],
           ],
@@ -294,7 +284,7 @@ class _ReferralRow extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.zero,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
           child: Row(
             children: [
               Expanded(
@@ -304,7 +294,6 @@ class _ReferralRow extends StatelessWidget {
                     Text(
                       label,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),

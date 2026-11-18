@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ai/handoff/handoff_task.dart';
+import 'package:mhad/ai/handoff/handoff_prompt.dart' show kHandoffMarker;
+import 'package:flutter/services.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,6 +65,10 @@ class _AiSuggestButtonState extends ConsumerState<AiSuggestButton> {
   bool _loading = false;
 
   Future<void> _suggest() async {
+    if (!appData.ai.apiModeVisible) {
+      await _handoff();
+      return;
+    }
     final assistant = ref.read(aiAssistantProvider);
     if (assistant == null) {
       _showSetupDialog();
@@ -200,7 +209,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
             Expanded(
                 child: Text(isDraft
                     ? ctx.l10n.aiSuggestDraftTitle
-                    : ctx.l10n.aiSuggestSuggestionTitle)),
+                    : ctx.l10n.aiSuggestIconTooltip)),
           ]),
           content: SingleChildScrollView(
             child: Column(
@@ -212,7 +221,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                   const SizedBox(height: 4),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: cs.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -236,7 +245,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 const SizedBox(height: 4),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: cs.primaryContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -292,6 +301,81 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
     _showUndo(previous);
   }
 
+  /// Copy-and-paste wording help (API path hidden): the SAME draft / refine
+  /// prompt with the same directive context; the person copies the AI's
+  /// wording and "Paste the wording into the field" puts it in (with Undo).
+  Future<void> _handoff() async {
+    final currentText = widget.controller.text.trim();
+    final correlating = await buildAiFilledFields(
+        ref.read(directiveRepositoryProvider), widget.directiveId);
+    if (!mounted) return;
+    final contextBlock = _contextBlock(correlating);
+    final prompt = currentText.isEmpty
+        ? _draftPrompt(contextBlock)
+        : _refinePrompt(PiiStripper.strip(currentText), contextBlock);
+
+    await showDialog<void>(
+      context: context,
+      builder: (dctx) => AlertDialog(
+        title: Text(dctx.l10n.aiWordingTitle(widget.fieldName)),
+        content: SizedBox(
+          width: 480,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AiHandoffPanel(
+                  kind: HandoffTaskKind.fieldWording,
+                  title: dctx.l10n.aiWordingPanelTitle,
+                  buildTask: (_) => HandoffTask(
+                    kind: HandoffTaskKind.fieldWording,
+                    instructions: prompt,
+                    ref: directiveHandoffRef(widget.directiveId),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: () => _pasteWording(dctx),
+                  icon: const Icon(Icons.content_paste, size: 18),
+                  label: Text(dctx.l10n.aiWordingPasteButton),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dctx),
+            child: Text(dctx.l10n.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Puts the copied wording into the field — never the instructions
+  /// themselves — then clears the clipboard; Undo restores the old text.
+  Future<void> _pasteWording(BuildContext dctx) async {
+    final text = (await Clipboard.getData(Clipboard.kTextPlain))?.text?.trim();
+    if (!dctx.mounted || !mounted) return;
+    if (text == null || text.isEmpty || text.contains(kHandoffMarker)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(text != null && text.contains(kHandoffMarker)
+              ? context.l10n.aiHandoffProblemPromptBack
+              : context.l10n.aiHandoffProblemEmpty)));
+      return;
+    }
+    final previous = widget.controller.text;
+    widget.controller.text = text;
+    widget.controller.selection =
+        TextSelection.collapsed(offset: text.length);
+    await Clipboard.setData(const ClipboardData(text: ''));
+    if (!dctx.mounted) return;
+    Navigator.pop(dctx);
+    _showUndo(previous);
+  }
+
   /// Confirmation snackbar with an Undo that restores the field's prior value —
   /// so accepting an AI suggestion is always reversible.
   void _showUndo(String previous) {
@@ -321,7 +405,10 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
 
   @override
   Widget build(BuildContext context) {
-    final hasAssistant = ref.watch(aiAssistantProvider) != null;
+    // Active when AI help is available: an API assistant, or (API path
+    // hidden) the copy-and-paste handoff, which needs no setup.
+    final hasAssistant = ref.watch(aiAssistantProvider) != null ||
+        !appData.ai.apiModeVisible;
     final cs = Theme.of(context).colorScheme;
 
     return Semantics(
@@ -342,7 +429,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Semantics(
-                    label: context.l10n.wizardLoading,
+                    label: context.l10n.commonLoading,
                     child: const CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),

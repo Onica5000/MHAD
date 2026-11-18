@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/ui/widgets/design/art_image.dart';
 
@@ -18,6 +19,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   // overflow there went unnoticed until a browser screenshot, 2026-11-17).
   TestWidgetsFlutterBinding.ensureInitialized();
   await EducationalContent.load();
+  await AiHandoffData.load();
 
   await testMain();
 }

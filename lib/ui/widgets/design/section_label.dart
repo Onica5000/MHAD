@@ -18,7 +18,7 @@ class SectionLabel extends StatelessWidget {
 
   const SectionLabel(
     this.text, {
-    this.padding = const EdgeInsets.fromLTRB(0, 18, 0, 8),
+    this.padding = const EdgeInsets.fromLTRB(0, 20, 0, 8),
     this.style,
     super.key,
   });

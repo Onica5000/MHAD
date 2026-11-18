@@ -902,7 +902,7 @@ class _AdminUpdateScreenState extends ConsumerState<AdminUpdateScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           // Secondary actions — wrap (never overflow) on a narrow window.
           // "Check best Gemini model" is a separate maintenance action: it
           // researches the live catalog and proposes switching ai.model to the

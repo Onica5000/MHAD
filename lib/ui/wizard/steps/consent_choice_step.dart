@@ -77,7 +77,7 @@ class ConsentChoiceConfig {
 
   static final ConsentChoiceConfig experimental = ConsentChoiceConfig(
     sectionLabel: (l) => l.consentChoiceExperimentalSectionLabel,
-    title: (l) => l.consentChoiceExperimentalTitle,
+    title: (l) => l.procResearchExperimentalLabel,
     subtitle: (l) => l.consentChoiceExperimentalSubtitle,
     helpText: (l) => l.consentChoiceExperimentalHelpText,
     stepId: 'experimentalStudies',
@@ -96,7 +96,7 @@ class ConsentChoiceConfig {
 
   static final ConsentChoiceConfig drugTrials = ConsentChoiceConfig(
     sectionLabel: (l) => l.consentChoiceDrugTrialsSectionLabel,
-    title: (l) => l.consentChoiceDrugTrialsTitle,
+    title: (l) => l.reviewStepDrugTrials,
     subtitle: (l) => l.consentChoiceDrugTrialsSubtitle,
     helpText: (l) => l.consentChoiceDrugTrialsHelpText,
     stepId: 'drugTrials',
@@ -225,13 +225,11 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           Text(
             c.subtitle(l),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              color: p.textMuted,
-              height: 1.45,
+              color: p.textMuted, height: MhadType.leadingParagraph,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.gavel_outlined,
             variant: InfoBannerVariant.warning,
@@ -277,7 +275,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
               controller: _conditionsCtrl,
               maxLines: 3,
               decoration: InputDecoration(
-                labelText: l.consentChoiceConditionsLabel,
+                labelText: l.reviewSectionCond,
                 hintText: c.conditionalHint(l),
               ),
               validator: (v) =>

@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -304,7 +305,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
         ),
         child: Column(
           children: [
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Container(
               width: 40,
               height: 4,
@@ -313,9 +314,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                 borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -329,23 +330,13 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                         ),
                       ],
                     ),
-                    style: const TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 28,
-                      height: 1.05,
-                      letterSpacing: -0.5,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.sub),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     context.l10n.contactSheetLocalOnly,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.45,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -356,7 +347,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                       border: Border.all(color: p.border),
                       borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
                         Icon(Icons.search,
@@ -374,10 +365,9 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 10),
+                                  const EdgeInsets.symmetric(vertical: 12),
                             ),
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 14,
                               color: p.text,
                             ),
@@ -389,7 +379,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                           IconButton(
                             onPressed: () =>
                                 setState(() => _searchCtrl.clear()),
-                            tooltip: context.l10n.contactSheetClearSearch,
+                            tooltip: context.l10n.diagnosesClearSearch,
                             iconSize: 14,
                             visualDensity: VisualDensity.compact,
                             padding: EdgeInsets.zero,
@@ -408,7 +398,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
             Expanded(
               child: ListView(
                 controller: scrollController,
-                padding: const EdgeInsets.fromLTRB(20, 6, 20, 12),
+                padding: DesignTokens.pagePadding,
                 children: [
                   SectionLabel(context.l10n.contactSheetContactsCount(others.length)),
                   for (final c in others)
@@ -426,7 +416,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                       const PickedContactData(),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   _EligibilityRulesCard(),
                   const SizedBox(height: 12),
                 ],
@@ -452,7 +442,7 @@ class _ContactPickerSheetState extends State<_ContactPickerSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     flex: 2,
                     child: FilledButton.icon(
@@ -537,7 +527,7 @@ class _PersonTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                 border: Border.all(color: borderColor, width: 1.5),
@@ -555,7 +545,6 @@ class _PersonTile extends StatelessWidget {
                     child: Text(
                       initials,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: selected ? p.onPrimary : p.onPrimaryLight,
@@ -572,7 +561,6 @@ class _PersonTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -582,8 +570,7 @@ class _PersonTile extends StatelessWidget {
                           Text(
                             relLabel,
                             style: TextStyle(
-                              fontSize: 12,
-                              letterSpacing: 0.3,
+                              fontSize: 12, letterSpacing: MhadType.trackingLabel,
                               color: p.textMuted,
                             ),
                           ),
@@ -597,7 +584,6 @@ class _PersonTile extends StatelessWidget {
                                       _noteText(
                                           context, cand.eligibilityNote!)),
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: blocked ? dangerColor : warnColor,
                               ),
@@ -609,7 +595,6 @@ class _PersonTile extends StatelessWidget {
                             child: Text(
                               context.l10n.contactSheetEligible,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: p.textMuted,
                               ),
@@ -670,7 +655,7 @@ class _ManualEntryTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             border: Border.all(
@@ -687,7 +672,6 @@ class _ManualEntryTile extends StatelessWidget {
               Text(
                 context.l10n.contactSheetEnterManually,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: p.primary,
@@ -721,7 +705,7 @@ class _EligibilityRulesCard extends StatelessWidget {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
@@ -753,10 +737,8 @@ class _EligibilityRulesCard extends StatelessWidget {
                     child: Text(
                       rule,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        color: p.text,
-                        height: 1.4,
+                        color: p.text, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ),
@@ -765,8 +747,7 @@ class _EligibilityRulesCard extends StatelessWidget {
                     label.toUpperCase(),
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.4,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                       color:
                           kind == _Eligibility.blocked ? dangerColor : warnColor,
                     ),
@@ -778,11 +759,9 @@ class _EligibilityRulesCard extends StatelessWidget {
           Text(
             l10n.contactSheetRulesFootnote,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.textMuted,
-              fontStyle: FontStyle.italic,
-              height: 1.4,
+              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
             ),
           ),
         ],

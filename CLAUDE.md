@@ -48,12 +48,14 @@ lib/
     llm_client.dart            -- Provider-agnostic transport (Gemini/Claude/OpenAI/Grok)
     gemini_api_assistant.dart   -- LlmAssistant (typedef GeminiApiAssistant); chat + helpers
     document_extractor.dart / smart_fill_service.dart -- multimodal autofill / smart-fill
+    handoff/                   -- copy-and-paste handoff (what users see): task, prompt, parser, wait
   ui/
     theme/        -- app_theme.dart (teal Material3 theme)
     home/         -- HomeScreen
     wizard/       -- Step-by-step form flow (adaptive per FormType)
     education/    -- FAQ, instructions, glossary
-    assistant/    -- AI chat UI
+    ai/           -- handoff card, Ask AI page, step helper, "Back to paste" banner
+    assistant/    -- AI chat UI (API path — hidden)
     export/       -- PDF preview & export options
     router.dart   -- GoRouter config + AppRoutes constants
   main.dart       -- ProviderScope + MaterialApp.router
@@ -83,7 +85,22 @@ This regenerates `app_database.g.dart`.
 - One renderer for all three form types (layout differences handled in code)
 - Dynamic text expansion: measure text, expand box, shift content down
 
-## AI Assistant (multi-provider — see lib/ai/)
+## AI — copy-and-paste handoff (what users see; user decision 2026-11-17)
+No API key in view: the person copies MHAD's instructions into ChatGPT / Claude / Gemini /
+Grok, attaches any document **there**, and pastes the JSON answer back. The API path below
+stays as a hidden backup (`app_data.json` → `ai.apiModeVisible: false`). A dedicated MHAD
+key would need a **relay server** — keys never ship to the browser.
+
+| Piece | Where | Rule |
+|---|---|---|
+| The card | `AiHandoffPanel` (`ui/ai/`) | ONE card everywhere: choose AI → copy (+ Open, see what's included) → paste. Privacy notice once per session |
+| Prompts | `buildHandoffPrompt` + `assets/data/ai_handoff.json` (versioned: services + what each accepts, legal facts, en/es envelope) | Task instructions come from the API path's own builders — never fork them |
+| Answers | `parseHandoffReply` | Forgiving about format; strict about `mhad_task` + `mhad_ref` (`directiveHandoffRef` = the one `d<id>` format) |
+| The wait | `PendingHandoff` (30 min, extendable) | Keeps the web recovery copy; a reload restores the work and returns to the paste page; "Back to paste your AI answer" banner elsewhere |
+| After a paste | panel | Clipboard cleared; a failed paste says a fresh copy may be needed |
+| API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
+
+## AI API path (hidden backup — multi-provider, see lib/ai/)
 - **Provider-agnostic** since 2026-06-28. `AiProvider` (lib/ai/ai_provider.dart) is the
   single source of truth (label/keyHint/models/host + capability flags); `LlmClient`
   (lib/ai/llm_client.dart) is the transport (Gemini via `google_generative_ai`; Anthropic
@@ -128,6 +145,9 @@ This regenerates `app_database.g.dart`.
   rail; `sidebarWidthFor(route)` is the one width source. **Phones hide the nav in the
   wizard** (`routeHidesBottomNav`); the step header's More opens the More sheet WITH the
   four primary destinations — nothing is more than one tap away.
+- Wizard actions = ONE `WizardBottomBar`: `[✦ Ask] … [Back] [Continue →]` (Ask only where
+  the AI rail isn't shown). It MEASURES its fit (theme text styles × text size — the app's
+  default is 1.2×): label → ✦ icon → no Ask (More still has Ask AI). Never stack a second bar.
 - `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
 - Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
   contextually or via the More sheet / sidebar.
@@ -141,6 +161,8 @@ This regenerates `app_database.g.dart`.
 | Card rows | `EqualHeightRow`, `PhotoActionCard(fillHeight:)` | **Sibling cards in a row are equal height** (user, 2026-11-17) |
 | Tab titles | `ui/route_titles.dart` | Every route has one (`route_titles_test`) |
 | Art pipeline | `tool/art/art_manifest.json` (single source) → `tool/art/generate_art.py` (Grok `image_gen`, verified, WebP); see `assets/images/README.md` | People photos name a **diverse cast** (user, 2026-11-17); review every image |
+| Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal") |
+| File names | `mhadFileName()` (`lib/utils/file_names.dart`) | Never hand-build a download name (blank parts were leaving `PA_MHAD_.pdf`) |
 | Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change |
 
 **Widget tests:** size the VIEW (`tester.view.physicalSize` + `devicePixelRatio = 1`), never

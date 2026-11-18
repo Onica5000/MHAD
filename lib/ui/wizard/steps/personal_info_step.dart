@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
@@ -151,7 +152,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       }
     });
     if (z == null) {
-      _toast(context.l10n.personalInfoStepZipLookupFailed);
+      _toast(context.l10n.addressFieldsZipLookupFailed);
     } else {
       final filled = [
         z.city,
@@ -234,7 +235,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding: DesignTokens.pagePadding,
           children: [
             WizardHelpButton(
               helpText: context.l10n.personalInfoStepHelp,

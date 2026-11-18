@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -63,6 +64,8 @@ Future<void> _bootstrap() async {
   final appDataLoad = AppData.load();
   // Educational corpus (Learn page + AI assistant reference).
   final educationalLoad = EducationalContent.load();
+  // Copy-and-paste AI handoff wording + service facts.
+  final handoffLoad = AiHandoffData.load();
   // Persisted disclaimer + onboarding state.
   final disclaimerLoad = DisclaimerNotifier.load();
   final onboardingLoad = OnboardingNotifier.load();
@@ -90,6 +93,7 @@ Future<void> _bootstrap() async {
   await Future.wait<void>([
     appDataLoad,
     educationalLoad,
+    handoffLoad,
     disclaimerLoad,
     onboardingLoad,
   ]);

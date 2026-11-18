@@ -1,5 +1,6 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -7,7 +8,6 @@ import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/utils/platform_utils.dart';
 
 /// In-app privacy & permissions overview.
@@ -38,24 +38,19 @@ class PermissionsOverviewScreen extends StatelessWidget {
       // + in-body back chevron. The 'Only what we need.' 30pt editorial
       // owns the header in the body.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.miscPrivacy,
             eyebrow: context.l10n.permissionsOverviewWhatThisAppMayAsk,
             title: EditorialHeading(
               text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
-              size: 30,
             ),
             lead: context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _PermissionCard(
             icon: Icons.fingerprint,
             title: context.l10n.permissionsOverviewBiometricsPasscode,
@@ -133,7 +128,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
             statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           InfoBanner(
             icon: Icons.settings_outlined,
             variant: InfoBannerVariant.info,
@@ -204,7 +199,6 @@ class _PermissionCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -226,8 +220,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             statusLine,
                             style: TextStyle(
-                              fontSize: 12,
-                              letterSpacing: 0.5,
+                              fontSize: 12, letterSpacing: MhadType.trackingLabel,
                               color: statusColor,
                             ),
                           ),
@@ -243,13 +236,11 @@ class _PermissionCard extends StatelessWidget {
           Text(
             usedFor,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              color: p.text,
-              height: 1.5,
+              color: p.text, height: MhadType.leadingParagraph,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           // Promises block — the prototype's "What we use it for" 4-check list.
           Container(
             padding: const EdgeInsets.all(12),
@@ -262,7 +253,7 @@ class _PermissionCard extends StatelessWidget {
               children: [
                 for (final line in promises)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -272,9 +263,7 @@ class _PermissionCard extends StatelessWidget {
                           child: Text(
                             line,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
-                              fontSize: 12,
-                              height: 1.4,
+                              fontSize: 12, height: MhadType.leadingParagraph,
                               color: p.text,
                             ),
                           ),

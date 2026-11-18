@@ -1,4 +1,5 @@
-﻿import 'dart:async';
+﻿import 'package:mhad/ai/handoff/pending_handoff.dart';
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final list = ListView(
           // The persistent bottom nav now reserves its own space (rendered by
           // ResponsiveShell below this screen), so no extra bottom gap is needed.
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          padding: DesignTokens.pagePadding,
           children: [
             const _DeviceSecurityCheck(),
             SectionLabel(dateLabel),
@@ -159,7 +160,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 24),
                     // Start-a-new-directive picker (the form-type page was
                     // retired — picking happens on the dashboard now).
                     SectionLabel(directives.isEmpty
@@ -168,7 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 12),
                     const DirectiveFormChoice(),
                     if (drafts.isNotEmpty) ...[
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 32),
                       // "Continue where you left off" sits BELOW the form
                       // picker (under "You can switch form types later").
                       ActiveDirectiveHero(directive: drafts.first),
@@ -193,12 +194,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             // Tools — inline on narrow; relocated to the right sidebar on wide.
             if (!isWide) ...[
-              const SizedBox(height: 22),
+              const SizedBox(height: 24),
               SectionLabel(context.l10n.homeTools),
               const SizedBox(height: 8),
               const ToolsGrid(),
             ],
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             // Past directives — completed / expired / revoked rendered as
             // compact tiles matching prototype L326-334. The active draft
             // is intentionally excluded (it lives in the hero above). When
@@ -335,7 +336,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onRename: () => _renameDirective(context, ref, d),
                 ),
               ],
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
               newDirective,
             ],
           );
@@ -344,7 +345,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
 
         return ListView(
-          padding: const EdgeInsets.fromLTRB(40, 20, 40, 60),
+          padding: const EdgeInsets.fromLTRB(40, 20, 40, 64),
           children: [
             const _DeviceSecurityCheck(),
             // "Private by design" moved to the very top, replacing the
@@ -355,7 +356,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 16),
             SectionLabel(dateLabel),
             _GreetingRow(directives: directives, isPublic: isPublic),
-            const SizedBox(height: 28),
+            const SizedBox(height: 32),
             // Primary action column, now full width.
             primary,
             // "Make it findable" was previously narrow-only (the ToolsGrid)
@@ -372,7 +373,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               return <Widget>[
                 const SizedBox(height: 16),
                 DesignCard(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   onTap: () =>
                       context.push(AppRoutes.findableRoute(mostRecent.id)),
                   child: Row(
@@ -387,7 +388,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               context.l10n.homeMakeItFindableInA,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
@@ -396,7 +396,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               context.l10n.homeShareCopiesCarryTheWallet,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 12,
                                 color: p.textMuted,
                               ),
@@ -412,9 +411,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             })(),
             // Past directives — 2-column grid filling the full width.
             if (past.isNotEmpty) ...[
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
               SectionLabel(context.l10n.homePastDirectives),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               LayoutBuilder(
                 builder: (context, c) {
                   const gap = 12.0;
@@ -459,11 +458,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _tryWebSessionRestore() async {
     try {
       final snap = await WebSessionCache.getCachedDirective();
-      if (snap == null || !mounted) return;
+      if (snap == null || !mounted) {
+        // Nothing to restore: a wait for an AI answer about that work can't
+        // be finished (web data lives in the tab) — drop it and its banner.
+        if (mounted) ref.read(pendingHandoffProvider.notifier).clear();
+        return;
+      }
 
       final repo = ref.read(directiveRepositoryProvider);
       final newId = await repo.restoreFromSnapshot(snap);
-      await WebSessionCache.clear();
+      // Waiting for an AI answer (copy and paste)? Go back to that page under
+      // the restored directive's id, and keep the recovery copy until the
+      // answer is in (the tab may unload again).
+      final pending = await ref
+          .read(pendingHandoffProvider.notifier)
+          .remapDirective(newId);
+      final resume =
+          pending != null && pending.resumable ? pending.route : null;
+      if (resume == null) {
+        if (pending != null) ref.read(pendingHandoffProvider.notifier).clear();
+        await WebSessionCache.clear();
+      } else {
+        unawaited(WebSessionCache.cacheDirective(repo, newId));
+      }
 
       if (mounted && context.mounted) {
         announce(context, context.l10n.homeSessionRestoredPersonalInfoMust);
@@ -473,7 +490,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             duration: Duration(seconds: 4),
           ),
         );
-        unawaited(context.push(AppRoutes.wizardRoute(newId)));
+        unawaited(context.push(resume ?? AppRoutes.wizardRoute(newId)));
       }
     } catch (e) {
       debugPrint('Web session restore failed: $e');
@@ -696,7 +713,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primaryTint,
         border: Border.all(color: p.primaryLight),
@@ -712,7 +729,6 @@ class _PrivacyByDesignCard extends StatelessWidget {
               Text(
                 context.l10n.homePrivateByDesign,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.onPrimaryLight,
@@ -730,9 +746,7 @@ class _PrivacyByDesignCard extends StatelessWidget {
                 ? context.l10n.homePrivateBodyWeb
                 : context.l10n.homePrivateBodyDevice,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.45,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.onPrimaryLight,
             ),
           ),
@@ -820,9 +834,6 @@ class _GreetingRow extends StatelessWidget {
               ),
             ],
           ),
-          size: 38,
-          height: 1.05,
-          letterSpacing: -0.6,
         );
       } else {
         final firstName = fullName.split(RegExp(r'\s+')).first;
@@ -841,15 +852,7 @@ class _GreetingRow extends StatelessWidget {
                     ),
                   ],
                 ),
-                style: const TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 38,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: EditorialHeading.styleFor(context, HeadingLevel.display),
               ),
             ),
             const SizedBox(width: 12),
@@ -868,7 +871,6 @@ class _GreetingRow extends StatelessWidget {
                 child: Text(
                   _initialsFrom(fullName),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
                     color: p.primary,
@@ -899,7 +901,7 @@ class _GreetingRow extends StatelessWidget {
                     radius: DesignTokens.radiusLg,
                     fade: false,
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   inner,
                 ],
               )
@@ -918,15 +920,7 @@ class _PublicGuestGreeting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       context.l10n.homeLetSGetStarted,
-      style: TextStyle(
-        fontFamily: kSerifFamily,
-        fontFamilyFallback: kSerifFallbacks,
-        fontStyle: FontStyle.italic,
-        fontSize: 38,
-        height: 1.05,
-        letterSpacing: -0.5,
-        fontWeight: FontWeight.w400,
-      ),
+      style: EditorialHeading.styleFor(context, HeadingLevel.display),
     );
   }
 }
@@ -1030,7 +1024,7 @@ class _PastDirectiveRow extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: p.border),
@@ -1048,7 +1042,6 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _nameLine(context.l10n),
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: p.text,
@@ -1057,7 +1050,6 @@ class _PastDirectiveRow extends StatelessWidget {
                       Text(
                         _subLine(context.l10n),
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: p.textMuted,
                         ),

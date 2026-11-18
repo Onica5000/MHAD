@@ -54,7 +54,7 @@ class _CrisisSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -66,7 +66,7 @@ class _CrisisSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Container(
@@ -74,18 +74,19 @@ class _CrisisSheet extends StatelessWidget {
                     height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SemanticColors.errorAccentLight,
+                      color: SemanticColors.errorAccent(Theme.of(context).brightness),
                     ),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     context.l10n.crisisSheet247FreeConfidential,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.2,
-                      color: SemanticColors.errorAccentLight,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
+                      // the light-mode red was ~3.1:1 on the dark sheet
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? SemanticColors.errorTextDark
+                          : SemanticColors.errorAccentLight,
                     ),
                   ),
                 ],
@@ -93,22 +94,19 @@ class _CrisisSheet extends StatelessWidget {
               const SizedBox(height: 4),
               EditorialHeading(
                 text: context.l10n.crisisSheetYouAreNotAlone,
-                size: 34,
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.crisisSheetRealPeopleAreStandingBy,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               _CrisisRow(
                 name: '988 Suicide & Crisis Lifeline',
-                detail: context.l10n.crisisSheetCallOrText988,
+                detail: context.l10n.legalSheetCallOrText988,
                 icon: Icons.phone_outlined,
                 accent: true,
                 // First action gets initial keyboard/screen-reader focus
@@ -154,21 +152,19 @@ class _CrisisSheet extends StatelessWidget {
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('trevorProject')}',
                     copyValue: appData.phoneOf('trevorProject')),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Immediate-danger callout (artboard WebCrisis). 911 is the right
               // escalation when someone is in physical danger right now — kept
               // visually distinct from the 24/7 support lines above.
               const _Emergency911Callout(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               SectionLabel(context.l10n.crisisSheetWhyTheseNumbers),
               const SizedBox(height: 4),
               Text(
                 context.l10n.crisisSheetCalling988ConnectsYouTo,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 16),
@@ -210,7 +206,7 @@ class _Emergency911Callout extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.favorite, size: 18, color: p.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -228,9 +224,7 @@ class _Emergency911Callout extends StatelessWidget {
                     ],
                   ),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.4,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.onPrimaryLight,
                   ),
                 ),
@@ -278,7 +272,7 @@ class _CrisisRow extends StatelessWidget {
             : SemanticColors.errorAccentLight)
         : p.primaryLight;
     final iconFg = accent
-        ? Colors.white
+        ? Theme.of(context).colorScheme.onError
         : p.onPrimaryLight;
 
     return Padding(
@@ -291,7 +285,7 @@ class _CrisisRow extends StatelessWidget {
           autofocus: autofocus,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),
@@ -315,7 +309,6 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         name,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: accent
@@ -329,7 +322,6 @@ class _CrisisRow extends StatelessWidget {
                       Text(
                         detail,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: accent
                               ? (dark

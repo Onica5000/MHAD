@@ -1,7 +1,9 @@
+import 'package:mhad/data/repository/directive_repository.dart';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:mhad/constants.dart';
+import 'package:mhad/ai/handoff/pending_handoff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Caches the current directive data to SharedPreferences on web so that
@@ -25,6 +27,26 @@ class WebSessionCache {
       await prefs.setString(_tsKey, DateTime.now().toIso8601String());
     } catch (e) {
       debugPrint('WebSessionCache: save failed: $e');
+    }
+  }
+
+  /// Snapshots directive [directiveId] for reload recovery (web only;
+  /// identity stays out — see `snapshotDirective`). Best-effort and bounded:
+  /// it must never block the caller (wizard navigation, a handoff copy), and a
+  /// try/catch alone doesn't rescue a hang — only a throw — so every async hop
+  /// has a timeout; on timeout the snapshot is simply skipped.
+  static Future<void> cacheDirective(
+      DirectiveRepository repo, int directiveId) async {
+    if (!kIsWeb) return;
+    try {
+      final snap = await repo
+          .snapshotDirective(directiveId)
+          .timeout(const Duration(seconds: 3));
+      if (snap.isNotEmpty) {
+        await saveDirective(snap).timeout(const Duration(seconds: 3));
+      }
+    } catch (e) {
+      debugPrint('Web cache save skipped (failed or timed out): $e');
     }
   }
 
@@ -55,7 +77,13 @@ class WebSessionCache {
       if (savedAt == null) return null;
 
       final age = DateTime.now().difference(savedAt);
-      if (age > ttl) {
+      // While the person is in their AI chat waiting to paste an answer back
+      // (copy-and-paste handoff), the work is kept until that wait's deadline
+      // (30 min, extendable) — a phone may unload this tab meanwhile.
+      final handoffDeadline = await PendingHandoffStore.activeDeadline();
+      final keptForHandoff =
+          handoffDeadline != null && DateTime.now().isBefore(handoffDeadline);
+      if (age > ttl && !keptForHandoff) {
         await clear();
         return null;
       }

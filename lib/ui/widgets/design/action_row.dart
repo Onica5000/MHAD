@@ -62,7 +62,7 @@ class ActionRow extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(color: p.border),
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -87,7 +87,6 @@ class ActionRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: titleColor,
@@ -99,7 +98,6 @@ class ActionRow extends StatelessWidget {
                         child: Text(
                           subtitle!,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             color: p.textMuted,
                           ),

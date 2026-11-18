@@ -29,7 +29,7 @@ extension _AllergyKindX on _AllergyKind {
         _AllergyKind.drug => l10n.allergiesKindDrug,
         _AllergyKind.food => l10n.allergiesKindFood,
         _AllergyKind.material => l10n.allergiesKindMaterial,
-        _AllergyKind.other => l10n.allergiesKindOther,
+        _AllergyKind.other => l10n.reviewStepOther,
       };
 
   /// Search-field hint for this kind.
@@ -263,7 +263,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             if (_query.length >= 2) _onSearchChanged(_query);
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
 
         // Search field + autocomplete.
         _SearchField(
@@ -293,10 +293,9 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : l10n.allergiesNoResults,
+              _searching ? '' : l10n.educationNoResultsFound,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 color: p.textMuted,
               ),
             ),
@@ -306,16 +305,14 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
           child: Text(
             l10n.allergiesSourceNote,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
-              fontStyle: FontStyle.italic,
-              height: 1.4,
+              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
         ),
 
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
         // ── Severity & reaction ───────────────────────────────────────────
         SectionLabel(l10n.allergiesSeveritySection),
@@ -325,7 +322,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             border: Border.all(color: p.border),
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -383,12 +380,10 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
         const SizedBox(height: 4),
         // Footer reassurance, matching the prototype's tone.
         Text(
-          l10n.allergiesFooter,
+          l10n.diagnosesFooter,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
-            fontStyle: FontStyle.italic,
-            height: 1.45,
+            fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -411,8 +406,7 @@ class _MonoLabel extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.6,
+        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
         color: p.textMuted,
       ),
     );
@@ -473,7 +467,7 @@ class _KindSegment extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           decoration: BoxDecoration(
             color: active ? p.card : Colors.transparent,
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -494,7 +488,6 @@ class _KindSegment extends StatelessWidget {
                 kind.label(context.l10n),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: active ? p.text : p.textMuted,
@@ -505,8 +498,7 @@ class _KindSegment extends StatelessWidget {
                 kind.source,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.4,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: active ? p.primary : p.textMuted,
                 ),
               ),
@@ -550,7 +542,7 @@ class _SearchField extends StatelessWidget {
       child: Row(
         children: [
           Icon(Icons.search, size: 18, color: p.textMuted),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -558,14 +550,13 @@ class _SearchField extends StatelessWidget {
               enableSuggestions: false,
               onChanged: onChanged,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: p.text,
               ),
               decoration: InputDecoration(
                 isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 hintText: hint,
                 hintStyle: TextStyle(
                   color: p.textMuted,
@@ -585,7 +576,7 @@ class _SearchField extends StatelessWidget {
           else if (controller.text.isNotEmpty)
             Semantics(
               button: true,
-              label: context.l10n.allergiesClearSearch,
+              label: context.l10n.diagnosesClearSearch,
               child: InkWell(
                 onTap: onClear,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -597,7 +588,7 @@ class _SearchField extends StatelessWidget {
             )
           else
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -611,8 +602,7 @@ class _SearchField extends StatelessWidget {
                     badge,
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                       color: p.primary,
                     ),
                   ),
@@ -661,8 +651,7 @@ class _AutoComplete extends StatelessWidget {
                     source.toUpperCase(),
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                       color: p.primary,
                     ),
                   ),
@@ -670,8 +659,7 @@ class _AutoComplete extends StatelessWidget {
                 Text(
                   context.l10n.allergiesMatches(items.length),
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     color: p.textMuted,
                   ),
                 ),
@@ -760,7 +748,7 @@ class _AutoCompleteRow extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -772,13 +760,12 @@ class _AutoCompleteRow extends StatelessWidget {
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -786,10 +773,8 @@ class _AutoCompleteRow extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        height: 1.3,
+                        fontWeight: FontWeight.w600, height: MhadType.leadingUi,
                       ),
                       children: _spans(context, p.text, p.primary),
                     ),
@@ -864,46 +849,18 @@ class _SeverityOption extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     final dark = Theme.of(context).brightness == Brightness.dark;
 
-    // Tone family per severity.
-    late final Color bg;
-    late final Color fg;
-    late final Color border;
-    late final Color activeBg;
-    late final Color activeFg;
-    switch (severity) {
-      case AllergySeverity.mild:
-        bg = p.primaryTint;
-        fg = p.text;
-        border = p.primaryLight;
-        activeBg = p.primary;
-        activeFg = p.onPrimary;
-      case AllergySeverity.moderate:
-        bg = dark
-            ? SemanticColors.warningBgDark
-            : SemanticColors.warningBgLight;
-        fg = dark
-            ? SemanticColors.warningTextDark
-            : SemanticColors.warningTextLight;
-        border = dark
-            ? SemanticColors.warningBorderDark
-            : SemanticColors.warningBorderLight;
-        activeBg = dark
-            ? SemanticColors.warningTextDark
-            : SemanticColors.warningTextLight;
-        activeFg = dark ? const Color(0xFF2A2102) : Colors.white;
-      case AllergySeverity.severe:
-        bg = dark ? SemanticColors.errorBgDark : SemanticColors.errorBgLight;
-        fg = dark
-            ? SemanticColors.errorTextDark
-            : SemanticColors.errorTextLight;
-        border = dark
-            ? SemanticColors.errorBorderDark
-            : SemanticColors.errorBorderLight;
-        activeBg = dark
-            ? SemanticColors.errorAccentDark
-            : SemanticColors.errorAccentLight;
-        activeFg = Colors.white;
-    }
+    // One colour per severity (the meaning), used calmly: chosen = its tint
+    // + a 2px border in it + ✓ (the app's segmented style); not chosen =
+    // neutral with a severity dot. It used to be a solid orange/red block.
+    final (Color tone, Color tint) = switch (severity) {
+      AllergySeverity.mild => (p.primary, p.primaryTint),
+      AllergySeverity.moderate => dark
+          ? (SemanticColors.warningTextDark, SemanticColors.warningBgDark)
+          : (SemanticColors.warningTextLight, SemanticColors.warningBgLight),
+      AllergySeverity.severe => dark
+          ? (SemanticColors.errorTextDark, SemanticColors.errorBgDark)
+          : (SemanticColors.errorTextLight, SemanticColors.errorBgLight),
+    };
 
     return Semantics(
       button: true,
@@ -912,28 +869,47 @@ class _SeverityOption extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-        child: Container(
+        child: AnimatedContainer(
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           decoration: BoxDecoration(
-            color: active ? activeBg : bg,
+            color: active ? tint : p.card,
             border: Border.all(
-              color: active ? activeBg : border,
-              width: 1.5,
+              color: active ? tone : p.border,
+              width: active ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // ✓ when chosen; otherwise the severity dot (the colour coding,
+              // before choosing). Above the label, so the word keeps the
+              // full width (inline, 'Moderate' broke mid-word on phones).
+              SizedBox(
+                height: 16,
+                child: Center(
+                  child: active
+                      ? Icon(Icons.check, size: 16, color: tone)
+                      : Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              color: tone, shape: BoxShape.circle),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 2),
               Text(
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  height: 1.25,
-                  color: active ? activeFg : fg,
+                  height: MhadType.leadingUi,
+                  color: active ? tone : p.text,
                 ),
               ),
               const SizedBox(height: 2),
@@ -941,11 +917,10 @@ class _SeverityOption extends StatelessWidget {
                 desc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  height: 1.2,
-                  color: (active ? activeFg : fg).withValues(alpha: 0.85),
+                  height: MhadType.leadingUi,
+                  color: active ? tone : p.textMuted,
                 ),
               ),
             ],

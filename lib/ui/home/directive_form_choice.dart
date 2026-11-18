@@ -32,7 +32,7 @@ class DirectiveFormChoice extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.info_outline, size: 36),
-        title: Text(context.l10n.poaOnly),
+        title: Text(context.l10n.formTypeNamePoa),
         content: Text(
           context.l10n.directiveFormChoiceWithAPoaOnlyForm,
         ),
@@ -90,9 +90,9 @@ class DirectiveFormChoice extends ConsumerWidget {
               return Column(
                 children: [
                   combined(wide: false),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   declaration,
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   poa,
                 ],
               );
@@ -102,13 +102,13 @@ class DirectiveFormChoice extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(flex: 14, child: combined(wide: true)),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 12),
                   Expanded(
                     flex: 10,
                     child: Column(
                       children: [
                         Expanded(child: declaration),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Expanded(child: poa),
                       ],
                     ),
@@ -124,9 +124,7 @@ class DirectiveFormChoice extends ConsumerWidget {
         Text(
           context.l10n.directiveFormChoiceYouCanSwitchFormTypes,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -158,13 +156,13 @@ class _CombinedCard extends StatelessWidget {
         // Brand CTA gradient (primary → primaryMid) for a richer feature hero
         // than the flat primary fill. Foreground stays onPrimary, fully legible.
         decoration: BoxDecoration(gradient: p.ctaGradient),
-        padding: const EdgeInsets.fromLTRB(24, 22, 22, 22),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
         child: wide
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(child: text),
-                  const SizedBox(width: 18),
+                  const SizedBox(width: 16),
                   const ArtImage(
                     AppArt.formCombined,
                     width: _photoSize,
@@ -197,7 +195,7 @@ class _CombinedCard extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 9, vertical: 4),
+                        horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: p.onPrimary.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -205,22 +203,18 @@ class _CombinedCard extends StatelessWidget {
                     child: Text(
                       context.l10n.modeSelectionRecommended,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: p.onPrimary,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Text(
                     context.l10n.directiveFormChoiceCombinedDirective,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.4,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                       color: p.onPrimary,
                     ),
                   ),
@@ -228,13 +222,11 @@ class _CombinedCard extends StatelessWidget {
                   Text(
                     context.l10n.directiveFormChoiceTreatmentPreferencesAndATrusted,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   FilledButton.icon(
                     onPressed: onStart,
                     icon: const Icon(Icons.arrow_forward, size: 16),
@@ -244,7 +236,7 @@ class _CombinedCard extends StatelessWidget {
                       foregroundColor: p.primaryDark,
                       iconAlignment: IconAlignment.end,
                       minimumSize: const Size(0, 44),
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
                       ),
@@ -289,7 +281,7 @@ class _SingleFormCard extends StatelessWidget {
               // layout's IntrinsicHeight, which can't measure a LayoutBuilder.
               ArtImage(art,
                   width: 64, height: 64, radius: DesignTokens.iconTileRadius),
-              const SizedBox(width: 14),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +289,6 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -307,9 +298,7 @@ class _SingleFormCard extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -344,7 +333,7 @@ class _HelpMeChooseBanner extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -353,12 +342,11 @@ class _HelpMeChooseBanner extends StatelessWidget {
             child: Row(
               children: [
                 Icon(Icons.auto_awesome, size: 18, color: p.primary),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     context.l10n.directiveFormChoiceNotSureWhichFormFits,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: p.onPrimaryLight,
@@ -377,7 +365,6 @@ class _HelpMeChooseBanner extends StatelessWidget {
                       context.l10n.directiveFormChoiceHelpMeChoose,
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.primary,

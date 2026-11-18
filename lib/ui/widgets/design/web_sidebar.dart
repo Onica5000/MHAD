@@ -1,13 +1,12 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/app_actions.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
 /// Persistent left-rail navigation for wide (desktop / web) screens.
 ///
@@ -27,48 +26,6 @@ class WebSidebar extends ConsumerWidget {
   static const double width = 232;
   static const double compactWidth = 72;
 
-  /// Erase everything in this session and return to a blank start. Confirms
-  /// first (destructive). Uses the root navigator's context because the sidebar
-  /// lives above the router's Navigator/InheritedGoRouter.
-  Future<void> _resetForm(WidgetRef ref) async {
-    final ctx = rootNavigatorKey.currentContext;
-    if (ctx == null) return;
-    final confirmed = await showDialog<bool>(
-      context: ctx,
-      builder: (dctx) {
-        final cs = Theme.of(dctx).colorScheme;
-        return AlertDialog(
-          icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
-          title: Text(dctx.l10n.moreSheetResetAndStartFresh),
-          content: Text(
-            dctx.l10n.moreSheetThisPermanentlyErasesEverythingIn,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dctx, false),
-              child: Text(dctx.l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(dctx, true),
-              style: FilledButton.styleFrom(backgroundColor: cs.error),
-              child: Text(dctx.l10n.moreSheetResetEverything),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed != true) return;
-
-    await endPublicSession(ref);
-    await WebSessionCache.clear();
-    try {
-      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
-    } catch (_) {}
-
-    // Land on a blank Home — the visibly fresh dashboard is the confirmation.
-    appRouter.go(AppRoutes.home);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
@@ -76,15 +33,8 @@ class WebSidebar extends ConsumerWidget {
         ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
     // Most-recently-edited directive — the "Download & print" destination
     // (export is a per-directive route).
-    final recentId = ref.watch(allDirectivesProvider).maybeWhen(
-      data: (list) {
-        if (list.isEmpty) return null;
-        final sorted = [...list]
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        return sorted.first.id;
-      },
-      orElse: () => null,
-    );
+    final recentId =
+        mostRecentDirectiveId(ref.watch(allDirectivesProvider).value ?? const []);
     // Directive currently in focus: prefer the one in the active route
     // (/wizard/:id, /sign/:id, /export/:id, /upload/:id, /wizard-complete/:id),
     // else the most-recently-edited. This lets "Download & print" open the SAME
@@ -106,7 +56,7 @@ class WebSidebar extends ConsumerWidget {
       _SidebarItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: context.l10n.navStart,
+        label: context.l10n.home,
         isActive: activeRoute == AppRoutes.home,
         onTap: () => appRouter.go(AppRoutes.home),
       ),
@@ -126,27 +76,33 @@ class WebSidebar extends ConsumerWidget {
         // page autofills it; with none on file (fresh web session), create a
         // Combined directive first. Either way the upload page is reachable
         // again after the AI-setup hop drops you in the assistant.
-        onTap: () async {
-          final id = recentId ??
-              await ref
-                  .read(directiveRepositoryProvider)
-                  .createDirective(FormType.combined);
-          appRouter.go(AppRoutes.uploadRoute(id));
-        },
+        onTap: () => openForDirective(ref, AppRoutes.uploadRoute,
+            preferredId: recentId),
       ),
-      _SidebarItem(
-        icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
-        activeIcon: Icons.auto_awesome,
-        label: context.l10n.navAiAssistant,
-        isActive: activeRoute == AppRoutes.assistant ||
-            activeRoute == AppRoutes.aiSetup,
-        badge: aiReady
-            ? context.l10n.badgeAiReady
-            : context.l10n.badgeAiSetUp,
-        badgeOk: aiReady,
-        onTap: () =>
-            appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
-      ),
+      // With the API path hidden (AiConfig.apiModeVisible) this is "Ask AI"
+      // — the copy-and-paste handoff needs no setup, so no SET UP badge.
+      if (appData.ai.apiModeVisible)
+        _SidebarItem(
+          icon: aiReady ? Icons.auto_awesome : Icons.auto_awesome_outlined,
+          activeIcon: Icons.auto_awesome,
+          label: context.l10n.navAiAssistant,
+          isActive: activeRoute == AppRoutes.assistant ||
+              activeRoute == AppRoutes.aiSetup,
+          badge: aiReady
+              ? context.l10n.badgeAiReady
+              : context.l10n.badgeAiSetUp,
+          badgeOk: aiReady,
+          onTap: () =>
+              appRouter.go(aiReady ? AppRoutes.assistant : AppRoutes.aiSetup),
+        )
+      else
+        _SidebarItem(
+          icon: Icons.auto_awesome_outlined,
+          activeIcon: Icons.auto_awesome,
+          label: context.l10n.navAskAi,
+          isActive: activeRoute == AppRoutes.assistant,
+          onTap: () => appRouter.go(AppRoutes.assistant),
+        ),
       _SidebarItem(
         icon: Icons.print_outlined,
         activeIcon: Icons.print,
@@ -167,13 +123,8 @@ class WebSidebar extends ConsumerWidget {
         // 760px reading column, while opening it from a fill route (Learn)
         // looked right. go() replaces the stack so the shell always sees
         // /export/… and gives it the correct full-bleed layout.
-        onTap: () async {
-          final id = focusedId ??
-              await ref
-                  .read(directiveRepositoryProvider)
-                  .createDirective(FormType.combined);
-          appRouter.go(AppRoutes.exportRoute(id));
-        },
+        onTap: () => openForDirective(ref, AppRoutes.exportRoute,
+            preferredId: focusedId),
       ),
       _SidebarItem(
         icon: Icons.settings_outlined,
@@ -190,10 +141,10 @@ class WebSidebar extends ConsumerWidget {
     // dialog was the only guard). delete_sweep reads as "clear it all".
     final reset = _SidebarItem(
       icon: Icons.delete_sweep_outlined,
-      label: context.l10n.navResetForm,
+      label: context.l10n.navStartOver,
       isActive: false,
       danger: true,
-      onTap: () => _resetForm(ref),
+      onTap: () => confirmAndResetSession(ref),
     );
 
     // Material root: the sidebar is built in MaterialApp.router's builder,
@@ -219,11 +170,11 @@ class WebSidebar extends ConsumerWidget {
           children: [
             // Brand
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 16, 14, 12),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: Row(
                 children: [
                   const ExcludeSemantics(child: _BrandMark()),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Flexible(
                     // Lets the wordmark wrap instead of overflowing the fixed-width
                     // sidebar when the fallback font runs wide.
@@ -233,18 +184,15 @@ class WebSidebar extends ConsumerWidget {
                         Text(
                           context.l10n.pinDialogPaMhad,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.2,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                             color: p.text,
                           ),
                         ),
                         Text(
                           context.l10n.webSidebarAct1942004,
                           style: TextStyle(
-                            fontSize: 12,
-                            letterSpacing: 0.6,
+                            fontSize: 12, letterSpacing: MhadType.trackingLabel,
                             color: p.textMuted,
                           ),
                         ),
@@ -260,7 +208,7 @@ class WebSidebar extends ConsumerWidget {
             // Items
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   for (final item in items)
                     _SidebarItemRow(
@@ -268,9 +216,9 @@ class WebSidebar extends ConsumerWidget {
                       active: item.isActive,
                       onTap: item.onTap,
                     ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Divider(color: p.border, height: 1),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   _SidebarItemRow(
                     item: reset,
                     active: false,
@@ -373,7 +321,7 @@ class _SidebarItemRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 6, vertical: 9),
+                const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             child: Row(
               children: [
                 // "You are here" accent bar — transparent when inactive so the
@@ -442,7 +390,7 @@ class _CompactRail extends StatelessWidget {
         right: false,
         child: Column(
           children: [
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Semantics(
               label: context.l10n.pinDialogPaMhad,
               child: ExcludeSemantics(child: _BrandMark(size: 36)),
@@ -452,7 +400,7 @@ class _CompactRail extends StatelessWidget {
             const SizedBox(height: 8),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   for (final item in items)
                     _RailButton(
@@ -488,7 +436,7 @@ class _CompactRail extends StatelessWidget {
               label: context.l10n.moreSheetGetHelp,
               tooltip: context.l10n.moreSheetGetHelp,
               selected: false,
-              onTap: _openGetHelp,
+              onTap: openGetHelp,
             ),
             const SizedBox(height: 6),
             // 988 stays one tap away with a 48px target and a red cue.
@@ -499,7 +447,7 @@ class _CompactRail extends StatelessWidget {
               selected: false,
               iconColor: SemanticColors.errorText(brightness),
               background: SemanticColors.errorBg(brightness),
-              onTap: _openCrisisSheet,
+              onTap: openCrisisHelp,
             ),
             const SizedBox(height: 16),
           ],
@@ -615,34 +563,9 @@ class _BrandMark extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         'm',
-        style: TextStyle(
-          fontFamily: kSerifFamily,
-          fontFamilyFallback: kSerifFallbacks,
-          fontStyle: FontStyle.italic,
-          fontSize: size * 0.56,
-          color: p.onPrimary,
-        ),
+        style: MhadText.serifAccent(context, size: size * 0.56, color: p.onPrimary),
       ),
     );
-  }
-}
-
-/// Opens the crisis-resources sheet via the root navigator (the sidebar sits
-/// above the router). Shared by the full card and the rail button.
-void _openCrisisSheet() {
-  final ctx = rootNavigatorKey.currentContext;
-  if (ctx != null) showCrisisSheet(ctx);
-}
-
-/// Opens the facilitator ("Get help") screen once — repeated taps don't stack
-/// copies. Shared by the full card and the rail button.
-Future<void> _openGetHelp() async {
-  if (_getHelpOpen) return;
-  _getHelpOpen = true;
-  try {
-    await appRouter.push(AppRoutes.facilitator);
-  } finally {
-    _getHelpOpen = false;
   }
 }
 
@@ -661,7 +584,7 @@ class _Badge extends StatelessWidget {
         ? SemanticColors.successTextLight
         : p.primary;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -670,8 +593,7 @@ class _Badge extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
           color: fg,
         ),
       ),
@@ -692,7 +614,7 @@ class _CrisisCard extends StatelessWidget {
       color: SemanticColors.errorBgLight,
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
-        onTap: _openCrisisSheet,
+        onTap: openCrisisHelp,
         focusColor: SemanticColors.errorAccentLight.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
@@ -717,8 +639,7 @@ class _CrisisCard extends StatelessWidget {
                       context.l10n.webSidebar247Lifeline,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.7,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: SemanticColors.errorTextLight,
                       ),
                     ),
@@ -729,7 +650,6 @@ class _CrisisCard extends StatelessWidget {
               Text(
                 context.l10n.webSidebar988CrisisHelp,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: SemanticColors.errorTextLight,
@@ -739,7 +659,6 @@ class _CrisisCard extends StatelessWidget {
               Text(
                 context.l10n.webSidebarClickForMoreInformation,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   color: SemanticColors.errorTextLight.withValues(alpha: 0.85),
                 ),
@@ -756,7 +675,6 @@ class _CrisisCard extends StatelessWidget {
 
 /// True while the facilitator ("Get help") screen is open, so repeated taps on
 /// the card don't push multiple stacked copies. Mirrors the crisis-sheet guard.
-bool _getHelpOpen = false;
 
 /// Prominent "Get help" card in the sidebar (above the crisis card): peer
 /// specialists, rights advocates, clinician referral. Opens the facilitator
@@ -772,7 +690,7 @@ class _GetHelpCard extends StatelessWidget {
       color: p.primaryTint,
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: InkWell(
-        onTap: _openGetHelp,
+        onTap: openGetHelp,
         focusColor: _focusTint(p),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
@@ -784,7 +702,7 @@ class _GetHelpCard extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.support_agent_outlined, size: 20, color: p.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -793,7 +711,6 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       context.l10n.moreSheetGetHelp,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -803,7 +720,6 @@ class _GetHelpCard extends StatelessWidget {
                     Text(
                       context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.textMuted,
                       ),

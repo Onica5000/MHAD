@@ -23,7 +23,7 @@ class MessageBubble extends StatelessWidget {
     final isError = !isUser && message.isError;
 
     return Semantics(
-      label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.assistantSenderAi, timeStr, message.content),
+      label: context.l10n.assistantMessageWidgetsAt(isUser ? context.l10n.assistantSenderYou : context.l10n.navAiAssistant, timeStr, message.content),
       liveRegion: isError,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
@@ -48,7 +48,7 @@ class MessageBubble extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
+                        horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
                       color: isUser ? cs.primary : cs.surfaceContainerHighest,
                       borderRadius: BorderRadius.only(
@@ -64,8 +64,7 @@ class MessageBubble extends StatelessWidget {
                       message.content,
                       style: TextStyle(
                         color: isUser ? cs.onPrimary : cs.onSurface,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ),
@@ -241,7 +240,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
             ),
             const SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
                 borderRadius: const BorderRadius.only(

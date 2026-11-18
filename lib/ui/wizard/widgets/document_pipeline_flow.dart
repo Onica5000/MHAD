@@ -6,7 +6,11 @@ import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/ai/handoff/handoff_task.dart';
 import 'package:mhad/ui/theme/app_art.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -531,52 +535,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
       if (cancelled()) return;
       _piiStripped = allPii;
-
-      // No uploaded file was a health/care document — refuse to use any of it.
-      if (!anyRelevant) {
-        setState(() {
-          final kind = (irrelevantKind != null && irrelevantKind.isNotEmpty)
-              ? context.l10n.pipelineLooksLikeKind(irrelevantKind)
-              : '';
-          _error = docs.length == 1
-              ? context.l10n.pipelineNotMedicalSingle(kind)
-              : context.l10n.pipelineNotMedicalMulti(kind);
-          _step = _PipelineStep.pick;
-        });
-        return;
-      }
-
-      if (merged == null || merged.isEmpty) {
-        setState(() {
-          _error = docs.length == 1
-              ? context.l10n.pipelineNoMedicalInfoSingle
-              : context.l10n.pipelineNoMedicalInfoMulti(docs.length);
-          _step = _PipelineStep.pick;
-        });
-        return;
-      }
-
-      // ── Step 2: Validate against NIH APIs ───────────────────────
-      setState(() {
-        _step = _PipelineStep.validating;
-        _statusMessage = context.l10n.pipelineValidating;
-      });
-
-      final validated = await ClinicalDataValidator.validate(merged);
-      if (cancelled()) return;
-
-      // Build review data + reconcile against the directive's current values
-      _validated = validated;
-      _buildReviewData(validated);
-      // Keyless geo backfill: when the AI read a ZIP but missed the city /
-      // state / county, fill them from the ZIP (Zippopotam + FCC) so the
-      // declarant + designated people land more complete. Best-effort.
-      await _geoBackfillReview();
-      if (cancelled()) return;
-      await _buildReconciliation();
-      if (cancelled()) return;
-
-      setState(() => _step = _PipelineStep.review);
+      await _reviewExtraction(
+        merged: merged,
+        anyRelevant: anyRelevant,
+        irrelevantKind: irrelevantKind,
+        fileCount: docs.length,
+        cancelled: cancelled,
+      );
     } catch (e) {
       // A cancelled run's failure must not clobber the pick step's state.
       if (mounted && runId == _processingRunId) {
@@ -590,6 +555,108 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
   }
 
+
+
+  /// After an extraction — from the API, or a pasted copy-and-paste
+  /// answer — refuse non-health documents, validate against NIH, build the
+  /// review, backfill city/state/county from the ZIP and reconcile with the
+  /// directive, then show the review. ONE path for both sources.
+  Future<void> _reviewExtraction({
+    required DocumentExtractionResult? merged,
+    required bool anyRelevant,
+    required String? irrelevantKind,
+    required int fileCount,
+    required bool Function() cancelled,
+  }) async {
+    // No uploaded file was a health/care document — refuse to use any of it.
+    if (!anyRelevant) {
+      setState(() {
+        final kind = (irrelevantKind != null && irrelevantKind.isNotEmpty)
+            ? context.l10n.pipelineLooksLikeKind(irrelevantKind)
+            : '';
+        _error = fileCount == 1
+            ? context.l10n.pipelineNotMedicalSingle(kind)
+            : context.l10n.pipelineNotMedicalMulti(kind);
+        _step = _PipelineStep.pick;
+      });
+      return;
+    }
+
+    if (merged == null || merged.isEmpty) {
+      setState(() {
+        _error = fileCount == 1
+            ? context.l10n.pipelineNoMedicalInfoSingle
+            : context.l10n.pipelineNoMedicalInfoMulti(fileCount);
+        _step = _PipelineStep.pick;
+      });
+      return;
+    }
+
+    // ── Step 2: Validate against NIH APIs ───────────────────────
+    setState(() {
+      _step = _PipelineStep.validating;
+      _statusMessage = context.l10n.pipelineValidating;
+    });
+
+    final validated = await ClinicalDataValidator.validate(merged);
+    if (cancelled()) return;
+
+    // Build review data + reconcile against the directive's current values
+    _validated = validated;
+    _buildReviewData(validated);
+    // Keyless geo backfill: when the AI read a ZIP but missed the city /
+    // state / county, fill them from the ZIP (Zippopotam + FCC) so the
+    // declarant + designated people land more complete. Best-effort.
+    await _geoBackfillReview();
+    if (cancelled()) return;
+    await _buildReconciliation();
+    if (cancelled()) return;
+
+    setState(() => _step = _PipelineStep.review);
+  }
+
+
+  /// A pasted copy-and-paste answer (already tag-checked by the handoff card)
+  /// → the same review path as an API extraction. Resolves true when the
+  /// review opened.
+  Future<bool> _useHandoffAnswer(Map<String, dynamic> json) async {
+    final runId = ++_processingRunId;
+    bool cancelled() => !mounted || runId != _processingRunId;
+    final DocumentExtractionResult result;
+    try {
+      result = DocumentExtractionResult.fromJson(json);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _error = context.l10n.aiHandoffProblemNotJson);
+      }
+      return false;
+    }
+    setState(() {
+      _error = null;
+      _piiStripped = const [];
+    });
+    try {
+      await _reviewExtraction(
+        merged: result,
+        anyRelevant: result.documentRelevant,
+        irrelevantKind: result.documentKind,
+        fileCount: 1,
+        cancelled: cancelled,
+      );
+    } catch (e) {
+      if (mounted && runId == _processingRunId) {
+        setState(() {
+          _error = FriendlyError.from(e, context.l10n);
+          _step = _PipelineStep.pick;
+        });
+      }
+      return false;
+    }
+    return mounted && _step == _PipelineStep.review;
+  }
+
+  /// What the person attaches in their AI for the handoff (document or voice).
+  HandoffAttachment _handoffAttachment = HandoffAttachment.document;
 
   // ── Build ───────────────────────────────────────────────────────────
 
@@ -664,64 +731,27 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // Pick: "‹ Wizard" + a thin progress bar + "Step 1 of 11". Review/results: a
   // back chevron to the previous step. Processing: a plain title (no back).
   Widget _standaloneTopBar(bool isProcessing) {
-    final p = Theme.of(context).mhadPalette;
-
-    Widget backLink(String label, VoidCallback? onTap) => InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.chevron_left, size: 18, color: p.textMuted),
-                const SizedBox(width: 2),
-                Text(label,
-                    style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        color: p.textMuted)),
-              ],
-            ),
-          ),
-        );
-
+    // The shared BackLink (2026-11 overhaul). Pick: back to the wizard.
+    // Review / results: a step back (disabled mid-process).
     if (_step == _PipelineStep.pick) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-        child: Row(
-          children: [
-            backLink(context.l10n.pipelineBackWizard, _toWizard),
-            const Spacer(),
-          ],
-        ),
-      );
+      return BackLink(onTap: _toWizard);
     }
-
-    // Processing / review / results: a back affordance (disabled mid-process).
     final (label, onBack) = switch (_step) {
       _PipelineStep.results => (
-          context.l10n.pipelineBackReview,
+          context.l10n.stepTitleReviewAndSign,
           isProcessing ? null : () => setState(() => _step = _PipelineStep.review)
         ),
       _ => (
-          context.l10n.pipelineTitleSnapToFill,
+          context.l10n.navAutofill,
           isProcessing ? null : _discardExtraction
         ),
     };
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-      child: Row(
-        children: [
-          backLink(label, onBack),
-          const Spacer(),
-        ],
-      ),
-    );
+    return BackLink(label: label, onTap: onBack, enabled: onBack != null);
   }
 
+
   String get _title => switch (_step) {
-        _PipelineStep.pick => context.l10n.pipelineTitleSnapToFill,
+        _PipelineStep.pick => context.l10n.navAutofill,
         _PipelineStep.extracting ||
         _PipelineStep.validating =>
           context.l10n.pipelineTitleProcessing,
@@ -820,9 +850,9 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
   FormType _selected = FormType.combined;
 
   String _title(FormType ft) => switch (ft) {
-        FormType.combined => context.l10n.pipelineFormCombined,
-        FormType.declaration => context.l10n.pipelineFormDeclaration,
-        FormType.poa => context.l10n.pipelineFormPoa,
+        FormType.combined => context.l10n.formTypeShortCombined,
+        FormType.declaration => context.l10n.quizLegendDeclaration,
+        FormType.poa => context.l10n.quizLegendPoa,
       };
 
   String _subtitle(FormType ft) => switch (ft) {
@@ -857,7 +887,7 @@ class _FormTypeChooserState extends State<_FormTypeChooser> {
                       size: 20,
                       color: _selected == ft ? cs.primary : cs.onSurfaceVariant,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

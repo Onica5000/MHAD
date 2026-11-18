@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
@@ -54,9 +56,9 @@ class BrowseByTopic extends StatelessWidget {
         context.l10n.eduBrowseWhatAnMhadIsAnd),
     (EducationCategory.combined, context.l10n.eduBrowseCombinedForm,
         context.l10n.eduBrowseBothAnAgentAndTreatment),
-    (EducationCategory.declaration, context.l10n.declarationOnly,
+    (EducationCategory.declaration, context.l10n.formTypeNameDeclaration,
         context.l10n.eduBrowseTreatmentPreferencesWithoutAnAgent),
-    (EducationCategory.poa, context.l10n.eduBrowsePowerOfAttorney,
+    (EducationCategory.poa, context.l10n.formTypeShortPoa,
         context.l10n.eduBrowseAgentDesignationWithoutPreferences),
     (EducationCategory.faq, context.l10n.eduBrowseFrequentlyAsked,
         context.l10n.eduBrowseCommonQuestionsAboutMhads),
@@ -132,7 +134,7 @@ class _BrowseRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               Expanded(
@@ -142,7 +144,6 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: p.text,
@@ -152,7 +153,6 @@ class _BrowseRow extends StatelessWidget {
                     Text(
                       sub,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         color: p.textMuted,
                       ),
@@ -165,7 +165,7 @@ class _BrowseRow extends StatelessWidget {
               // style so it reads as a count, not a button.
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: p.primaryTint,
                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -176,8 +176,7 @@ class _BrowseRow extends StatelessWidget {
                     fontFamily: kMonoFamily,
                     fontFamilyFallback: kMonoFallbacks,
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.4,
+                    fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                     color: p.primary,
                   ),
                 ),
@@ -207,8 +206,19 @@ class _CategoryListScreen extends StatelessWidget {
         .where((s) => s.category == category)
         .toList();
     return Scaffold(
-      appBar: AppBar(title: Text(category.label(context.l10n))),
-      body: sections.isEmpty
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: EditorialHeading(text: category.label(context.l10n)),
+            ),
+          ),
+          Expanded(
+            child: sections.isEmpty
           ? Center(
               child: Text(
                 context.l10n.educationCategoryBrowserNoSectionsInThisCategory,
@@ -221,6 +231,9 @@ class _CategoryListScreen extends StatelessWidget {
               itemBuilder: (context, i) =>
                   SectionTile(section: sections[i]),
             ),
+          ),
+        ],
+      ),
     );
   }
 }

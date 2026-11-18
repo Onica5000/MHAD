@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -10,7 +11,6 @@ import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// "Make it findable in a crisis" — addresses the #1 evidence-based failure
 /// mode for psychiatric advance directives (the "transmitter/receiver problem":
@@ -33,22 +33,18 @@ class MakeItFindableScreen extends ConsumerWidget {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => Navigator.of(context).maybePop(),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowFindable,
                   eyebrow: context.l10n.makeItFindableCrisisReadiness,
-                  title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA, size: 32),
+                  title: EditorialHeading(text: context.l10n.makeItFindableMakeItFindableInA),
                   lead: context.l10n.makeItFindableADirectiveOnlyHelpsIf,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 SectionLabel(context.l10n.makeItFindableDoTheseNow),
                 const SizedBox(height: 8),
                 ActionRow(
@@ -59,7 +55,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                       context.l10n.makeItFindableTheyShouldEachHaveA,
                   onTap: toExport,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 ActionRow(
                   icon: Icons.medical_services_outlined,
                   tone: ActionRowTone.primary,
@@ -68,7 +64,7 @@ class MakeItFindableScreen extends ConsumerWidget {
                       context.l10n.makeItFindableAskYourPsychiatristTherapistPrimary,
                   onTap: toExport,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 ActionRow(
                   icon: Icons.account_balance_wallet_outlined,
                   tone: ActionRowTone.primary,
@@ -95,10 +91,8 @@ class MakeItFindableScreen extends ConsumerWidget {
                 Text(
                   context.l10n.makeItFindableThisIsGeneralInformationAbout,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    fontStyle: FontStyle.italic,
-                    height: 1.45,
+                    fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),

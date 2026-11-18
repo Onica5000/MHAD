@@ -102,7 +102,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+                  padding: DesignTokens.pagePadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -115,11 +115,8 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         context.l10n.modeSelectionHowShouldWeHandleYour,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          height: 1.15,
-                          letterSpacing: -0.5,
+                          fontWeight: FontWeight.w700, height: MhadType.leadingTitle, letterSpacing: MhadType.trackingDisplay,
                           color: p.text,
                         ),
                       ),
@@ -127,13 +124,11 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                       Text(
                         context.l10n.modeSelectionYouCanChangeThisAnytime,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.5,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.textMuted,
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 24),
 
                       // Mode cards. Order follows the prototype: Private
                       // (recommended) first, then Public. On web, the
@@ -173,7 +168,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         onTap: _loading != null ? null : _pickPublic,
                       ),
 
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 20),
                       Center(
                         child: Text(
                           kIsWeb
@@ -181,9 +176,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                               : context.l10n.modeSelectionThisAppIsNotHipaa,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 12,
-                            height: 1.45,
+                            fontSize: 12, height: MhadType.leadingParagraph,
                             color: p.textMuted,
                           ),
                         ),
@@ -243,7 +236,7 @@ class _Card2 extends StatelessWidget {
             onTap: onTap,
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
             child: Container(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
                 border: Border.all(color: borderColor, width: 1.5),
@@ -283,15 +276,13 @@ class _Card2 extends StatelessWidget {
                                 // the icon against navy's primaryLight.
                                 : Icon(icon, color: p.onPrimaryLight, size: 20),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               title,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.2,
+                                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                                 color: p.text,
                               ),
                             ),
@@ -302,9 +293,7 @@ class _Card2 extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.textMuted,
                         ),
                       ),
@@ -315,7 +304,7 @@ class _Card2 extends StatelessWidget {
                         children: badges
                             .map((b) => Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 3),
+                                      horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: p.scaffoldBackground,
                                     borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -324,7 +313,6 @@ class _Card2 extends StatelessWidget {
                                   child: Text(
                                     b,
                                     style: TextStyle(
-                                      fontFamily: kSansFamily,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: p.textMuted,
@@ -345,7 +333,7 @@ class _Card2 extends StatelessWidget {
                       left: 16,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 4),
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: p.primary,
                           borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -353,10 +341,8 @@ class _Card2 extends StatelessWidget {
                         child: Text(
                           context.l10n.modeSelectionRecommended,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: p.onPrimary,
                           ),
                         ),

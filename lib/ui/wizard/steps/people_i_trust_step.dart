@@ -51,7 +51,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: DesignTokens.pagePadding,
       children: [
         _AgentCard(
           directiveId: widget.directiveId,
@@ -89,8 +89,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  color: p.textMuted,
-                  letterSpacing: 0.4,
+                  color: p.textMuted, letterSpacing: MhadType.trackingLabel,
                 ),
               ),
             ),
@@ -99,10 +98,8 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
         Text(
           context.l10n.peopleTrustAuthorityIntro,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
-            color: p.textMuted,
-            height: 1.45,
+            color: p.textMuted, height: MhadType.leadingParagraph,
           ),
         ),
         const SizedBox(height: 8),
@@ -111,7 +108,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
           directiveId: widget.directiveId,
           embedded: true,
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -123,15 +120,13 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.info_outline, size: 16, color: p.textMuted),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text.rich(
                   TextSpan(
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
-                      color: p.textMuted,
-                      height: 1.45,
+                      color: p.textMuted, height: MhadType.leadingParagraph,
                     ),
                     children: [
                       TextSpan(
@@ -252,7 +247,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
             ),
             borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
           ),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -281,7 +276,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                           ? Text(
                               initials,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                                 color: widget.isPrimary
@@ -292,7 +286,7 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                           : Icon(Icons.add,
                               size: 18, color: p.textMuted),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,33 +297,13 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 widget.roleLabel,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
                                   color: p.textMuted,
                                 ),
                               ),
-                              if (widget.isPrimary) ...[
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: p.primaryLight,
-                                    borderRadius:
-                                        BorderRadius.circular(DesignTokens.radiusXs),
-                                  ),
-                                  child: Text(
-                                    context.l10n.peopleTrustPrimaryBadge,
-                                    style: TextStyle(
-                                      fontFamily: kSansFamily,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.4,
-                                      color: p.onPrimaryLight,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              // (No "Primary" badge: the role label above
+                              // already says it — it read "PRIMARY AGENT ·
+                              // Primary · Primary agent designation".)
                             ],
                           ),
                           const SizedBox(height: 1),
@@ -340,7 +314,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                     ? context.l10n.peopleTrustAddSomeone
                                     : context.l10n.peopleTrustOptional),
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: p.text,
@@ -362,7 +335,6 @@ class _AgentCardState extends ConsumerState<_AgentCard> {
                                 return Text(
                                   parts.join(' · '),
                                   style: TextStyle(
-                                    fontFamily: kSansFamily,
                                     fontSize: 12,
                                     color: p.textMuted,
                                   ),
@@ -446,7 +418,7 @@ class _StatusChip extends StatelessWidget {
         : p.surface;
     final fg = ok ? okText : p.textMuted;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: ok ? fg.withValues(alpha: 0.2) : p.border),
@@ -457,11 +429,10 @@ class _StatusChip extends StatelessWidget {
         children: [
           Icon(ok ? Icons.check : Icons.remove,
               size: 12, color: fg),
-          const SizedBox(width: 5),
+          const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: fg,

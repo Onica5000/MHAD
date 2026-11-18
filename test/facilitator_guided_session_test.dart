@@ -59,7 +59,7 @@ void main() {
   });
 
   testWidgets("I'm helping someone", (tester) async {
-    final ctx = await tapAndCapture(tester, "I'm helping someone");
+    final ctx = await tapAndCapture(tester, 'I’m helping someone');
     expect(ctx?.guidedSession, isTrue);
     expect(ctx?.facilitatorMode, isTrue);
     expect(ctx?.openingPrompt, contains('for them'));

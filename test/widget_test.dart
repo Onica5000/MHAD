@@ -44,7 +44,7 @@ void main() {
     // setUp) the anonymous "Let's get started." greeting renders regardless
     // of any session name.
     expect(
-      find.textContaining("Let's get started", findRichText: true),
+      find.textContaining('Let’s get started', findRichText: true),
       findsWidgets,
     );
 

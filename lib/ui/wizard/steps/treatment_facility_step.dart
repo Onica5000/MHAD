@@ -175,7 +175,7 @@ class _TreatmentFacilityStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'treatmentFacility'),
           const SizedBox(height: 8),
@@ -222,7 +222,7 @@ class _TreatmentFacilityStepState
           // Same-gender-roommate match sub-selector (artboard WebWizCare) —
           // only shown when the "Same-gender roommate" chip is selected.
           if (_roomPrefs.contains('sameGenderRoommate')) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             _RoommateMatchSelector(
               options: _roommateOptions(l10n),
               selected: _roommateOption,
@@ -374,7 +374,7 @@ class _RoommateMatchSelector extends StatelessWidget {
             ],
           ),
           if (selected == 'specify') ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             TextField(
               controller: specifyCtrl,
               decoration: InputDecoration(

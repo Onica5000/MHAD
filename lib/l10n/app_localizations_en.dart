@@ -9,12 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'PA Mental Health\nAdvance Directive';
-
-  @override
-  String get navHome => 'Home';
-
-  @override
   String get navLearn => 'Learn';
 
   @override
@@ -27,9 +21,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMore => 'More';
 
   @override
-  String get navStart => 'Start';
-
-  @override
   String get navAutofill => 'Autofill';
 
   @override
@@ -39,16 +30,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navDownloadPrint => 'Download & print';
 
   @override
-  String get navResetForm => 'Reset Form';
-
-  @override
   String get badgeAiReady => 'READY';
 
   @override
   String get badgeAiSetUp => 'SET UP';
-
-  @override
-  String get newDirective => 'New Directive';
 
   @override
   String get home => 'Home';
@@ -58,9 +43,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistant => 'Assistant';
-
-  @override
-  String get exportDirective => 'Export Directive';
 
   @override
   String get cancel => 'Cancel';
@@ -73,9 +55,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
-
-  @override
-  String get finish => 'Finish';
 
   @override
   String get done => 'Done';
@@ -102,16 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get required => 'Required';
 
   @override
-  String get combinedForm => 'Combined Declaration & Power of Attorney';
-
-  @override
-  String get declarationOnly => 'Declaration Only';
-
-  @override
-  String get poaOnly => 'Power of Attorney Only';
-
-  @override
-  String get personalInfo => 'Personal Information';
+  String get personalInfo => 'Personal information';
 
   @override
   String get fullName => 'Full name';
@@ -129,49 +99,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get state => 'State';
 
   @override
-  String get zipCode => 'ZIP code';
-
-  @override
   String get phone => 'Phone number';
 
   @override
-  String get effectiveCondition => 'Effective Condition';
-
-  @override
-  String get treatmentFacility => 'Treatment Facility';
+  String get effectiveCondition => 'Effective condition';
 
   @override
   String get medications => 'Medications';
 
   @override
-  String get ectPreferences => 'ECT Preferences';
-
-  @override
-  String get experimentalStudies => 'Experimental Studies';
-
-  @override
   String get drugTrials => 'Drug Trials';
 
   @override
-  String get additionalInstructions => 'Additional Instructions';
+  String get additionalInstructions => 'Additional instructions';
 
   @override
-  String get agentDesignation => 'Agent Designation';
+  String get alternateAgent => 'Alternate agent';
 
   @override
-  String get alternateAgent => 'Alternate Agent';
+  String get agentAuthority => 'Agent authority & limits';
 
   @override
-  String get agentAuthority => 'Agent Authority & Limits';
-
-  @override
-  String get guardianNomination => 'Guardian Nomination';
+  String get guardianNomination => 'Guardian nomination';
 
   @override
   String get review => 'Review';
-
-  @override
-  String get execution => 'Execution';
 
   @override
   String get draft => 'Draft';
@@ -186,32 +138,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revoked => 'Revoked';
 
   @override
-  String get saveAndExit => 'Save & Exit';
-
-  @override
-  String get saveAndExitMessage =>
-      'Your work isn\'t saved permanently — it stays in this browser only and is wiped when you close the tab (kept about 10 minutes for crash recovery). Export or print to keep a copy.';
+  String get saveAndExit => 'Save & exit';
 
   @override
   String get previewPdf => 'Preview PDF';
 
   @override
-  String get sharePrint => 'Share / Print';
-
-  @override
-  String get generateWalletCard => 'Generate Wallet Card';
-
-  @override
   String get importFromDocument => 'Import from Document';
-
-  @override
-  String get importFromContacts => 'Import from Contacts';
-
-  @override
-  String get seeExamples => 'See examples';
-
-  @override
-  String get aiSuggest => 'AI Suggest';
 
   @override
   String stepNOfTotal(int current, int total) {
@@ -238,9 +171,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get procResearchExperimentalLabel => 'Experimental studies';
-
-  @override
-  String get procResearchDrugTrialsLabel => 'Drug trials';
 
   @override
   String get procResearchWhyTheseThree =>
@@ -283,7 +213,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionIntro =>
-      'Pennsylvania law requires a real signature on paper. We can\'t witness it for you — but here\'s exactly what to do.';
+      'Pennsylvania law requires a real signature on paper. We can’t witness it for you — but here’s exactly what to do.';
 
   @override
   String get executionWhyNotAppLead => 'Why not sign in the app? ';
@@ -297,7 +227,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get executionWhyNotAppTail =>
-      ', together. A tap-to-sign wouldn\'t hold up.';
+      ', together. A tap-to-sign wouldn’t hold up.';
 
   @override
   String get executionAnyFormValid =>
@@ -338,7 +268,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get executionInYourPacket => 'In your packet';
 
   @override
-  String get executionPacketMhadTitle => 'Your completed MHAD';
+  String get executionPacketMhadTitle => 'Your completed directive';
 
   @override
   String get executionPacketMhadSub => 'PDF · PA Act 194 format';
@@ -354,7 +284,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get executionPacketWitnessTitle => 'Witness eligibility guide';
 
   @override
-  String get executionPacketWitnessSub => 'One page — who can and can\'t sign';
+  String get executionPacketWitnessSub => 'One page — who can and can’t sign';
 
   @override
   String get executionPacketAfterTitle => 'What to do after signing';
@@ -382,28 +312,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get reviewStepPrimaryAgent => 'Primary Agent';
+  String get reviewStepPrimaryAgent => 'Primary agent';
 
   @override
-  String get reviewStepWhereIWantCare => 'Where I want care';
-
-  @override
-  String get reviewStepMedicalDiagnoses => 'Medical Diagnoses';
-
-  @override
-  String get reviewStepAllergiesReactions => 'Allergies & reactions';
-
-  @override
-  String get reviewStepProceduresResearch => 'Procedures & research';
+  String get reviewStepMedicalDiagnoses => 'Medical diagnoses';
 
   @override
   String get reviewStepName => 'Name';
 
   @override
   String get reviewStepPhone => 'Phone';
-
-  @override
-  String get reviewStepCondition => 'Condition';
 
   @override
   String get reviewStepRelationship => 'Relationship';
@@ -436,12 +354,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStepActivities => 'Activities';
 
   @override
-  String get reviewStepCrisisIntervention => 'Crisis intervention';
-
-  @override
-  String get reviewStepHealthHistory => 'Health history';
-
-  @override
   String get reviewStepDietary => 'Dietary';
 
   @override
@@ -449,9 +361,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewStepChildren => 'Children';
-
-  @override
-  String get reviewStepFamilyNotification => 'Family notification';
 
   @override
   String get reviewStepRecordsDisclosure => 'Records disclosure';
@@ -464,12 +373,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String reviewStepWhoPhone(String who) {
-    return '$who\'s phone number';
+    return '$who’s phone number';
   }
 
   @override
   String reviewStepWhoAddress(String who) {
-    return '$who\'s address';
+    return '$who’s address';
   }
 
   @override
@@ -480,13 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewStepYourGuardianNominee => 'your guardian nominee';
-
-  @override
-  String get reviewStepLoading => 'Loading';
-
-  @override
-  String get reviewStepOneLastLook =>
-      'One last look, then we\'ll make your signing packet.';
 
   @override
   String get reviewStepOneSectionNeedsAttention =>
@@ -534,25 +436,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'with your directive under PA Act 194 (20 Pa.C.S. §§ 5804, 5842). A provider may decline specific instructions only if they conflict with accepted medical practice, or when the provider is not physically available.';
 
   @override
-  String get reviewStepExperimentalStudies => 'Experimental studies';
-
-  @override
   String get wizardProgressSaved => 'Progress saved';
-
-  @override
-  String get wizardLoading => 'Loading';
-
-  @override
-  String get wizardError => 'Error';
 
   @override
   String get wizardUnableToLoad => 'Unable to load this directive.';
 
   @override
   String get wizardBackToHome => 'Back to home';
-
-  @override
-  String get wizardNotFound => 'Not found';
 
   @override
   String get wizardDirectiveNotFound => 'Directive not found.';
@@ -610,10 +500,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalInfoStepZipFirst => 'Enter a 5-digit ZIP first.';
 
   @override
-  String get personalInfoStepZipLookupFailed =>
-      'Couldn\'t look up that ZIP — you can type it in.';
-
-  @override
   String personalInfoStepCountyName(String county) {
     return '$county County';
   }
@@ -631,7 +517,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personalInfoStepDobFuture =>
-      'Date of birth can\'t be in the future';
+      'Date of birth can’t be in the future';
 
   @override
   String get personalInfoStepMustBeAdult =>
@@ -708,26 +594,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'Limit or expand your agent’s authority. Default is broad authority.';
 
   @override
-  String get peopleTrustLegendAgentDecides => '\"Agent decides\"';
+  String get peopleTrustLegendAgentDecides => '“Agent decides”';
 
   @override
   String get peopleTrustLegendGrants => ' grants the power; ';
 
   @override
-  String get peopleTrustLegendNo => '\"No\"';
+  String get peopleTrustLegendNo => '“No”';
 
   @override
   String get peopleTrustLegendWithholds => ' withholds it entirely; ';
 
   @override
-  String get peopleTrustLegendIf => '\"If…\"';
+  String get peopleTrustLegendIf => '“If…”';
 
   @override
   String get peopleTrustLegendCondition =>
       ' lets you add a condition in your own words.';
-
-  @override
-  String get peopleTrustPrimaryBadge => 'Primary';
 
   @override
   String get peopleTrustAddSomeone => 'Add someone';
@@ -746,14 +629,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your agent must be 18 or older. Under PA Act 194, they cannot be your mental health care provider or an employee of a mental health care facility or residential facility where you receive care — unless they are related to you. Choose someone you trust to honor your wishes.';
 
   @override
-  String get agentDesigTitle => 'Primary Agent Designation';
+  String get agentDesigTitle => 'Primary agent designation';
 
   @override
   String get agentDesigAgentDefinition =>
       'An agent (healthcare proxy) is someone you choose to make mental health care decisions on your behalf when you cannot.';
-
-  @override
-  String get agentDesigRelationship => 'Relationship';
 
   @override
   String get agentDesigSpouseNote =>
@@ -764,7 +644,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your agent must be 18 or older. They cannot be your treating physician, an employee of your treatment facility (unless a relative), or someone with financial interest in your estate. Choose someone you trust to honor your wishes.';
 
   @override
-  String get altAgentTitle => 'Alternate Agent Designation';
+  String get altAgentTitle => 'Alternate agent designation';
 
   @override
   String get altAgentActsIf =>
@@ -779,11 +659,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'You are not required to designate an alternate agent.';
 
   @override
-  String get altAgentRelationship => 'Relationship';
-
-  @override
   String get agentAuthHelp =>
-      'Consider carefully before restricting your agent\'s authority. Broad authority gives your agent flexibility to respond to situations you may not anticipate.';
+      'Consider carefully before restricting your agent’s authority. Broad authority gives your agent flexibility to respond to situations you may not anticipate.';
 
   @override
   String get agentAuthIntro =>
@@ -791,7 +668,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agentAuthScopeTitle =>
-      'Important: Scope of Authority (20 Pa.C.S. § 5836)';
+      'Important: scope of authority (20 Pa.C.S. § 5836)';
 
   @override
   String get agentAuthScopeBody =>
@@ -820,7 +697,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'General psychiatric medications only — does not include ECT';
 
   @override
-  String get agentAuthExamplesField => 'Agent Limitations';
+  String get agentAuthExamplesField => 'Agent limitations';
 
   @override
   String get agentAuthExample1 =>
@@ -945,9 +822,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosesMedical => 'Medical';
 
   @override
-  String get diagnosesNoResults => 'No results found.';
-
-  @override
   String get diagnosesEmptyTitle => 'No diagnoses added yet';
 
   @override
@@ -992,28 +866,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosesSpecialty => 'Specialty';
 
   @override
-  String get diagnosesPhone => 'Phone';
-
-  @override
   String get diagnosesDescribeSemantics =>
       'Describe a condition to find its official name';
 
   @override
-  String get diagnosesDescribeLead => 'Don\'t know the official name? ';
+  String get diagnosesDescribeLead => 'Don’t know the official name? ';
 
   @override
   String get diagnosesDescribeBold => 'Describe how it shows up for you';
 
   @override
   String get diagnosesDescribeTail =>
-      ' and I\'ll suggest the closest ICD-10 code for you to confirm.';
+      ' and I’ll suggest the closest ICD-10 code for you to confirm.';
 
   @override
   String get diagnosesTry => 'Try →';
 
   @override
   String get diagnosesFooter =>
-      'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.';
+      'You’re not required to list anything. Anything you do list is shared only with the people your directive names.';
 
   @override
   String diagnosesAddedName(String name) {
@@ -1030,11 +901,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosesDescribeIntro =>
-      'In your own words — symptoms, how it affects you, when it happens. We\'ll suggest possible conditions and confirm each against the ICD-10 registry. These are suggestions to review, not a diagnosis.';
+      'In your own words — symptoms, how it affects you, when it happens. We’ll suggest possible conditions and confirm each against the ICD-10 registry. These are suggestions to review, not a diagnosis.';
 
   @override
   String get diagnosesDescribeHint =>
-      'e.g. long stretches where I feel hopeless and can\'t get out of bed';
+      'e.g. long stretches where I feel hopeless and can’t get out of bed';
 
   @override
   String get diagnosesFinding => 'Finding…';
@@ -1051,9 +922,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Suggestions only — confirm with your records or your doctor. Codes from NIH Clinical Tables (ICD-10-CM).';
 
   @override
-  String get diagnosesDone => 'Done';
-
-  @override
   String get allergiesKindDrug => 'Drug';
 
   @override
@@ -1061,9 +929,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allergiesKindMaterial => 'Material';
-
-  @override
-  String get allergiesKindOther => 'Other';
 
   @override
   String get allergiesSearchDrugHint => 'Search a drug or class…';
@@ -1093,7 +958,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allergiesHelpText =>
-      'List drug allergies, sensitivities, and past adverse reactions. ER staff check this section first. Severity = Mild / Moderate / Severe. Allergies and the \"Medications I never want\" list are separate sections — add a medication you refuse there yourself.';
+      'List drug allergies, sensitivities, and past adverse reactions. ER staff check this section first. Severity = Mild / Moderate / Severe. Allergies and the “Medications I never want” list are separate sections — add a medication you refuse there yourself.';
 
   @override
   String get allergiesAddSection => 'Add an allergy';
@@ -1103,9 +968,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allergiesSourceIcd => 'ICD-10-CM · NLM clinical tables';
-
-  @override
-  String get allergiesNoResults => 'No results found.';
 
   @override
   String get allergiesSourceNote =>
@@ -1135,13 +997,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String allergiesAddedMany(int count) {
     return 'Added · $count allergies';
   }
-
-  @override
-  String get allergiesFooter =>
-      'You\'re not required to list anything. Anything you do list is shared only with the people your directive names.';
-
-  @override
-  String get allergiesClearSearch => 'Clear search';
 
   @override
   String allergiesMatches(int count) {
@@ -1178,7 +1033,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medsStepHelpText =>
-      'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an \"NTI\" badge when you search.';
+      'List medications by name. Your preferences apply to generic, brand name, and trade name equivalents unless you specify otherwise in the notes — to request brand-name only, note it in the reason field.\n\nNarrow Therapeutic Index (NTI) drugs — ones with only a small safety margin between a helpful dose and a harmful one, like lithium, carbamazepine, and valproic acid — cannot have generics substituted under PA law (35 P.S. §960.3). These are marked with an “NTI” badge when you search.';
 
   @override
   String get medsStepHeadsUpLead => 'Heads up — ';
@@ -1289,17 +1144,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilityNoPreferenceBanner =>
-      'Leave both sections empty if you have no preference. Your directive will indicate \"No Preference\" for treatment facilities.';
+      'Leave both sections empty if you have no preference. Your directive will indicate “No Preference” for treatment facilities.';
 
   @override
-  String get facilityPreferredTitle => 'Preferred Facilities';
+  String get facilityPreferredTitle => 'Preferred facilities';
 
   @override
   String get facilityPreferredSubtitle =>
       'Facilities where you would prefer to be treated';
 
   @override
-  String get facilityAvoidTitle => 'Facilities to Avoid';
+  String get facilityAvoidTitle => 'Facilities to avoid';
 
   @override
   String get facilityAvoidSubtitle =>
@@ -1342,7 +1197,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilityRoommateMatchPrompt =>
-      'For \"same-gender roommate\", match me with:';
+      'For “same-gender roommate”, match me with:';
 
   @override
   String get facilityMatchMeWithLabel => 'Match me with';
@@ -1383,9 +1238,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'These sections are all optional. Use them to give guidance to your agent and treatment team beyond the basic preferences above.';
 
   @override
-  String get addlInstrExampleFieldName => 'Additional Instructions';
-
-  @override
   String get addlInstrExample1 =>
       'I find listening to calming music and going for walks helpful during periods of distress. Please allow me access to my personal music player.';
 
@@ -1398,7 +1250,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please notify my sister, Jane Doe, if I am admitted. Do not contact my ex-spouse under any circumstances. My therapist, Dr. Smith, should be informed of any treatment changes.';
 
   @override
-  String get addlInstrActivitiesTitle => 'Activities & Environment';
+  String get addlInstrActivitiesTitle => 'Activities & environment';
 
   @override
   String get addlInstrActivitiesHint =>
@@ -1406,21 +1258,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addlInstrActivitiesDescription =>
-      'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a \"chemical restraint\") or seclusion (being confined alone in a room).';
-
-  @override
-  String get addlInstrCrisisTitle => 'Crisis Intervention';
+      'Describe activities that help you feel better (e.g., walking, reading, music) and your preferences about your physical environment during treatment. You can also state whether you consent to or refuse the use of restraints (being physically held or strapped down, or given medication to restrict your movement or behavior — a “chemical restraint”) or seclusion (being confined alone in a room).';
 
   @override
   String get addlInstrCrisisHint =>
-      'What helps or doesn\'t help during a crisis';
+      'What helps or doesn’t help during a crisis';
 
   @override
   String get addlInstrCrisisDescription =>
       'Based on your past experience, describe what helps you during a mental health crisis and what makes things worse. This helps your treatment team respond in the way that works best for you.';
 
   @override
-  String get addlInstrDeescTitle => 'De-escalation Techniques';
+  String get addlInstrDeescTitle => 'De-escalation techniques';
 
   @override
   String get addlInstrDeescHint =>
@@ -1431,7 +1280,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'List specific techniques or strategies that help calm you when you are distressed. Examples include listening to music, deep breathing, being in a quiet room, using a weighted blanket, speaking with a specific person, or going for a walk.';
 
   @override
-  String get addlInstrTriggersTitle => 'Potential Crisis Triggers';
+  String get addlInstrTriggersTitle => 'Potential crisis triggers';
 
   @override
   String get addlInstrTriggersHint =>
@@ -1442,9 +1291,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Identify situations, environments, or topics that may trigger or worsen a crisis for you. This helps your treatment team avoid these triggers. Examples: loud environments, being touched without permission, certain conversation topics, being left alone, or specific people.';
 
   @override
-  String get addlInstrHealthHistoryTitle => 'Health History';
-
-  @override
   String get addlInstrHealthHistoryHint =>
       'Relevant mental health history, diagnoses, hospitalizations';
 
@@ -1453,7 +1299,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Summarize your relevant mental health history, including past diagnoses, hospitalizations, and treatments that worked well or did not work. This gives your treatment team context about your care history.';
 
   @override
-  String get addlInstrDietaryTitle => 'Dietary Preferences';
+  String get addlInstrDietaryTitle => 'Dietary preferences';
 
   @override
   String get addlInstrDietaryHint =>
@@ -1464,7 +1310,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'List any food allergies, dietary restrictions, or preferences your treatment team should know about. This includes religious dietary laws (e.g., kosher, halal, vegetarian), food intolerances, and any foods to avoid due to medication interactions.';
 
   @override
-  String get addlInstrReligiousTitle => 'Religious & Spiritual';
+  String get addlInstrReligiousTitle => 'Religious & spiritual';
 
   @override
   String get addlInstrReligiousHint =>
@@ -1475,7 +1321,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Describe any religious or spiritual practices that are important to you during treatment. This may include prayer times, clergy or chaplain visits, religious texts or items you would like to have access to, fasting observances, or faith-based coping practices.';
 
   @override
-  String get addlInstrChildrenTitle => 'Children & Custody';
+  String get addlInstrChildrenTitle => 'Children & custody';
 
   @override
   String get addlInstrChildrenHint =>
@@ -1486,7 +1332,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'If you have minor children or dependents, describe who should care for them if you are hospitalized. Include contact information for caregivers, school details, and any custody arrangements your treatment team should be aware of.';
 
   @override
-  String get addlInstrFamilyNotifyTitle => 'Family Notification';
+  String get addlInstrFamilyNotifyTitle => 'Family notification';
 
   @override
   String get addlInstrFamilyNotifyHint => 'Who should be notified and how';
@@ -1496,17 +1342,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Specify who should be notified if you are hospitalized or if your treatment changes. Include how to reach them and what information may be shared. You can also specify people who should NOT be contacted.';
 
   @override
-  String get addlInstrPetCareTitle => 'Pet Care';
-
-  @override
   String get addlInstrPetCareHint => 'Instructions for care of your pets';
 
   @override
   String get addlInstrPetCareDescription =>
-      'If you have pets, describe who should care for them if you are hospitalized. Include the caregiver\'s contact information, feeding and medication schedules, veterinary contacts, and any special care instructions.';
+      'If you have pets, describe who should care for them if you are hospitalized. Include the caregiver’s contact information, feeding and medication schedules, veterinary contacts, and any special care instructions.';
 
   @override
-  String get addlInstrReproTitle => 'Reproductive Health Care';
+  String get addlInstrReproTitle => 'Reproductive health care';
 
   @override
   String get addlInstrReproHint => 'Pregnancy testing, contraception, etc.';
@@ -1516,7 +1359,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Describe any reproductive health care preferences your treatment team should know about. This may include whether you want pregnancy testing before medication changes, contraception preferences, or reproductive health conditions that could affect your treatment.';
 
   @override
-  String get addlInstrOtherTitle => 'Other Instructions';
+  String get addlInstrOtherTitle => 'Other instructions';
 
   @override
   String get addlInstrOtherHint => 'Any other instructions not covered above';
@@ -1526,7 +1369,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use this section for any instructions to your treatment team or agent that are not covered by the sections above. This is a catch-all for anything else you want to communicate about your care preferences.';
 
   @override
-  String get addlInstrRecordsTitle => 'Records Disclosure & Limitations';
+  String get addlInstrRecordsTitle => 'Records disclosure & limitations';
 
   @override
   String get addlInstrRecordsDescription =>
@@ -1557,11 +1400,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addlInstrOptionalAddOns => 'Optional add-ons';
 
   @override
-  String get addlInstrCrisisPlanTitle => 'Crisis plan';
-
-  @override
   String get addlInstrCrisisPlanSubtitle =>
-      'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it\'s the part agents and ER staff read first.';
+      'Your early-warning signs, triggers, what genuinely helps, and what not to do. Not required by Act 194 — but it’s the part agents and ER staff read first.';
 
   @override
   String get addlInstrUlyssesTitle => 'Self-binding (Ulysses) clause';
@@ -1572,7 +1412,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effCondHelpText =>
-      'Describe the circumstances under which you want this directive to take effect — for example, \"when two qualified professionals certify that I lack capacity to make treatment decisions.\" Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.';
+      'Describe the circumstances under which you want this directive to take effect — for example, “when two qualified professionals certify that I lack capacity to make treatment decisions.” Under PA Act 194, the declaration becomes operative when a psychiatrist and one of the following certify you lack capacity: another psychiatrist, a licensed psychologist, your family physician, your attending physician, or another mental health treatment professional.';
 
   @override
   String get effCondTakeEffectWhen => 'This directive should take effect when…';
@@ -1583,7 +1423,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effCondTriggerTwoSubtitle =>
-      'The standard PA Act 194 trigger — two qualified professionals certify you can\'t make mental-health treatment decisions.';
+      'The standard PA Act 194 trigger — two qualified professionals certify you can’t make mental-health treatment decisions.';
 
   @override
   String get effCondTriggerCourtTitle => 'A court determines I lack capacity';
@@ -1598,9 +1438,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get effCondAnythingElseSubtitle =>
       'Add your own words, or pick an example to start from.';
-
-  @override
-  String get effCondExampleFieldName => 'Effective Condition';
 
   @override
   String get effCondExample1 =>
@@ -1633,10 +1470,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'If you have a preferred doctor to evaluate your capacity, enter their information below.';
 
   @override
-  String get effCondDoctorNameLabel => 'Name of Doctor';
+  String get effCondDoctorNameLabel => 'Name of doctor';
 
   @override
-  String get effCondDoctorContactLabel => 'Address / Phone Number';
+  String get effCondDoctorContactLabel => 'Address / phone number';
 
   @override
   String get consentChoiceEctSectionLabel => 'TREATMENT CONSENT';
@@ -1685,9 +1522,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentChoiceExperimentalSectionLabel => 'RESEARCH CONSENT';
 
   @override
-  String get consentChoiceExperimentalTitle => 'Experimental Studies';
-
-  @override
   String get consentChoiceExperimentalSubtitle =>
       'State your preferences regarding participation in experimental research during mental health treatment.';
 
@@ -1717,9 +1551,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentChoiceDrugTrialsSectionLabel => 'CLINICAL TRIALS';
-
-  @override
-  String get consentChoiceDrugTrialsTitle => 'Drug Trials';
 
   @override
   String get consentChoiceDrugTrialsSubtitle =>
@@ -1755,9 +1586,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get consentChoiceConditionalDescription =>
       'Describe the conditions in the box below.';
-
-  @override
-  String get consentChoiceConditionsLabel => 'Conditions';
 
   @override
   String get consentChoiceNoConsentTitle => 'I do not consent';
@@ -1837,7 +1665,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wizardHelpButton => 'Help';
 
   @override
-  String get wizardHelpLearnMore => 'Learn More';
+  String get wizardHelpLearnMore => 'Learn more';
 
   @override
   String wizardHelpQuestionsContact(String phone) {
@@ -1894,7 +1722,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizQ1Sub =>
-      'A family member, partner, or close friend who could make treatment decisions if you can\'t.';
+      'A family member, partner, or close friend who could make treatment decisions if you can’t.';
 
   @override
   String get quizQ1O1Label => 'Yes — and I trust them completely';
@@ -1917,7 +1745,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizQ1O3Hint => 'Declaration-only is for you.';
 
   @override
-  String get quizQ1O4Label => 'I\'m not sure yet';
+  String get quizQ1O4Label => 'I’m not sure yet';
 
   @override
   String get quizQ1O4Hint => 'No problem — we can come back to this.';
@@ -1939,11 +1767,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizQ2O2Label =>
-      'Some preferences, but I\'d rather my agent decide';
+      'Some preferences, but I’d rather my agent decide';
 
   @override
   String get quizQ2O2Hint =>
-      'Combined still works — agent decides where you didn\'t write.';
+      'Combined still works — agent decides where you didn’t write.';
 
   @override
   String get quizQ2O3Label => 'No — let my agent or doctors decide everything';
@@ -1952,14 +1780,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizQ2O3Hint => 'Power of Attorney only is the lightest path.';
 
   @override
-  String get quizQ2O4Label => 'I\'m not sure yet';
-
-  @override
   String get quizQ2O4Hint => 'No problem — Combined leaves both doors open.';
 
   @override
   String get quizQ3Headline =>
-      'If you can\'t decide, **whose voice** should reach the doctors first?';
+      'If you can’t decide, **whose voice** should reach the doctors first?';
 
   @override
   String get quizQ3Sub =>
@@ -1988,18 +1813,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizQ3O3Hint => 'Combined is the strongest fit.';
 
   @override
-  String get quizQ3O4Label => 'I\'m not sure yet';
-
-  @override
   String get quizQ3O4Hint => 'No problem — Combined supports both pathways.';
 
   @override
   String get quizQ4Headline =>
-      'What\'s the **most important** thing this document does for you?';
+      'What’s the **most important** thing this document does for you?';
 
   @override
   String get quizQ4Sub =>
-      'There\'s no wrong answer — this just confirms what we\'re seeing.';
+      'There’s no wrong answer — this just confirms what we’re seeing.';
 
   @override
   String get quizQ4O1Label => 'Names who I trust to speak for me';
@@ -2044,9 +1866,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizYouProbablyWant => 'You probably want\n';
 
   @override
-  String get quizLegendCombined => 'Combined';
-
-  @override
   String get quizLegendDeclaration => 'Declaration only';
 
   @override
@@ -2059,12 +1878,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String quizUseForm(String formName) {
     return 'Use $formName';
   }
-
-  @override
-  String get quizFormNameCombined => 'Combined';
-
-  @override
-  String get quizFormNameDeclaration => 'Declaration';
 
   @override
   String get quizFormNamePoa => 'POA';
@@ -2082,10 +1895,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Documents your treatment preferences without naming an agent. Your treatment team will follow your written wishes directly.';
 
   @override
-  String get aiSuggestDraftTitle => 'AI Draft';
-
-  @override
-  String get aiSuggestSuggestionTitle => 'AI Suggestion';
+  String get aiSuggestDraftTitle => 'AI draft';
 
   @override
   String get aiSuggestYourText => 'Your text:';
@@ -2129,7 +1939,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiSuggestForFieldA11y(String fieldName) {
-    return 'AI Suggest for $fieldName';
+    return 'Wording help for $fieldName';
   }
 
   @override
@@ -2156,13 +1966,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSheetLocalOnly =>
-      'From your phone\'s contacts. We never upload them — search runs locally.';
+      'From your phone’s contacts. We never upload them — search runs locally.';
 
   @override
   String get contactSheetSearchHint => 'Search by name or number';
-
-  @override
-  String get contactSheetClearSearch => 'Clear search';
 
   @override
   String contactSheetContactsCount(int count) {
@@ -2188,7 +1995,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String contactSheetWarnConfirm(String note) {
-    return '⚠ $note — confirm they\'re not treating you';
+    return '⚠ $note — confirm they’re not treating you';
   }
 
   @override
@@ -2212,18 +2019,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'An owner/operator of a facility where you receive care';
 
   @override
-  String get contactSheetWhoCantBeAgent => 'Who can\'t be your agent';
+  String get contactSheetWhoCantBeAgent => 'Who can’t be your agent';
 
   @override
   String get contactSheetRulesFootnote =>
-      'Under-18 is blocked automatically from the contact\'s birthday. We can\'t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren\'t treating you.';
+      'Under-18 is blocked automatically from the contact’s birthday. We can’t tell who your providers are, so anything that looks like a provider is a soft warning you can override — confirm only if they truly aren’t treating you.';
 
   @override
   String get voiceMicPermission => 'Microphone permission is needed.';
 
   @override
   String get voiceTranscribeFailed =>
-      'Couldn\'t transcribe. Try again, or type it instead.';
+      'Couldn’t transcribe. Try again, or type it instead.';
 
   @override
   String get voiceSpeechError => 'Speech recognition error.';
@@ -2249,11 +2056,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceExplainAi =>
-      'For better accuracy on medication names and conditions, your recording goes to Google\'s AI to transcribe. Review the text before saving.';
+      'For better accuracy on medication names and conditions, your recording goes to Google’s AI to transcribe. Review the text before saving.';
 
   @override
   String get voiceExplainBrowser =>
-      'To transcribe, your browser sends the audio to its speech service (often Google). We don\'t keep the audio or text — edit it before saving.';
+      'To transcribe, your browser sends the audio to its speech service (often Google). We don’t keep the audio or text — edit it before saving.';
 
   @override
   String get voiceExplainDevice =>
@@ -2275,15 +2082,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceFooterAi =>
-      'WE STORE NOTHING · GOOGLE\'S AI TRANSCRIBES THE RECORDING';
+      'WE STORE NOTHING · GOOGLE’S AI TRANSCRIBES THE RECORDING';
 
   @override
   String get voiceFooterBrowser =>
-      'WE STORE NOTHING · YOUR BROWSER\'S SPEECH SERVICE TRANSCRIBES THE AUDIO';
+      'WE STORE NOTHING · YOUR BROWSER’S SPEECH SERVICE TRANSCRIBES THE AUDIO';
 
   @override
   String get voiceFooterDevice =>
-      'AUDIO ISN\'T SAVED · TRANSCRIPT STAYS IN THIS SESSION';
+      'AUDIO ISN’T SAVED · TRANSCRIPT STAYS IN THIS SESSION';
 
   @override
   String get voiceTranscribingCard => 'Transcribing your recording…';
@@ -2296,7 +2103,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pipelineGeneratingSuggestions =>
-      'AI is generating personalized suggestions...';
+      'AI is generating personalized suggestions…';
 
   @override
   String get pipelineNoAdditionalSuggestions =>
@@ -2345,7 +2152,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pipelineSetupAiBody =>
-      'Snap-to-fill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini\'s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
+      'Autofill uses AI to read your uploaded document (photo, PDF, or text) and pull out details to fill your form — medications, conditions, care preferences, and your contact details. It needs an AI key — Gemini’s free tier takes about 30 seconds to set up. You review every field before anything lands in your form.';
 
   @override
   String get pipelineSetupAi => 'Set up AI';
@@ -2355,7 +2162,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pipelineUnsupportedType =>
-      'That file type isn\'t supported. Use a JPG, PNG, HEIC, PDF, or text file.';
+      'That file type isn’t supported. Use a JPG, PNG, HEIC, PDF, or text file.';
 
   @override
   String pipelineRpmLimit(int pages, int remaining, int seconds) {
@@ -2369,17 +2176,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String pipelineFileTooLarge(String name, String sizeMb) {
-    return 'File \"$name\" is too large ($sizeMb MB). Maximum file size is 10 MB per document.';
+    return 'File “$name” is too large ($sizeMb MB). Maximum file size is 10 MB per document.';
   }
 
   @override
   String pipelineExtractingPage(int current, int total) {
-    return 'Extracting page $current of $total...';
+    return 'Extracting page $current of $total…';
   }
 
   @override
   String get pipelineExtractingSingle =>
-      'Extracting medical data from document...';
+      'Extracting medical data from document…';
 
   @override
   String pipelineLooksLikeKind(String kind) {
@@ -2388,12 +2195,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String pipelineNotMedicalSingle(String kind) {
-    return 'This doesn\'t look like a health or medical document$kind, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.';
+    return 'This doesn’t look like a health or medical document$kind, so nothing was used. Upload a medical record, medication or allergy list, or an existing advance directive.';
   }
 
   @override
   String pipelineNotMedicalMulti(String kind) {
-    return 'These don\'t look like health or medical documents$kind, so nothing was used.';
+    return 'These don’t look like health or medical documents$kind, so nothing was used.';
   }
 
   @override
@@ -2406,49 +2213,31 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get pipelineValidating => 'Validating medications and conditions...';
+  String get pipelineValidating => 'Validating medications and conditions…';
 
   @override
-  String get pipelinePleaseWait => 'Please wait while processing...';
-
-  @override
-  String get pipelineBackWizard => 'Wizard';
-
-  @override
-  String get pipelineBackReview => 'Review';
-
-  @override
-  String get pipelineTitleSnapToFill => 'Snap to fill';
+  String get pipelinePleaseWait => 'Please wait while processing…';
 
   @override
   String get pipelineTitleProcessing => 'Processing';
 
   @override
-  String get pipelineTitleReview => 'Review Extracted Data';
+  String get pipelineTitleReview => 'Review extracted data';
 
   @override
-  String get pipelineTitleGenerating => 'Generating Suggestions';
+  String get pipelineTitleGenerating => 'Generating suggestions';
 
   @override
-  String get pipelineTitleResults => 'AI Suggestions';
+  String get pipelineTitleResults => 'AI suggestions';
 
   @override
   String pipelinePickerFailed(String error) {
-    return 'Couldn\'t open the file picker ($error). Try dragging the file onto the box above instead.';
+    return 'Couldn’t open the file picker ($error). Try dragging the file onto the box above instead.';
   }
 
   @override
   String get pipelineCouldNotRead =>
-      'We couldn\'t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.';
-
-  @override
-  String get pipelineFormCombined => 'Combined';
-
-  @override
-  String get pipelineFormDeclaration => 'Declaration only';
-
-  @override
-  String get pipelineFormPoa => 'Power of Attorney only';
+      'We couldn’t read that file. Please use a PDF, JPG, PNG, WEBP, HEIC, or plain-text file under 10 MB.';
 
   @override
   String get pipelineFormCombinedSub =>
@@ -2470,13 +2259,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choose your form first — the AI will then read only the parts that form needs. Combined is the broadest; you can change this later.';
 
   @override
-  String get pickSnapOptional => 'Snap to fill · optional';
+  String get pickSnapOptional => 'Autofill · optional';
 
   @override
   String get pickHeadlineLead => 'Have a photo handy? ';
 
   @override
-  String get pickHeadlineAccent => 'We\'ll read it.';
+  String get pickHeadlineAccent => 'We’ll read it.';
 
   @override
   String get pickIntro =>
@@ -2491,7 +2280,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Recording a voice file? See the questionnaire & how-to';
 
   @override
-  String get pickSkipTypeAll => 'Skip — I\'ll type it all';
+  String get pickSkipTypeAll => 'Skip — I’ll type it all';
 
   @override
   String get pickContinueStep2 => 'Continue to step 2';
@@ -2536,11 +2325,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickRemove => 'Remove';
 
   @override
-  String get pickNoKeyTitle => 'AI isn\'t set up yet';
+  String get pickNoKeyTitle => 'AI isn’t set up yet';
 
   @override
   String get pickNoKeyBody =>
-      'You can see how snap-to-fill works below, but reading a real photo or PDF needs an AI key (Gemini\'s free tier takes about 30 seconds). You review every field before it lands in your form.';
+      'You can see how autofill works below, but reading a real photo or PDF needs an AI key (Gemini’s free tier takes about 30 seconds). You review every field before it lands in your form.';
 
   @override
   String get pickTryAgain => 'Try again';
@@ -2567,7 +2356,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickSentToProvider =>
-      'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it\'s gone when this tab closes), but the provider may retain it (Gemini\'s free tier does). You review everything before it is added to your directive.';
+      'To autofill, your file — including any personal details in it — is sent to your AI provider to read. The app saves nothing (it’s gone when this tab closes), but the provider may retain it (Gemini’s free tier does). You review everything before it is added to your directive.';
 
   @override
   String get pickTargetId => 'Photo of ID';
@@ -2628,7 +2417,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickSentToProviderShort =>
-      'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini\'s free tier does). You review before anything is added.';
+      'Your file (including any personal details) is sent to your AI provider to read it. The app saves nothing; the provider may retain it (Gemini’s free tier does). You review before anything is added.';
 
   @override
   String pickReadingDocs(int count) {
@@ -2646,23 +2435,23 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count files read by Google\'s AI to autofill.',
-      one: 'Read by Google\'s AI to autofill.',
+      other: '$count files read by Google’s AI to autofill.',
+      one: 'Read by Google’s AI to autofill.',
     );
     return '$_temp0';
   }
 
   @override
-  String get reviewLabelMedPrefer => 'Preferred Medication';
+  String get reviewLabelMedPrefer => 'Preferred medication';
 
   @override
-  String get reviewLabelMedAvoid => 'Medication to Avoid';
+  String get reviewLabelMedAvoid => 'Medication to avoid';
 
   @override
-  String get reviewLabelMedCurrent => 'Currently Taking';
+  String get reviewLabelMedCurrent => 'Currently taking';
 
   @override
-  String get reviewLabelMedLimit => 'Restricted-Use Medication';
+  String get reviewLabelMedLimit => 'Restricted-use medication';
 
   @override
   String get reviewLabelCond => 'Condition';
@@ -2674,46 +2463,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelAllergy => 'Allergy';
 
   @override
-  String get reviewLabelHh => 'Health History';
+  String get reviewLabelHh => 'Health history';
 
   @override
   String get reviewLabelEffectiveCondition => 'When this kicks in (your words)';
 
   @override
-  String get reviewLabelFacilityPrefer => 'Preferred Facility';
+  String get reviewLabelFacilityPrefer => 'Preferred facility';
 
   @override
-  String get reviewLabelFacilityAvoid => 'Facility to Avoid';
+  String get reviewLabelFacilityAvoid => 'Facility to avoid';
 
   @override
-  String get reviewLabelDietary => 'Dietary';
+  String get reviewLabelReligious => 'Religious/cultural';
 
   @override
-  String get reviewLabelReligious => 'Religious/Cultural';
-
-  @override
-  String get reviewLabelActivities => 'Activities';
-
-  @override
-  String get reviewLabelCrisis => 'Crisis Intervention';
-
-  @override
-  String get reviewLabelCrisisPlan => 'Crisis plan';
+  String get reviewLabelCrisis => 'Crisis intervention';
 
   @override
   String get reviewLabelAgentAuthorityLimitations => 'Agent authority limits';
-
-  @override
-  String get reviewLabelEctConsent => 'ECT consent';
 
   @override
   String get reviewLabelExperimentalConsent => 'Experimental treatment consent';
 
   @override
   String get reviewLabelDrugTrialConsent => 'Drug trial consent';
-
-  @override
-  String get reviewLabelMedicationConsent => 'Medication consent';
 
   @override
   String get reviewLabelTriggerTwoProfessionals => 'Trigger: professionals';
@@ -2726,13 +2500,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Trigger: involuntary commitment';
 
   @override
-  String get reviewLabelRoomPrefsNote => 'Room preferences';
-
-  @override
   String get reviewLabelRoomPrefChips => 'Room options';
-
-  @override
-  String get reviewLabelRoommateSameGender => 'Same-gender roommate';
 
   @override
   String get reviewLabelGuardianCanRevoke => 'Guardian: override';
@@ -2753,40 +2521,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelUlyssesOptin => 'Self-binding (Ulysses)';
 
   @override
-  String get reviewLabelPetCustody => 'Pet care';
-
-  @override
   String get reviewLabelChildrenCustody => 'Children / dependents';
 
   @override
   String get reviewLabelFamilyNotification => 'Who to notify';
 
   @override
-  String get reviewLabelRecordsDisclosure => 'Records disclosure';
-
-  @override
-  String get reviewLabelOther => 'Other';
-
-  @override
   String get reviewLabelPersonName => 'Your full name';
 
   @override
-  String get reviewLabelPersonDob => 'Date of birth';
-
-  @override
-  String get reviewLabelPersonAddress1 => 'Street address';
-
-  @override
   String get reviewLabelPersonAddress2 => 'Apt / suite / unit';
-
-  @override
-  String get reviewLabelPersonCity => 'City';
-
-  @override
-  String get reviewLabelPersonCounty => 'County';
-
-  @override
-  String get reviewLabelPersonState => 'State';
 
   @override
   String get reviewLabelPersonZip => 'ZIP code';
@@ -2801,7 +2545,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelPersonDoctorSpecialty => 'Doctor specialty';
 
   @override
-  String get reviewLabelPersonDoctorPhone => 'Doctor\'s phone';
+  String get reviewLabelPersonDoctorPhone => 'Doctor’s phone';
 
   @override
   String get reviewLabelPersonEvalDoctorName => 'Preferred evaluating doctor';
@@ -2882,31 +2626,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelGuardianPhone => 'Guardian phone';
 
   @override
-  String get reviewSectionMedPrefer => 'Preferred Meds';
+  String get reviewSectionMedPrefer => 'Preferred meds';
 
   @override
-  String get reviewSectionMedAvoid => 'Meds to Avoid';
+  String get reviewSectionMedAvoid => 'Meds to avoid';
 
   @override
-  String get reviewSectionMedCurrent => 'Currently Taking';
+  String get reviewSectionMedCurrent => 'Currently taking';
 
   @override
-  String get reviewSectionMedLimit => 'Restricted-Use Meds';
+  String get reviewSectionMedLimit => 'Restricted-use meds';
 
   @override
   String get reviewSectionCond => 'Conditions';
-
-  @override
-  String get reviewSectionDiag => 'Diagnoses';
-
-  @override
-  String get reviewSectionAllergy => 'Allergies';
-
-  @override
-  String get reviewSectionHh => 'Health History';
-
-  @override
-  String get reviewSectionEffectiveCondition => 'When this kicks in';
 
   @override
   String get reviewSectionPerson => 'Your details';
@@ -2915,84 +2647,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewSectionAgent => 'Your agent';
 
   @override
-  String get reviewSectionAgentAuthority => 'Agent Authority';
+  String get reviewSectionAgentAuthority => 'Agent authority';
 
   @override
   String get reviewSectionUlyssesOptin => 'Self-binding';
 
   @override
-  String get reviewSectionCrisisPlan => 'Crisis Plan';
-
-  @override
   String get reviewSectionConsent => 'Consent';
-
-  @override
-  String get reviewSectionRoomPreferences => 'Room Preferences';
-
-  @override
-  String get reviewSectionAltAgent => 'Alternate agent';
 
   @override
   String get reviewSectionGuardian => 'Guardian';
 
   @override
-  String get reviewSectionOther => 'Other';
-
-  @override
-  String get reviewStepGroupWhenKicksIn => 'When this kicks in';
-
-  @override
-  String get reviewStepGroupDiagnoses => 'Diagnoses';
-
-  @override
-  String get reviewStepGroupAboutYou => 'About you';
-
-  @override
-  String get reviewStepGroupPeopleITrust => 'People I trust';
-
-  @override
-  String get reviewStepGroupGuardian => 'If a court appoints a guardian';
-
-  @override
-  String get reviewStepGroupWhereIWantCare => 'Where I want care';
-
-  @override
-  String get reviewStepGroupMedications => 'Medications';
-
-  @override
-  String get reviewStepGroupAllergies => 'Allergies & reactions';
-
-  @override
-  String get reviewStepGroupProceduresResearch => 'Procedures & research';
-
-  @override
-  String get reviewStepGroupAnythingElse => 'Anything else';
-
-  @override
   String get reviewAiReadThisPhoto => 'AI READ THIS PHOTO';
 
   @override
-  String get reviewHeresWhatWeRead => 'Here\'s what we read.';
+  String get reviewHeresWhatWeRead => 'Here’s what we read.';
 
   @override
   String get reviewHowToIntro =>
-      'These are the details the AI pulled from your document. Here\'s how to use this page:';
+      'These are the details the AI pulled from your document. Here’s how to use this page:';
 
   @override
   String get reviewHowToChecked =>
-      'A checked box means it will be added to your form. Uncheck anything you don\'t want.';
+      'A checked box means it will be added to your form. Uncheck anything you don’t want.';
 
   @override
   String get reviewHowToEdit =>
-      'Tap any field to edit its wording before it\'s added.';
+      'Tap any field to edit its wording before it’s added.';
 
   @override
   String get reviewHowToGrouped =>
-      'Results are grouped by form section (the same steps you\'ll see next). A \"Replaces what you have\" note means it would overwrite something you already entered — those start unchecked.';
+      'Results are grouped by form section (the same steps you’ll see next). A “Replaces what you have” note means it would overwrite something you already entered — those start unchecked.';
 
   @override
   String reviewHowToFinish(String buttonLabel) {
-    return 'When you\'re ready, tap \"$buttonLabel\" at the bottom to fill these into your form and continue — you\'ll land in the form to review everything.';
+    return 'When you’re ready, tap “$buttonLabel” at the bottom to fill these into your form and continue — you’ll land in the form to review everything.';
   }
 
   @override
@@ -3032,7 +2722,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewIdentityNotMerged =>
-      'Identity fields aren\'t merged by the AI — double-check this one yourself.';
+      'Identity fields aren’t merged by the AI — double-check this one yourself.';
 
   @override
   String get reviewWillSave => 'Will save:';
@@ -3054,10 +2744,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Guidance to read — not saved to your form. Set your choice in Procedures & research.';
 
   @override
-  String get reviewAutofillInformation => 'Autofill Information';
+  String get reviewAutofillInformation => 'Autofill information';
 
   @override
-  String get reviewApplyAll => 'Apply All';
+  String get reviewApplyAll => 'Apply all';
 
   @override
   String get reviewDiscardAll => 'Discard all';
@@ -3122,7 +2812,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePrivateByDesign => 'Private by design';
 
   @override
-  String get homeLetSGetStarted => 'Let\'s get started.';
+  String get homeLetSGetStarted => 'Let’s get started.';
 
   @override
   String get homeRename => 'Rename';
@@ -3164,7 +2854,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Shown only in this list — never printed on the form. Leave empty to use the name on the directive.';
 
   @override
-  String get homeCouldnTLoadYourDirectives => 'Couldn\'t load your directives.';
+  String get homeCouldnTLoadYourDirectives => 'Couldn’t load your directives.';
 
   @override
   String get homeNothingWasLostThisIs =>
@@ -3177,7 +2867,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeInYourWords => 'in your words.';
 
   @override
-  String get homeLetSKeepYourVoice => 'Let\'s keep your voice clear.';
+  String get homeLetSKeepYourVoice => 'Let’s keep your voice clear.';
 
   @override
   String get homeStartYourDirective => 'Start your directive';
@@ -3255,7 +2945,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crisisPlanThingsToSayToMe => 'Things to say to me';
 
   @override
-  String get crisisPlanDonTDoThese => 'Don\'t do these';
+  String get crisisPlanDonTDoThese => 'Don’t do these';
 
   @override
   String get crisisPlanTypeAShortNote => 'Type a short note';
@@ -3398,7 +3088,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminUpdateEGTheTrevorProject =>
-      'e.g. \"The Trevor Project number changed to ...\" or \"Check Gemini\'s current free-tier rate limits\"';
+      'e.g. “The Trevor Project number changed to …” or “Check Gemini’s current free-tier rate limits”';
 
   @override
   String get adminUpdateRequiredWhatShouldTheAi =>
@@ -3409,14 +3099,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminUpdateRestrictTheAiToOne =>
-      'Restrict the AI to one spot, e.g. \"config.timeoutsSeconds\" or \"sections.faq_valid\".';
+      'Restrict the AI to one spot, e.g. “config.timeoutsSeconds” or “sections.faq_valid”.';
 
   @override
   String get reminderSheetsQuickRenew5Min => 'Quick renew · ~5 min';
 
   @override
   String get reminderSheetsMostPeopleKeepTheSame =>
-      'Most people keep the same answers. We\'ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.';
+      'Most people keep the same answers. We’ll pre-fill all 11 sections from your current directive — tap any card to change it, then print and sign the new copy in ink with two witnesses.';
 
   @override
   String get reminderSheetsStartQuickRenew => 'Start quick renew';
@@ -3426,7 +3116,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderSheetsWeLlRemindYouAgain =>
-      'We\'ll remind you again 7 days before expiration.';
+      'We’ll remind you again 7 days before expiration.';
 
   @override
   String get reminderSheetsAnythingChanged => 'Anything changed?';
@@ -3439,7 +3129,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderSheetsIfYouEditAnythingYou =>
-      'If you edit anything, you\'ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.';
+      'If you edit anything, you’ll re-print and sign that updated copy in ink. Small changes can wait for your 2-year renewal.';
 
   @override
   String get reminderSheets3MonthCheckIn => '● 3-month check-in';
@@ -3540,7 +3230,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pastDirectiveDetailWeDonTTrackDelivery =>
-      'We don\'t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.';
+      'We don’t track delivery or receipt confirmation (that would need a server). Add entries manually as you distribute copies.';
 
   @override
   String get pastDirectiveDetailGeneratedOnDemand6Pages =>
@@ -3588,7 +3278,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pastDirectiveDetailDirective => 'Directive · ';
 
   @override
-  String get pinDialogCreatePasscode => 'Create Passcode';
+  String get pinDialogCreatePasscode => 'Create passcode';
 
   @override
   String get pinDialogBiometricAuthenticationIsNotAvailable =>
@@ -3617,7 +3307,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pinDialogAtLeast4Characters => 'At least 4 characters';
 
   @override
-  String get pinDialogConfirmPasscode => 'Confirm Passcode';
+  String get pinDialogConfirmPasscode => 'Confirm passcode';
 
   @override
   String get pinDialogUseYour => 'Use your ';
@@ -3659,7 +3349,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsForTheMedicationsYouRe =>
-      'For the medications you\'re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.';
+      'For the medications you’re currently taking, here are common side effects — check the ones you actually have. Noting them (especially any that affect your daily activities) helps your care team. This is common-side-effect information, not medical advice.';
 
   @override
   String get sideEffectsWorthDiscussingWithYourDoctor =>
@@ -3686,7 +3376,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get educationYourDirectiveIsYourVoice =>
-      '\"Your directive is your voice — written in advance, kept safe, honored when you can\'t speak for yourself.\"';
+      '“Your directive is your voice — written in advance, kept safe, honored when you can’t speak for yourself.”';
 
   @override
   String get educationPaOfficeOfMentalHealth =>
@@ -3694,7 +3384,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get educationTypeToSearchEducationalContent =>
-      'Type to search educational content...';
+      'Type to search educational content…';
 
   @override
   String get educationBrowseAllTopics => 'Browse all topics';
@@ -3733,14 +3423,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideCouldnTOpenTheQuestionnaire =>
-      'Couldn\'t open the questionnaire to print. Please try again.';
+      'Couldn’t open the questionnaire to print. Please try again.';
 
   @override
   String get audioGuideRecordYourWishesByVoice => 'Record your wishes by voice';
 
   @override
   String get audioGuideDescribeYourWishesOutLoud =>
-      'Describe your wishes out loud, upload the recording on the Snap-to-fill screen, and the AI fills your directive — you review every field before anything is saved.';
+      'Describe your wishes out loud, upload the recording on the Autofill page, and the AI fills your directive — you review every field before anything is added.';
 
   @override
   String get audioGuidePrintTheQuestionnaire => 'Print the questionnaire';
@@ -3763,7 +3453,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get audioGuideHowToRecord => 'How to record';
 
   @override
-  String get audioGuideWhatTheRecordingCanT => 'What the recording can\'t fill';
+  String get audioGuideWhatTheRecordingCanT => 'What the recording can’t fill';
 
   @override
   String get ulyssesClauseBeforeYouAcknowledge => 'Before you acknowledge';
@@ -3777,17 +3467,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ulyssesClauseSometimesDuringACrisisPeople =>
-      'Sometimes during a crisis, people refuse treatment that they\'d want when well. PA law honors what you wrote today, even if you protest in the moment.';
+      'Sometimes during a crisis, people refuse treatment that they’d want when well. PA law honors what you wrote today, even if you protest in the moment.';
 
   @override
-  String get ulyssesClauseSelfBindingUlysses => 'SELF-BINDING (\"Ulysses\")';
+  String get ulyssesClauseSelfBindingUlysses => 'SELF-BINDING (“Ulysses”)';
 
   @override
   String get ulyssesClauseTieMyselfToTheMast => 'Tie myself to the mast.';
 
   @override
   String get ulyssesClausePerPaAct19420 =>
-      'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I\'m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.';
+      'Per PA Act 194 (20 Pa.C.S. §§ 5825, 5839), this directive may be revoked only while I have capacity. Once I’m found incapable, what I wrote here stands — even over my in-the-moment protest — until capacity returns.';
 
   @override
   String get ulyssesClauseIAcknowledgeThis => 'I acknowledge this';
@@ -3804,7 +3494,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Before sharing: ensure this directive has been signed, dated, and witnessed by two adults (18+) as required by PA Act 194. Give copies to your agent, physician, and support people.';
 
   @override
-  String get exportCardsPrincipal => 'Principal';
+  String get exportCardsPrincipal => 'The person who made it';
 
   @override
   String get exportCardsTheExportedPdfIsNot =>
@@ -3815,20 +3505,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Important: Before sharing, ensure this directive has been signed, dated, and witnessed by two adults as required by PA Act 194. Give copies to your agent, physician, and support people.';
 
   @override
-  String get pdfPreviewUsLetter8511 => 'US LETTER · 8.5×11\"';
+  String get pdfPreviewUsLetter8511 => 'US LETTER · 8.5 × 11 IN';
 
   @override
   String get pdfPreviewShare => 'Share';
 
   @override
   String get pdfPreviewSizedForUsLetter8 =>
-      'Sized for US Letter (8.5 × 11″) with 1-inch margins. The preview fills the width — use − / + to zoom.';
+      'Sized for US Letter (8.5 × 11 in) with 1-inch margins. The preview fills the width — use − / + to zoom.';
 
   @override
   String get pdfPreviewPages => 'PAGES';
-
-  @override
-  String get pdfPreviewExportShare => 'Export & share';
 
   @override
   String get pdfPreviewClosePreview => 'Close preview';
@@ -3850,16 +3537,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select at least one section to include.';
 
   @override
-  String get exportIncompleteDirective => 'Incomplete Directive';
+  String get exportIncompleteDirective => 'Incomplete directive';
 
   @override
-  String get exportGoBack => 'Go Back';
+  String get exportGoBack => 'Go back';
 
   @override
-  String get exportEditDirective => 'Edit Directive';
+  String get exportEditDirective => 'Edit directive';
 
   @override
-  String get exportExportAnyway => 'Export Anyway';
+  String get exportExportAnyway => 'Export anyway';
 
   @override
   String get exportExportedFileIsNotEncrypted =>
@@ -3870,10 +3557,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The PDF you are about to share contains your full mental-health directive (names, agents, medications, signatures). It is generated unencrypted because the underlying PDF library does not support password protection.\n\nShare only via channels you trust (e.g., direct hand-off, a secure email to a specific provider). Avoid public uploads, cloud links, or untrusted messaging apps.';
 
   @override
-  String get exportIUnderstandContinue => 'I understand, continue';
-
-  @override
-  String get exportCouldnTGenerateThePdf => 'Couldn\'t generate the PDF.';
+  String get exportCouldnTGenerateThePdf => 'Couldn’t generate the PDF.';
 
   @override
   String get exportSelectAtLeastOneSection2 =>
@@ -3890,7 +3574,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportSelectFormsToInclude => 'Select forms to include:';
 
   @override
-  String get exportAdditionalPages => 'Additional Pages:';
+  String get exportAdditionalPages => 'Additional pages:';
 
   @override
   String get exportPrintABlankFormFill =>
@@ -3938,7 +3622,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportCouldnTSaveTheFile =>
-      'Couldn\'t save the file. Please try again.';
+      'Couldn’t save the file. Please try again.';
 
   @override
   String get exportExportedYourDirectiveBundlePdf =>
@@ -3949,7 +3633,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportCouldnTGenerateTheWallet =>
-      'Couldn\'t generate the wallet card. Please try again.';
+      'Couldn’t generate the wallet card. Please try again.';
 
   @override
   String get exportYourOfficialDirective => 'Your official directive';
@@ -3974,7 +3658,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportSupplementaryLegalInformation =>
-      'Supplementary Legal Information';
+      'Supplementary legal information';
 
   @override
   String get exportAdditionalLegalReferenceInformation =>
@@ -3982,7 +3666,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDistributionChecklistNotes =>
-      'Distribution Checklist & Notes';
+      'Distribution checklist & notes';
 
   @override
   String get exportBlankPagesForHandwrittenNotes =>
@@ -4056,32 +3740,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupStep1OpenAPrivate =>
-      'Step 1: Open a Private/Incognito Window';
+      'Step 1: Open a private/incognito window';
 
   @override
   String get aiSetupYouLlNeedToSign =>
-      'You\'ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:';
+      'You’ll need to sign into your Google account to get an API key. To protect your login on shared or public devices, open a private browsing window first:';
 
   @override
   String get aiSetupOnAPhoneTapThe =>
-      'On a phone: tap the menu (⋮ or ⋯) and select \"New Incognito Tab\" or \"New Private Tab\".';
+      'On a phone: tap the menu (⋮ or ⋯) and select “New Incognito Tab” or “New Private Tab”.';
 
   @override
   String get aiSetupYourGoogleLoginWillBe =>
       'Your Google login will be automatically forgotten when you close the private window.';
 
   @override
-  String get aiSetupPrivacyNotice => 'Privacy Notice';
+  String get aiSetupPrivacyNotice => 'Privacy notice';
 
   @override
-  String get aiSetupHowYourDataIsHandled => 'How Your Data Is Handled';
+  String get aiSetupHowYourDataIsHandled => 'How your data is handled';
 
   @override
   String get aiSetupYourDirectiveDataIsHeld =>
       '- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
 
   @override
-  String get aiSetupCommonQuestions => 'Common Questions';
+  String get aiSetupCommonQuestions => 'Common questions';
 
   @override
   String get aiSetupRemoveApiKey2 => 'Remove API key';
@@ -4122,7 +3806,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accessibilitySettingsPeopleWhoITrustWill =>
-      'People who I trust will make my decisions if I can\'t.';
+      'People who I trust will make my decisions if I can’t.';
 
   @override
   String get accessibilitySettingsEnglish => 'English';
@@ -4173,17 +3857,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'System Settings → Accessibility → Spoken Content → “Speak selection”, then press Option+Esc.';
 
   @override
-  String get privacyPolicyPrivacyPolicy => 'Privacy Policy';
+  String get privacyPolicyPaMhadAppPrivacyPolicy => 'PA MHAD privacy policy';
 
   @override
-  String get privacyPolicyPaMhadAppPrivacyPolicy =>
-      'PA MHAD App Privacy Policy';
+  String get privacyPolicyReviewLegalDisclaimer => 'Review legal disclaimer';
 
   @override
-  String get privacyPolicyReviewLegalDisclaimer => 'Review Legal Disclaimer';
-
-  @override
-  String get privacyPolicyDataWeCollect => 'Data We Collect';
+  String get privacyPolicyDataWeCollect => 'Data we collect';
 
   @override
   String get privacyPolicyThisAppCollectsOnlyThe =>
@@ -4191,7 +3871,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyHowDataIsStoredProtected =>
-      'How Data Is Stored & Protected';
+      'How data is stored & protected';
 
   @override
   String get privacyPolicyYourDirectiveDataIsNot =>
@@ -4199,74 +3879,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
-      'AI Features & Third-Party Data Sharing';
+      'AI features & third-party data sharing';
 
   @override
   String get privacyPolicyIfYouChooseToUse =>
-      'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google\'s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.';
+      'If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google’s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.';
 
   @override
   String get privacyPolicyGeminiFreeTierDataPractices =>
-      'Gemini Free Tier Data Practices';
+      'Gemini free tier data practices';
 
   @override
   String get privacyPolicyIfYouUseTheAi =>
-      'If you use the AI features with Google\'s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google\'s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider\'s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.';
+      'If you use the AI features with Google’s free Gemini tier, be aware of the following:\n\n1. Google retains AI conversation data indefinitely on the free tier. There is no automatic expiration.\n\n2. Human reviewers at Google may read your inputs and outputs as part of their quality and safety processes.\n\n3. Data sent to Gemini cannot be recalled or deleted by you or by this app. Once submitted, it is under Google’s control.\n\n4. If you are concerned about data privacy, consider upgrading to the paid Gemini tier, which offers stronger data protection policies and does not use your data for model training.\n\nIf you select a different provider (Anthropic, OpenAI, or xAI) instead of Gemini, that provider’s own data and retention policy applies — review it before sending sensitive content.\n\nYou can avoid all third-party data sharing by not using the AI features.';
 
   @override
   String get privacyPolicyInternationalUsersGdpr =>
-      'International Users (GDPR)';
+      'International users (GDPR)';
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use \"Delete All Data\" in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider\'s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
+      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'US State Consumer Health Data Laws (CA, WA, CT, NV, NY)';
+      'US state consumer health data laws (CA, WA, CT, NV, NY)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is \"consumer health data\" under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via \"Delete All Data\" in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
-      'Medical Reference Lookups (U.S. government data)';
+      'Medical reference lookups (U.S. government data)';
 
   @override
   String get privacyPolicyToHelpYouFillIn =>
-      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug\'s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
+      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
 
   @override
-  String get privacyPolicyPdfExportSharing => 'PDF Export & Sharing';
+  String get privacyPolicyPdfExportSharing => 'PDF export & sharing';
 
   @override
   String get privacyPolicyWhenYouExportAPdf =>
-      'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device\'s standard sharing mechanism. The app cannot control where the PDF is stored once shared.';
+      'When you export a PDF of your directive, it is generated locally on your device. Sharing the PDF (via email, messaging, etc.) sends it through your device’s standard sharing mechanism. The app cannot control where the PDF is stored once shared.';
 
   @override
-  String get privacyPolicyYourRights => 'Your Rights';
+  String get privacyPolicyYourRights => 'Your rights';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
       'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.';
 
   @override
-  String get privacyPolicyNoThirdPartyTracking => 'No Third-Party Tracking';
+  String get privacyPolicyNoThirdPartyTracking => 'No third-party tracking';
 
   @override
   String get privacyPolicyThisAppDoesNotInclude =>
       'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.';
 
   @override
-  String get privacyPolicyHipaaCompliance => 'HIPAA & Compliance';
+  String get privacyPolicyHipaaCompliance => 'HIPAA & compliance';
 
   @override
   String get privacyPolicyThisAppIsNotHipaa =>
       'This app is NOT HIPAA-compliant. It is not a covered entity or business associate under HIPAA. The app is intended for personal use by individuals preparing their own mental health advance directives.\n\nWhile this app implements privacy measures aligned with GDPR, CCPA, and MHMDA principles (as described above), it has not been independently audited or certified for compliance with these regulations. If you require verified regulatory compliance, consult with a privacy professional before use.';
 
   @override
-  String get privacyPolicyBreachNotification => 'Breach Notification';
+  String get privacyPolicyBreachNotification => 'Breach notification';
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
@@ -4279,7 +3959,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBrightness => 'Brightness';
 
   @override
-  String get settingsScreenshotProtection => 'Screenshot Protection';
+  String get settingsScreenshotProtection => 'Screenshot protection';
 
   @override
   String get settingsAdminToolTitle => 'Admin: data update tool';
@@ -4324,7 +4004,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'What permissions the app uses, and what we promise about each';
 
   @override
-  String get settingsLegalDisclaimer => 'Legal Disclaimer';
+  String get settingsLegalDisclaimer => 'Legal disclaimer';
 
   @override
   String get settingsTermsLimitationsAndYourLegal =>
@@ -4397,7 +4077,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantToUseTheAiAssistant =>
-      'To use the AI assistant, set up an AI key — Gemini\'s free tier works.';
+      'To use the AI assistant, set up an AI key — Gemini’s free tier works.';
 
   @override
   String get assistantSetUpFree => 'Set Up (Free)';
@@ -4425,7 +4105,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantAskAQuestionAboutYour =>
-      'Ask a question about your directive...';
+      'Ask a question about your directive…';
 
   @override
   String get assistantSend => 'Send';
@@ -4502,9 +4182,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webLandingFromTheBooklet => 'From the booklet';
 
   @override
-  String get webLandingPrintABlankForm => 'Print a blank form';
-
-  @override
   String get webLandingPrintBlankForm => 'Print blank form';
 
   @override
@@ -4517,9 +4194,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webLandingAdvanceDirective => 'advance directive.';
 
   @override
-  String get homeToolsGridMakeItFindable => 'Make it findable';
-
-  @override
   String get homeToolsGridCrisisHelp => 'Crisis help';
 
   @override
@@ -4530,7 +4204,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Continue where you left off';
 
   @override
-  String get facilitatorGetHelpEvidenceBased => 'Get help · evidence-based';
+  String get facilitatorGetHelpEvidenceBased => 'Find support · evidence-based';
 
   @override
   String get facilitatorTalkToSomeoneTrained => 'Talk to someone trained';
@@ -4544,14 +4218,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilitatorPrintOrScreenShareYour =>
-      'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can\'t change anything in your app — that stays in your hands.';
+      'Print or screen-share your draft and walk through it with a friend, family member, or peer. They can’t change anything in your app — that stays in your hands.';
 
   @override
   String get facilitatorEmailADraftToMy => 'Email a draft to my clinician';
 
   @override
   String get facilitatorGenerateThePdfInExport =>
-      'Generate the PDF in Export, then send it via your phone\'s email app. Ask your therapist or psychiatrist for comments. You\'ll transcribe their suggestions back into the form yourself — this app doesn\'t connect to their EHR.';
+      'Generate the PDF in Export, then send it via your phone’s email app. Ask your therapist or psychiatrist for comments. You’ll transcribe their suggestions back into the form yourself — this app doesn’t connect to their EHR.';
 
   @override
   String get facilitatorCall => 'Call';
@@ -4600,7 +4274,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetPaMentalHealthConsumersAssociation =>
-      'PA Mental Health Consumers\' Association';
+      'PA Mental Health Consumers’ Association';
 
   @override
   String get legalSheetMentalHealthAssociationInPennsylvania =>
@@ -4648,7 +4322,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalSheetThisAppIsProvided => 'This app is provided ';
 
   @override
-  String get legalSheetAsIs => '\"as is\"';
+  String get legalSheetAsIs => '“as is”';
 
   @override
   String get legalSheetWithoutWarrantiesOfAnyKind =>
@@ -4735,7 +4409,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetIfYouUseTheOptional =>
-      'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini\'s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.';
+      'If you use the optional AI Assistant, text you send is transmitted to the AI provider you choose (Google Gemini by default; or Anthropic, OpenAI, or xAI). On Gemini’s free tier, Google may use this data to improve their products and human reviewers may read inputs; other providers handle your data under their own API policies.';
 
   @override
   String get legalSheetToProtectYouTheApp => 'To protect you, the app ';
@@ -4746,15 +4420,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetDocumentsYouUploadForAutofill =>
-      'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent\'s or guardian\'s details). You review everything before it is saved. ';
+      'Documents you upload for autofill are different: the whole file is sent to your chosen AI provider as-is, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent’s or guardian’s details). You review everything before it is saved. ';
 
   @override
   String get legalSheetBlackOutAnythingYouDon =>
-      ' — black out anything you don\'t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.';
+      ' — black out anything you don’t want sent, or simply type any field by hand to keep it private. Also avoid typing personal identifiers (full name, SSN, date of birth, address) directly into chat messages.';
 
   @override
   String get legalSheetSeparatelyToHelpYouFill =>
-      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA\'s openFDA. ';
+      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA. ';
 
   @override
   String get legalSheetNeverYourIdentityThePeople =>
@@ -4779,7 +4453,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disclaimerIM18OrOlder =>
-      'I\'m 18 or older, and I understand and want to continue.';
+      'I’m 18 or older, and I understand and want to continue.';
 
   @override
   String get disclaimerBeforeYouBegin => 'Before you begin';
@@ -4812,7 +4486,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingWeLlWalkYouThrough =>
-      'We\'ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can\'t speak for yourself.';
+      'We’ll walk you through it, step by step and in plain language: how you want to be treated during a mental health crisis — so your wishes are honored even when you can’t speak for yourself.';
 
   @override
   String get onboardingValidTwoYearsFromSigning =>
@@ -4916,27 +4590,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get draftRecoveryDialogCouldnTRestoreTheDraft =>
-      'Couldn\'t restore the draft.';
+      'Couldn’t restore the draft.';
 
   @override
-  String get moreSheetResetAndStartFresh => 'Reset and start fresh?';
+  String get moreSheetResetAndStartFresh => 'Start over?';
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
       'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
-  String get moreSheetResetEverything => 'Reset everything';
+  String get moreSheetResetEverything => 'Erase and start over';
 
   @override
   String get moreSheetEverythingElseYouCanDo =>
       'Everything else you can do here.';
 
   @override
-  String get moreSheetGetHelp => 'Get help';
-
-  @override
-  String get moreSheetReset => 'Reset';
+  String get moreSheetGetHelp => 'Find support';
 
   @override
   String get crisisSheet247FreeConfidential => '24/7 FREE, CONFIDENTIAL';
@@ -5017,7 +4688,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentDialogUploadingIsOnlyAShortcut =>
-      'Uploading is only a shortcut, never required:\n• Black out anything you don\'t want sent (ID or card numbers, other people\'s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.';
+      'Uploading is only a shortcut, never required:\n• Black out anything you don’t want sent (ID or card numbers, other people’s details) before uploading.\n• Or skip the upload and type any field by hand — typed fields stay on your device and are never sent to the AI.';
 
   @override
   String get aiConsentDialogSendToTheAi => 'Send to the AI';
@@ -5027,13 +4698,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentDialogYouReviewTheTextBefore =>
-      'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device\'s built-in dictation instead, or just type — neither sends audio to the AI.';
+      'You review the text before it goes into your form. Prefer not to? Tap Cancel to use your device’s built-in dictation instead, or just type — neither sends audio to the AI.';
 
   @override
   String get aiConsentDialogUseAi => 'Use AI';
 
   @override
-  String get aiConsentDialogAiDataNotice => 'AI Data Notice';
+  String get aiConsentDialogAiDataNotice => 'AI data notice';
 
   @override
   String get aiConsentDialogImportantPleaseReadBeforeContinuing =>
@@ -5048,10 +4719,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'NEVER enter personal information (full name, date of birth, Social Security number, address, phone number, email) into the AI chat or AI-powered features.\n\nThe app automatically strips common personal data, but this is not guaranteed. Personal information fields must be filled in manually — they are stored on your device only and never sent to the AI.';
 
   @override
-  String get aiConsentDialogNotNow => 'Not Now';
-
-  @override
-  String get aiConsentDialogIAuthorize => 'I Authorize';
+  String get aiConsentDialogIAuthorize => 'I authorize';
 
   @override
   String get addressFieldsTapTheIconToFill =>
@@ -5059,13 +4727,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressFieldsFillCityStateFromZip => 'Fill city & state from ZIP';
-
-  @override
-  String get mainTheAppCouldnTStart => 'The app couldn\'t start';
-
-  @override
-  String get mainPaMentalHealthAdvanceDirective =>
-      'PA Mental Health Advance Directive';
 
   @override
   String get mainAppTitle => 'PA Mental Health Advance Directive';
@@ -5118,7 +4779,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Agent not authorized: medications';
 
   @override
-  String get aiConsistencyEditMedications => 'Edit Medications';
+  String get aiConsistencyEditMedications => 'Edit medications';
 
   @override
   String get aiConsistencyEditAgentAuthority => 'Edit Agent authority';
@@ -5145,7 +4806,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiConsistencyCheckFailed(String error) {
-    return 'Couldn\'t run the consistency check.\n$error';
+    return 'Couldn’t run the consistency check.\n$error';
   }
 
   @override
@@ -5165,7 +4826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsistencyWarningsOnly =>
-      'These won\'t block you from generating the PDF — they are warnings you can fix or ignore.';
+      'These won’t block you from generating the PDF — they are warnings you can fix or ignore.';
 
   @override
   String get aiConsistencyNoContradictions =>
@@ -5173,7 +4834,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsistencyRulesExplainer =>
-      'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn\'t block PDF generation.';
+      'The contradiction check above is built-in rules. When the AI assistant is set up, an additional AI review adds optional suggestions. Review anything before accepting — this screen warns; it doesn’t block PDF generation.';
 
   @override
   String aiConsistencyConflictHeader(int number, String steps) {
@@ -5184,18 +4845,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiConsistencyVs => 'vs';
 
   @override
-  String get crisisPlanHowIKnowIM => 'How I know I\'m not okay';
+  String get crisisPlanHowIKnowIM => 'How I know I’m not okay';
 
   @override
   String get crisisPlanHeadsUpThisSectionIs =>
-      'Heads up: this section is yours alone — it isn\'t required by PA Act 194, but in practice it\'s the part agents and ER staff read first.';
+      'Heads up: this section is yours alone — it isn’t required by PA Act 194, but in practice it’s the part agents and ER staff read first.';
 
   @override
   String get permissionsOverviewOnlyWhatWeNeed => 'Only what we need.';
 
   @override
   String get permissionsOverviewPermissionsAreManagedByYour =>
-      'Permissions are managed by your device, not by this app. Open your device\'s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
+      'Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
@@ -5253,10 +4914,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ask anything about this step — answers appear here, and in the full assistant.';
 
   @override
-  String get wizardAiRailNeedHelpWithThisStep =>
-      'Need help with this step? Ask the AI';
-
-  @override
   String get wizardAiRailOptionalHelpTitle => 'Optional AI help';
 
   @override
@@ -5281,7 +4938,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsBringAnythingYouCheckAnd =>
-      'Bring anything you check — and especially anything marked \"discuss with your doctor\" — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.';
+      'Bring anything you check — and especially anything marked “discuss with your doctor” — to your doctor or pharmacist. This list never tells you to start, stop, or change a medication.';
 
   @override
   String get sideEffectsTheseArePossibleInteractionsDrawn =>
@@ -5289,25 +4946,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsAddTheMedicationsYouRe =>
-      'Add the medications you\'re currently taking on the Medications step first, then come back here to check their common side effects.';
+      'Add the medications you’re currently taking on the Medications step first, then come back here to check their common side effects.';
 
   @override
   String get audioGuideToTranscribeYourRecordingIncluding =>
-      'To transcribe, your recording — including any personal details you speak — is sent to Google\'s AI. On the free tier it may be retained and reviewed, and can\'t be recalled. Don\'t say anything you\'re not comfortable sending; you can always type sensitive fields by hand instead.';
+      'To transcribe, your recording — including any personal details you speak — is sent to Google’s AI. On the free tier it may be retained and reviewed, and can’t be recalled. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.';
 
   @override
   String get ulyssesClauseIfFutureMeRefuses => 'If future-me refuses…';
 
   @override
   String get ulyssesClauseStronglyRecommendedTalkWithA =>
-      'Strongly recommended: talk with a peer specialist or clinician before saving. See \"Get help\" in Settings.';
+      'Strongly recommended: talk with a peer specialist or clinician before you add it. See “Find support” in the menu.';
 
   @override
   String get aiSetupIsTheApiKeyReally => 'Is the API key really free?';
 
   @override
   String get aiSetupYesGoogleOffersAGenerous =>
-      'Yes. Google\'s free tier for Gemini needs no credit card. It has daily limits: the app\'s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).';
+      'Yes. Google’s free tier for Gemini needs no credit card. It has daily limits: the app’s default model (Gemini Flash-Lite) allows a few hundred requests a day, which covers normal use; the stronger Flash models allow far fewer (about 20 a day).';
 
   @override
   String get aiSetupWhatGoogleAccountShouldI =>
@@ -5325,7 +4982,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Yes. Visit aistudio.google.com/apikey at any time to delete or regenerate your key. You can also remove it from this app using the trash icon in the top-right.';
 
   @override
-  String get aiSetupWhatIfIDonT => 'What if I don\'t add a key?';
+  String get aiSetupWhatIfIDonT => 'What if I don’t add a key?';
 
   @override
   String get aiSetupTheAppWorksFullyWithout =>
@@ -5339,7 +4996,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Legal text is always rendered in English to preserve PA Act 194 wording.';
 
   @override
-  String get facilitatorYouDonTHaveTo => 'You don\'t have to do this alone.';
+  String get facilitatorYouDonTHaveTo => 'You don’t have to do this alone.';
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
@@ -5353,7 +5010,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilitatorPreferToDoItYourself =>
-      'Prefer to do it yourself? That\'s fine — keep going from where you left off.';
+      'Prefer to do it yourself? That’s fine — keep going from where you left off.';
 
   @override
   String get moreSheetCallOrText98824 => 'Call or text 988 · 24/7 support';
@@ -5374,9 +5031,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crisisSheetYouAreNotAlone => 'You are not alone.';
 
   @override
-  String get crisisSheetCallOrText988 => 'Call or text 988';
-
-  @override
   String get crisisSheetCall988Press1 => 'Call 988, press 1';
 
   @override
@@ -5386,29 +5040,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantSenderYou => 'You';
 
   @override
-  String get assistantSenderAi => 'AI Assistant';
-
-  @override
   String get aiSetupApiKeySetForThis => 'API key set for this session';
 
   @override
   String get aiSetupApiKeySaved => 'API key saved';
 
   @override
-  String get aiSetupGetYourFreeGeminiApi => 'Get Your Free Gemini API Key';
+  String get aiSetupGetYourFreeGeminiApi => 'Get your free Gemini API key';
 
   @override
   String aiSetupAddYourApiKey(Object label) {
-    return 'Add Your $label API Key';
+    return 'Add your $label API key';
   }
 
   @override
   String get aiSetupTheAssistantUsesGoogleS =>
-      'The assistant uses Google\'s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.';
+      'The assistant uses Google’s Gemini model. You need a free API key from Google AI Studio — it takes about 30 seconds.';
 
   @override
   String aiSetupYouBringYourOwnApi(Object label) {
-    return 'You bring your own $label API key. Your provider\'s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you\'d rather not pay.';
+    return 'You bring your own $label API key. Your provider’s usage limits and billing apply — this app never sees or charges for your usage. Gemini stays the free default if you’d rather not pay.';
   }
 
   @override
@@ -5445,7 +5096,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupNoCreditCardOrPayment =>
-      'No credit card or payment is needed. The free tier has daily limits; the app\'s default model (Flash-Lite) is chosen to fit normal use.';
+      'No credit card or payment is needed. The free tier has daily limits; the app’s default model (Flash-Lite) is chosen to fit normal use.';
 
   @override
   String get aiSetupMostProvidersRequireAPaid =>
@@ -5464,10 +5115,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSetupHideApiKey => 'Hide API key';
 
   @override
-  String get aiSetupUseKeyForThisSession => 'Use Key for This Session';
+  String get aiSetupUseKeyForThisSession => 'Use key for this session';
 
   @override
-  String get aiSetupSaveApiKey => 'Save API Key';
+  String get aiSetupSaveApiKey => 'Save API key';
 
   @override
   String get aiSetupTesting => 'Testing…';
@@ -5477,7 +5128,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiSetupThatDoesnTLookLike(Object label, Object keyHint) {
-    return 'That doesn\'t look like a valid $label key ($keyHint).';
+    return 'That doesn’t look like a valid $label key ($keyHint).';
   }
 
   @override
@@ -5487,22 +5138,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiSetupMayBeBlockedByYour(Object label) {
-    return '$label may be blocked by your browser\'s security (CORS) on the web. If it doesn\'t respond, pick Gemini or Claude — both work in the browser.';
+    return '$label may be blocked by your browser’s security (CORS) on the web. If it doesn’t respond, pick Gemini or Claude — both work in the browser.';
   }
 
   @override
   String aiSetupTheKeyLooksLikeCopy(Object keyHint) {
-    return 'The key looks like \"$keyHint\" — copy it, then use the paste button or paste it manually.';
+    return 'The key looks like “$keyHint” — copy it, then use the paste button or paste it manually.';
   }
 
   @override
   String aiSetupApiKey(Object label) {
-    return '$label API Key';
+    return '$label API key';
   }
 
   @override
   String get adminUpdateBlankUseTheAppS =>
-      'Blank = use the app\'s saved key for this provider. Not stored.';
+      'Blank = use the app’s saved key for this provider. Not stored.';
 
   @override
   String get adminUpdateDrafting => 'Drafting…';
@@ -5659,7 +5310,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnAiPanelAskAQuestionToGet =>
-      'Ask a question to get started — e.g. \"What\'s the difference between a declaration and a power of attorney?\"';
+      'Ask a question to get started — e.g. “What’s the difference between a declaration and a power of attorney?”';
 
   @override
   String get learnAiPanelSetUpTheFreeAi =>
@@ -5691,9 +5342,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String exportCardsExpires(Object expirationDate) {
     return 'Expires: $expirationDate';
   }
-
-  @override
-  String get pdfPreviewFit => 'FIT';
 
   @override
   String pdfPreviewPageOf(Object current, Object pageCount) {
@@ -5759,7 +5407,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String assistantOlderMessagesWereTrimmedTo(Object trimmedCount) {
-    return '$trimmedCount older messages were trimmed to fit within the AI\'s context limit. Recent messages are preserved.';
+    return '$trimmedCount older messages were trimmed to fit within the AI’s context limit. Recent messages are preserved.';
   }
 
   @override
@@ -5886,14 +5534,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiConsentDialogByTappingIAuthorizeYou(Object label) {
-    return '\nBy tapping \"I Authorize,\" you consent to sending your text to $label for AI processing under these terms.\n\nThis notice appears once per session.';
+    return '\nBy tapping “I Authorize,” you consent to sending your text to $label for AI processing under these terms.\n\nThis notice appears once per session.';
   }
 
   @override
   String get exportDraftModeFinal => 'Final copy';
-
-  @override
-  String get exportDraftModeDraft => 'Draft';
 
   @override
   String get exportDraftModeSignedExists => 'Draft · signed copy exists';
@@ -5916,9 +5561,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportWalletSignToActivate => 'sign to activate';
-
-  @override
-  String get exportEffectiveCondition => 'Effective condition';
 
   @override
   String get exportWitnessSignatures => 'Witness signatures';
@@ -5990,7 +5632,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String aiSetupPrivacyNoticeBody(String lead, String keyLine) {
-    return '$lead\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider\'s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n$keyLine';
+    return '$lead\n\nThe AI features in this app send text you enter in form fields and chat messages to your AI provider’s servers. Do not include personally identifying details (full legal name, Social Security number, date of birth, etc.) in AI chat or when using AI Suggest.\n\n$keyLine';
   }
 
   @override
@@ -6018,7 +5660,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feAiUnreachable =>
-      'Couldn\'t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser\'s security policy — Gemini and Claude both work in the browser.';
+      'Couldn’t reach the AI service. Check your internet connection. If you are using the web app, this provider may also be blocked by your browser’s security policy — Gemini and Claude both work in the browser.';
 
   @override
   String get feNoInternet =>
@@ -6030,7 +5672,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feBlocked =>
-      'Couldn\'t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.';
+      'Couldn’t reach the AI service — the request was blocked or the connection failed. Check your internet connection, and if you are on the web app try Gemini or Claude, which work in the browser.';
 
   @override
   String get feRateLimited =>
@@ -6042,7 +5684,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feModelUnavailable =>
-      'The selected AI model isn\'t available — it may have been retired. Pick a different model in AI setup.';
+      'The selected AI model isn’t available — it may have been retired. Pick a different model in AI setup.';
 
   @override
   String get feEmptyResponse =>
@@ -6070,7 +5712,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String assistantVerifyError(String error) {
-    return 'Sorry, I couldn\'t verify that on the web: $error';
+    return 'Sorry, I couldn’t verify that on the web: $error';
   }
 
   @override
@@ -6131,11 +5773,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewNothingIsSavedToYour =>
-      'Nothing is saved to your device\'s photo library by default';
+      'Nothing is saved to your device’s photo library by default';
 
   @override
   String get permissionsOverviewYouReviewEveryFieldBefore =>
-      'You review every field before it\'s used';
+      'You review every field before it’s used';
 
   @override
   String get permissionsOverviewNotYetWiredFeatureIn =>
@@ -6143,7 +5785,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewSpeakingLongFormAnswersE =>
-      'Speaking long-form answers (e.g. \"anything else\") instead of typing. Coming in a later release.';
+      'Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.';
 
   @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
@@ -6151,7 +5793,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewIfSentToAiFor =>
-      'If sent to AI for transcription, it isn\'t stored';
+      'If sent to AI for transcription, it isn’t stored';
 
   @override
   String get permissionsOverviewTranscriptStaysInYourSession =>
@@ -6192,7 +5834,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'What an MHAD is and who should sign one';
 
   @override
-  String get eduBrowseCombinedForm => 'Combined Form';
+  String get eduBrowseCombinedForm => 'Combined form';
 
   @override
   String get eduBrowseBothAnAgentAndTreatment =>
@@ -6203,14 +5845,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Treatment preferences without an agent';
 
   @override
-  String get eduBrowsePowerOfAttorney => 'Power of Attorney';
-
-  @override
   String get eduBrowseAgentDesignationWithoutPreferences =>
       'Agent designation without preferences';
 
   @override
-  String get eduBrowseFrequentlyAsked => 'Frequently Asked';
+  String get eduBrowseFrequentlyAsked => 'Frequently asked';
 
   @override
   String get eduBrowseCommonQuestionsAboutMhads =>
@@ -6223,14 +5862,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eduBrowseEveryLegalTermDefined => 'Every legal term, defined';
 
   @override
-  String get eduBrowseBeyondTheBooklet => 'Beyond the Booklet';
+  String get eduBrowseBeyondTheBooklet => 'Beyond the booklet';
 
   @override
   String get eduBrowseTopicsNotCoveredInThe =>
       'Topics not covered in the official PA booklet';
 
   @override
-  String get eduBrowseYourChecklist => 'Your Checklist';
+  String get eduBrowseYourChecklist => 'Your checklist';
 
   @override
   String get eduBrowseStepByStepDistributionRevocation =>
@@ -6291,14 +5930,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Incorrect passcode. Please try again.';
 
   @override
-  String get deviceSecurityWarningTitle => 'Device Security Warning';
+  String get deviceSecurityWarningTitle => 'Device security warning';
 
   @override
   String get deviceSecurityWarningBody =>
       'Your device appears to be rooted/jailbroken. This may put your sensitive health data at risk. Consider using a non-modified device for storing advance directives.';
-
-  @override
-  String get deviceSecurityIUnderstand => 'I Understand';
 
   @override
   String get blankFormPrintTitle => 'Print a blank form';
@@ -6344,7 +5980,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantSuggestWhatSTheDifferenceBetween =>
-      'What\'s the difference between Combined, Declaration, and POA?';
+      'What’s the difference between Combined, Declaration, and POA?';
 
   @override
   String get assistantSuggestWhoCanBeMyAgent => 'Who can be my agent?';
@@ -6404,25 +6040,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeHeroCombinedForm => 'Combined form';
-
-  @override
-  String get homeHeroDeclarationOnly => 'Declaration only';
-
-  @override
   String homeHeroNamedMhad(String name) {
     return '$name’s MHAD';
   }
 
   @override
-  String get homeHeroYourMhad => 'Your MHAD';
+  String get homeHeroYourMhad => 'Your directive';
 
   @override
   String get educationNoResultsFound => 'No results found.';
 
   @override
   String educationNoResultsFor(String query) {
-    return 'No results for \"$query\"';
+    return 'No results for “$query”';
   }
 
   @override
@@ -6536,7 +6166,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crisisPlanSpecificConcreteNotSelfCare =>
-      'Specific, concrete. Not \'self-care\' — what actually works.';
+      'Specific, concrete. Not “self-care” — what actually works.';
 
   @override
   String get crisisPlanWordsThatGroundMeUseful =>
@@ -6552,7 +6182,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderSheetsCurrentMedsOnesYouDon =>
-      'Current meds, ones you don\'t want, allergies';
+      'Current meds, ones you don’t want, allergies';
 
   @override
   String get reminderSheetsPreferredFacilityRoomEnvironment =>
@@ -6656,21 +6286,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsNoneFound =>
-      'We couldn\'t find common side effects to list right now. You can add anything you\'re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.';
+      'We couldn’t find common side effects to list right now. You can add anything you’re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.';
 
   @override
   String get sideEffectsGenerateError =>
       'Something went wrong generating the list. Please try again, or note side effects yourself.';
 
   @override
-  String get inputPhoneInvalid => 'Enter a valid 10-digit phone number';
-
-  @override
   String get inputZipInvalid => 'Enter a 5-digit or 5+4-digit ZIP';
 
   @override
   String get audioGuideTipQualityDoesnTMatterAny =>
-      'Quality doesn\'t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
+      'Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
@@ -6678,11 +6305,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideTipSayMedicationAndDoctorNames =>
-      'Say medication and doctor names slowly and spell them. The AI won\'t guess a drug or condition it didn\'t clearly hear.';
+      'Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.';
 
   @override
   String get stepSubtitleAboutYou =>
-      'Just the basics so this document is uniquely yours. Drop a photo of your ID and we\'ll read these for you.';
+      'Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.';
 
   @override
   String get stepSubtitleWhenItKicksIn =>
@@ -6690,7 +6317,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitlePeopleITrust =>
-      'They speak for you if you can\'t. You can name a primary, an alternate, and set limits on what they decide.';
+      'They speak for you if you can’t. You can name a primary, an alternate, and set limits on what they decide.';
 
   @override
   String get stepSubtitleGuardianNomination =>
@@ -6718,11 +6345,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepSubtitleAnythingElse =>
-      'Free-form preferences not covered above. This is your voice — write it how you\'d say it.';
+      'Free-form preferences not covered above. This is your voice — write it how you’d say it.';
 
   @override
   String get stepSubtitleReviewAndSign =>
-      'One last look, then we\'ll make your signing packet. Tap any section to edit.';
+      'One last look, then we’ll make your signing packet. Tap any section to edit.';
 
   @override
   String get formTypeNameCombined => 'Combined Declaration & Power of Attorney';
@@ -6761,9 +6388,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stepTitleDiagnoses => 'Diagnoses';
 
   @override
-  String get stepTitleMedications => 'Medications';
-
-  @override
   String get stepTitleAllergies => 'Allergies & reactions';
 
   @override
@@ -6776,16 +6400,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stepTitleReviewAndSign => 'Review';
 
   @override
-  String get directiveStatusRevoked => 'Revoked';
-
-  @override
-  String get directiveStatusExpired => 'Expired';
-
-  @override
   String get directiveStatusActive => 'Active';
-
-  @override
-  String get directiveStatusDraft => 'Draft';
 
   @override
   String pastDirectiveSignedOn(String date) {
@@ -6807,7 +6422,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String rateDailyLimitUsed(int max) {
-    return 'You\'ve used all $max free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.';
+    return 'You’ve used all $max free requests for today. The limit resets at midnight. Consider upgrading to a paid API key for higher limits.';
   }
 
   @override
@@ -6835,17 +6450,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String llmHeicUnsupported(String provider) {
-    return '$provider can\'t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.';
+    return '$provider can’t read HEIC/HEIF photos (the iPhone default). Switch to Gemini, or re-save the photo as JPEG or PNG first.';
   }
 
   @override
   String llmPdfUnsupported(String provider) {
-    return '$provider can\'t read PDFs here — switch to Gemini or Claude, or paste the document text instead.';
+    return '$provider can’t read PDFs here — switch to Gemini or Claude, or paste the document text instead.';
   }
 
   @override
   String llmFileTypeUnsupported(String provider, String mimeType) {
-    return '$provider can\'t read $mimeType files here — switch to Gemini, or paste the text instead.';
+    return '$provider can’t read $mimeType files here — switch to Gemini, or paste the text instead.';
   }
 
   @override
@@ -6860,12 +6475,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String llmGeminiModelNotFound(String provider, String model) {
-    return '$provider doesn\'t recognise the model \"$model\" — it may have been retired. Pick a different model in AI setup.';
+    return '$provider doesn’t recognise the model “$model” — it may have been retired. Pick a different model in AI setup.';
   }
 
   @override
   String llmNetworkError(String provider, String detail) {
-    return 'Couldn\'t reach $provider ($detail). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser\'s CORS policy — Gemini and Claude both work in the browser.';
+    return 'Couldn’t reach $provider ($detail). Check your internet connection. If you are on the web app, this provider may also be blocked by your browser’s CORS policy — Gemini and Claude both work in the browser.';
   }
 
   @override
@@ -6875,7 +6490,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String llmModelNotFound(String provider, String model) {
-    return '$provider doesn\'t recognise the model \"$model\". Pick a different model in AI setup.';
+    return '$provider doesn’t recognise the model “$model”. Pick a different model in AI setup.';
   }
 
   @override
@@ -6938,7 +6553,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilitatorGuidedBody =>
-      'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn\'t decide.';
+      'The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn’t decide.';
 
   @override
   String get facilitatorGuidedMetaPace => 'Stop any time';
@@ -6950,15 +6565,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get facilitatorGuidedStart => 'Start a guided session';
 
   @override
-  String get facilitatorHelperStart => 'I\'m helping someone';
+  String get facilitatorHelperStart => 'I’m helping someone';
 
   @override
   String get facilitatorGuidedOpeningPrompt =>
-      'I\'d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.';
+      'I’d like a guided session. Please walk me through my advance directive one question at a time, starting with what a crisis looks like for me.';
 
   @override
   String get facilitatorHelperOpeningPrompt =>
-      'I\'m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.';
+      'I’m helping someone complete their advance directive. Please guide us through it one question at a time, starting with what a crisis looks like for them.';
 
   @override
   String get assistantContextGuidedSession => 'Guided session';
@@ -7051,16 +6666,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingPillStaysOnDevice => 'Stays on your device';
 
   @override
-  String get educationHelpTitle => 'Help';
-
-  @override
   String get educationTabAll => 'All';
 
   @override
   String get educationTabArticles => 'Articles';
-
-  @override
-  String get educationTabGlossary => 'Glossary';
 
   @override
   String get educationTabFaq => 'FAQ';
@@ -7081,9 +6690,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonLoading => 'Loading';
 
   @override
-  String get wizardHeaderSaveAndExit => 'Save & exit';
-
-  @override
   String get fdaLabelDialogAdverseReactions =>
       'Adverse reactions (side effects)';
 
@@ -7091,11 +6697,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fdaLabelDialogDrugInteractions => 'Drug interactions';
 
   @override
-  String get addressFieldsEnterZipFirst => 'Enter a 5-digit ZIP first.';
-
-  @override
   String get addressFieldsZipLookupFailed =>
-      'Couldn\'t look up that ZIP — you can type it in.';
+      'Couldn’t look up that ZIP — you can type it in.';
 
   @override
   String addressFieldsFilled(String place) {
@@ -7132,9 +6735,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderSheetsYourRenewalDate => 'your renewal date';
 
   @override
-  String get pastDirectiveDetailPrincipalYou => 'You';
-
-  @override
   String get exportShareSubjectEditable => 'MHAD editable directive copy';
 
   @override
@@ -7161,7 +6761,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideEffectsOfficialLabelsIntro =>
-      'Straight from each medication\'s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.';
+      'Straight from each medication’s FDA label (openFDA). No AI needed. Tap a medication to read its side effects and drug interactions.';
 
   @override
   String get sideEffectsChecklistOptionalTitle =>
@@ -7173,7 +6773,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String llmRefusal(String provider) {
-    return '$provider declined to answer this. If you\'re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.';
+    return '$provider declined to answer this. If you’re in crisis or thinking about harming yourself, call or text 988 now. Otherwise, try rephrasing, or choose a different model in AI setup.';
   }
 
   @override
@@ -7182,11 +6782,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get crisisBannerTitle => 'You don\'t have to wait for the AI';
+  String get crisisBannerTitle => 'You don’t have to wait for the AI';
 
   @override
   String get crisisBannerBody =>
-      'If you\'re thinking about suicide or hurting yourself, or you\'re in crisis, call or text 988 now — free, confidential, 24/7. If you\'re in immediate danger, call 911.';
+      'If you’re thinking about suicide or hurting yourself, or you’re in crisis, call or text 988 now — free, confidential, 24/7. If you’re in immediate danger, call 911.';
 
   @override
   String get crisisBannerCall => 'Call 988';
@@ -7222,15 +6822,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarReminderDescription =>
-      'Your Pennsylvania advance directive is valid for 2 years. Open the MHAD app to make a new one and sign it with two adult witnesses.';
+      'Your Pennsylvania advance directive is valid for 2 years. Open the PA MHAD app to make a new one and sign it with two adult witnesses.';
 
   @override
   String tabTitle(String page) {
     return '$page · PA MHAD';
   }
-
-  @override
-  String get tabPageDisclaimer => 'Before you begin';
 
   @override
   String get tabPageWelcome => 'Welcome';
@@ -7239,22 +6836,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabPageAiSetup => 'AI setup';
 
   @override
-  String get tabPageAccessibility => 'Accessibility';
-
-  @override
   String get tabPagePrivacyPolicy => 'Privacy policy';
-
-  @override
-  String get tabPageGetHelp => 'Get help';
 
   @override
   String get tabPageAudioGuide => 'Audio guide';
 
   @override
   String get tabPageAdmin => 'Admin tool';
-
-  @override
-  String get tabPageYourDirective => 'Your directive';
 
   @override
   String get tabPageSign => 'Sign on paper';
@@ -7303,4 +6891,539 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wizardKeptInThisTab => 'Kept in this tab';
+
+  @override
+  String get aiHandoffChooseAi => 'Choose your AI';
+
+  @override
+  String get aiHandoffStepCopy => 'Copy the message for your AI';
+
+  @override
+  String get aiHandoffCopyButton => 'Copy message';
+
+  @override
+  String aiHandoffOpenService(String service) {
+    return 'Open $service';
+  }
+
+  @override
+  String aiHandoffCopied(String service) {
+    return 'Copied. Next, send it in $service.';
+  }
+
+  @override
+  String get aiHandoffSeeIncluded => 'See exactly what’s included';
+
+  @override
+  String get aiHandoffHideIncluded => 'Hide what’s included';
+
+  @override
+  String get aiHandoffStepPaste => 'Bring the answer back';
+
+  @override
+  String get aiHandoffPasteButton => 'Paste the answer';
+
+  @override
+  String get aiHandoffPasteHint => 'Paste your AI’s answer here';
+
+  @override
+  String get aiHandoffUseAnswer => 'Use this answer';
+
+  @override
+  String get aiHandoffWordingNote =>
+      'When it answers, copy the wording it suggests, then tap “Paste the wording into the field” below.';
+
+  @override
+  String aiHandoffWaiting(int minutes) {
+    return 'Waiting for your answer · $minutes min left';
+  }
+
+  @override
+  String get aiHandoffExtend => 'Extend 30 min';
+
+  @override
+  String aiHandoffExpiring(int minutes) {
+    return 'Your work here will be cleared in $minutes min. Extend to keep it while you’re in your AI.';
+  }
+
+  @override
+  String get aiHandoffBackToPaste => 'Back to paste your AI answer';
+
+  @override
+  String get aiHandoffDone =>
+      'Done. Review what was filled in before you go on.';
+
+  @override
+  String get aiHandoffProblemEmpty =>
+      'Nothing was pasted. Copy your AI’s whole answer and try again.';
+
+  @override
+  String get aiHandoffProblemPromptBack =>
+      'That’s the message you sent, not your AI’s answer. In your AI, copy its reply (the code box), then paste it here.';
+
+  @override
+  String get aiHandoffProblemNotJson =>
+      'We couldn’t read that answer. Ask your AI to reply with only the code box.';
+
+  @override
+  String get aiHandoffProblemTruncated =>
+      'The answer looks cut off. Ask your AI to send the whole code box again.';
+
+  @override
+  String get aiHandoffProblemWrongTask =>
+      'That answer is for a different task. Copy the answer to this message.';
+
+  @override
+  String get aiHandoffProblemWrongRef =>
+      'That answer is for a different directive. Start a fresh copy and paste from this page.';
+
+  @override
+  String get aiHandoffProblemNoAttachment =>
+      'The AI says nothing was attached. Attach your document or recording in the AI and send again.';
+
+  @override
+  String get aiHandoffFixItButton => 'Copy a fix-it message';
+
+  @override
+  String get aiHandoffFixItCopied =>
+      'Fix-it message copied. Paste it into your AI.';
+
+  @override
+  String aiHandoffFixItMessage(String task, String ref) {
+    return 'PA MHAD couldn\'t read your last reply. Please reply again with ONLY one JSON code block that starts with \"mhad_task\": \"$task\" and \"mhad_ref\": \"$ref\", with no other text.';
+  }
+
+  @override
+  String get aiHandoffFreshAttempt =>
+      'Still not working? Start fresh: copy the message again and paste it into a new chat. For your security, an old answer is never reused.';
+
+  @override
+  String get aiHandoffAudioPaid => 'Audio: paid plans';
+
+  @override
+  String get aiHandoffAudioNo => 'No audio';
+
+  @override
+  String get aiHandoffAudioMaybe => 'Audio: may not work';
+
+  @override
+  String get aiHandoffChooseFirst => 'Choose an AI first.';
+
+  @override
+  String get aiHandoffPrivacyTitle => 'Before you use an outside AI';
+
+  @override
+  String aiHandoffPrivacyBody(String service) {
+    return 'You’re about to copy a message to paste into $service, a separate service you choose. PA MHAD’s privacy promise covers this app only: $service’s own privacy terms apply to anything you share there, and using it is your choice.';
+  }
+
+  @override
+  String get aiHandoffPrivacyPrivateTitle =>
+      'For more privacy, use a private chat';
+
+  @override
+  String get aiHandoffPrivacyPrivateModes =>
+      'ChatGPT: Temporary Chat · Claude: Incognito chat · Gemini: Temporary chat · Grok: Private Chat';
+
+  @override
+  String get aiHandoffPrivacyHowTitle => 'How it works';
+
+  @override
+  String aiHandoffPrivacyHowSteps(String service) {
+    return '1. Copy the message.\n2. In $service, paste it into a new chat (attach any document there) and send.\n3. Read the answer there — or, when PA MHAD asks for it, copy it and paste it back here.';
+  }
+
+  @override
+  String get aiHandoffPrivacyKept =>
+      'While you’re away, your work here is kept for 30 minutes. You can extend it.';
+
+  @override
+  String get aiHandoffPrivacyContinue => 'I understand, continue';
+
+  @override
+  String get askAiEyebrow => 'AI help · optional';
+
+  @override
+  String get askAiLead =>
+      'Type your question, copy it into the AI you already use, and read the answer there. PA MHAD adds the Pennsylvania facts it needs.';
+
+  @override
+  String get askAiQuestionLabel => 'Your question';
+
+  @override
+  String get askAiPanelTitle => 'Ask your AI';
+
+  @override
+  String get askAiPanelSubtitle =>
+      'Your question goes with the Pennsylvania facts it needs. Names, addresses, and phone numbers are removed.';
+
+  @override
+  String get navAskAi => 'Ask AI';
+
+  @override
+  String get autofillHandoffLead =>
+      'Have a photo, PDF, or recording — an ID, a medication list, a prescription label, an old directive? Your AI reads it and PA MHAD fills in what it found. You review every field first. Or skip and type it yourself.';
+
+  @override
+  String get autofillWhatWillYouShare => 'What will you share with your AI?';
+
+  @override
+  String get autofillShareDocument => 'A document';
+
+  @override
+  String get autofillShareRecording => 'A recording';
+
+  @override
+  String get autofillHandoffTitle => 'Autofill with your AI';
+
+  @override
+  String get autofillHandoffSubtitle =>
+      'You attach your document in your AI — it never passes through PA MHAD. You review every field before anything is filled in.';
+
+  @override
+  String get autofillWhatWorksWell => 'What works well';
+
+  @override
+  String get aiStepHelpTitle => 'AI help for this step';
+
+  @override
+  String get aiStepHelpSubtitle =>
+      'Optional. Your own AI answers — nothing is filled in for you.';
+
+  @override
+  String get aiStepHelpPanelTitle => 'Ask your AI about this step';
+
+  @override
+  String get aiStepHelpPanelSubtitle =>
+      'Your question goes with this step and what you’ve filled in so far — names, addresses, and phone numbers removed.';
+
+  @override
+  String get aiStepQAboutYou1 =>
+      'Why does the directive ask for my date of birth and address?';
+
+  @override
+  String get aiStepQAboutYou2 => 'Who should have a copy of my directive?';
+
+  @override
+  String get aiStepQAboutYou3 => 'Can someone help me fill this out?';
+
+  @override
+  String get aiStepQWhenItKicksIn1 =>
+      'What does it mean to be found unable to make mental health decisions?';
+
+  @override
+  String get aiStepQWhenItKicksIn2 =>
+      'Who decides when my directive takes effect?';
+
+  @override
+  String get aiStepQWhenItKicksIn3 =>
+      'Can I choose more than one situation for when it applies?';
+
+  @override
+  String get aiStepQPeopleITrust1 => 'What does a mental health care agent do?';
+
+  @override
+  String get aiStepQPeopleITrust2 => 'Who can — and can’t — be my agent?';
+
+  @override
+  String get aiStepQPeopleITrust3 => 'Should I name an alternate agent?';
+
+  @override
+  String get aiStepQGuardian1 =>
+      'What’s the difference between a guardian and an agent?';
+
+  @override
+  String get aiStepQGuardian2 => 'Do I have to nominate a guardian?';
+
+  @override
+  String get aiStepQGuardian3 => 'How does a court choose a guardian?';
+
+  @override
+  String get aiStepQWhereIWantCare1 =>
+      'How do I find mental health facilities near me?';
+
+  @override
+  String get aiStepQWhereIWantCare2 =>
+      'Can I name facilities I don’t want to go to?';
+
+  @override
+  String get aiStepQWhereIWantCare3 =>
+      'What room and environment preferences can I list?';
+
+  @override
+  String get aiStepQDiagnoses1 => 'Do I have to list my diagnoses?';
+
+  @override
+  String get aiStepQDiagnoses2 =>
+      'How do I find the official name of a condition?';
+
+  @override
+  String get aiStepQDiagnoses3 => 'Who will see the diagnoses I list?';
+
+  @override
+  String get aiStepQMedications1 =>
+      'Are my medication preferences binding on doctors?';
+
+  @override
+  String get aiStepQMedications2 =>
+      'What should I write about medications I refuse?';
+
+  @override
+  String get aiStepQMedications3 => 'Can I set limits on a medication?';
+
+  @override
+  String get aiStepQAllergies1 =>
+      'What’s the difference between an allergy and a side effect?';
+
+  @override
+  String get aiStepQAllergies2 =>
+      'Why does this section matter so much in an emergency?';
+
+  @override
+  String get aiStepQAllergies3 => 'How should I describe a past bad reaction?';
+
+  @override
+  String get aiStepQProcedures1 =>
+      'What is ECT, and what does consenting to it mean?';
+
+  @override
+  String get aiStepQProcedures2 =>
+      'What happens if I say nothing about research studies?';
+
+  @override
+  String get aiStepQProcedures3 => 'Can my agent consent to these for me?';
+
+  @override
+  String get aiStepQAnythingElse1 =>
+      'What else do people include in a mental health directive?';
+
+  @override
+  String get aiStepQAnythingElse2 =>
+      'How do I write a crisis plan my care team can use?';
+
+  @override
+  String get aiStepQAnythingElse3 =>
+      'Can I include instructions about my children or pets?';
+
+  @override
+  String get aiStepQReview1 => 'Who can be a witness when I sign?';
+
+  @override
+  String get aiStepQReview2 => 'What should I do with copies after I sign?';
+
+  @override
+  String get aiStepQReview3 => 'How do I change or revoke my directive later?';
+
+  @override
+  String get learnAskAiTitle => 'Ask AI about what you’re reading';
+
+  @override
+  String get learnAskAiSubtitle =>
+      'Optional. Your own AI answers, with the Pennsylvania facts it needs.';
+
+  @override
+  String get articleAskAiButton => 'Ask AI about this article';
+
+  @override
+  String get articleAskAiQ1 => 'Explain this in simpler words.';
+
+  @override
+  String get articleAskAiQ2 => 'What does this mean for my directive?';
+
+  @override
+  String get articleAskAiQ3 =>
+      'What should I ask my doctor or agent about this?';
+
+  @override
+  String get sideEffectsHandoffTitle => 'Check side effects with your AI';
+
+  @override
+  String get sideEffectsHandoffSubtitle =>
+      'PA MHAD adds the official FDA label text for your medications. Your AI turns it into a checklist you can tick.';
+
+  @override
+  String get sideEffectsGettingLabels => 'Getting the official FDA label text…';
+
+  @override
+  String get diagnosesHandoffTitle => 'Find the official name with your AI';
+
+  @override
+  String aiWordingTitle(String field) {
+    return 'Wording help: $field';
+  }
+
+  @override
+  String get aiWordingPanelTitle => 'Get suggested wording from your AI';
+
+  @override
+  String get aiWordingPasteButton => 'Paste the wording into the field';
+
+  @override
+  String get aiCheckHandoffTitle => 'Get a second opinion from your AI';
+
+  @override
+  String get aiCheckHandoffSubtitle =>
+      'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.';
+
+  @override
+  String get smartFillHandoffTitle => 'AI suggestions for your preferences';
+
+  @override
+  String get smartFillHandoffPanelTitle => 'Ask your AI for suggestions';
+
+  @override
+  String get smartFillHandoffSubtitle =>
+      'Based on the conditions and medications found (identifying details removed). You review every suggestion before it’s added.';
+
+  @override
+  String get homeToolsAskAiSub => 'Ask questions with your own AI';
+
+  @override
+  String get aiConsistencyRulesExplainerHandoff =>
+      'The contradiction check above uses built-in rules. Anything your AI suggests is optional — review it before you change your directive. This screen warns; it doesn’t block making the PDF.';
+
+  @override
+  String get privacyPolicyIfYouChooseToUseHandoff =>
+      'The AI help is optional, and this app never sends anything to an AI service itself. If you choose to use it, the app writes instructions that you copy and paste into an AI chat service you choose — ChatGPT, Claude, Gemini or Grok — and you attach any document or recording there yourself. You then copy the answer back into this app.\n\nWhat you paste or attach in that service is handled under that service’s own terms and privacy policy, not this one. Depending on the service and your settings, it may:\n  - Keep your conversations, with or without an automatic expiration\n  - Use them to improve its products\n  - Let human reviewers read them\nMost services offer a private or temporary chat that keeps less — see “Outside AI services” below.\n\nThe instructions this app writes leave out common identifying details (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names). This is a best-effort filter and cannot guarantee complete removal. A document or recording you attach yourself reaches the service as it is.\n\nAI help is entirely optional. The app is fully functional without it.';
+
+  @override
+  String get privacyPolicyOutsideAiServices => 'Outside AI services';
+
+  @override
+  String get privacyPolicyIfYouUseTheAiHandoff =>
+      'If you use an outside AI service with this app, be aware of the following:\n\n1. That service decides how long it keeps what you send, and whether people or its AI models learn from it. Review its privacy policy and settings before you send sensitive content.\n\n2. Data you send to that service cannot be recalled or deleted by this app. Once sent, it is under that service’s control.\n\n3. For more privacy, use a private chat: ChatGPT’s Temporary Chat, Claude’s Incognito chat, Gemini’s Temporary chat, or Grok’s Private Chat.\n\nYou can avoid all third-party data sharing by not using the AI help.';
+
+  @override
+  String get privacyPolicyIfYouAreLocatedInHandoff =>
+      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.';
+
+  @override
+  String get privacyPolicyThisAppMayBeSubjectHandoff =>
+      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+
+  @override
+  String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.\n\nUninstalling the app removes all locally stored data.';
+
+  @override
+  String get privacyPolicyThisAppDoesNotIncludeHandoff =>
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.';
+
+  @override
+  String get legalSheetIfYouUseTheOptionalHandoff =>
+      'If you use the optional AI help, you copy instructions from this app into an AI chat service you choose (ChatGPT, Claude, Gemini or Grok) — the app never sends anything to an AI service itself. What you paste or attach there is handled under that service’s own terms: some keep conversations, use them to improve their products, or let human reviewers read them.';
+
+  @override
+  String get legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff =>
+      'automatically keeps identifying details out of the instructions it writes for your AI';
+
+  @override
+  String get legalSheetYourNameDateOfBirthHandoff =>
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)';
+
+  @override
+  String get legalSheetDocumentsYouUploadForAutofillHandoff =>
+      'Documents you attach for autofill are different: you attach the whole file in your AI service yourself, and to fill in your directive the AI reads the personal details in it (your name, date of birth, address, and your agent’s or guardian’s details). You review everything before it is added. ';
+
+  @override
+  String get facilitatorGuidedBodyHandoff =>
+      'Your own AI (ChatGPT, Claude, Gemini or Grok) asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the AI explains, it doesn’t decide.';
+
+  @override
+  String get facilitatorGuidedMetaAiHandoff => 'Your own AI, by copy and paste';
+
+  @override
+  String get medsStepSideEffectsBodyHandoff =>
+      'For the medications you take now, read the official FDA side effects and interactions — no AI needed. With your own AI (copy and paste), you can also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.';
+
+  @override
+  String get moreSheetThisPermanentlyErasesEverythingInHandoff =>
+      'This permanently erases everything in this session — all directives and any AI answer you’re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+
+  @override
+  String get audioGuideDescribeYourWishesOutLoudHandoff =>
+      'Describe your wishes out loud, attach the recording in your own AI from the Autofill page, and PA MHAD fills in your directive from its answer — you review every field before anything is added.';
+
+  @override
+  String get audioGuideToTranscribeYourRecordingIncludingHandoff =>
+      'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.';
+
+  @override
+  String get audioGuideTipKeepEachClipShortUnderHandoff =>
+      'Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.';
+
+  @override
+  String get navStartOver => 'Start over';
+
+  @override
+  String get wizardAskAboutStep => 'Ask AI about this step';
+
+  @override
+  String readingTimeMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count min read',
+      one: '1 min read',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiHandoffCopyHelp =>
+      'A ready-made message that tells your AI what to do, with the Pennsylvania facts it needs.';
+
+  @override
+  String get aiHandoffCopyAgain => 'Copy again';
+
+  @override
+  String get aiHandoffYourAi => 'your AI';
+
+  @override
+  String aiHandoffStepSend(String service) {
+    return 'Send it in $service';
+  }
+
+  @override
+  String aiHandoffSendOpen(String service) {
+    return 'Open $service and start a new chat.';
+  }
+
+  @override
+  String get aiHandoffSendPaste =>
+      'Paste the message there (Ctrl+V, or press and hold, then Paste).';
+
+  @override
+  String get aiHandoffAttachDocumentTodo =>
+      'Attach your document (a photo, scan, or PDF) to the same message.';
+
+  @override
+  String get aiHandoffAttachAudioTodo =>
+      'Attach your voice recording to the same message.';
+
+  @override
+  String get aiHandoffSendIt => 'Send it.';
+
+  @override
+  String get aiHandoffPasteHelp =>
+      'Your AI replies with a code box. Copy it with the box’s Copy button (or copy the whole reply), then come back and tap Paste the answer.';
+
+  @override
+  String get aiHandoffPasteManual => 'Paste it into a box instead';
+
+  @override
+  String get aiHandoffClipboardBlocked =>
+      'Nothing came through from what you copied — some browsers block this. Paste the answer into this box (Ctrl+V, or press and hold, then Paste), then tap Use this answer.';
+
+  @override
+  String get aiHandoffAnswerThere =>
+      'Your AI answers there — nothing comes back to PA MHAD. You can ask follow-up questions in the same chat.';
+
+  @override
+  String get aiHandoffNeedQuestion =>
+      'Type a question above, or pick one, first.';
+
+  @override
+  String get aiHandoffNeedDescription =>
+      'Describe it in a few words above first.';
 }

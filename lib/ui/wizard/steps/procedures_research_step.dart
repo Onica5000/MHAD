@@ -42,7 +42,7 @@ class _ProceduresResearchStepState
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: DesignTokens.pagePadding,
       children: [
         SectionLabel(context.l10n.procResearchEctLabel),
         const SizedBox(height: 4),
@@ -66,7 +66,7 @@ class _ProceduresResearchStepState
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 8),
-        SectionLabel(context.l10n.procResearchDrugTrialsLabel),
+        SectionLabel(context.l10n.reviewStepDrugTrials),
         const SizedBox(height: 4),
         ConsentChoiceStep(
           key: _drugTrialsKey,
@@ -123,7 +123,7 @@ class _NeverAuthorizedCard extends StatelessWidget {
         : SemanticColors.errorAccentLight;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: bg,
         border: Border.all(color: border),
@@ -139,7 +139,6 @@ class _NeverAuthorizedCard extends StatelessWidget {
               Text(
                 context.l10n.procResearchNeverAuthorizedTitle,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: fg,
@@ -151,10 +150,8 @@ class _NeverAuthorizedCard extends StatelessWidget {
           Text(
             context.l10n.procResearchNeverAuthorizedBody,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              color: fg,
-              height: 1.45,
+              color: fg, height: MhadType.leadingParagraph,
             ),
           ),
           const SizedBox(height: 8),
@@ -197,7 +194,6 @@ class _NeverItem extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: fg,

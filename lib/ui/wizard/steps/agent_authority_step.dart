@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/ai/ai_clinical_policy.dart';
@@ -129,8 +130,7 @@ class _AgentAuthorityStepState
                     context.l10n.agentAuthScopeBody,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer,
-                      height: 1.4,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer, height: MhadType.leadingParagraph,
                     ),
                   ),
                 ],
@@ -159,8 +159,7 @@ class _AgentAuthorityStepState
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimaryContainer,

@@ -358,10 +358,10 @@ class SmartFillService {
     }
   }
 
-  /// Builds the full generation prompt. Exposed for tests so the consent
-  /// wording and PII-stripping contract can be pinned without a network call.
-  @visibleForTesting
-  String buildPrompt(SmartFillInput input) {
+  /// Builds the full generation prompt — shared by the API path and the
+  /// copy-and-paste handoff; tests pin the consent wording and the
+  /// PII-stripping contract through it without a network call.
+  static String buildPrompt(SmartFillInput input) {
     final buf = StringBuffer();
 
     buf.writeln('PA Mental Health Advance Directive auto-fill.');
@@ -653,7 +653,7 @@ class SmartFillService {
     return value;
   }
 
-  SmartFillResult _parse(String text) {
+  static SmartFillResult _parse(String text) {
     final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;

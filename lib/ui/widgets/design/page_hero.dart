@@ -85,8 +85,7 @@ class PageHero extends StatelessWidget {
             Text(
               lead!,
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: p.textMuted,
-                height: 1.5,
+                color: p.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
           ],

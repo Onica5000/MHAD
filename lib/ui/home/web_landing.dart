@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,9 +46,9 @@ class WebDashboardLanding extends ConsumerWidget {
     final p = Theme.of(context).mhadPalette;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(40, 32, 40, 60),
+      padding: const EdgeInsets.fromLTRB(40, 32, 40, 64),
       children: [
-        if (isPublic) ...[_AnonBanner(), const SizedBox(height: 22)],
+        if (isPublic) ...[_AnonBanner(), const SizedBox(height: 24)],
 
         // ── Hero: headline + the Home photo (two people walking a path at
         //    sunrise — planning ahead, together). Above the form choice,
@@ -67,15 +68,7 @@ class WebDashboardLanding extends ConsumerWidget {
                 ),
               ],
             ),
-            style: const TextStyle(
-              fontFamily: kSerifFamily,
-              fontFamilyFallback: kSerifFallbacks,
-              fontStyle: FontStyle.italic,
-              fontSize: 56, // artboard WebDashboard hero size
-              height: 1,
-              letterSpacing: -1,
-              fontWeight: FontWeight.w400,
-            ),
+            style: EditorialHeading.styleFor(context, HeadingLevel.display),
           ),
         ),
         const SizedBox(height: 32),
@@ -83,7 +76,7 @@ class WebDashboardLanding extends ConsumerWidget {
         // ── Form choice (reusable — also shown on the returning dashboard so
         //    "Start a new directive" lands on the same picker) ──────────────
         const DirectiveFormChoice(),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
 
         // ── Other ways to start: one row of three equal photo cards. It
         //    replaces the lone "Print a blank form" card (which left half the
@@ -114,14 +107,14 @@ class WebDashboardLanding extends ConsumerWidget {
             PhotoActionCard(
                 fillHeight: true,
                 art: AppArt.startPrint,
-                title: context.l10n.webLandingPrintABlankForm,
+                title: context.l10n.blankFormPrintTitle,
                 body: context.l10n.webLandingPreferPaperOpenAnyOf,
                 cta: context.l10n.webLandingPrintBlankForm,
                 onTap: () => showBlankFormPicker(context),
             ),
           ],
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 32),
 
         // ── Privacy promise + booklet quote ──────────────────────────────
         // Both cards shrink-wrap (their Columns are mainAxisSize.min) so the
@@ -177,7 +170,7 @@ class _AnonBanner extends StatelessWidget {
             ),
             child: Icon(Icons.lock_outline, size: 16, color: p.onPrimary),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +178,6 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   context.l10n.webLandingYouReWorkingAnonymouslyNothing,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -195,16 +187,14 @@ class _AnonBanner extends StatelessWidget {
                 Text(
                   context.l10n.webLandingNoAccountNoCloudIf,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           // "HOW THIS WORKS →" link (artboard WebDashboard anon banner) →
           // the privacy policy, which explains the anonymous / nothing-saved
           // model in full.
@@ -217,8 +207,7 @@ class _AnonBanner extends StatelessWidget {
                 context.l10n.webLandingHowThisWorks,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.6,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
@@ -259,7 +248,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
       ),
     ];
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -276,7 +265,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: _PromiseItem(row: rows[0])),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(child: _PromiseItem(row: rows[1])),
             ],
           ),
@@ -285,7 +274,7 @@ class _PrivacyPromiseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: _PromiseItem(row: rows[2])),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(child: _PromiseItem(row: rows[3])),
             ],
           ),
@@ -316,7 +305,7 @@ class _PromiseItem extends StatelessWidget {
           ),
           child: Icon(icon, size: 14, color: p.primary),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,7 +313,6 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: p.text,
@@ -334,9 +322,7 @@ class _PromiseItem extends StatelessWidget {
               Text(
                 sub,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  height: 1.4,
+                  fontSize: 12, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -358,7 +344,7 @@ class _BookletQuoteCard extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           decoration: BoxDecoration(
             color: p.primaryTint,
             border: Border.all(color: p.primaryLight),
@@ -371,22 +357,13 @@ class _BookletQuoteCard extends StatelessWidget {
               SectionLabel(context.l10n.webLandingFromTheBooklet),
               Text(
                 context.l10n.webLandingAnMhadIsYourVoice,
-                style: TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 22,
-                  height: 1.2,
-                  color: p.primaryDark,
-                ),
+                style: MhadText.serifAccent(context, size: 22, color: p.primaryDark, height: MhadType.leadingUi),
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.webLandingPaMhadBookletOfficeOf,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 12,
-                  letterSpacing: 0.3,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),

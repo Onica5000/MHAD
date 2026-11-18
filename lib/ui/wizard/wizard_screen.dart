@@ -2,6 +2,9 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/ai/ai_step_helper.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_assistant.dart' show AssistantContext;
@@ -129,28 +132,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     unawaited(_persistStep(index));
   }
 
-  /// On web, snapshot the full directive to SharedPreferences so the user
-  /// can resume after a page reload within the TTL window.
-  Future<void> _cacheForWebReload() async {
-    if (!kIsWeb) return;
-    // Best-effort crash-recovery snapshot. It must NEVER block wizard
-    // navigation: callers `await` this before advancing the step, so a hung
-    // DB read / storage write here would freeze "Continue". Bound every async
-    // hop with a timeout — a try/catch alone does not rescue a hang, only a
-    // throw. On timeout we simply skip caching this step.
-    try {
-      final repo = ref.read(directiveRepositoryProvider);
-      final snap = await repo
-          .snapshotDirective(widget.directiveId)
-          .timeout(const Duration(seconds: 3));
-      if (snap.isNotEmpty) {
-        await WebSessionCache.saveDirective(snap)
-            .timeout(const Duration(seconds: 3));
-      }
-    } catch (e) {
-      debugPrint('Web cache save skipped (failed or timed out): $e');
-    }
-  }
+  /// On web, snapshot the directive so the user can resume after a page
+  /// reload within the TTL window. Never blocks navigation (callers await
+  /// this before advancing the step) — see [WebSessionCache.cacheDirective].
+  Future<void> _cacheForWebReload() => WebSessionCache.cacheDirective(
+      ref.read(directiveRepositoryProvider), widget.directiveId);
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +147,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       loading: () => Scaffold(
         body: Center(
           child: Semantics(
-            label: context.l10n.wizardLoading,
+            label: context.l10n.commonLoading,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -169,8 +155,12 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
       error: (e, _) {
         debugPrint('Error loading directive: $e');
         return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.wizardError)),
-          body: Center(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const BackLink(),
+              Expanded(
+                child: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -212,13 +202,23 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
               ),
             ),
           ),
+              ),
+            ],
+          ),
         );
       },
       data: (directive) {
         if (directive == null) {
           return Scaffold(
-            appBar: AppBar(title: Text(context.l10n.wizardNotFound)),
-            body: Center(child: Text(context.l10n.wizardDirectiveNotFound)),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const BackLink(),
+                Expanded(
+                  child: Center(child: Text(context.l10n.wizardDirectiveNotFound)),
+                ),
+              ],
+            ),
           );
         }
 
@@ -302,6 +302,11 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                             _stepIndex > 0 ? context.l10n.back : null,
                         onSecondary: _stepIndex > 0 ? _goBack : null,
                         showGradient: false,
+                        // Phones never show the AI rail: ✦ Ask lives here.
+                        assistLabel: context.l10n.navAsk,
+                        assistTooltip: context.l10n.wizardAskAboutStep,
+                        onAssist: () => _askStepAi(
+                            context, formType, currentStep, directive.id),
                       ),
             body: LayoutBuilder(
               builder: (context, constraints) {
@@ -328,12 +333,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                 // 1080 the form shrank to ~518px.
                 final showAiRail =
                     shellActive && constraints.maxWidth >= 1162;
-                // When the on-screen keyboard is up on a narrow layout, the
-                // peeking "Need help?" bar just steals vertical space from the
-                // field being edited — hide it while typing. Wide layouts (which
-                // show the full rail, or the peeking bar in the 1000–1080 band)
-                // are unaffected.
-                final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
                 final mainColumn = Column(
                   children: [
                     if (!shellActive)
@@ -386,7 +385,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                 duration: const Duration(milliseconds: 200),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
+                                      horizontal: 12, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: p.card,
                                     border: Border.all(color: p.border),
@@ -397,7 +396,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                     children: [
                                       Icon(Icons.check,
                                           size: 14, color: p.textMuted),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 4),
                                       Text(
                                         kIsWeb
                                             ? context.l10n.wizardKeptInThisTab
@@ -417,18 +416,10 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                         ],
                       ),
                     ),
-                    // Prototype `w-wiz-mobile`: the AI rail collapses to a slim
-                    // peeking "Need help?" bar whenever the full 320px rail
-                    // isn't shown — i.e. on mobile AND in the desktop band
-                    // that's too narrow for the rail.
-                    if (!showAiRail && !(keyboardOpen && !shellActive))
-                      WizardAiBar(
-                        onAsk: () => _openStepAi(
-                          context,
-                          formType,
-                          currentStep.displayName,
-                        ),
-                      ),
+                    // AI help without the 320px rail (phones, and the desktop
+                    // band too narrow for it) is the ✦ Ask button in the
+                    // Back/Continue bar — one bar, not two stacked (the old
+                    // "Need help?" strip cost a phone ~56px of form).
                     // Desktop: the same Back/Continue bar as phones, under the
                     // form (one implementation, one label). The column has a
                     // TIGHT width here (see the LayoutBuilder below), so the
@@ -447,6 +438,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                               _stepIndex > 0 ? context.l10n.back : null,
                           onSecondary: _stepIndex > 0 ? _goBack : null,
                           showGradient: false,
+                          assistLabel:
+                              showAiRail ? null : context.l10n.navAsk,
+                          assistTooltip: context.l10n.wizardAskAboutStep,
+                          onAssist: showAiRail
+                              ? null
+                              : () => _askStepAi(
+                                  context, formType, currentStep, directive.id),
                         ),
                       ),
                     // Narrow (mobile) Back/Continue navigation is the
@@ -502,17 +500,33 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                     if (showAiRail) ...[
                       Container(width: 1, color: p.border),
                       FocusTraversalGroup(
-                        child: WizardAiRail(
-                          formType: formType.name,
-                          step: currentStep,
-                          stepName: currentStep.displayName,
-                          directiveId: directive.id,
-                          onOpenFull: () => _openStepAi(
-                            context,
-                            formType,
-                            currentStep.displayName,
-                          ),
-                        ),
+                        child: appData.ai.apiModeVisible
+                            ? WizardAiRail(
+                                formType: formType.name,
+                                step: currentStep,
+                                stepName: currentStep.displayName,
+                                directiveId: directive.id,
+                                onOpenFull: () => _openStepAi(
+                                  context,
+                                  formType,
+                                  currentStep.displayName,
+                                ),
+                              )
+                            // Copy-and-paste step help (API path hidden).
+                            : Container(
+                                width: 320,
+                                color: p.card,
+                                child: SingleChildScrollView(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                                  child: AiStepHelper(
+                                    formType: formType.name,
+                                    step: currentStep,
+                                    stepName: currentStep.displayName,
+                                    directiveId: directive.id,
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ],
@@ -537,6 +551,24 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// Opens the AI assistant pre-loaded with this step's context. Used by both
   /// the desktop right rail and the narrow peeking bar (prototype w-wizard /
   /// w-wiz-mobile).
+  /// AI help for the current step without the rail: the copy-and-paste
+  /// step helper in a sheet (stays in the wizard); with the API path shown,
+  /// the old chat page.
+  void _askStepAi(BuildContext context, FormType formType, WizardStep step,
+      int directiveId) {
+    if (appData.ai.apiModeVisible) {
+      _openStepAi(context, formType, step.displayName);
+      return;
+    }
+    showAiStepHelperSheet(
+      context,
+      formType: formType.name,
+      step: step,
+      stepName: step.displayName,
+      directiveId: directiveId,
+    );
+  }
+
   Future<void> _openStepAi(
       BuildContext context, FormType formType, String stepName) async {
     final filled = await buildAiFilledFields(
@@ -798,26 +830,16 @@ class _WideStepRail extends StatelessWidget {
               context.l10n.wizardYourDirective,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
                 color: p.textMuted,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               '${currentIndex + 1} / ${steps.length}',
-              style: TextStyle(
-                fontFamily: kSerifFamily,
-                fontFamilyFallback: kSerifFallbacks,
-                fontStyle: FontStyle.italic,
-                fontSize: 36,
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.5,
-                height: 1,
-                color: p.primary,
-              ),
+              style: MhadText.serifAccent(context, size: 36, color: p.primary, height: 1),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             // Overall progress at a glance.
             ClipRRect(
               borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -826,7 +848,7 @@ class _WideStepRail extends StatelessWidget {
                 minHeight: 6,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             for (var i = 0; i < steps.length; i++)
               _RailStepRow(
                 index: i + 1,
@@ -917,16 +939,14 @@ class _RailStepRow extends StatelessWidget {
                     ),
                   ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: titleWeight,
-                color: titleColor,
-                height: 1.2,
+                color: titleColor, height: MhadType.leadingUi,
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/router.dart';
 
@@ -39,7 +40,7 @@ List<PrimaryDestination> primaryDestinations(
       PrimaryDestination(
         icon: Icons.home_outlined,
         activeIcon: Icons.home,
-        label: context.l10n.navHome,
+        label: context.l10n.home,
         route: AppRoutes.home,
         activeOn: const {AppRoutes.home},
       ),
@@ -54,7 +55,9 @@ List<PrimaryDestination> primaryDestinations(
         icon: Icons.auto_awesome_outlined,
         activeIcon: Icons.auto_awesome,
         label: context.l10n.navAsk,
-        route: aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
+        route: (aiReady || !appData.ai.apiModeVisible)
+            ? AppRoutes.assistant
+            : AppRoutes.aiSetup,
         activeOn: const {AppRoutes.assistant, AppRoutes.aiSetup},
       ),
       PrimaryDestination(

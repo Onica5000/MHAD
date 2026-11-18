@@ -363,6 +363,85 @@ class LlmAssistant implements AiAssistant {
         if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
     };
 
+    final prompt = sideEffectsPrompt(cleaned, grounded);
+
+    try {
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.sideEffectsTimeout);
+      if (text == null) return const [];
+      return parseSideEffects(jsonDecode(text) as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('generateSideEffects error: $e');
+      return const [];
+    }
+  }
+
+  /// Flags POSSIBLE interactions between the user's CURRENT medications so they
+  /// can ask their doctor or pharmacist. Grounded in each drug's official FDA
+  /// label "Drug Interactions" text (via openFDA) so notes paraphrase a real
+  /// source instead of the model's memory. Strictly informational — per the
+  /// clinical policy it NEVER tells the user to start, stop, change, or combine
+  /// a medication, and never invents an interaction. Returns [] on any failure
+  /// or when fewer than two medications are supplied.
+  Future<List<InteractionNote>> generateInteractionNotes(
+      List<String> meds) async {
+    final cleaned =
+        meds.map((m) => m.trim()).where((m) => m.isNotEmpty).toSet().toList();
+    // An interaction needs at least two medications to compare.
+    if (cleaned.length < 2) return const [];
+
+    // Ground in the FDA labels' "Drug Interactions" sections. A note may only
+    // be raised when it is supported by at least one provided label, so we need
+    // labels for at least one of the meds to proceed.
+    final labels = await Future.wait(
+      cleaned.map((m) async => MapEntry(m, await OpenFdaService.drugInteractions(m))),
+    );
+    final grounded = <String, String>{
+      for (final e in labels)
+        if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
+    };
+    if (grounded.isEmpty) return const [];
+
+    final prompt = interactionsPrompt(cleaned, grounded);
+
+    try {
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.sideEffectsTimeout);
+      if (text == null) return const [];
+      return parseInteractions(jsonDecode(text) as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('generateInteractionNotes error: $e');
+      return const [];
+    }
+  }
+
+  /// Maps a user's PLAIN-LANGUAGE description of what they experience to a few
+  /// candidate condition NAMES they can look up and confirm — powers the
+  /// diagnoses step's "Don't know the official name?" helper. This is NOT a
+  /// diagnosis: it only proposes recognized condition names to search the
+  /// authoritative ICD-10 registry with; the user confirms the actual code.
+  /// Returns [] on any failure or too-vague input.
+  Future<List<String>> suggestConditionTerms(String description) async {
+    final desc = description.trim();
+    if (desc.length < 3) return const [];
+
+    final prompt = conditionTermsPrompt(desc);
+
+    try {
+      final text = await _generateJson(prompt.toString(),
+          timeout: appData.config.stepSuggestionTimeout);
+      if (text == null) return const [];
+      return parseConditionTerms(jsonDecode(text) as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('suggestConditionTerms error: $e');
+      return const [];
+    }
+  }
+
+  /// The side-effects prompt for [cleaned] medications, grounded in their
+  /// FDA label text ([grounded], med → label). Shared with the handoff.
+  static String sideEffectsPrompt(
+      List<String> cleaned, Map<String, String> grounded) {
     final prompt = StringBuffer()
       ..writeln(
           'A user is documenting a PA Mental Health Advance Directive. For '
@@ -409,49 +488,22 @@ class LlmAssistant implements AiAssistant {
       });
     }
 
-    try {
-      final text = await _generateJson(prompt.toString(),
-          timeout: appData.config.sideEffectsTimeout);
-      if (text == null) return const [];
-      final data = jsonDecode(text) as Map<String, dynamic>;
-      return ((data['items'] as List?) ?? const [])
+    return prompt.toString();
+  }
+
+  /// Parses a side-effects reply (`{"items": [...]}`).
+  static List<SideEffectItem> parseSideEffects(Map<String, dynamic> data) =>
+      ((data['items'] as List?) ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(SideEffectItem.fromJson)
           .where((i) => i.med.isNotEmpty && i.effect.isNotEmpty)
           .take(60)
           .toList();
-    } catch (e) {
-      debugPrint('generateSideEffects error: $e');
-      return const [];
-    }
-  }
 
-  /// Flags POSSIBLE interactions between the user's CURRENT medications so they
-  /// can ask their doctor or pharmacist. Grounded in each drug's official FDA
-  /// label "Drug Interactions" text (via openFDA) so notes paraphrase a real
-  /// source instead of the model's memory. Strictly informational — per the
-  /// clinical policy it NEVER tells the user to start, stop, change, or combine
-  /// a medication, and never invents an interaction. Returns [] on any failure
-  /// or when fewer than two medications are supplied.
-  Future<List<InteractionNote>> generateInteractionNotes(
-      List<String> meds) async {
-    final cleaned =
-        meds.map((m) => m.trim()).where((m) => m.isNotEmpty).toSet().toList();
-    // An interaction needs at least two medications to compare.
-    if (cleaned.length < 2) return const [];
-
-    // Ground in the FDA labels' "Drug Interactions" sections. A note may only
-    // be raised when it is supported by at least one provided label, so we need
-    // labels for at least one of the meds to proceed.
-    final labels = await Future.wait(
-      cleaned.map((m) async => MapEntry(m, await OpenFdaService.drugInteractions(m))),
-    );
-    final grounded = <String, String>{
-      for (final e in labels)
-        if (e.value != null && e.value!.isNotEmpty) e.key: e.value!,
-    };
-    if (grounded.isEmpty) return const [];
-
+  /// The drug-interactions prompt, grounded in FDA "Drug Interactions"
+  /// label text. Shared with the handoff.
+  static String interactionsPrompt(
+      List<String> cleaned, Map<String, String> grounded) {
     final prompt = StringBuffer()
       ..writeln(
           'A user is documenting a PA Mental Health Advance Directive. Below '
@@ -492,33 +544,21 @@ class LlmAssistant implements AiAssistant {
         ..writeln('--- END FDA LABEL · $med ---');
     });
 
-    try {
-      final text = await _generateJson(prompt.toString(),
-          timeout: appData.config.sideEffectsTimeout);
-      if (text == null) return const [];
-      final data = jsonDecode(text) as Map<String, dynamic>;
-      return ((data['items'] as List?) ?? const [])
+    return prompt.toString();
+  }
+
+  /// Parses an interactions reply (`{"items": [...]}`).
+  static List<InteractionNote> parseInteractions(Map<String, dynamic> data) =>
+      ((data['items'] as List?) ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(InteractionNote.fromJson)
           .where((i) => i.meds.length >= 2 && i.note.isNotEmpty)
           .take(20)
           .toList();
-    } catch (e) {
-      debugPrint('generateInteractionNotes error: $e');
-      return const [];
-    }
-  }
 
-  /// Maps a user's PLAIN-LANGUAGE description of what they experience to a few
-  /// candidate condition NAMES they can look up and confirm — powers the
-  /// diagnoses step's "Don't know the official name?" helper. This is NOT a
-  /// diagnosis: it only proposes recognized condition names to search the
-  /// authoritative ICD-10 registry with; the user confirms the actual code.
-  /// Returns [] on any failure or too-vague input.
-  Future<List<String>> suggestConditionTerms(String description) async {
-    final desc = description.trim();
-    if (desc.length < 3) return const [];
-
+  /// The "don't know the official name" prompt for [desc]. Shared with
+  /// the handoff.
+  static String conditionTermsPrompt(String desc) {
     final prompt = StringBuffer()
       ..writeln(
           'A person is completing a PA Mental Health Advance Directive and does '
@@ -541,30 +581,31 @@ class LlmAssistant implements AiAssistant {
       ..writeln('Their description:')
       ..writeln(desc);
 
-    try {
-      final text = await _generateJson(prompt.toString(),
-          timeout: appData.config.stepSuggestionTimeout);
-      if (text == null) return const [];
-      final data = jsonDecode(text) as Map<String, dynamic>;
-      return ((data['conditions'] as List?) ?? const [])
+    return prompt.toString();
+  }
+
+  /// Parses a condition-names reply (`{"conditions": [...]}`).
+  static List<String> parseConditionTerms(Map<String, dynamic> data) =>
+      ((data['conditions'] as List?) ?? const [])
           .map((e) => e.toString().trim())
           .where((s) => s.isNotEmpty)
           .take(5)
           .toList();
-    } catch (e) {
-      debugPrint('suggestConditionTerms error: $e');
-      return const [];
-    }
-  }
 
-  String _buildSystemPrompt(AssistantContext? context) {
+  /// The assistant's full instructions (role, guided walkthrough, PA
+  /// reference, guidelines) for [context]. ONE definition, shared by the API
+  /// chat and the copy-and-paste handoff's "Ask AI" prompt.
+  static String systemPromptFor(AssistantContext? context) =>
+      _buildSystemPrompt(context);
+
+  static String _buildSystemPrompt(AssistantContext? context) {
     return _buildRoleSection(context) +
         _buildWalkthroughSection() +
         _buildReferenceSection() +
         _buildGuidelinesSection();
   }
 
-  String _buildRoleSection(AssistantContext? context) {
+  static String _buildRoleSection(AssistantContext? context) {
     final buf = StringBuffer();
 
     buf.writeln(
@@ -626,7 +667,7 @@ class LlmAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  String _buildWalkthroughSection() {
+  static String _buildWalkthroughSection() {
     final buf = StringBuffer();
 
     buf.writeln('--- GUIDED WALKTHROUGH CAPABILITY ---\n');
@@ -777,7 +818,7 @@ class LlmAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  String _buildReferenceSection() {
+  static String _buildReferenceSection() {
     final buf = StringBuffer();
 
     buf.writeln('--- PENNSYLVANIA MHAD REFERENCE INFORMATION ---\n');
@@ -796,7 +837,7 @@ class LlmAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  String _buildGuidelinesSection() {
+  static String _buildGuidelinesSection() {
     final buf = StringBuffer();
 
     buf.writeln('Guidelines (STRICT — follow every rule):');
@@ -971,6 +1012,6 @@ class LlmAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  String _formTypeName(String formType) =>
+  static String _formTypeName(String formType) =>
       formTypeFromName(formType)?.displayName ?? formType;
 }

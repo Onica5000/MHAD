@@ -1,5 +1,6 @@
-﻿import 'package:drift/drift.dart' show Value;
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,7 +12,6 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Self-binding ("Ulysses") clause (v2 prototype `m-ulysses`, v3 corrected
 /// framing).
@@ -102,20 +102,16 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
       // in-body back chevron. The editorial "If future-me refuses…" header
       // owns the visual title rather than a Material AppBar string.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: _loading
           ? const PageLoading()
           : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+              padding: DesignTokens.pagePadding,
               children: [
                 PageHero(
                   art: AppArt.flowUlysses,
                   eyebrow: context.l10n.sideEffectsOptionalAddOn,
-                  title: EditorialHeading(text: context.l10n.ulyssesClauseIfFutureMeRefuses, size: 30),
+                  title: EditorialHeading(text: context.l10n.ulyssesClauseIfFutureMeRefuses),
                   lead: context.l10n.ulyssesClauseSometimesDuringACrisisPeople,
                 ),
                 const SizedBox(height: 16),
@@ -129,8 +125,7 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         Text(
                           context.l10n.ulyssesClauseSelfBindingUlysses,
                           style: TextStyle(
-                            fontSize: 12,
-                            letterSpacing: 1,
+                            fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                             fontWeight: FontWeight.w700,
                             color: _acknowledged
                                 ? cs.onPrimary
@@ -140,27 +135,19 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                         const SizedBox(height: 6),
                         Text(
                           context.l10n.ulyssesClauseTieMyselfToTheMast,
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 24,
-                            color: _acknowledged ? cs.onPrimary : cs.onSurface,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: _acknowledged ? cs.onPrimary : cs.onSurface),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           context.l10n.ulyssesClausePerPaAct19420,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.45,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                             color: _acknowledged
                                 ? cs.onPrimary
                                 : cs.onSurfaceVariant,
                           ),
                         ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 16),
                         SwitchListTile(
                           value: _acknowledged,
                           onChanged: _setAcknowledged,
@@ -187,9 +174,9 @@ class _UlyssesClauseScreenState extends ConsumerState<UlyssesClauseScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 _BoundariesCard(),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 InfoBanner(
                   icon: Icons.warning_amber_rounded,
                   variant: InfoBannerVariant.warning,
@@ -215,7 +202,7 @@ class _BoundariesCard extends StatelessWidget {
     ];
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -234,9 +221,7 @@ class _BoundariesCard extends StatelessWidget {
                     Expanded(
                       child: Text(b,
                           style: const TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.4,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                           )),
                     ),
                   ],

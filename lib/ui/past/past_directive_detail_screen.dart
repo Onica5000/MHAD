@@ -1,6 +1,9 @@
-﻿import 'dart:async';
+import 'package:mhad/utils/file_names.dart';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -19,9 +22,8 @@ import 'package:mhad/ui/widgets/design/action_row.dart';
 import 'package:mhad/ui/widgets/design/dashed_divider.dart';
 import 'package:mhad/ui/widgets/design/directive_status_style.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/mono_pill.dart';
+import 'package:mhad/ui/widgets/design/status_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Past directive detail (v2 prototype `m-past`).
 ///
@@ -46,11 +48,7 @@ class PastDirectiveDetailScreen extends ConsumerWidget {
       // AppBar.
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.homePastDirectives,
-            onBack: () => Navigator.of(context).maybePop(),
-            actionLabel: '',
-          ),
+          BackLink(label: context.l10n.homePastDirectives),
           Expanded(
             child: directiveAsync.when(
               loading: () => PageLoading(label: context.l10n.pastDirectiveDetailLoadingThisDirective),
@@ -145,14 +143,14 @@ class _Body extends ConsumerWidget {
     final statusColor = directiveStatusColor(directive.status, dark: dark);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+      padding: DesignTokens.pagePadding,
       children: [
-        MonoPill(
+        StatusPill(
           label: status,
           foreground: statusColor,
           background: statusColor.withValues(alpha: 0.15),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         // Editorial title — prototype uses "Directive · <YEAR>" with the
         // year in primary color. Year comes from executionDate if set,
         // otherwise createdAt as a fallback. When the user's stored name
@@ -199,7 +197,7 @@ class _Body extends ConsumerWidget {
         else
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -275,15 +273,7 @@ class _PastDetailTitle extends StatelessWidget {
           ),
         ],
       ),
-      style: const TextStyle(
-        fontFamily: kSerifFamily,
-        fontFamilyFallback: kSerifFallbacks,
-        fontStyle: FontStyle.italic,
-        fontSize: 38,
-        fontWeight: FontWeight.w400,
-        height: 1.05,
-        letterSpacing: -0.5,
-      ),
+      style: EditorialHeading.styleFor(context, HeadingLevel.page),
     );
   }
 }
@@ -303,11 +293,15 @@ class _DocPreviewCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = Theme.of(context).mhadPalette;
     final principal = directive.fullName.trim().isEmpty
-        ? context.l10n.pastDirectiveDetailPrincipalYou
+        ? context.l10n.assistantSenderYou
         : directive.fullName.trim().split(RegExp(r'\s+')).first;
-    final filename =
-        'Directive_${DateTime.fromMillisecondsSinceEpoch(directive.executionDate ?? directive.createdAt).year}'
-        '_${directive.fullName.trim().split(RegExp(r'\s+')).lastOrNull ?? 'MHAD'}.pdf';
+    final filename = mhadFileName([
+      kFileNamePrefix,
+      directive.fullName,
+      DateTime.fromMillisecondsSinceEpoch(
+              directive.executionDate ?? directive.createdAt)
+          .year,
+    ]);
 
     return FutureBuilder<List<WitnessesData>>(
       // Cached via the provider so this doesn't re-query on every rebuild.
@@ -325,7 +319,7 @@ class _DocPreviewCard extends ConsumerWidget {
         }
 
         return DesignCard(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -333,7 +327,7 @@ class _DocPreviewCard extends ConsumerWidget {
                 children: [
                   Icon(Icons.description_outlined,
                       size: 20, color: p.textMuted),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,7 +335,6 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           filename,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -352,7 +345,6 @@ class _DocPreviewCard extends ConsumerWidget {
                         Text(
                           context.l10n.pastDirectiveDetailGeneratedOnDemand6Pages,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             color: p.textMuted,
                           ),
@@ -374,11 +366,11 @@ class _DocPreviewCard extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Dashed-style divider — drawn as a custom painted line
               // since Flutter has no built-in dashed Divider widget.
               DashedDivider(color: p.border),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(child: _SigCol(label: context.l10n.pastDirectiveDetailSignedBy, value: principal)),
@@ -412,8 +404,7 @@ class _SigCol extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
-            letterSpacing: 0.4,
+            fontSize: 12, letterSpacing: MhadType.trackingLabel,
             color: p.textMuted,
           ),
         ),
@@ -421,7 +412,6 @@ class _SigCol extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: p.text,

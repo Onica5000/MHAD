@@ -200,7 +200,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
 
         case WizardStep.whenItKicksIn:
           rows.add(row(step, l.effectiveCondition,
-              {l.reviewStepCondition: d.effectiveCondition}));
+              {l.reviewLabelCond: d.effectiveCondition}));
 
         case WizardStep.peopleITrust:
           rows.add(row(step, l.reviewStepPrimaryAgent, {
@@ -225,7 +225,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.whereIWantCare:
-          rows.add(row(step, l.reviewStepWhereIWantCare, {
+          rows.add(row(step, l.stepTitleWhereIWantCare, {
             l.reviewStepTreatmentFacility: prefs?.treatmentFacilityPref ?? '',
             l.reviewStepMedicationConsent: prefs?.medicationConsent ?? '',
           }));
@@ -236,7 +236,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.allergies:
-          rows.add(row(step, l.reviewStepAllergiesReactions, {
+          rows.add(row(step, l.stepTitleAllergies, {
             l.reviewStepAllergies: data.allergies
                 .map((a) => a.severity.isNotEmpty
                     ? '${a.substance} (${a.severity})'
@@ -256,22 +256,22 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.proceduresResearch:
-          rows.add(row(step, l.reviewStepProceduresResearch, {
+          rows.add(row(step, l.stepTitleProceduresResearch, {
             l.reviewStepEctConsent: prefs?.ectConsent ?? '',
-            l.reviewStepExperimentalStudies: prefs?.experimentalConsent ?? '',
+            l.procResearchExperimentalLabel: prefs?.experimentalConsent ?? '',
             l.reviewStepDrugTrials: prefs?.drugTrialConsent ?? '',
           }));
 
         case WizardStep.anythingElse:
           rows.add(row(step, l.additionalInstructions, {
             l.reviewStepActivities: additional?.activities ?? '',
-            l.reviewStepCrisisIntervention:
+            l.reviewLabelCrisis:
                 additional?.crisisIntervention ?? '',
-            l.reviewStepHealthHistory: additional?.healthHistory ?? '',
+            l.reviewLabelHh: additional?.healthHistory ?? '',
             l.reviewStepDietary: additional?.dietary ?? '',
             l.reviewStepReligious: additional?.religious ?? '',
             l.reviewStepChildren: additional?.childrenCustody ?? '',
-            l.reviewStepFamilyNotification:
+            l.addlInstrFamilyNotifyTitle:
                 additional?.familyNotification ?? '',
             l.reviewStepRecordsDisclosure: additional?.recordsDisclosure ?? '',
             l.reviewStepPetCare: additional?.petCustody ?? '',
@@ -321,7 +321,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
     if (_data == null) {
       return Center(
         child: Semantics(
-          label: context.l10n.reviewStepLoading,
+          label: context.l10n.commonLoading,
           child: const CircularProgressIndicator(),
         ),
       );
@@ -341,20 +341,9 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           ? const EdgeInsets.symmetric(horizontal: 4)
           : const EdgeInsets.fromLTRB(20, 4, 20, 16),
       children: [
-        // The wizard scaffold's StepHead already renders the "Review" title +
-        // subtitle above this step, so we avoid a duplicate H1 and instead
-        // lead with a short editorial summary line (prototype ScrReview copy).
-        Text(
-          context.l10n.reviewStepOneLastLook,
-          style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.5,
-            color: p.textMuted,
-          ),
-        ),
-        const SizedBox(height: 16),
-
+        // The wizard's StepHead already shows the "Review" title and its
+        // subtitle ("One last look… Tap any section to edit.") — this step
+        // opens straight on the summary banner (it used to repeat that line).
         // ok / warning summary banner.
         if (warnCount > 0)
           InfoBanner(
@@ -399,7 +388,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           );
         }),
 
-        const SizedBox(height: 18),
+        const SizedBox(height: 20),
         // Opt-in review (moved here from Settings). Built-in rules flag
         // cross-step contradictions; when the AI is set up it adds an optional
         // AI review (gaps + things to double-check) on the same screen.
@@ -418,9 +407,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         Text(
           context.l10n.reviewStepConsistencyCheckHelp,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12,
-            height: 1.4,
+            fontSize: 12, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -457,7 +444,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
             ],
           ),
         ),
-        const SizedBox(height: 80),
+        const SizedBox(height: 64),
       ],
     );
   }
@@ -508,7 +495,7 @@ class _ReviewRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           border: Border.all(color: p.border),
         ),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -536,7 +523,6 @@ class _ReviewRow extends StatelessWidget {
                   Text(
                     data.label,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: p.text,
@@ -550,9 +536,7 @@ class _ReviewRow extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.3,
+                      fontSize: 12, height: MhadType.leadingUi,
                       fontStyle:
                           data.hasContent ? FontStyle.normal : FontStyle.italic,
                       color: p.textMuted,
@@ -561,7 +545,7 @@ class _ReviewRow extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             // Per-row ok / needs-attention indicator.
             Padding(
               padding: const EdgeInsets.only(top: 2),
@@ -637,7 +621,6 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         title!,
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -649,9 +632,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text(
         body!,
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.45,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: fg,
         ),
       ));
@@ -660,9 +641,7 @@ class _CalloutCard extends StatelessWidget {
       children.add(Text.rich(
         richBody!,
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.45,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: fg,
         ),
       ));
@@ -679,7 +658,7 @@ class _CalloutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         border: Border.all(color: border),
       ),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       child: icon == null
           ? body0
           : Row(

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/ai/ai_step_helper.dart' show showAiSheet;
+import 'package:mhad/ui/ai/ai_question_handoff.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/ai/handoff/ai_handoff_data.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
@@ -17,6 +23,41 @@ import 'package:mhad/ui/widgets/design/art_image.dart';
 /// Material variant carried.
 class ArticleDetailScreen extends StatelessWidget {
   final EducationSection section;
+
+  /// The article's AI help in a sheet: three questions about it, the
+  /// question box and the copy-and-paste card; the AI is told which article
+  /// the person is reading (ai_handoff.json "articleContext").
+  void _askAboutArticle(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
+    final articleLine = AiHandoffData.instance
+        .text(lang, 'articleContext')
+        .replaceAll('{title}', section.title);
+    final t = Theme.of(context).textTheme;
+    showAiSheet(
+      context,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(context.l10n.learnAskAiTitle, style: t.titleMedium),
+          const SizedBox(height: 4),
+          Text(section.title, style: t.bodySmall),
+          const SizedBox(height: 16),
+          AiQuestionHandoff(
+            suggestions: [
+              context.l10n.articleAskAiQ1,
+              context.l10n.articleAskAiQ2,
+              context.l10n.articleAskAiQ3,
+            ],
+            ref: 'learn',
+            panelTitle: context.l10n.askAiPanelTitle,
+            panelSubtitle: context.l10n.askAiPanelSubtitle,
+            instructions: () =>
+                '${LlmAssistant.systemPromptFor(null)}\n$articleLine',
+          ),
+        ],
+      ),
+    );
+  }
   const ArticleDetailScreen({required this.section, super.key});
 
   @override
@@ -26,18 +67,22 @@ class ArticleDetailScreen extends StatelessWidget {
         ? context.l10n.educationSourceBeyondBooklet
         : context.l10n.educationSourceOfficialBooklet;
     return Scaffold(
-      appBar: AppBar(title: Text(section.title)),
       // A centered ~720px reading column (about 70 characters a line): the
       // article is pushed over Learn's FILL layout, so on a wide monitor the
       // text used to run the whole content width. The scrollbar stays at the
       // window edge because the padding, not a box, centers the column.
-      body: LayoutBuilder(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Expanded(
+            child: LayoutBuilder(
         builder: (context, box) {
           final side = box.maxWidth > _readingWidth + 40
               ? (box.maxWidth - _readingWidth) / 2
               : 20.0;
           return ListView(
-        padding: EdgeInsets.fromLTRB(side, 20, side, 28),
+        padding: EdgeInsets.fromLTRB(side, 20, side, 32),
         children: [
           // Category photo header (one definition: EducationCategoryArt).
           ArtImage(
@@ -46,41 +91,44 @@ class ArticleDetailScreen extends StatelessWidget {
             expand: true,
             radius: DesignTokens.radiusLg,
           ),
-          const SizedBox(height: 18),
-          // Source line (artboard WebArticle).
+          const SizedBox(height: 20),
+          // Source line (artboard WebArticle) + reading time.
           Text(
-            source,
+            '$source · ${context.l10n.readingTimeMinutes(readingMinutes(section.content)).toUpperCase()}',
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 0.6,
+              fontSize: 12, letterSpacing: MhadType.trackingLabel,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             section.title,
-            style: const TextStyle(
-              fontFamily: kSerifFamily,
-              fontFamilyFallback: kSerifFallbacks,
-              fontStyle: FontStyle.italic,
-              fontSize: 30,
-              fontWeight: FontWeight.w400,
-              height: 1.05,
-              letterSpacing: -0.4,
-            ),
+            style: EditorialHeading.styleFor(context, HeadingLevel.page),
           ),
           const SizedBox(height: 12),
           // Real bold + indented lists instead of raw `**` markers.
           RichContentText(
             section.content,
             style: const TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 16,
-              height: 1.6,
+              fontSize: 16, height: MhadType.leadingParagraph,
             ),
           ),
           const SizedBox(height: 24),
+          // Ask AI about this article (copy-and-paste handoff) — on phones
+          // too, where Learn had no AI entry before. API path hidden only;
+          // with it shown, Learn's chat panel covers this.
+          if (!appData.ai.apiModeVisible) ...[
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                onPressed: () => _askAboutArticle(context),
+                icon: const Icon(Icons.auto_awesome, size: 18),
+                label: Text(context.l10n.articleAskAiButton),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
           // "TRY IT — Ready to write yours?" inline CTA (artboard WebArticle).
           Container(
             padding: const EdgeInsets.all(16),
@@ -96,8 +144,7 @@ class ArticleDetailScreen extends StatelessWidget {
                   context.l10n.educationArticleDetailTryIt,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
+                    fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                     color: p.primary,
                   ),
                 ),
@@ -105,7 +152,6 @@ class ArticleDetailScreen extends StatelessWidget {
                 Text(
                   context.l10n.educationArticleDetailReadyToWriteYours,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -115,9 +161,7 @@ class ArticleDetailScreen extends StatelessWidget {
                 Text(
                   context.l10n.educationArticleDetailTheGuidedWizardTakesAbout,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.5,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -155,6 +199,9 @@ class ArticleDetailScreen extends StatelessWidget {
         ],
           );
         },
+      ),
+          ),
+        ],
       ),
     );
   }

@@ -82,7 +82,7 @@ class DateInputFormatter extends TextInputFormatter {
 String? optionalPhoneValidator(String? value, [AppLocalizations? l10n]) {
   if (value == null || value.trim().isEmpty) return null;
   final digits = value.replaceAll(RegExp(r'\D'), '');
-  if (digits.length != 10) return (l10n ?? _en).inputPhoneInvalid;
+  if (digits.length != 10) return (l10n ?? _en).personalInfoStepPhoneInvalid;
   return null;
 }
 

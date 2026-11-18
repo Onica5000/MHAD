@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/pin_auth_service.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -244,7 +245,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
       backgroundColor: p.scaffoldBackground,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),
+          padding: const EdgeInsets.fromLTRB(32, 24, 32, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -263,35 +264,25 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     alignment: Alignment.center,
                     child: Text(
                       'm',
-                      style: TextStyle(
-                        fontFamily: kSerifFamily,
-                        fontFamilyFallback: kSerifFallbacks,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        color: p.onPrimary,
-                      ),
+                      style: MhadText.serifAccent(context, size: 20, color: p.onPrimary),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         context.l10n.pinDialogPaMhad,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
+                          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                           color: p.text,
                         ),
                       ),
                       Text(
                         context.l10n.pinDialogPrivateModeLocked,
                         style: TextStyle(
-                          fontSize: 12,
-                          letterSpacing: 0.6,
+                          fontSize: 12, letterSpacing: MhadType.trackingLabel,
                           color: p.textMuted,
                         ),
                       ),
@@ -361,24 +352,14 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                   ],
                 ),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: kSerifFamily,
-                  fontFamilyFallback: kSerifFallbacks,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 36,
-                  height: 1.05,
-                  letterSpacing: -0.5,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: EditorialHeading.styleFor(context, HeadingLevel.page),
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.pinDialogEnterYourPasscodeToUnlock,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -390,7 +371,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                        horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       color: _verifying
                           ? p.primaryTint
@@ -423,8 +404,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                                   : context.l10n.pinDialogAttempt(_failedAttempts, 5)),
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: _verifying
                                 ? p.primary
                                 : (_lockedOut ? cs.error : p.primary),
@@ -434,7 +414,7 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                     ),
                   ),
                 ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               TextField(
                 controller: _controller,
                 obscureText: _obscure,
@@ -480,14 +460,14 @@ class _PinEntryDialogState extends State<PinEntryDialog> {
                 onSubmitted: (_) => _submit(),
               ),
               if (_error != null) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   _error!,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: cs.error, fontSize: 14),
                 ),
               ],
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(

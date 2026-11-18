@@ -35,9 +35,9 @@ class ActiveDirectiveHero extends StatelessWidget {
     final updated = DateTime.fromMillisecondsSinceEpoch(directive.updatedAt);
     final lastEdited = relativeTime(updated, l10n: context.l10n);
     final formLabel = switch (formType) {
-      FormType.combined => context.l10n.homeHeroCombinedForm,
-      FormType.declaration => context.l10n.homeHeroDeclarationOnly,
-      FormType.poa => context.l10n.eduBrowsePowerOfAttorney,
+      FormType.combined => context.l10n.eduBrowseCombinedForm,
+      FormType.declaration => context.l10n.quizLegendDeclaration,
+      FormType.poa => context.l10n.formTypeShortPoa,
     };
     final headline = directive.fullName.trim().isNotEmpty
         ? context.l10n.homeHeroNamedMhad(directive.fullName.split(' ').first)
@@ -62,19 +62,11 @@ class ActiveDirectiveHero extends StatelessWidget {
                 top: -28,
                 child: Text(
                   '$currentStep',
-                  style: TextStyle(
-                    fontFamily: kSerifFamily,
-                    fontFamilyFallback: kSerifFallbacks,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 180,
-                    height: 1,
-                    fontWeight: FontWeight.w400,
-                    color: p.onPrimary.withValues(alpha: 0.10),
-                  ),
+                  style: MhadText.serifAccent(context, size: 180, color: p.onPrimary.withValues(alpha: 0.10), height: 1),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -82,7 +74,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: p.onPrimary.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -90,7 +82,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                           child: Text(
                             context.l10n.homeDirectiveHeroDraft,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: p.onPrimary,
@@ -111,10 +102,8 @@ class ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       headline,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.3,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                         color: p.onPrimary,
                       ),
                     ),
@@ -122,13 +111,11 @@ class ActiveDirectiveHero extends StatelessWidget {
                     Text(
                       context.l10n.homeDirectiveHeroLastEdited(formLabel, lastEdited),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimary.withValues(alpha: 0.85),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: SizedBox(
@@ -142,14 +129,13 @@ class ActiveDirectiveHero extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
                           child: Text(
                             pctLabel,
                             style: TextStyle(
-                              fontFamily: kSansFamily,
                               fontSize: 12,
                               color:
                                   p.onPrimary.withValues(alpha: 0.85),
@@ -159,7 +145,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         Text(
                           remainingLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.onPrimary,
@@ -167,7 +152,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     SizedBox(
                       height: 40,
                       child: FilledButton.icon(
@@ -178,7 +163,6 @@ class ActiveDirectiveHero extends StatelessWidget {
                         label: Text(
                           context.l10n.homeDirectiveHeroContinueWhereYouLeftOff,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             color: p.primaryDark,
                           ),
@@ -187,7 +171,7 @@ class ActiveDirectiveHero extends StatelessWidget {
                           backgroundColor: Colors.white,
                           iconAlignment: IconAlignment.end,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14),
+                              horizontal: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
                           ),

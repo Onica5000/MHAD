@@ -78,7 +78,7 @@ $extracted''';
     // preferences-only; Combined = everything). 'combined' if unspecified.
     String formType = 'combined',
   }) async {
-    final parts = <LlmPart>[LlmText(_extractionPrompt + _formScope(formType))];
+    final parts = <LlmPart>[LlmText(promptFor(formType))];
     final List<String> piiStripped = [];
 
     if (mimeType.startsWith('text/')) {
@@ -120,7 +120,7 @@ $extracted''';
     }
 
     return ExtractionWithPiiReport(
-      result: _parseResponse(text),
+      result: parseResponse(text),
       strippedPiiCategories: piiStripped,
     );
   }
@@ -165,7 +165,13 @@ $extracted''';
     );
   }
 
-  DocumentExtractionResult _parseResponse(String text) {
+  /// The extraction instructions for [formType]. ONE definition, shared by
+  /// the API path and the copy-and-paste handoff.
+  static String promptFor(String formType) =>
+      _extractionPrompt + _formScope(formType);
+
+  /// Parses an extraction reply. Shared with the handoff.
+  static DocumentExtractionResult parseResponse(String text) {
     final cleaned = cleanLlmJson(text);
     try {
       final json = jsonDecode(cleaned) as Map<String, dynamic>;

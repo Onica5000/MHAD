@@ -151,7 +151,7 @@ class _EffectiveConditionStepState
           ),
           const SizedBox(height: 8),
           ExampleTextButton(
-            fieldName: l10n.effCondExampleFieldName,
+            fieldName: l10n.effectiveCondition,
             examples: [
               // Standard — two professionals certify
               l10n.effCondExample1,
@@ -246,7 +246,7 @@ class _TriggerTile extends StatelessWidget {
         onTap: () => onChanged(!value),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
+          padding: const EdgeInsets.fromLTRB(12, 12, 16, 12),
           decoration: BoxDecoration(
             color: value ? cs.primaryContainer.withValues(alpha: 0.4) : null,
             border: Border.all(
@@ -270,7 +270,7 @@ class _TriggerTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 9),
+                      padding: const EdgeInsets.only(top: 8),
                       child: Text(
                         title,
                         style: theme.textTheme.bodyMedium

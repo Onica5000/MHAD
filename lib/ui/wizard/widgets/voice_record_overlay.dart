@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/assistant_providers.dart';
@@ -317,7 +318,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
             top: Radius.circular(DesignTokens.sheetRadius),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(0, 14, 0, 32),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -329,9 +330,9 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
                 children: [
                   SectionLabel(
@@ -346,15 +347,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                   ),
                   Text(
                     context.l10n.voiceSayItYourWay,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: -0.5,
-                      color: p.text,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: p.text),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -368,9 +361,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                             : context.l10n.voiceExplainDevice),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 14, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -391,8 +382,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                       fontFamily: kMonoFamily,
                       fontFamilyFallback: kMonoFallbacks,
                       fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
                       color: p.text,
                     ),
                   ),
@@ -420,9 +410,9 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 24),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -435,14 +425,14 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                     onTap: _onCancel,
                     semantics: context.l10n.voiceCancelA11y,
                   ),
-                  const SizedBox(width: 26),
+                  const SizedBox(width: 24),
                   _RecordCircle(
                     listening: _listening,
                     onTap: _toggleListening,
                     crisisAccent: Theme.of(context).colorScheme.error,
                     cardColor: p.card,
                   ),
-                  const SizedBox(width: 26),
+                  const SizedBox(width: 24),
                   _CircleButton(
                     size: 52,
                     icon: Icons.check,
@@ -455,7 +445,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
@@ -466,8 +456,7 @@ class _VoiceRecordSheetState extends ConsumerState<_VoiceRecordSheet>
                         : context.l10n.voiceFooterDevice),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.5,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),
@@ -498,7 +487,7 @@ class _TranscribingCard extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: 70),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: borderColor),
@@ -516,7 +505,6 @@ class _TranscribingCard extends StatelessWidget {
           Text(
             context.l10n.voiceTranscribingCard,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: textColor,
             ),
@@ -555,7 +543,7 @@ class _Waveform extends StatelessWidget {
         children: [
           for (var i = 0; i < _baseHeights.length; i++)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1.5),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               child: _bar(i),
             ),
         ],
@@ -631,7 +619,7 @@ class _LiveCaptionState extends State<_LiveCaption>
     return Container(
       constraints: const BoxConstraints(minHeight: 70),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: widget.surface,
         border: Border.all(color: widget.borderColor),
@@ -684,9 +672,7 @@ class _LiveCaptionState extends State<_LiveCaption>
           ],
         ),
         style: TextStyle(
-          fontFamily: kSansFamily,
-          fontSize: 14,
-          height: 1.5,
+          fontSize: 14, height: MhadType.leadingParagraph,
           color: widget.textColor,
         ),
       ),
@@ -735,7 +721,6 @@ class _CircleButton extends StatelessWidget {
                   : Text(
                       label!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: fg,

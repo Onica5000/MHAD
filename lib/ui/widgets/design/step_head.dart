@@ -39,7 +39,7 @@ class StepHead extends StatelessWidget {
     this.art,
     this.onExit,
     this.onMore,
-    this.padding = const EdgeInsets.fromLTRB(20, 10, 20, 16),
+    this.padding = const EdgeInsets.fromLTRB(20, 12, 20, 16),
     super.key,
   });
 
@@ -84,7 +84,7 @@ class StepHead extends StatelessWidget {
                           color: p.primary,
                         ),
                       ),
-                      const SizedBox(width: 3),
+                      const SizedBox(width: 4),
                       Icon(icon, size: 16, color: p.primary),
                     ],
                   ),
@@ -141,9 +141,7 @@ class StepHead extends StatelessWidget {
                           title,
                           style: TextStyle(
                             fontSize: 26,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.4,
-                            height: 1.15,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle, height: MhadType.leadingTitle,
                             color: p.text,
                           ),
                         ),
@@ -153,8 +151,7 @@ class StepHead extends StatelessWidget {
                             subtitle!,
                             style: TextStyle(
                               fontSize: 14,
-                              color: p.textMuted,
-                              height: 1.45,
+                              color: p.textMuted, height: MhadType.leadingParagraph,
                             ),
                           ),
                         ],

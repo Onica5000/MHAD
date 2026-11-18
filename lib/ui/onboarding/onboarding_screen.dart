@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -123,13 +124,13 @@ class OnboardingScreen extends ConsumerWidget {
                     SliverFillRemaining(
                       hasScrollBody: false,
                       child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 32, 28, 24),
+              padding: const EdgeInsets.fromLTRB(32, 32, 32, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // The photo (SplitHero) replaced the small voice sketch.
                   SectionLabel(context.l10n.onboardingPaMhadAct194),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   // Editorial 68pt h1 "In your\nwords." — "words." is the
                   // primary-tinted accent (prototype L58-64).
                   Text.rich(
@@ -142,18 +143,9 @@ class OnboardingScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 68,
-                      height: 0.95,
-                      letterSpacing: -1.5,
-                      fontWeight: FontWeight.w400,
-                      color: p.text,
-                    ),
+                    style: EditorialHeading.styleFor(context, HeadingLevel.display).copyWith(color: p.text),
                   ),
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 24),
                   // Cap the measure at 320 via right padding, not a
                   // ConstrainedBox: SliverFillRemaining sizes this column by
                   // intrinsic height, and ConstrainedBox measures its child at
@@ -166,21 +158,19 @@ class OnboardingScreen extends ConsumerWidget {
                     child: Text(
                       context.l10n.onboardingWeLlWalkYouThrough,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 17,
-                        height: 1.45,
+                        fontSize: 17, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   // A2 / F17: capacity-presumption reassurance — the single
                   // biggest adoption fear is "does signing this take away my
                   // choices now?". State plainly that it does not.
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 12),
+                        horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
                       color: p.primaryLight,
                       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -201,14 +191,12 @@ class OnboardingScreen extends ConsumerWidget {
                         ],
                       ),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimaryLight,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 32),
                   const _WelcomePills(),
                   const SizedBox(height: 12),
                   // C1: the "Valid 2 years" pill omits the statutory incapacity
@@ -216,9 +204,7 @@ class OnboardingScreen extends ConsumerWidget {
                   Text(
                     context.l10n.onboardingValidTwoYearsFromSigning,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.4,
+                      fontSize: 12, height: MhadType.leadingParagraph,
                       color: p.textMuted,
                     ),
                   ),
@@ -243,7 +229,7 @@ class OnboardingScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   // Ghost secondary — creates a directive and opens the
                   // standalone snap-to-fill page to autofill from an existing
                   // document before the wizard.
@@ -256,7 +242,6 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize: const Size.fromHeight(
                             DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -276,7 +261,6 @@ class OnboardingScreen extends ConsumerWidget {
                         minimumSize:
                             const Size.fromHeight(DesignTokens.buttonHeightMd),
                         textStyle: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -284,16 +268,14 @@ class OnboardingScreen extends ConsumerWidget {
                       child: Text(context.l10n.onboardingContinueFromASavedFile),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   // Footer reassurance (prototype L89-90).
                   Center(
                     child: Text(
                       context.l10n.onboardingFreeNoAccountNoTracking,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.45,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -355,11 +337,9 @@ class _WelcomePills extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: p.onPrimaryLight,
-                    height: 1,
+                    color: p.onPrimaryLight, height: MhadType.leadingTitle,
                   ),
                 ),
               ],

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
@@ -71,6 +72,14 @@ class AiConfig {
   /// empty/absent → the consumer falls back to the hardcoded `AiProvider.models`.
   final Map<String, List<String>> providerModels;
 
+  /// Whether the API-key AI (AI setup page, in-app chat, automatic tips,
+  /// per-field suggestions) is shown. FALSE since 2026-11-17: the visible AI
+  /// is the copy-and-paste handoff to the person's own ChatGPT / Claude /
+  /// Gemini / Grok, and the API path stays in the code as a hidden backup
+  /// until the owner decides it's needed (e.g. with a dedicated key — which
+  /// would need a relay server; a static site can't hide a key).
+  final bool apiModeVisible;
+
   const AiConfig({
     this.model = 'gemini-3.5-flash-lite',
     this.maxContextTokens = 1048576,
@@ -81,6 +90,7 @@ class AiConfig {
     this.rateLimitsAsOf = '',
     this.providerModels = const {},
     this.freeTierRpdByModel = const {},
+    this.apiModeVisible = false,
   });
 
   /// The curated picker list for [providerName], or null if not externalized.
@@ -97,6 +107,7 @@ class AiConfig {
         tpm: (m['tpm'] as num?)?.toInt() ?? 1000000,
         maxOutputTokens: (m['maxOutputTokens'] as num?)?.toInt() ?? 65536,
         rateLimitsAsOf: (m['rateLimitsAsOf'] ?? '').toString(),
+        apiModeVisible: m['apiModeVisible'] == true,
         providerModels: _parseProviderModels(m['providerModels']),
         freeTierRpdByModel: {
           if (m['freeTierRpdByModel'] is Map)
@@ -372,6 +383,21 @@ class AppData {
 
   /// Null-safe lookup into the `dated` block (version/date strings).
   String dateFact(String key) => dated[key] ?? '';
+
+  /// A dated fact for display in [locale]: `yyyy-MM` reads as a month
+  /// ("November 2026" / "noviembre de 2026"), `yyyy-MM-dd` as a date; any
+  /// other text (e.g. typed on the admin page) is shown as written.
+  String dateFactFor(String key, String locale) {
+    final raw = dateFact(key);
+    final m = RegExp(r'^(\d{4})-(\d{2})(?:-(\d{2}))?$').firstMatch(raw);
+    if (m == null) return raw;
+    final day = m.group(3);
+    final d = DateTime(int.parse(m.group(1)!), int.parse(m.group(2)!),
+        day == null ? 1 : int.parse(day));
+    return day == null
+        ? DateFormat.yMMMM(locale).format(d)
+        : DateFormat.yMMMMd(locale).format(d);
+  }
 
   /// Null-safe lookup into the `facts` block (updatable user-facing copy).
   String fact(String key) => facts[key] ?? '';

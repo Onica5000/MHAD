@@ -1,6 +1,7 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -10,9 +11,8 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/mono_pill.dart';
+import 'package:mhad/ui/widgets/design/status_pill.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Revocation flow (v2 prototype `m-revoke`, v3 canonical PA statutory
 /// wording).
@@ -124,18 +124,14 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
       // CrisisBar + a thin in-body back row, then the editorial 'Are you
       // sure?' headline. No Material AppBar.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           // Editorial 'PERMANENT ACTION' pill replaces what was the
           // AppBar's title. The 38pt 'Are you sure?' headline below
           // matches the prototype L1568 wording exactly.
-          MonoPill(
+          StatusPill(
             label: context.l10n.revocationPermanentAction,
             foreground: cs.onErrorContainer,
             background: cs.errorContainer,
@@ -146,7 +142,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           PageHero(
             art: AppArt.flowRevocation,
             title: EditorialHeading(
-                text: context.l10n.revocationAreYouSure, size: 38),
+                text: context.l10n.revocationAreYouSure,),
             lead: context.l10n.revocationYourDirectiveWillNoLonger,
           ),
 
@@ -155,12 +151,12 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
           // above the verbatim statutory statement as an actionable summary.
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SectionLabel(context.l10n.revocationHowRevocationWorksInPa),
-                  SizedBox(height: 10),
+                  SizedBox(height: 12),
                   _RevokeStep(
                     n: 1,
                     text: context.l10n.revocationPutItInWritingSign,
@@ -179,10 +175,10 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -190,20 +186,14 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontSize: 14,
-                      height: 1.6,
-                      color: p.text,
-                    ),
+                    style: MhadText.serifAccent(context, size: 14, color: p.text, height: MhadType.leadingParagraph).copyWith(fontStyle: FontStyle.normal),
                   ),
                 ],
               ),
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           SectionLabel(context.l10n.revocationWhoToNotifyOptIn),
           const SizedBox(height: 4),
           Text(
@@ -234,18 +224,17 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               contentPadding: EdgeInsets.zero,
             ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Card(
             color: cs.errorContainer,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     context.l10n.revocationTypeRevokeToConfirm,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: cs.onErrorContainer,
@@ -280,7 +269,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.info_outline,
             variant: InfoBannerVariant.info,
@@ -306,7 +295,7 @@ class _RevokeStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: EdgeInsets.only(bottom: last ? 0 : 10),
+      padding: EdgeInsets.only(bottom: last ? 0 : 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -329,16 +318,14 @@ class _RevokeStep extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.5,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.text,
                 ),
               ),

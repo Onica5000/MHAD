@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
@@ -32,12 +33,11 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
       appBar: AppBar(title: Text(context.l10n.settingsLegalDisclaimer)),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          padding: DesignTokens.pagePadding,
           children: [
             Text(
               context.l10n.legalSheetFullLegalDisclosure,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -47,13 +47,11 @@ class _ReadOnlyAccordionState extends State<ReadOnlyAccordion> {
             Text(
               context.l10n.legalSheetTheEightSectionsBelowWere,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: p.textMuted,
-                height: 1.5,
+                color: p.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             for (int i = 0; i < sections.length; i++) ...[
               _AccordionSection(
                 number: sections[i].number,
@@ -93,7 +91,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
       children: [
         // Drag handle
         Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 8),
+          margin: const EdgeInsets.only(top: 12, bottom: 8),
           width: 36,
           height: 4,
           decoration: BoxDecoration(
@@ -102,14 +100,13 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 10),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   context.l10n.legalSheetFullLegalSections,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -127,7 +124,7 @@ class _FullLegalSheetState extends State<FullLegalSheet> {
         Expanded(
           child: ListView(
             controller: widget.scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               for (int i = 0; i < sections.length; i++) ...[
                 _AccordionSection(
@@ -332,19 +329,19 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
         _Para(spans: [
           TextSpan(
               text:
-                  context.l10n.legalSheetIfYouUseTheOptional),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetIfYouUseTheOptional : context.l10n.legalSheetIfYouUseTheOptionalHandoff)),
         ], palette: p),
         _Para(spans: [
           TextSpan(text: context.l10n.legalSheetToProtectYouTheApp),
-          _bold(context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut),
+          _bold((appData.ai.apiModeVisible ? context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOut : context.l10n.legalSheetBoldAutomaticallyKeepsIdentifyingDetailsOutHandoff)),
           TextSpan(
               text:
-                  context.l10n.legalSheetYourNameDateOfBirth),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetYourNameDateOfBirth : context.l10n.legalSheetYourNameDateOfBirthHandoff)),
         ], palette: p),
         _Para(spans: [
           TextSpan(
               text:
-                  context.l10n.legalSheetDocumentsYouUploadForAutofill),
+                  (appData.ai.apiModeVisible ? context.l10n.legalSheetDocumentsYouUploadForAutofill : context.l10n.legalSheetDocumentsYouUploadForAutofillHandoff)),
           _bold(context.l10n.legalSheetBoldUploadingIsNeverRequired),
           TextSpan(
               text:
@@ -376,19 +373,19 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
             mono:
                 '${appData.phoneOf('paProtectionAdvocacy')} · TDD/TTY ${appData.contact('paProtectionAdvocacy').tdd ?? ''}',
             palette: p),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         _Resource(
             title: context.l10n.legalSheetPaMentalHealthConsumersAssociation,
             sub: null,
             mono: appData.phoneOf('pmhca'),
             palette: p),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         _Resource(
             title: context.l10n.legalSheetMentalHealthAssociationInPennsylvania,
             sub: null,
             mono: appData.phoneOf('mhapa'),
             palette: p),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         _Resource(
             title: context.l10n.legalSheet988SuicideCrisisLifeline,
             sub: context.l10n.legalSheet247FreeConfidential,
@@ -422,10 +419,8 @@ class _Para extends StatelessWidget {
               .toList(growable: false),
         ),
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
-          color: palette.textMuted,
-          height: 1.55,
+          color: palette.textMuted, height: MhadType.leadingParagraph,
         ),
       ),
     );
@@ -445,7 +440,7 @@ class _Bullet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 7, right: 8),
+            padding: const EdgeInsets.only(top: 8, right: 8),
             child: Container(
               width: 4,
               height: 4,
@@ -463,10 +458,8 @@ class _Bullet extends StatelessWidget {
                     .toList(growable: false),
               ),
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: palette.textMuted,
-                height: 1.55,
+                color: palette.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
           ),
@@ -523,9 +516,7 @@ class _Resource extends StatelessWidget {
             ],
           ),
           style: const TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.45,
+            fontSize: 14, height: MhadType.leadingParagraph,
           ),
         ),
         const SizedBox(height: 2),
@@ -584,23 +575,14 @@ class _AccordionSection extends StatelessWidget {
               child: SizedBox(
                 height: 56,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
                       SizedBox(
                         width: 30,
                         child: Text(
                           number,
-                          style: TextStyle(
-                            fontFamily: kSerifFamily,
-                            fontFamilyFallback: kSerifFallbacks,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400,
-                            height: 1,
-                            letterSpacing: -0.5,
-                            color: p.primary,
-                          ),
+                          style: EditorialHeading.styleFor(context, HeadingLevel.sub).copyWith(color: p.primary),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -608,10 +590,8 @@ class _AccordionSection extends StatelessWidget {
                         child: Text(
                           title,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.1,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                             color: p.text,
                           ),
                         ),
@@ -630,7 +610,7 @@ class _AccordionSection extends StatelessWidget {
           ),
           if (expanded)
             Padding(
-              padding: const EdgeInsets.fromLTRB(56, 0, 18, 16),
+              padding: const EdgeInsets.fromLTRB(48, 0, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: body,

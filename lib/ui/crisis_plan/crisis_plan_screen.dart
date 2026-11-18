@@ -1,7 +1,8 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,7 +12,6 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/info_banner.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 
 /// Crisis plan / wellness toolbox optional add-on (v2 prototype `m-crisisplan`).
 ///
@@ -112,21 +112,17 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
       // + in-body back chevron, then a 38pt editorial heading. No Material
       // AppBar — the "How I know I'm not okay" headline owns the title.
       body: Column(children: [
-        WizardHeader(
-          backLabel: context.l10n.back,
-          onBack: () => Navigator.of(context).maybePop(),
-          actionLabel: '',
-        ),
+        const BackLink(),
         Expanded(child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.flowCrisisPlan,
             eyebrow: context.l10n.crisisPlanOptionalAddOnCrisisPlan,
-            title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM, size: 38),
+            title: EditorialHeading(text: context.l10n.crisisPlanHowIKnowIM),
             lead: context.l10n.crisisPlanHelpThePeopleAroundYou,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _Section(
             title: context.l10n.crisisPlanEarlyWarningSigns,
             sub: context.l10n.crisisPlanTheFirstThingsINotice,
@@ -169,7 +165,7 @@ class _CrisisPlanScreenState extends ConsumerState<CrisisPlanScreen> {
             onAdd: () => _addItem('dontDo'),
             onRemove: (i) => _removeItem('dontDo', i),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           InfoBanner(
             icon: Icons.auto_awesome,
             variant: InfoBannerVariant.info,
@@ -260,10 +256,10 @@ class _Section extends StatelessWidget {
         : p.onPrimaryLight;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -274,7 +270,6 @@ class _Section extends StatelessWidget {
                   Expanded(
                     child: Text(title,
                         style: const TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         )),
@@ -283,7 +278,7 @@ class _Section extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(sub, style: Theme.of(context).textTheme.bodySmall),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
+import 'package:mhad/ui/ai/ai_question_handoff.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,6 +103,47 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
     final isSending = ref.watch(isSendingProvider);
     final hasKey = ref.watch(apiKeyProvider).value?.isNotEmpty ?? false;
 
+    // API path hidden (2026-11-17): the panel is the copy-and-paste ask —
+    // the same widget as the Ask AI page and the wizard's step helper.
+    if (!appData.ai.apiModeVisible) {
+      final t = Theme.of(context).textTheme;
+      return Container(
+        width: LearnAiPanel.width,
+        color: p.card,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.auto_awesome, size: 18, color: p.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      child: Text(context.l10n.learnAskAiTitle,
+                          style: t.titleMedium),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(context.l10n.learnAskAiSubtitle, style: t.bodySmall),
+              const SizedBox(height: 16),
+              AiQuestionHandoff(
+                suggestions: generalAiQuestions(context.l10n),
+                ref: 'learn',
+                panelTitle: context.l10n.askAiPanelTitle,
+                panelSubtitle: context.l10n.askAiPanelSubtitle,
+                instructions: () => LlmAssistant.systemPromptFor(null),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: LearnAiPanel.width,
       decoration: BoxDecoration(
@@ -112,7 +156,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
               child: Row(
                 children: [
                   Icon(Icons.auto_awesome, size: 18, color: p.primary),
@@ -121,7 +165,6 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                     child: Text(
                       context.l10n.learnAiPanelAskTheAi,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -139,8 +182,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
               child: Text(
                 context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.5,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: hasKey ? p.primary : p.textMuted,
                 ),
               ),
@@ -158,9 +200,7 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
                               : context.l10n.learnAiPanelSetUpTheFreeAi,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
-                            fontSize: 14,
-                            height: 1.5,
+                            fontSize: 14, height: MhadType.leadingParagraph,
                             color: p.textMuted,
                           ),
                         ),
@@ -222,11 +262,10 @@ class _LearnAiPanelState extends ConsumerState<LearnAiPanel> {
             ),
             // Disclaimer by the input, mirroring the wizard step rail.
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Text(
                 context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   color: p.textMuted,
                 ),
@@ -252,7 +291,7 @@ class _LearnChatBubble extends StatelessWidget {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         constraints: const BoxConstraints(maxWidth: 280),
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,
@@ -262,9 +301,7 @@ class _LearnChatBubble extends StatelessWidget {
         child: Text(
           message.content,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             color: isUser ? p.onPrimary : p.text,
           ),
         ),

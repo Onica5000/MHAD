@@ -129,11 +129,14 @@ class _AlternateAgentStepState
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'alternateAgent'),
             const SizedBox(height: 8),
-            Text(
-              context.l10n.altAgentTitle,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
+            // Inside the People step's card the card header names the role.
+            if (!widget.embedded) ...[
+              Text(
+                context.l10n.altAgentTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+            ],
             Text(
               context.l10n.altAgentActsIf,
             ),
@@ -173,7 +176,7 @@ class _AlternateAgentStepState
             TextFormField(
               controller: _relationshipCtrl,
               decoration: InputDecoration(
-                labelText: context.l10n.altAgentRelationship,
+                labelText: context.l10n.reviewStepRelationship,
                 border: const OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,

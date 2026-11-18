@@ -25,14 +25,14 @@ class ConsentOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: DesignCard(
         variant: selected ? DesignCardVariant.tinted : DesignCardVariant.plain,
         overrideBorder: selected
             ? BorderSide(color: p.primary, width: 2)
             : null,
         onTap: onTap,
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,11 +57,9 @@ class ConsentOptionTile extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: p.text,
-                      height: 1.35,
+                      color: p.text, height: MhadType.leadingUi,
                     ),
                   ),
                   if (description != null) ...[
@@ -69,10 +67,8 @@ class ConsentOptionTile extends StatelessWidget {
                     Text(
                       description!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
-                        color: p.textMuted,
-                        height: 1.4,
+                        color: p.textMuted, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],

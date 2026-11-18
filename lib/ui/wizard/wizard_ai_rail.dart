@@ -168,7 +168,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
     return Container(
       width: 320,
       color: p.card,
-      padding: const EdgeInsets.fromLTRB(20, 24, 18, 16),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -179,7 +179,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
               Text(
                 context.l10n.navAiAssistant,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: p.text,
@@ -196,7 +195,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                     child: Text(
                       context.l10n.wizardAiRailFullView,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: p.primary,
@@ -210,12 +208,11 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
           Text(
             context.l10n.learnAiPanelPiiStripped(ref.watch(activeProviderProvider).name.toUpperCase()),
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 0.5,
+              fontSize: 12, letterSpacing: MhadType.trackingLabel,
               color: hasKey ? p.primary : p.textMuted,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           if (!hasKey)
             Expanded(
               child: SingleChildScrollView(
@@ -236,7 +233,7 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
                 controller: _facilityCtrl,
                 onSubmit: _askFacility,
               ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Divider(color: p.border, height: 1),
             const CrisisSupportBanner(),
             Expanded(child: _RailChat(scrollController: _scrollCtrl)),
@@ -248,7 +245,6 @@ class _WizardAiRailState extends ConsumerState<WizardAiRail> {
             Text(
               context.l10n.learnAiPanelNotLegalOrMedicalAdvice,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 color: p.textMuted,
               ),
@@ -295,7 +291,7 @@ class _RailNoAiCard extends StatelessWidget {
                 child: Icon(Icons.auto_awesome,
                     size: 18, color: p.onPrimaryLight),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Semantics(
                   header: true,
@@ -311,12 +307,12 @@ class _RailNoAiCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             context.l10n.wizardAiRailOptionalHelpBody,
-            style: TextStyle(fontSize: 14, height: 1.45, color: p.text),
+            style: TextStyle(fontSize: 14, height: MhadType.leadingParagraph, color: p.text),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
@@ -325,10 +321,10 @@ class _RailNoAiCard extends StatelessWidget {
               label: Text(context.l10n.pipelineSetupAi),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             context.l10n.wizardAiRailYourApiKeyStaysOn,
-            style: TextStyle(fontSize: 12, height: 1.4, color: p.textMuted),
+            style: TextStyle(fontSize: 12, height: MhadType.leadingParagraph, color: p.textMuted),
           ),
         ],
       ),
@@ -378,11 +374,10 @@ class _RailHeadsUp extends ConsumerWidget {
             strokeWidth: 2,
             color: p.primary,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Text(
             context.l10n.wizardAiRailReadingThisStep,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.onPrimaryLight,
             ),
@@ -405,9 +400,7 @@ class _RailHeadsUp extends ConsumerWidget {
                     child: Text(
                       s.headsUp,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.onPrimaryLight,
                       ),
                     ),
@@ -415,12 +408,11 @@ class _RailHeadsUp extends ConsumerWidget {
                 ],
               )),
             if (s.chips.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Text(
                 context.l10n.wizardAiRailSuggestedForThisStep,
                 style: TextStyle(
-                  fontSize: 12,
-                  letterSpacing: 0.6,
+                  fontSize: 12, letterSpacing: MhadType.trackingLabel,
                   color: p.textMuted,
                 ),
               ),
@@ -435,7 +427,7 @@ class _RailHeadsUp extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: p.surface,
                           border: Border.all(color: p.border),
@@ -444,7 +436,6 @@ class _RailHeadsUp extends ConsumerWidget {
                         child: Text(
                           c,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: p.text,
@@ -473,11 +464,11 @@ class _RailFacilitySearch extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 12),
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSubmit(),
-        style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
+        style: const TextStyle( fontSize: 14),
         decoration: InputDecoration(
           isDense: true,
           hintText: context.l10n.wizardAiRailFindAPaFacilityBy,
@@ -511,9 +502,7 @@ class _RailChat extends ConsumerWidget {
             context.l10n.wizardAiRailAskAnythingAboutThisStep,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 12,
-              height: 1.4,
+              fontSize: 12, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -523,7 +512,7 @@ class _RailChat extends ConsumerWidget {
 
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       itemCount: messages.length + (isSending ? 1 : 0),
       itemBuilder: (context, i) {
         if (i >= messages.length) {
@@ -556,7 +545,7 @@ class _RailBubble extends StatelessWidget {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         constraints: const BoxConstraints(maxWidth: 250),
         decoration: BoxDecoration(
           color: isUser ? p.primary : p.surface,
@@ -566,9 +555,7 @@ class _RailBubble extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 14,
-            height: 1.4,
+            fontSize: 14, height: MhadType.leadingParagraph,
             fontStyle: muted ? FontStyle.italic : FontStyle.normal,
             color: isUser
                 ? p.onPrimary
@@ -595,7 +582,7 @@ class _RailInput extends ConsumerWidget {
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         border: Border.all(color: p.border),
       ),
-      padding: const EdgeInsets.only(left: 14, right: 4),
+      padding: const EdgeInsets.only(left: 16, right: 4),
       child: Row(
         children: [
           Expanded(
@@ -603,7 +590,7 @@ class _RailInput extends ConsumerWidget {
               controller: controller,
               enabled: !isSending,
               onSubmitted: (_) => onSend(),
-              style: const TextStyle(fontFamily: kSansFamily, fontSize: 14),
+              style: const TextStyle( fontSize: 14),
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
@@ -625,49 +612,6 @@ class _RailInput extends ConsumerWidget {
                 : Icon(Icons.arrow_upward, size: 18, color: p.primary),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Narrow-width collapse of [WizardAiRail] (prototype `w-wiz-mobile`): a slim
-/// tappable "Need help?" bar above the bottom action bar.
-class WizardAiBar extends StatelessWidget {
-  final VoidCallback onAsk;
-  const WizardAiBar({required this.onAsk, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Theme.of(context).mhadPalette;
-    return Material(
-      color: p.primaryTint,
-      child: InkWell(
-        onTap: onAsk,
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: p.primaryLight)),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            children: [
-              Icon(Icons.auto_awesome, size: 16, color: p.primary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  context.l10n.wizardAiRailNeedHelpWithThisStep,
-                  style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: p.onPrimaryLight,
-                  ),
-                ),
-              ),
-              Icon(Icons.keyboard_arrow_up, size: 18, color: p.primary),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -1,8 +1,10 @@
-﻿import 'dart:convert';
+import 'package:mhad/utils/file_names.dart';
+import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -14,7 +16,6 @@ import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
-import 'package:mhad/utils/nav_utils.dart';
 import 'package:mhad/ui/export/export_cards.dart';
 import 'package:mhad/ui/export/pdf_preview_screen.dart';
 import 'package:mhad/ui/export/pdf/pdf_generator.dart';
@@ -25,7 +26,6 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/design/wallet_card.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/services/calendar_reminder_service.dart';
@@ -81,7 +81,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
   String _draftModeLabel(DraftMode m) => switch (m) {
         DraftMode.finalCopy => context.l10n.exportDraftModeFinal,
-        DraftMode.draftGeneral => context.l10n.exportDraftModeDraft,
+        DraftMode.draftGeneral => context.l10n.draft,
         DraftMode.draftSignedAvailable =>
           context.l10n.exportDraftModeSignedExists,
       };
@@ -176,7 +176,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (_directive!.fullName.isEmpty) warnings.add(context.l10n.fullName);
       if (_directive!.dateOfBirth.isEmpty) warnings.add(context.l10n.dateOfBirth);
       if (_directive!.effectiveCondition.isEmpty) {
-        warnings.add(context.l10n.exportEffectiveCondition);
+        warnings.add(context.l10n.effectiveCondition);
       }
       if (_directive!.status == 'draft') {
         final hasSignatures = _witnesses.any(
@@ -235,7 +235,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               // Initial focus on the primary action (UX audit A3).
               autofocus: true,
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text(context.l10n.exportIUnderstandContinue),
+              child: Text(context.l10n.aiHandoffPrivacyContinue),
             ),
           ],
         ),
@@ -260,7 +260,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       // than one is produced.
       final modes = _draftModeOrder.where(_draftModes.contains).toList();
       if (modes.isEmpty) modes.add(DraftMode.finalCopy);
-      final safeName = directive.fullName.replaceAll(' ', '_');
 
       for (final mode in modes) {
         final generator = PdfGenerator(
@@ -284,8 +283,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           allergies: _allergies,
         ));
         if (!mounted) return;
-        final suffix = modes.length > 1 ? '_${_draftModeFileSuffix(mode)}' : '';
-        final fname = 'PA_MHAD_$safeName$suffix.pdf';
+        final fname = mhadFileName([
+          kFileNamePrefix,
+          directive.fullName,
+          if (modes.length > 1) _draftModeFileSuffix(mode),
+        ]);
         // Open in the user's PDF viewer (a new browser tab on web) instead of
         // force-downloading — they choose Print or Download there. Fall back to
         // the print/save dialog on native or if the browser blocks the tab.
@@ -400,7 +402,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget _loadingState() => Scaffold(
         body: Center(
           child: Semantics(
-            label: context.l10n.reviewStepLoading,
+            label: context.l10n.commonLoading,
             child: const CircularProgressIndicator(),
           ),
         ),
@@ -412,11 +414,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
           Expanded(
             child: Center(
               child: Padding(
@@ -430,7 +428,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     Text(
                       context.l10n.exportNothingToDownloadYet,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: p.text,
@@ -441,9 +438,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                       context.l10n.exportStartADirectiveFirstThen,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.4,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -480,7 +475,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         // flow, where the directive goes out into the world.
         PageHero(
           art: AppArt.flowExport,
-          eyebrow: context.l10n.pdfPreviewExportShare,
+          eyebrow: context.l10n.navDownloadPrint,
           title: EditorialHeading(
             textSpan: TextSpan(
               children: [
@@ -491,9 +486,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 ),
               ],
             ),
-            size: 36,
-            height: 1.05,
-            letterSpacing: -0.8,
           ),
         ),
         const SizedBox(height: 16),
@@ -518,7 +510,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 ?.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         _FormCheckbox(
-          title: context.l10n.combinedForm,
+          title: context.l10n.formTypeNameCombined,
           subtitle: context.l10n.exportDeclarationPowerOfAttorneyMost,
           value: _includeCombined,
           onChanged: (v) => setState(() => _includeCombined = v ?? false),
@@ -527,13 +519,13 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
               : null,
         ),
         _FormCheckbox(
-          title: context.l10n.declarationOnly,
+          title: context.l10n.formTypeNameDeclaration,
           subtitle: context.l10n.exportTreatmentPreferencesOnlyNoAgent,
           value: _includeDeclaration,
           onChanged: (v) => setState(() => _includeDeclaration = v ?? false),
         ),
         _FormCheckbox(
-          title: context.l10n.poaOnly,
+          title: context.l10n.formTypeNamePoa,
           subtitle: context.l10n.exportAgentAuthorityOnlyNoPersonal,
           value: _includePoa,
           onChanged: (v) => setState(() => _includePoa = v ?? false),
@@ -586,7 +578,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     width: 16,
                     height: 16,
                     child: Semantics(
-                      label: context.l10n.reviewStepLoading,
+                      label: context.l10n.commonLoading,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   )
@@ -875,7 +867,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             shape: Border(left: BorderSide(color: p.border)),
             child: FocusTraversalGroup(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 40),
+              padding: DesignTokens.pagePadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -902,7 +894,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   Widget _narrowLayout(MhadPalette p) => ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        padding: DesignTokens.pagePadding,
         children: [
           ..._buildHeaderChildren(p),
           ..._buildDocumentChildren(),
@@ -926,11 +918,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       body: Column(children: [
         // Wide layout moves Back into the preview's left panel.
         if (!isWide)
-          WizardHeader(
-            backLabel: context.l10n.back,
-            onBack: () => safeBack(context),
-            actionLabel: '',
-          ),
+          const BackLink(),
         Expanded(child: isWide ? _wideLayout(p) : _narrowLayout(p)),
       ]),
     );
@@ -1152,11 +1140,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         diagnoses: _diagnoses,
       );
 
-      final safe = _directive!.fullName.trim().isEmpty
-          ? 'directive'
-          : _directive!.fullName.trim().replaceAll(RegExp(r'\s+'), '_');
       final archive = Archive()
-        ..addFile(ArchiveFile('PA_MHAD_$safe.pdf', pdfBytes.length, pdfBytes))
+        ..addFile(ArchiveFile(
+            mhadFileName([kFileNamePrefix, _directive!.fullName]),
+            pdfBytes.length,
+            pdfBytes))
         ..addFile(_textFile('mhad_fhir.json', json))
         ..addFile(_textFile('mhad_fhir.xml', xml))
         ..addFile(_textFile('mhad_directive.csv', csv));
@@ -1167,7 +1155,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         files: [
           XFile.fromData(
             Uint8List.fromList(zip),
-            name: 'PA_MHAD_$safe.zip',
+            name: mhadFileName([kFileNamePrefix, _directive!.fullName],
+                extension: 'zip'),
             mimeType: 'application/zip',
           ),
         ],

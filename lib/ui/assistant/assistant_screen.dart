@@ -237,7 +237,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 color: Theme.of(context).mhadPalette.primary,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,10 +246,8 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                   Text(
                     context.l10n.navAiAssistant,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingTitle,
                       color: Theme.of(context).mhadPalette.text,
                     ),
                   ),
@@ -258,8 +256,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         ? context.l10n.assistantActiveTextPiiStrippedBefore(ref.watch(activeModelProvider).toUpperCase().replaceAll('-', ' '))
                         : context.l10n.assistantNotSetUpAddA,
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 0.5,
+                      fontSize: 12, letterSpacing: MhadType.trackingLabel,
                       color: Theme.of(context).mhadPalette.textMuted,
                     ),
                   ),
@@ -402,7 +399,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                         child: Text(
                           context.l10n.assistantNotLegalOrMedicalAdvice(appData.phoneOf('paProtectionAdvocacy')),
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: fg,
@@ -644,7 +640,7 @@ class _InputBar extends StatelessWidget {
                   // vertical 14 (was 10) brings the single-line height to
                   // ~52 — comfortably over the 48px a11y guideline.
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 14),
+                      horizontal: 16, vertical: 16),
                   isDense: true,
                 ),
                 onSubmitted: (_) => onSend(),
@@ -658,7 +654,7 @@ class _InputBar extends StatelessWidget {
                       width: 20,
                       height: 20,
                       child: Semantics(
-                        label: context.l10n.reviewStepLoading,
+                        label: context.l10n.commonLoading,
                         child: CircularProgressIndicator(
                             strokeWidth: 2,
                             color: Theme.of(context).colorScheme.onPrimary),
@@ -691,7 +687,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: DesignTokens.pagePadding,
       children: [
         const SizedBox(height: 8),
         // The assistant photo (someone at a desk with tea, phone beside
@@ -746,7 +742,7 @@ class _SuggestionChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -6,7 +7,6 @@ import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
-import 'package:mhad/ui/widgets/design/wizard_header.dart';
 import 'package:mhad/ui/wizard/steps/execution_step.dart';
 
 /// Post-wizard, pre-summary sign-on-paper instructions screen.
@@ -87,13 +87,11 @@ class _SignScreenState extends ConsumerState<SignScreen> {
       backgroundColor: p.scaffoldBackground,
       body: Column(
         children: [
-          WizardHeader(
-            backLabel: context.l10n.signScreenBackToReview,
-            onBack: () =>
-                context.go(AppRoutes.wizardRoute(widget.directiveId)),
-            // Sign isn't a wizard step — no "Save & exit" here. The empty
-            // action label hides the right side of the header row.
-            actionLabel: '',
+          // "Back to review" returns to the wizard (Review is its last step);
+          // Sign is not a wizard step, so there is no "Save & exit" here.
+          BackLink(
+            label: context.l10n.signScreenBackToReview,
+            onTap: () => context.go(AppRoutes.wizardRoute(widget.directiveId)),
           ),
           Expanded(
             child: ExecutionStep(

@@ -5,6 +5,8 @@
     "note": "Source of truth for the app's dynamic/updatable facts. Edited via the admin propose/approve flow. 'autonomy': 'auto' = an AI may update without human sign-off; 'verify' = a human must approve the diff before it ships. Keep 'source' current so updates are checkable."
   },
   "ai": {
+    "_apiModeVisible": "false = the API-key AI is hidden; the visible AI is the copy-and-paste handoff (2026-11-17). Set true to show it again.",
+    "apiModeVisible": false,
     "model": "gemini-3.5-flash-lite",
     "maxContextTokens": 1048576,
     "rpm": 15,
@@ -76,8 +78,8 @@
   "dated": {
     "_note": "Date/version-stamped facts shown to users that go stale. VERIFY tier — confirm before changing.",
     "autonomy": "verify",
-    "privacyPolicyVersion": "v1.2",
-    "privacyPolicyUpdated": "September 2026",
+    "privacyPolicyVersion": "v1.3",
+    "privacyPolicyUpdated": "2026-11",
     "playStoreRulesAsOf": "Jan 2026"
   },
   "facts": {

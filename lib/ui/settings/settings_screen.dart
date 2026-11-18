@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/constants.dart';
@@ -43,7 +44,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              padding: DesignTokens.pagePadding,
               children: [
                 // Compact photo header (photo beside the title on wide
                 // screens, a small thumbnail beside it on phones).
@@ -52,9 +53,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   eyebrow: context.l10n.settingsAccount,
                   title: EditorialHeading(
                     text: context.l10n.navSettings,
-                    size: 38,
-                    height: 1.0,
-                    letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -63,7 +61,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 // most-recently-edited directive (same source as the home
                 // greeting); status pill reflects current privacy mode.
                 const _ProfileChip(),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 SectionLabel(context.l10n.settingsAppearance),
                 const SizedBox(height: 8),
           // Per user direction (2026-06-02): the app ships in the Deep Navy
@@ -93,18 +91,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // mixed one functional item (AI setup) with three legal/
           // informational ones. AI assistant is now its own functional
           // section; the legal/privacy items live under "Legal & privacy".
-          SectionLabel(context.l10n.navAiAssistant),
-          const SizedBox(height: 8),
-          DesignCard(
-            padding: EdgeInsets.zero,
-            child: _SettingsRow(
-              icon: Icons.auto_awesome,
-              title: context.l10n.navAiAssistant,
-              subtitle: context.l10n.settingsChooseAProviderAndAdd,
-              onTap: () => context.push(AppRoutes.aiSetup),
+          // AI setup (keys, providers) exists only with the API path
+          // (AiConfig.apiModeVisible); "Ask AI" needs no setup.
+          if (appData.ai.apiModeVisible) ...[
+            SectionLabel(context.l10n.navAiAssistant),
+            const SizedBox(height: 8),
+            DesignCard(
+              padding: EdgeInsets.zero,
+              child: _SettingsRow(
+                icon: Icons.auto_awesome,
+                title: context.l10n.navAiAssistant,
+                subtitle: context.l10n.settingsChooseAProviderAndAdd,
+                onTap: () => context.push(AppRoutes.aiSetup),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
+          ],
 
           // "Get help" moved to the left sidebar (above the crisis card) for
           // prominence. Accessibility stays here.
@@ -129,7 +131,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 _SettingsRow(
                   icon: Icons.privacy_tip_outlined,
-                  title: context.l10n.privacyPolicyPrivacyPolicy,
+                  title: context.l10n.tabPagePrivacyPolicy,
                   subtitle: context.l10n.settingsHowYourDataIsStored,
                   onTap: () => context.push(AppRoutes.privacyPolicy),
                 ),
@@ -248,10 +250,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 Text(
                   context.l10n.settingsPaMentalHealthAdvanceDirective,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    color: p.textMuted,
-                    height: 1.5,
+                    color: p.textMuted, height: MhadType.leadingParagraph,
                   ),
                 ),
               ],
@@ -309,7 +309,6 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: kSansFamily,
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
@@ -318,7 +317,6 @@ class _SettingsRow extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                     ),
@@ -361,7 +359,7 @@ class _ThemeModeSegment extends StatelessWidget {
               onTap: () => onChanged(opt.$1),
               borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: selected ? p.card : Colors.transparent,
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -384,7 +382,6 @@ class _ThemeModeSegment extends StatelessWidget {
                     Text(
                       opt.$2,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: selected ? p.text : p.textMuted,
@@ -462,7 +459,7 @@ class _ProfileChip extends ConsumerWidget {
     final initials = _initialsFor(name);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primary,
         borderRadius: BorderRadius.circular(DesignTokens.cardRadius),
@@ -480,7 +477,6 @@ class _ProfileChip extends ConsumerWidget {
             child: Text(
               initials,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: p.onPrimary,
@@ -495,7 +491,6 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   displayName,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.onPrimary,
@@ -507,8 +502,7 @@ class _ProfileChip extends ConsumerWidget {
                 Text(
                   _statusFor(context, mode),
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     color: p.onPrimary.withValues(alpha: 0.85),
                   ),
                 ),

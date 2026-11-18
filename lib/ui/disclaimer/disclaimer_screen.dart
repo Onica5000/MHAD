@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/split_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -134,49 +135,10 @@ class _GateLayout extends StatelessWidget {
               tallArt: AppArt.welcomeDisclaimerTall,
               wideArt: AppArt.welcomeDisclaimerWide,
               child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Language first: a Spanish reader can switch before
-                  // reading anything else. Same setting as Accessibility.
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _SectionLabel(
-                          context.l10n.disclaimerBeforeYouBegin,
-                          palette: palette,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      const LanguageToggle(compact: true),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    context.l10n.disclaimerAFewThingsToUnderstand,
-                    style: TextStyle(
-                      fontFamily: kSerifFamily,
-                      fontFamilyFallback: kSerifFallbacks,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w400,
-                      height: 1.05,
-                      letterSpacing: -0.5,
-                      color: palette.text,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    context.l10n.disclaimerThisToolHelpsYouWrite,
-                    style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      color: palette.textMuted,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 22),
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.zero,
@@ -187,19 +149,51 @@ class _GateLayout extends StatelessWidget {
                       // validity and the PA P&A / attorney resources live in
                       // the full legal sections ("Read full disclaimer").
                       children: [
+                        // Header scrolls with the cards (2026-11): pinned,
+                        // the hero title + intro left the cards no room on a
+                        // phone in Spanish (32px overflow). Only the consent
+                        // row and the CTA stay pinned below.
+                        // Language first: a Spanish reader can switch before
+                        // reading anything else. Same setting as Accessibility.
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _SectionLabel(
+                                context.l10n.disclaimerBeforeYouBegin,
+                                palette: palette,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const LanguageToggle(compact: true),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          context.l10n.disclaimerAFewThingsToUnderstand,
+                          style: EditorialHeading.styleFor(context, HeadingLevel.display).copyWith(color: palette.text),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          context.l10n.disclaimerThisToolHelpsYouWrite,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: palette.textMuted),
+                        ),
+                        const SizedBox(height: 24),
                         _DisclaimerCard(
                           icon: Icons.shield_outlined,
                           title: context.l10n.disclaimerThisIsNotLegalAdvice,
                           body: context.l10n.disclaimerWeGivePlainLanguageHelp,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         _DisclaimerCard(
                           icon: Icons.draw_outlined,
                           title: context.l10n.disclaimerItBecomesValidOnlyWhen,
                           body:
                               context.l10n.disclaimerPaLawRequiresYourSignature,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         _DisclaimerCard(
                           icon: Icons.lock_outline,
                           title: context.l10n.disclaimerNothingIsSavedOrSent,
@@ -209,7 +203,7 @@ class _GateLayout extends StatelessWidget {
                               ? context.l10n.disclaimerYouWorkAnonymouslyInThis
                               : context.l10n.disclaimerNoAccountNoCloudNo,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         _DisclaimerCard(
                           icon: Icons.published_with_changes,
                           title: context.l10n.disclaimerYouCanStopOrChange,
@@ -218,7 +212,7 @@ class _GateLayout extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   _AckRow(
                     palette: palette,
                     checked: accepted,
@@ -240,7 +234,6 @@ class _GateLayout extends StatelessWidget {
                             style: TextButton.styleFrom(
                               foregroundColor: palette.text,
                               textStyle: const TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -272,14 +265,13 @@ class _GateLayout extends StatelessWidget {
                             0,
                             DesignTokens.buttonHeightLg,
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                               DesignTokens.buttonRadius,
                             ),
                           ),
                           textStyle: const TextStyle(
-                            fontFamily: kSansFamily,
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
@@ -312,8 +304,7 @@ class _SectionLabel extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1.2,
+        fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingEyebrow,
         color: palette.textMuted,
       ),
     );
@@ -336,7 +327,7 @@ class _DisclaimerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     return DesignCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       radius: DesignTokens.inputRadius,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +342,7 @@ class _DisclaimerCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Icon(icon, size: 19, color: p.primary),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,7 +350,6 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -369,9 +359,7 @@ class _DisclaimerCard extends StatelessWidget {
                 Text(
                   body,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 14,
-                    height: 1.5,
+                    fontSize: 14, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -435,7 +423,6 @@ class _AckRow extends StatelessWidget {
                   child: Text(
                     context.l10n.disclaimerIM18OrOlder,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: palette.text,

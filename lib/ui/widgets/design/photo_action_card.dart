@@ -46,7 +46,7 @@ class PhotoActionCard extends StatelessWidget {
     final size = fillHeight ? MainAxisSize.max : MainAxisSize.min;
 
     final text = Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: size,
@@ -64,13 +64,12 @@ class PhotoActionCard extends StatelessWidget {
             Text(
               body!,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: p.textMuted,
-                height: 1.45,
+                color: p.textMuted, height: MhadType.leadingParagraph,
               ),
             ),
           ],
           if (cta != null) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             // In an equal-height row the CTA sits at the bottom of every card.
             if (fillHeight) const Spacer(),
             Text(

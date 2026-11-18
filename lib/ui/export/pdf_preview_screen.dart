@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -11,9 +12,10 @@ import 'package:printing/printing.dart';
 /// print or save it — never an automatic download. Falls back to the print/save
 /// dialog on native or if the browser blocks the tab.
 Future<void> _openOrPrintPdf(Uint8List bytes) async {
-  final opened = await openPdfInViewer(bytes, filename: 'PA_MHAD.pdf');
+  final name = mhadFileName([kFileNamePrefix]);
+  final opened = await openPdfInViewer(bytes, filename: name);
   if (!opened) {
-    await Printing.layoutPdf(onLayout: (_) => bytes, name: 'PA_MHAD');
+    await Printing.layoutPdf(onLayout: (_) => bytes, name: name);
   }
 }
 
@@ -45,7 +47,6 @@ class PdfPreviewScreen extends StatelessWidget {
             Text(
               context.l10n.wizardPreview,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -54,8 +55,7 @@ class PdfPreviewScreen extends StatelessWidget {
             Text(
               context.l10n.pdfPreviewUsLetter8511,
               style: TextStyle(
-                fontSize: 12,
-                letterSpacing: 0.5,
+                fontSize: 12, letterSpacing: MhadType.trackingLabel,
                 color: p.textMuted,
               ),
             ),
@@ -103,7 +103,7 @@ class PdfPreviewScreen extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           decoration: BoxDecoration(
             color: p.card,
             border: Border(top: BorderSide(color: p.border)),
@@ -419,7 +419,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         // Title row — "Export & share" on the left, Back on the opposite right.
         Row(
           children: [
-            Expanded(child: SectionLabel(context.l10n.pdfPreviewExportShare)),
+            Expanded(child: SectionLabel(context.l10n.navDownloadPrint)),
             TextButton.icon(
               onPressed: widget.onClose,
               icon: const Icon(Icons.arrow_back, size: 16),
@@ -430,7 +430,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                 minimumSize: const Size(0, 32),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 textStyle: const TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -438,7 +437,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         EditorialHeading(
           textSpan: TextSpan(
             children: [
@@ -446,34 +445,29 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
               TextSpan(text: context.l10n.pdfPreviewOnPaper, style: TextStyle(color: p.primary)),
             ],
           ),
-          size: 24,
-          height: 1.05,
-          letterSpacing: -0.5,
+          level: HeadingLevel.sub,
         ),
         const SizedBox(height: 6),
         Text(
           context.l10n.pdfPreviewSizedForUsLetter8,
           style: TextStyle(
-            fontFamily: kSansFamily,
-            fontSize: 12,
-            height: 1.4,
+            fontSize: 12, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
         if (hasPages) ...[
           const SizedBox(height: 16),
           Divider(height: 1, color: p.border),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Text(
             context.l10n.pdfPreviewPageOf(_current + 1, pageCount),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: p.text,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             children: [
               _zoomBtn(p, '−', _zoom > 0.5, () => _setZoom(_zoom - 0.1)),
@@ -485,12 +479,11 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           ),
         ],
         if (hasPages && pageCount > 1) ...[
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           Text(
             context.l10n.pdfPreviewPages,
             style: TextStyle(
-              fontSize: 12,
-              letterSpacing: 1,
+              fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
               fontWeight: FontWeight.w700,
               color: p.textMuted,
             ),
@@ -537,12 +530,11 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4),
                       Text(
                         context.l10n.pdfPreviewPage(i + 1),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
@@ -567,7 +559,6 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
         child: Text(
           text,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 14,
             color: p.textMuted,
           ),
@@ -593,8 +584,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
           label,
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w600,
-            height: 1,
+            fontWeight: FontWeight.w600, height: MhadType.leadingTitle,
             color: enabled ? p.text : p.border,
           ),
         ),
@@ -628,8 +618,7 @@ class _ExportPdfPreviewState extends State<ExportPdfPreview> {
             fontFamily: kMonoFamily,
             fontFamilyFallback: kMonoFallbacks,
             fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.4,
+            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
             color: isFit ? p.primary : p.text,
           ),
         ),

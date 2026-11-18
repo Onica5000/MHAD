@@ -1,4 +1,8 @@
+import 'package:mhad/ui/widgets/rich_content_text.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/editorial_heading.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -14,28 +18,29 @@ class PrivacyPolicyScreen extends StatelessWidget {
     final bodyStyle = Theme.of(context)
         .textTheme
         .bodySmall
-        ?.copyWith(height: 1.6);
+        ?.copyWith(height: MhadType.leadingParagraph);
     final headingStyle = Theme.of(context)
         .textTheme
         .titleSmall
         ?.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.privacyPolicyPrivacyPolicy)),
       body: Column(
         children: [
+          const BackLink(),
           Expanded(
             child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PageHero(
               art: AppArt.miscPrivacy,
-              title: Text(context.l10n.privacyPolicyPaMhadAppPrivacyPolicy,
-                  style: headingStyle),
+              title: EditorialHeading(
+                  text: context.l10n.privacyPolicyPaMhadAppPrivacyPolicy),
               lead: context.l10n.privacyPolicyLastUpdated(
-                  appData.dateFact('privacyPolicyUpdated'),
+                  appData.dateFactFor('privacyPolicyUpdated',
+                      Localizations.localeOf(context).toLanguageTag()),
                   appData.dateFact('privacyPolicyVersion')),
             ),
             const SizedBox(height: 16),
@@ -59,15 +64,17 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyAiFeaturesThirdPartyData,
               body:
-                  context.l10n.privacyPolicyIfYouChooseToUse,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouChooseToUse : context.l10n.privacyPolicyIfYouChooseToUseHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
 
             _PolicySection(
-              title: context.l10n.privacyPolicyGeminiFreeTierDataPractices,
+              title: appData.ai.apiModeVisible
+                  ? context.l10n.privacyPolicyGeminiFreeTierDataPractices
+                  : context.l10n.privacyPolicyOutsideAiServices,
               body:
-                  context.l10n.privacyPolicyIfYouUseTheAi,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouUseTheAi : context.l10n.privacyPolicyIfYouUseTheAiHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -75,7 +82,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyInternationalUsersGdpr,
               body:
-                  context.l10n.privacyPolicyIfYouAreLocatedIn,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyIfYouAreLocatedIn : context.l10n.privacyPolicyIfYouAreLocatedInHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -83,7 +90,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyUsStateConsumerHealthData,
               body:
-                  context.l10n.privacyPolicyThisAppMayBeSubject,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyThisAppMayBeSubject : context.l10n.privacyPolicyThisAppMayBeSubjectHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -107,7 +114,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyYourRights,
               body:
-                  context.l10n.privacyPolicyYouCanDeleteAnyDirective,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyYouCanDeleteAnyDirective : context.l10n.privacyPolicyYouCanDeleteAnyDirectiveHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -115,7 +122,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyNoThirdPartyTracking,
               body:
-                  context.l10n.privacyPolicyThisAppDoesNotInclude,
+                  (appData.ai.apiModeVisible ? context.l10n.privacyPolicyThisAppDoesNotInclude : context.l10n.privacyPolicyThisAppDoesNotIncludeHandoff),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),
@@ -191,7 +198,9 @@ class _PolicySection extends StatelessWidget {
         children: [
           Text(title, style: headingStyle),
           const SizedBox(height: 4),
-          Text(body, style: bodyStyle),
+          // The shared renderer: real bold (it showed raw **), and
+          // bullets with a hanging indent.
+          RichContentText(body, style: bodyStyle),
         ],
       ),
     );

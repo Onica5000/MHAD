@@ -44,7 +44,7 @@ class AssistantContextPanel extends StatelessWidget {
         border: Border(left: BorderSide(color: p.border)),
       ),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+        padding: DesignTokens.pagePadding,
         children: [
           if (hasContext) ...[
             // "Context the AI sees" — structured key/value list mirroring the
@@ -66,7 +66,7 @@ class AssistantContextPanel extends StatelessWidget {
           ] else ...[
             SectionLabel(buildContext.l10n.assistantContextPanelWhatICanHelpWith),
             Container(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.border),
@@ -76,9 +76,7 @@ class AssistantContextPanel extends StatelessWidget {
               child: Text(
                 buildContext.l10n.assistantContextPanelAskAboutFormTypesAgents,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),
@@ -110,8 +108,7 @@ class AssistantContextPanel extends StatelessWidget {
                       buildContext.l10n.assistantContextPanelPiiRedactionOn,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.6,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: p.primary,
                       ),
                     ),
@@ -121,9 +118,7 @@ class AssistantContextPanel extends StatelessWidget {
                 Text(
                   buildContext.l10n.assistantContextPanelNamesAddressesPhoneNumbersAnd,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.45,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.text,
                   ),
                 ),
@@ -157,7 +152,6 @@ class _ContextKV extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 color: p.textMuted,
               ),
@@ -169,7 +163,6 @@ class _ContextKV extends StatelessWidget {
               value,
               textAlign: TextAlign.right,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -202,7 +195,7 @@ class _ContextPromptTile extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(minHeight: 44),
             padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
               border: Border.all(color: p.border),
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -213,9 +206,7 @@ class _ContextPromptTile extends StatelessWidget {
                   child: Text(
                     text,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 14,
-                      height: 1.3,
+                      fontSize: 14, height: MhadType.leadingUi,
                       color: p.text,
                     ),
                   ),

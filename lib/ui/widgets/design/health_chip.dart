@@ -96,14 +96,14 @@ class HealthChip extends StatelessWidget {
         border: Border.all(color: border),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (code.isNotEmpty) ...[
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: codeBg,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -114,13 +114,12 @@ class HealthChip extends StatelessWidget {
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: codeFg,
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
           ],
           Expanded(
             child: Column(
@@ -134,7 +133,6 @@ class HealthChip extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: text,
@@ -147,15 +145,14 @@ class HealthChip extends StatelessWidget {
                           fontFamily: kMonoFamily,
                           fontFamilyFallback: kMonoFallbacks,
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.4,
+                          fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingLabel,
                           color: text.withValues(alpha: 0.75),
                         ),
                       ),
                     if (sourceTag != null && sourceTag!.isNotEmpty)
                       Container(
                         padding:
-                            const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                         decoration: BoxDecoration(
                           color: p.card,
                           border: Border.all(color: border),
@@ -165,8 +162,7 @@ class HealthChip extends StatelessWidget {
                           sourceTag!,
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                             color: codeBg,
                           ),
                         ),
@@ -178,9 +174,7 @@ class HealthChip extends StatelessWidget {
                   Text(
                     sub!,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.35,
+                      fontSize: 12, height: MhadType.leadingUi,
                       color: text.withValues(alpha: 0.78),
                     ),
                   ),

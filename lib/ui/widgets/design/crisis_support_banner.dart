@@ -22,8 +22,8 @@ class CrisisSupportBanner extends ConsumerWidget {
       container: true,
       liveRegion: true,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+        margin: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
         decoration: BoxDecoration(
           color: cs.errorContainer,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -34,7 +34,6 @@ class CrisisSupportBanner extends ConsumerWidget {
             Text(
               context.l10n.crisisBannerTitle,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: cs.onErrorContainer,
@@ -44,9 +43,7 @@ class CrisisSupportBanner extends ConsumerWidget {
             Text(
               context.l10n.crisisBannerBody,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 14,
-                height: 1.4,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: cs.onErrorContainer,
               ),
             ),

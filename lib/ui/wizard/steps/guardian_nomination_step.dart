@@ -208,7 +208,7 @@ class _GuardianNominationStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(
             // The on-screen description below already says this is optional and
@@ -378,7 +378,7 @@ class _GuardianConditionRow extends StatelessWidget {
         onTap: () => onChanged(isYes),
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
           decoration: BoxDecoration(
             color: selected ? cs.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -386,7 +386,6 @@ class _GuardianConditionRow extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: selected ? cs.onPrimary : cs.onSurfaceVariant,
@@ -397,7 +396,7 @@ class _GuardianConditionRow extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
           Expanded(
@@ -418,7 +417,7 @@ class _GuardianConditionRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Container(
-            padding: const EdgeInsets.all(3),
+            padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               border: Border.all(color: cs.outlineVariant),
               borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -459,7 +458,7 @@ class _GuardianRelOptCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: selected ? cs.primaryContainer : cs.surfaceContainerLow,
           border: Border.all(
@@ -502,11 +501,9 @@ class _GuardianRelOptCard extends StatelessWidget {
                   Text(
                     option.label(context.l10n),
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: cs.onSurface,
-                      height: 1.3,
+                      color: cs.onSurface, height: MhadType.leadingUi,
                     ),
                   ),
                   if (selected) ...[
@@ -514,10 +511,8 @@ class _GuardianRelOptCard extends StatelessWidget {
                     Text(
                       option.hint(context.l10n),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
-                        color: cs.onSurfaceVariant,
-                        height: 1.4,
+                        color: cs.onSurfaceVariant, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],

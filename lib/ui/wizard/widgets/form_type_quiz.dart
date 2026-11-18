@@ -165,7 +165,7 @@ class _QuestionBody extends StatelessWidget {
       children: [
         // Header — back row + step dots + "question N of 4" eyebrow
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -178,8 +178,7 @@ class _QuestionBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizQuestionEyebrow(step + 1, total),
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 1,
+                      fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                       color: p.textMuted,
                     ),
                   ),
@@ -190,31 +189,28 @@ class _QuestionBody extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: StepDots(current: step + 1, total: total),
         ),
 
         // Scrollable body
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            padding: DesignTokens.pagePadding,
             children: [
               SectionLabel(context.l10n.quizInYourWords),
               const SizedBox(height: 8),
               EditorialHeading(
                 textSpan: inlineMarkdownSpan(question.headline,
                     emphasisStyle: TextStyle(color: p.primary)),
-                size: 26,
-                height: 1.15,
+                level: HeadingLevel.sub,
               ),
               const SizedBox(height: 6),
               Text(
                 question.sub,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.45,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
               const SizedBox(height: 16),
@@ -256,7 +252,7 @@ class _OptCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: selected ? p.primaryTint : p.card,
           border: Border.all(
@@ -299,11 +295,9 @@ class _OptCard extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: p.text,
-                      height: 1.3,
+                      color: p.text, height: MhadType.leadingUi,
                     ),
                   ),
                   if (selected) ...[
@@ -311,10 +305,8 @@ class _OptCard extends StatelessWidget {
                     Text(
                       hint,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 14,
-                        color: p.textMuted,
-                        height: 1.4,
+                        color: p.textMuted, height: MhadType.leadingParagraph,
                       ),
                     ),
                   ],
@@ -354,7 +346,7 @@ class _ResultBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 6),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
           child: Row(
             children: [
               IconButton(
@@ -367,8 +359,7 @@ class _ResultBody extends StatelessWidget {
                   child: Text(
                     context.l10n.quizResultEyebrow,
                     style: TextStyle(
-                      fontSize: 12,
-                      letterSpacing: 1,
+                      fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
                       color: p.textMuted,
                     ),
                   ),
@@ -380,7 +371,7 @@ class _ResultBody extends StatelessWidget {
         ),
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            padding: DesignTokens.pagePadding,
             children: [
               SectionLabel(context.l10n.quizRecommendedForYou),
               const SizedBox(height: 8),
@@ -395,20 +386,16 @@ class _ResultBody extends StatelessWidget {
                     const TextSpan(text: '.'),
                   ],
                 ),
-                size: 30,
-                height: 1.1,
               ),
               const SizedBox(height: 8),
               Text(
                 _explanation(context, leader),
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
 
               // Stacked confidence bar with three segments
               ClipRRect(
@@ -433,10 +420,10 @@ class _ResultBody extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               _LegendRow(
                 color: p.primary,
-                label: context.l10n.quizLegendCombined,
+                label: context.l10n.formTypeShortCombined,
                 pct: pctFor(FormType.combined),
                 emphasized: leader == FormType.combined,
               ),
@@ -456,7 +443,7 @@ class _ResultBody extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
           decoration: BoxDecoration(
             color: p.card,
             border: Border(top: BorderSide(color: p.border)),
@@ -475,7 +462,7 @@ class _ResultBody extends StatelessWidget {
                 label: Text(context.l10n.quizUseForm(_formName(context, leader))),
                 style: FilledButton.styleFrom(
                   iconAlignment: IconAlignment.end,
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
             ],
@@ -486,8 +473,8 @@ class _ResultBody extends StatelessWidget {
   }
 
   String _formName(BuildContext context, FormType t) => switch (t) {
-        FormType.combined => context.l10n.quizFormNameCombined,
-        FormType.declaration => context.l10n.quizFormNameDeclaration,
+        FormType.combined => context.l10n.formTypeShortCombined,
+        FormType.declaration => context.l10n.formTypeShortDeclaration,
         FormType.poa => context.l10n.quizFormNamePoa,
       };
 
@@ -531,7 +518,6 @@ class _LegendRow extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
                 color: emphasized ? p.text : p.textMuted,
@@ -626,7 +612,7 @@ class _QuizQuestions {
           weights: {FormType.poa: 3},
         ),
         _QuizOption(
-          label: l.quizQ2O4Label,
+          label: l.quizQ1O4Label,
           hint: l.quizQ2O4Hint,
           weights: {FormType.combined: 1},
         ),
@@ -652,7 +638,7 @@ class _QuizQuestions {
           weights: {FormType.combined: 3},
         ),
         _QuizOption(
-          label: l.quizQ3O4Label,
+          label: l.quizQ1O4Label,
           hint: l.quizQ3O4Hint,
           weights: {FormType.combined: 1},
         ),

@@ -130,7 +130,7 @@ class _NavPill extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             color: item.active ? p.primaryLight : Colors.transparent,
             borderRadius: BorderRadius.circular(DesignTokens.chipRadius),

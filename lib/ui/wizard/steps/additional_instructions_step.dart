@@ -247,8 +247,7 @@ class _AdditionalInstructionsStepState
             description,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              height: 1.4,
+              color: Theme.of(context).colorScheme.onSurfaceVariant, height: MhadType.leadingParagraph,
             ),
           ),
         ),
@@ -333,8 +332,7 @@ class _AdditionalInstructionsStepState
             context.l10n.addlInstrRecordsDescription,
             style: TextStyle(
               fontSize: 12,
-              color: cs.onSurfaceVariant,
-              height: 1.4,
+              color: cs.onSurfaceVariant, height: MhadType.leadingParagraph,
             ),
           ),
         ),
@@ -377,11 +375,11 @@ class _AdditionalInstructionsStepState
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'additionalInstructions'),
           ExampleTextButton(
-            fieldName: l10n.addlInstrExampleFieldName,
+            fieldName: l10n.additionalInstructions,
             examples: [
               l10n.addlInstrExample1,
               l10n.addlInstrExample2,
@@ -399,7 +397,7 @@ class _AdditionalInstructionsStepState
           ),
           _buildSection(
             'Crisis Intervention',
-            l10n.addlInstrCrisisTitle,
+            l10n.reviewLabelCrisis,
             _crisisCtrl,
             l10n.addlInstrCrisisHint,
             'specific things that help or make things worse during a mental health crisis, based on past experience',
@@ -428,7 +426,7 @@ class _AdditionalInstructionsStepState
           ),
           _buildSection(
             'Health History',
-            l10n.addlInstrHealthHistoryTitle,
+            l10n.reviewLabelHh,
             _healthHistoryCtrl,
             l10n.addlInstrHealthHistoryHint,
             'relevant mental health history including diagnoses, past hospitalizations, and treatments that did or did not work',
@@ -469,7 +467,7 @@ class _AdditionalInstructionsStepState
           _buildRecordsDisclosureSection(),
           _buildSection(
             'Pet Care',
-            l10n.addlInstrPetCareTitle,
+            l10n.reviewStepPetCare,
             _petCustodyCtrl,
             l10n.addlInstrPetCareHint,
             'instructions for care and custody of pets if you are hospitalized',
@@ -503,7 +501,7 @@ class _AdditionalInstructionsStepState
           const SizedBox(height: 8),
           _addOnCard(
             icon: Icons.favorite_outline,
-            title: l10n.addlInstrCrisisPlanTitle,
+            title: l10n.tabPageCrisisPlan,
             subtitle: l10n.addlInstrCrisisPlanSubtitle,
             onTap: () =>
                 context.push(AppRoutes.crisisPlanRoute(widget.directiveId)),
@@ -557,7 +555,6 @@ class _AdditionalInstructionsStepState
                     Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -566,9 +563,7 @@ class _AdditionalInstructionsStepState
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

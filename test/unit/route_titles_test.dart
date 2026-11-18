@@ -41,7 +41,7 @@ void main() {
 
   test('parameterised locations resolve by their first segment', () async {
     final l = await AppLocalizations.delegate.load(const Locale('en'));
-    expect(routePageName(l, '/wizard/5?step=3'), l.tabPageYourDirective);
+    expect(routePageName(l, '/wizard/5?step=3'), l.homeHeroYourMhad);
     expect(routeTitle(l, '/education'), 'Learn · PA MHAD');
   });
 }

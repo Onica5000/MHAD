@@ -495,43 +495,43 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'effective_condition') return l.reviewLabelEffectiveCondition;
     if (key == 'facility_prefer') return l.reviewLabelFacilityPrefer;
     if (key == 'facility_avoid') return l.reviewLabelFacilityAvoid;
-    if (key == 'dietary') return l.reviewLabelDietary;
+    if (key == 'dietary') return l.reviewStepDietary;
     if (key == 'religious') return l.reviewLabelReligious;
-    if (key == 'activities') return l.reviewLabelActivities;
+    if (key == 'activities') return l.reviewStepActivities;
     if (key == 'crisis') return l.reviewLabelCrisis;
-    if (key == 'crisis_plan') return l.reviewLabelCrisisPlan;
+    if (key == 'crisis_plan') return l.tabPageCrisisPlan;
     if (key == 'agent_authority_limitations') return l.reviewLabelAgentAuthorityLimitations;
-    if (key == 'ect_consent') return l.reviewLabelEctConsent;
+    if (key == 'ect_consent') return l.reviewStepEctConsent;
     if (key == 'experimental_consent') return l.reviewLabelExperimentalConsent;
     if (key == 'drug_trial_consent') return l.reviewLabelDrugTrialConsent;
-    if (key == 'medication_consent') return l.reviewLabelMedicationConsent;
+    if (key == 'medication_consent') return l.reviewStepMedicationConsent;
     if (key == 'trigger_two_professionals') return l.reviewLabelTriggerTwoProfessionals;
     if (key == 'trigger_court_order') return l.reviewLabelTriggerCourtOrder;
     if (key == 'trigger_involuntary_commitment') {
       return l.reviewLabelTriggerInvoluntaryCommitment;
     }
-    if (key == 'room_prefs_note') return l.reviewLabelRoomPrefsNote;
+    if (key == 'room_prefs_note') return l.facilityRoomPrefsTitle;
     if (key == 'room_pref_chips') return l.reviewLabelRoomPrefChips;
-    if (key == 'roommate_same_gender') return l.reviewLabelRoommateSameGender;
+    if (key == 'roommate_same_gender') return l.facilityRoomSameGender;
     if (key == 'guardian_can_revoke') return l.reviewLabelGuardianCanRevoke;
     if (key == 'guardian_can_change_agent') return l.reviewLabelGuardianCanChangeAgent;
     if (key == 'guardian_must_consult_agent') return l.reviewLabelGuardianMustConsultAgent;
     if (key == 'authority_hospitalization') return l.reviewLabelAuthorityHospitalization;
     if (key == 'authority_medication') return l.reviewLabelAuthorityMedication;
     if (key == 'ulysses_optin') return l.reviewLabelUlyssesOptin;
-    if (key == 'pet_custody') return l.reviewLabelPetCustody;
+    if (key == 'pet_custody') return l.reviewStepPetCare;
     if (key == 'children_custody') return l.reviewLabelChildrenCustody;
     if (key == 'family_notification') return l.reviewLabelFamilyNotification;
-    if (key == 'records_disclosure') return l.reviewLabelRecordsDisclosure;
-    if (key == 'other') return l.reviewLabelOther;
+    if (key == 'records_disclosure') return l.reviewStepRecordsDisclosure;
+    if (key == 'other') return l.reviewStepOther;
     // Personal info (PII) — declarant
     if (key == 'person_name') return l.reviewLabelPersonName;
-    if (key == 'person_dob') return l.reviewLabelPersonDob;
-    if (key == 'person_address1') return l.reviewLabelPersonAddress1;
+    if (key == 'person_dob') return l.dateOfBirth;
+    if (key == 'person_address1') return l.personalInfoStepStreetAddress;
     if (key == 'person_address2') return l.reviewLabelPersonAddress2;
-    if (key == 'person_city') return l.reviewLabelPersonCity;
-    if (key == 'person_county') return l.reviewLabelPersonCounty;
-    if (key == 'person_state') return l.reviewLabelPersonState;
+    if (key == 'person_city') return l.city;
+    if (key == 'person_county') return l.personalInfoStepCounty;
+    if (key == 'person_state') return l.state;
     if (key == 'person_zip') return l.reviewLabelPersonZip;
     if (key == 'person_phone') return l.reviewLabelPersonPhone;
     if (key == 'person_doctor_name') return l.reviewLabelPersonDoctorName;
@@ -576,10 +576,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key.startsWith('med_current_')) return l.reviewSectionMedCurrent;
     if (key.startsWith('med_limit_')) return l.reviewSectionMedLimit;
     if (key.startsWith('cond_')) return l.reviewSectionCond;
-    if (key.startsWith('diag_')) return l.reviewSectionDiag;
-    if (key.startsWith('allergy_')) return l.reviewSectionAllergy;
-    if (key.startsWith('hh_')) return l.reviewSectionHh;
-    if (key == 'effective_condition') return l.reviewSectionEffectiveCondition;
+    if (key.startsWith('diag_')) return l.stepTitleDiagnoses;
+    if (key.startsWith('allergy_')) return l.reviewStepAllergies;
+    if (key.startsWith('hh_')) return l.reviewLabelHh;
+    if (key == 'effective_condition') return l.stepTitleWhenItKicksIn;
     if (key.startsWith('person_')) return l.reviewSectionPerson;
     if (key.startsWith('agent_') && !key.startsWith('agent_authority')) {
       return l.reviewSectionAgent;
@@ -590,22 +590,22 @@ extension _PipelineReviewUi on _PipelineScreenState {
       return l.reviewSectionAgentAuthority;
     }
     if (key == 'ulysses_optin') return l.reviewSectionUlyssesOptin;
-    if (key == 'crisis_plan') return l.reviewSectionCrisisPlan;
+    if (key == 'crisis_plan') return l.tabPageCrisisPlan;
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
         key == 'medication_consent') {
       return l.reviewSectionConsent;
     }
-    if (key.startsWith('trigger_')) return l.reviewSectionEffectiveCondition;
+    if (key.startsWith('trigger_')) return l.stepTitleWhenItKicksIn;
     if (key == 'room_prefs_note' ||
         key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
-      return l.reviewSectionRoomPreferences;
+      return l.facilityRoomPrefsTitle;
     }
-    if (key.startsWith('alt_agent_')) return l.reviewSectionAltAgent;
+    if (key.startsWith('alt_agent_')) return l.alternateAgent;
     if (key.startsWith('guardian_')) return l.reviewSectionGuardian;
-    return l.reviewSectionOther;
+    return l.reviewStepOther;
   }
 
   /// Maps a review key to the wizard STEP it belongs to, as (order, title), so
@@ -613,39 +613,39 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// the wizard instead of one long list. Order mirrors the wizard step order.
   (int, String) _wizardSection(String key) {
     final l = context.l10n;
-    if (key.startsWith('person_eval_doctor')) return (2, l.reviewStepGroupWhenKicksIn);
-    if (key == 'effective_condition') return (2, l.reviewStepGroupWhenKicksIn);
-    if (key.startsWith('trigger_')) return (2, l.reviewStepGroupWhenKicksIn);
-    if (key.startsWith('person_doctor')) return (6, l.reviewStepGroupDiagnoses);
-    if (key.startsWith('person_')) return (1, l.reviewStepGroupAboutYou);
+    if (key.startsWith('person_eval_doctor')) return (2, l.stepTitleWhenItKicksIn);
+    if (key == 'effective_condition') return (2, l.stepTitleWhenItKicksIn);
+    if (key.startsWith('trigger_')) return (2, l.stepTitleWhenItKicksIn);
+    if (key.startsWith('person_doctor')) return (6, l.stepTitleDiagnoses);
+    if (key.startsWith('person_')) return (1, l.stepTitleAboutYou);
     if (key == 'authority_hospitalization' ||
         key == 'authority_medication' ||
         key == 'agent_authority_limitations' ||
         key.startsWith('alt_agent_') ||
         (key.startsWith('agent_') && !key.startsWith('agent_authority'))) {
-      return (3, l.reviewStepGroupPeopleITrust);
+      return (3, l.stepTitlePeopleITrust);
     }
-    if (key.startsWith('guardian_')) return (4, l.reviewStepGroupGuardian);
+    if (key.startsWith('guardian_')) return (4, l.stepTitleGuardianNomination);
     if (key == 'facility_prefer' ||
         key == 'facility_avoid' ||
         key == 'room_prefs_note' ||
         key == 'room_pref_chips' ||
         key == 'roommate_same_gender') {
-      return (5, l.reviewStepGroupWhereIWantCare);
+      return (5, l.stepTitleWhereIWantCare);
     }
     if (key.startsWith('diag_') || key.startsWith('cond_')) {
-      return (6, l.reviewStepGroupDiagnoses);
+      return (6, l.stepTitleDiagnoses);
     }
-    if (key.startsWith('med_')) return (7, l.reviewStepGroupMedications);
-    if (key.startsWith('allergy_')) return (8, l.reviewStepGroupAllergies);
+    if (key.startsWith('med_')) return (7, l.medications);
+    if (key.startsWith('allergy_')) return (8, l.stepTitleAllergies);
     if (key == 'ect_consent' ||
         key == 'experimental_consent' ||
         key == 'drug_trial_consent' ||
         key == 'medication_consent' ||
         key == 'ulysses_optin') {
-      return (9, l.reviewStepGroupProceduresResearch);
+      return (9, l.stepTitleProceduresResearch);
     }
-    return (10, l.reviewStepGroupAnythingElse);
+    return (10, l.stepTitleAnythingElse);
   }
 
   Widget _buildReviewStep() {
@@ -666,7 +666,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: p.primaryTint,
               borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -675,12 +675,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.auto_awesome, size: 11, color: p.primary),
-                const SizedBox(width: 5),
+                const SizedBox(width: 4),
                 Text(
                   context.l10n.reviewAiReadThisPhoto,
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.6,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     fontWeight: FontWeight.w700,
                     color: p.primary,
                   ),
@@ -693,26 +692,15 @@ extension _PipelineReviewUi on _PipelineScreenState {
       const SizedBox(height: 12),
       Text(
         context.l10n.reviewHeresWhatWeRead,
-        style: TextStyle(
-          fontFamily: kSerifFamily,
-          fontFamilyFallback: kSerifFallbacks,
-          fontStyle: FontStyle.italic,
-          fontSize: 32,
-          fontWeight: FontWeight.w400,
-          height: 1.05,
-          letterSpacing: -0.4,
-          color: p.text,
-        ),
+        style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
       ),
       const SizedBox(height: 6),
       Text(
         context.l10n.reviewHowToIntro,
         style: TextStyle(
-          fontFamily: kSansFamily,
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: p.text,
-          height: 1.5,
+          color: p.text, height: MhadType.leadingParagraph,
         ),
       ),
       const SizedBox(height: 6),
@@ -730,16 +718,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
       builder: (context, c) {
         final twoPane = c.maxWidth >= 720 && _sourceDocs.isNotEmpty;
         return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+          padding: DesignTokens.pagePadding,
           children: [
             ...header,
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             if (twoPane)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(flex: 10, child: _sourceThumb(p)),
-                  const SizedBox(width: 18),
+                  const SizedBox(width: 16),
                   Expanded(
                     flex: 14,
                     child: _reviewFieldsPane(p, keys, checkedCount, okText),
@@ -774,7 +762,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       children: [
         if (_piiStripped.isNotEmpty) ...[
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: p.primaryTint,
               border: Border.all(color: p.primary.withValues(alpha: 0.2)),
@@ -789,9 +777,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   child: Text(
                     context.l10n.reviewPiiRemoved(_piiStripped.toSet().join(', ')),
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.4,
+                      fontSize: 12, height: MhadType.leadingParagraph,
                       color: p.text,
                     ),
                   ),
@@ -805,17 +791,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewAddToDirective,
           style: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
+            fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
             color: p.textMuted,
           ),
         ),
         const SizedBox(height: 8),
         _buildReconGroups(p, keys),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         // Privacy reassurance lock-line — matches prototype L2082-2087.
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             color: p.surface,
             border: Border.all(color: p.border),
@@ -830,10 +815,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
                 child: Text(
                   context.l10n.reviewPhotoDiscarded,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
-                    color: p.textMuted,
-                    height: 1.4,
+                    color: p.textMuted, height: MhadType.leadingParagraph,
                   ),
                 ),
               ),
@@ -845,8 +828,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           context.l10n.reviewFieldsReady(checkedCount, keys.length),
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 12,
-            letterSpacing: 0.6,
+            fontSize: 12, letterSpacing: MhadType.trackingLabel,
             color: checkedCount > 0 ? okText : p.textMuted,
           ),
         ),
@@ -902,7 +884,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           _groupLabel(titles[o]!, p),
           const SizedBox(height: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: p.card,
               border: Border.all(color: p.border),
@@ -918,7 +900,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               ],
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
         ],
       ],
     );
@@ -974,7 +956,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               TextSpan(
                 text: '$tag: ',
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: p.textMuted,
@@ -983,7 +964,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               TextSpan(
                 text: value,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   color: p.text,
                 ),
@@ -1000,7 +980,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
           Text(
             _displayLabel(it.key),
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: p.text,
@@ -1027,7 +1006,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
                   _reviewEdited[it.key] = addValue;
                 });
               }),
-              if (!isIdentity)
+              // "Consolidate" asks the API-key AI to merge both values: an
+              // API-only extra, hidden with the API path (keep / replace / add
+              // both / edit still resolve every conflict).
+              if (!isIdentity && appData.ai.apiModeVisible)
                 busy
                     ? const Padding(
                         padding:
@@ -1048,7 +1030,6 @@ extension _PipelineReviewUi on _PipelineScreenState {
               child: Text(
                 context.l10n.reviewIdentityNotMerged,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
@@ -1060,20 +1041,16 @@ extension _PipelineReviewUi on _PipelineScreenState {
             Text(
               context.l10n.reviewWillSave,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.3,
+                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                 color: p.textMuted,
               ),
             ),
             Text(
               _reviewEdited[it.key] ?? '',
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
-                color: p.text,
-                height: 1.4,
+                color: p.text, height: MhadType.leadingParagraph,
               ),
             ),
           ],
@@ -1161,9 +1138,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             child: Text(
               context.l10n.reviewAgentInitialsNote,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 12,
-                height: 1.4,
+                fontSize: 12, height: MhadType.leadingParagraph,
                 color: p.textMuted,
               ),
             ),
@@ -1177,8 +1152,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         text.toUpperCase(),
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.2,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingEyebrow,
           color: p.textMuted,
         ),
       );
@@ -1455,8 +1429,7 @@ class _SnapReviewRow extends StatelessWidget {
                         fieldLabel.toUpperCase(),
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
+                          fontWeight: FontWeight.w600, letterSpacing: MhadType.trackingLabel,
                           color: p.textMuted,
                         ),
                       ),
@@ -1466,8 +1439,7 @@ class _SnapReviewRow extends StatelessWidget {
                       ok ? '→ $target' : context.l10n.reviewNotAdded,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4,
+                        fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                         color: ok ? p.primary : p.textMuted,
                       ),
                     ),
@@ -1477,7 +1449,6 @@ class _SnapReviewRow extends StatelessWidget {
                 Text(
                   value,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: ok ? p.text : p.textMuted,

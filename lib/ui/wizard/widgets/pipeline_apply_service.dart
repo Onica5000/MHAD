@@ -12,6 +12,10 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   // ── Smart Fill generation ───────────────────────────────────────────
 
   Future<void> _runSmartFill() async {
+    if (!appData.ai.apiModeVisible) {
+      await _runSmartFillHandoff();
+      return;
+    }
     final aiCfg = ref.read(aiConfigProvider);
     if (aiCfg == null || _validated == null) return;
 
@@ -68,6 +72,66 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     } finally {
       service?.dispose();
     }
+  }
+
+  /// Copy-and-paste smart fill (API path hidden): the SAME prompt over the
+  /// same sanitized input; the pasted suggestions open the same results step,
+  /// where every suggestion is reviewed before it is added.
+  Future<void> _runSmartFillHandoff() async {
+    if (_validated == null) return;
+    final prompt = SmartFillService.buildPrompt(SmartFillInput(
+      conditions: _validated!.icdConditions,
+      currentMedications: _validated!.validatedPreferredMedNames,
+      medicationsToAvoid: _validated!.validatedAvoidMedNames,
+      formType: widget.formType,
+    ).sanitized());
+    await showDialog<void>(
+      context: context,
+      builder: (dctx) => AlertDialog(
+        title: Text(dctx.l10n.smartFillHandoffTitle),
+        content: SizedBox(
+          width: 520,
+          child: SingleChildScrollView(
+            child: AiHandoffPanel(
+              kind: HandoffTaskKind.smartFill,
+              // The suggestions apply to this review, which leaving loses.
+              resumable: false,
+              title: dctx.l10n.smartFillHandoffPanelTitle,
+              subtitle: dctx.l10n.smartFillHandoffSubtitle,
+              buildTask: (_) => HandoffTask(
+                kind: HandoffTaskKind.smartFill,
+                instructions: prompt,
+                ref: directiveHandoffRef(widget.directiveId),
+              ),
+              onAnswer: (json) async {
+                final result = SmartFillResult.fromJson(json);
+                if (dctx.mounted) Navigator.pop(dctx);
+                if (!mounted) return true;
+                if (result.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text(context.l10n.pipelineNoAdditionalSuggestions)));
+                  await _applyAll();
+                  return true;
+                }
+                final display = result.toDisplayMap();
+                _smartResult = result;
+                _smartChecked = {for (final k in display.keys) k: true};
+                _smartEdited = Map<String, String>.from(display);
+                setState(() => _step = _PipelineStep.results);
+                return true;
+              },
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dctx),
+            child: Text(dctx.l10n.close),
+          ),
+        ],
+      ),
+    );
   }
 
   // ── Apply everything ────────────────────────────────────────────────

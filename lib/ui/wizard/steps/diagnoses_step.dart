@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/ai/ai_handoff_panel.dart';
+import 'package:mhad/ai/pii_stripper.dart';
+import 'package:mhad/ai/handoff/handoff_task.dart';
 import 'package:mhad/utils/input_formatters.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -131,6 +135,20 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
   //    candidate conditions and each is confirmed against the ICD-10 registry
   //    before the user adds it. ─────────────────────────────────────────────
   Future<void> _openDescribeDialog() async {
+    // Copy-and-paste (API path hidden): no key, consent or rate limit here —
+    // the person's own AI answers; names are still registry-confirmed.
+    if (!appData.ai.apiModeVisible) {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => _DescribeConditionDialog(
+          onSuggest: _suggestFromDescription,
+          onAdd: _addSuggestedDiagnosis,
+          onConfirmNames: _confirmNames,
+          directiveId: widget.directiveId,
+        ),
+      );
+      return;
+    }
     final assistant = ref.read(aiAssistantProvider);
     if (assistant is! GeminiApiAssistant) {
       // No AI yet — send them to set it up (same as the AI Suggest button).
@@ -160,6 +178,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       builder: (_) => _DescribeConditionDialog(
         onSuggest: _suggestFromDescription,
         onAdd: _addSuggestedDiagnosis,
+        directiveId: widget.directiveId,
       ),
     );
   }
@@ -176,6 +195,13 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         .recordRequest(
           estimatedTokens: GeminiRateTracker.estimateTokens(description.length),
         );
+    return _confirmNames(names);
+  }
+
+  /// Candidate condition NAMES (from the AI) → confirmed ICD-10 matches: the
+  /// codes come from the authoritative registry, never from the model.
+  /// Deduped by code. Shared by the API path and a pasted answer.
+  Future<List<IcdCondition>> _confirmNames(List<String> names) async {
     if (names.isEmpty) return const [];
     final out = <IcdCondition>[];
     final seen = <String>{};
@@ -285,11 +311,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         border: Border.all(color: active ? p.primary : p.border, width: 1.5),
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
           Icon(Icons.search, size: 18, color: p.textMuted),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: _searchCtrl,
@@ -298,7 +324,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               enableSuggestions: false,
               onChanged: _onSearchChanged,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: p.text,
@@ -311,7 +336,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 focusedBorder: InputBorder.none,
                 hintText: context.l10n.diagnosesSearchHint,
                 hintStyle: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: p.textMuted,
@@ -347,7 +371,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           else
             // ICD-10 mono badge pill
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
                 color: p.primaryTint,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -356,8 +380,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 'ICD-10',
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
@@ -384,7 +407,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -396,21 +419,18 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   fontFamily: kMonoFamily,
                   fontFamilyFallback: kMonoFallbacks,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                   color: p.primary,
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 c.name,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
+                  fontWeight: FontWeight.w600, height: MhadType.leadingUi,
                   color: p.text,
                 ),
               ),
@@ -435,8 +455,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         label.toUpperCase(),
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.6,
+          fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
           color: p.textMuted,
         ),
       ),
@@ -524,9 +543,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              _searching ? '' : l10n.diagnosesNoResults,
+              _searching ? '' : l10n.educationNoResultsFound,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: kSansFamily, color: p.textMuted),
+              style: TextStyle( color: p.textMuted),
             ),
           ),
 
@@ -559,7 +578,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         l10n.diagnosesEmptyTitle,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontWeight: FontWeight.w600,
                           color: p.text,
                         ),
@@ -568,7 +586,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                       Text(
                         l10n.diagnosesEmptyBody,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: p.textMuted,
                         ),
@@ -688,7 +705,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                             Text(
                               r.name,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
@@ -705,7 +721,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontFamily: kSansFamily,
                                     fontSize: 12,
                                     color: p.textMuted,
                                   ),
@@ -720,7 +735,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                     child: Text(
                       l10n.diagnosesNpiNote,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
@@ -753,7 +767,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 keyboardType: TextInputType.phone,
                 inputFormatters: const [PhoneInputFormatter()],
                 decoration: InputDecoration(
-                  labelText: l10n.diagnosesPhone,
+                  labelText: l10n.reviewStepPhone,
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -783,14 +797,12 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(Icons.auto_awesome, size: 16, color: p.primary),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: p.text,
                         ),
                         children: [
@@ -808,7 +820,6 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                   Text(
                     l10n.diagnosesTry,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: p.primary,
@@ -826,10 +837,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
         Text(
           l10n.diagnosesFooter,
           style: TextStyle(
-            fontFamily: kSansFamily,
             fontSize: 12,
-            fontStyle: FontStyle.italic,
-            height: 1.45,
+            fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
             color: p.textMuted,
           ),
         ),
@@ -850,9 +859,18 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 class _DescribeConditionDialog extends StatefulWidget {
   final Future<List<IcdCondition>> Function(String description) onSuggest;
   final Future<bool> Function(IcdCondition condition) onAdd;
+
+  /// Copy-and-paste mode when set: the handoff card replaces "Find matches"
+  /// and the pasted names are confirmed through this.
+  final Future<List<IcdCondition>> Function(List<String> names)?
+      onConfirmNames;
+  final int directiveId;
+
   const _DescribeConditionDialog({
     required this.onSuggest,
     required this.onAdd,
+    required this.directiveId,
+    this.onConfirmNames,
   });
 
   @override
@@ -889,6 +907,22 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
     });
   }
 
+  /// A pasted answer → names → the same registry-confirmed results list.
+  Future<bool> _useHandoffAnswer(Map<String, dynamic> json) async {
+    final names = LlmAssistant.parseConditionTerms(json);
+    setState(() {
+      _loading = true;
+      _searched = true;
+    });
+    final r = await widget.onConfirmNames!(names);
+    if (!mounted) return false;
+    setState(() {
+      _results = r;
+      _loading = false;
+    });
+    return true;
+  }
+
   Future<void> _add(IcdCondition c) async {
     final added = await widget.onAdd(c);
     if (!mounted) return;
@@ -913,15 +947,15 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
       title: Text(l10n.diagnosesDescribeTitle),
       content: SizedBox(
         width: 440,
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
-                fontSize: 14,
-                height: 1.4,
+                fontSize: 14, height: MhadType.leadingParagraph,
                 color: cs.onSurfaceVariant,
               ),
             ),
@@ -932,13 +966,31 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               maxLines: 4,
               autofocus: true,
               textInputAction: TextInputAction.search,
-              onSubmitted: (_) => _find(),
+              onChanged: (_) => setState(() {}),
+              onSubmitted: (_) =>
+                  widget.onConfirmNames == null ? _find() : null,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 hintText: l10n.diagnosesDescribeHint,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
+            if (widget.onConfirmNames != null)
+              AiHandoffPanel(
+                kind: HandoffTaskKind.conditionTerms,
+                title: l10n.diagnosesHandoffTitle,
+                enabled: _ctrl.text.trim().length >= 3,
+                disabledHint: l10n.aiHandoffNeedDescription,
+                buildTask: (_) => HandoffTask(
+                  kind: HandoffTaskKind.conditionTerms,
+                  // The SAME prompt as the API path (shared builder).
+                  instructions: LlmAssistant.conditionTermsPrompt(
+                      PiiStripper.strip(_ctrl.text.trim())),
+                  ref: directiveHandoffRef(widget.directiveId),
+                ),
+                onAnswer: _useHandoffAnswer,
+              )
+            else
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
@@ -982,11 +1034,12 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
             ],
           ],
         ),
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.diagnosesDone),
+          child: Text(l10n.done),
         ),
       ],
     );
@@ -1004,7 +1057,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -1018,7 +1071,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 c.name,

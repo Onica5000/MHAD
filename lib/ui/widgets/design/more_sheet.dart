@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/app_actions.dart';
 import 'package:mhad/ui/widgets/design/primary_destinations.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/domain/model/directive.dart';
-import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
-import 'package:mhad/services/web_session_cache.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
@@ -55,71 +53,6 @@ class _MoreSheet extends StatelessWidget {
   final bool includePrimaryNav;
   const _MoreSheet({required this.ref, this.includePrimaryNav = false});
 
-  /// Most-recently-edited directive id, or null when none exist yet (fresh web
-  /// session). Mirrors the sidebar's `recentId`.
-  int? _recentId() => ref.read(allDirectivesProvider).maybeWhen(
-        data: (list) {
-          if (list.isEmpty) return null;
-          final sorted = [...list]
-            ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-          return sorted.first.id;
-        },
-        orElse: () => null,
-      );
-
-  /// Open a per-directive route (upload / export). Reuses the directive you're
-  /// working on; creates a Combined one first if none exist — exactly the
-  /// sidebar's behavior.
-  Future<void> _openForDirective(
-      BuildContext context, String Function(int) route) async {
-    Navigator.of(context).pop();
-    final id = _recentId() ??
-        await ref
-            .read(directiveRepositoryProvider)
-            .createDirective(FormType.combined);
-    appRouter.go(route(id));
-  }
-
-  /// Reset everything in this session and return to a blank start. Confirms
-  /// first (destructive). Mirrors the sidebar's `_resetForm`.
-  Future<void> _reset(BuildContext context) async {
-    Navigator.of(context).pop();
-    final ctx = rootNavigatorKey.currentContext;
-    if (ctx == null) return;
-    final confirmed = await showDialog<bool>(
-      context: ctx,
-      builder: (dctx) {
-        final cs = Theme.of(dctx).colorScheme;
-        return AlertDialog(
-          icon: Icon(Icons.warning_amber_rounded, color: cs.error, size: 36),
-          title: Text(context.l10n.moreSheetResetAndStartFresh),
-          content: Text(
-            context.l10n.moreSheetThisPermanentlyErasesEverythingIn,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dctx, false),
-              child: Text(context.l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(dctx, true),
-              style: FilledButton.styleFrom(backgroundColor: cs.error),
-              child: Text(context.l10n.moreSheetResetEverything),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed != true) return;
-
-    await endPublicSession(ref);
-    await WebSessionCache.clear();
-    try {
-      await ref.read(directiveRepositoryProvider).deleteAllDirectives();
-    } catch (_) {}
-    appRouter.go(AppRoutes.home);
-  }
-
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
@@ -138,7 +71,7 @@ class _MoreSheet extends StatelessWidget {
           top: false,
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+            padding: DesignTokens.pagePadding,
             children: [
               Center(
                 child: Container(
@@ -150,19 +83,17 @@ class _MoreSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
-              EditorialHeading(text: context.l10n.navMore, size: 30),
+              const SizedBox(height: 16),
+              EditorialHeading(text: context.l10n.navMore),
               const SizedBox(height: 4),
               Text(
                 context.l10n.moreSheetEverythingElseYouCanDo,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 14,
-                  color: p.textMuted,
-                  height: 1.5,
+                  color: p.textMuted, height: MhadType.leadingParagraph,
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               // Crisis help, pinned first — the mobile crisis affordance now
               // that the floating 988 button is gone. Opens the full
               // crisis-resources sheet (via the root navigator, since this
@@ -176,8 +107,7 @@ class _MoreSheet extends StatelessWidget {
                 autofocus: true,
                 onTap: () {
                   Navigator.of(context).pop();
-                  final ctx = rootNavigatorKey.currentContext;
-                  if (ctx != null) showCrisisSheet(ctx);
+                  openCrisisHelp();
                 },
               ),
               if (includePrimaryNav) ...[
@@ -192,19 +122,25 @@ class _MoreSheet extends StatelessWidget {
                     appRouter.go(route);
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
               ],
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
                 title: context.l10n.navAutofill,
                 detail: context.l10n.moreSheetUploadADocumentPhotoOr,
-                onTap: () => _openForDirective(context, AppRoutes.uploadRoute),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  openForDirective(ref, AppRoutes.uploadRoute);
+                },
               ),
               _MoreRow(
                 icon: Icons.print_outlined,
                 title: context.l10n.navDownloadPrint,
                 detail: context.l10n.moreSheetPreviewAndExportYourDirective,
-                onTap: () => _openForDirective(context, AppRoutes.exportRoute),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  openForDirective(ref, AppRoutes.exportRoute);
+                },
               ),
               _MoreRow(
                 icon: Icons.support_agent_outlined,
@@ -212,16 +148,19 @@ class _MoreSheet extends StatelessWidget {
                 detail: context.l10n.webSidebarPeerSupportAdvocatesReferrals,
                 onTap: () {
                   Navigator.of(context).pop();
-                  appRouter.push(AppRoutes.facilitator);
+                  openGetHelp();
                 },
               ),
               const SizedBox(height: 4),
               _MoreRow(
                 icon: Icons.delete_sweep_outlined,
-                title: context.l10n.moreSheetReset,
+                title: context.l10n.navStartOver,
                 detail: context.l10n.moreSheetEraseThisSessionAndStart,
                 destructive: true,
-                onTap: () => _reset(context),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  confirmAndResetSession(ref);
+                },
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -350,7 +289,9 @@ class _MoreRow extends StatelessWidget {
             ? SemanticColors.errorAccentDark
             : SemanticColors.errorAccentLight)
         : p.primaryLight;
-    final iconFg = destructive ? Colors.white : p.onPrimaryLight;
+    final iconFg = destructive
+        ? Theme.of(context).colorScheme.onError
+        : p.onPrimaryLight;
     final titleColor = destructive
         ? (dark ? SemanticColors.errorTextDark : SemanticColors.errorTextLight)
         : p.text;
@@ -368,7 +309,7 @@ class _MoreRow extends StatelessWidget {
           autofocus: autofocus,
           borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: border),
@@ -392,7 +333,6 @@ class _MoreRow extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: titleColor,
@@ -402,7 +342,6 @@ class _MoreRow extends StatelessWidget {
                       Text(
                         detail,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 12,
                           color: detailColor,
                         ),

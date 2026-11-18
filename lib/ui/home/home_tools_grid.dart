@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,14 +33,25 @@ class ToolsGrid extends ConsumerWidget {
     );
 
     final tiles = <_ToolTile>[
-      _ToolTile(
-        icon: Icons.auto_awesome,
-        label: context.l10n.navAiAssistant,
-        sub: aiReady ? context.l10n.homeToolsGridSuggestsChecks : context.l10n.pipelineSetupAi,
-        onTap: () => context.go(
-          aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
+      // API path hidden: "Ask AI" (copy and paste) needs no setup.
+      if (!appData.ai.apiModeVisible)
+        _ToolTile(
+          icon: Icons.auto_awesome,
+          label: context.l10n.navAskAi,
+          sub: context.l10n.homeToolsAskAiSub,
+          onTap: () => context.go(AppRoutes.assistant),
+        )
+      else
+        _ToolTile(
+          icon: Icons.auto_awesome,
+          label: context.l10n.navAiAssistant,
+          sub: aiReady
+              ? context.l10n.homeToolsGridSuggestsChecks
+              : context.l10n.pipelineSetupAi,
+          onTap: () => context.go(
+            aiReady ? AppRoutes.assistant : AppRoutes.aiSetup,
+          ),
         ),
-      ),
       _ToolTile(
         icon: Icons.menu_book_outlined,
         label: context.l10n.navLearn,
@@ -48,7 +60,7 @@ class ToolsGrid extends ConsumerWidget {
       ),
       _ToolTile(
         icon: Icons.health_and_safety_outlined,
-        label: context.l10n.homeToolsGridMakeItFindable,
+        label: context.l10n.tabPageFindable,
         sub: mostRecentDirective != null
             ? context.l10n.homeToolsGridShareCarry
             : context.l10n.homeToolsGridNoDirectiveYet,
@@ -145,7 +157,6 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.label,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: palette.text,
@@ -154,7 +165,6 @@ class _ToolTileCard extends StatelessWidget {
                 Text(
                   tile.sub,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 12,
                     color: palette.textMuted,
                   ),

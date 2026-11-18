@@ -51,7 +51,7 @@ class WizardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     final backLabel = this.backLabel ?? context.l10n.back;
-    final actionLabel = this.actionLabel ?? context.l10n.wizardHeaderSaveAndExit;
+    final actionLabel = this.actionLabel ?? context.l10n.saveAndExit;
     return Padding(
       padding: padding,
       // Row sits 48dp tall so each side's InkWell renders a ≥48×48 tap target
@@ -80,7 +80,6 @@ class WizardHeader extends StatelessWidget {
                         Text(
                           backLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: p.primary,
@@ -111,7 +110,6 @@ class WizardHeader extends StatelessWidget {
                         child: Text(
                           actionLabel,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: p.textMuted,

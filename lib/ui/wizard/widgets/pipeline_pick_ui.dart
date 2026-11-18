@@ -29,7 +29,9 @@ extension _PipelinePickUi on _PipelineScreenState {
               PageHero(
                 art: AppArt.startUpload,
                 eyebrow: context.l10n.pickSnapOptional,
-                lead: context.l10n.pickIntro,
+                lead: appData.ai.apiModeVisible
+                    ? context.l10n.pickIntro
+                    : context.l10n.autofillHandoffLead,
                 title: Text.rich(
                   TextSpan(children: [
                     TextSpan(text: context.l10n.pickHeadlineLead),
@@ -38,37 +40,27 @@ extension _PipelinePickUi on _PipelineScreenState {
                       style: TextStyle(color: p.primary),
                     ),
                   ]),
-                  style: TextStyle(
-                    fontFamily: kSerifFamily,
-                    fontFamilyFallback: kSerifFallbacks,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 32,
-                    height: 1.05,
-                    letterSpacing: -0.5,
-                    color: p.text,
-                  ),
+                  style: EditorialHeading.styleFor(context, HeadingLevel.page).copyWith(color: p.text),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(Icons.privacy_tip_outlined, size: 15, color: p.textMuted),
-                  const SizedBox(width: 7),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       context.l10n.pickPrivacyNote,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 14,
-                        height: 1.45,
+                        fontSize: 14, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               // Voice path: the read-aloud questionnaire + how-to (printable).
               Align(
                 alignment: Alignment.centerLeft,
@@ -84,12 +76,18 @@ extension _PipelinePickUi on _PipelineScreenState {
                 ),
               ),
               const SizedBox(height: 20),
-              if (!hasKey) ...[
-                _noKeyBanner(p),
-                const SizedBox(height: 16),
-              ],
               if (_error != null) ...[
                 _errorCard(p),
+                const SizedBox(height: 16),
+              ],
+              // Copy-and-paste autofill (the API path is hidden — 2026-11-17):
+              // the document goes into the person's own AI, never through
+              // MHAD; the pasted answer takes the same review path.
+              if (!appData.ai.apiModeVisible)
+                _handoffAutofill(p, wide)
+              else ...[
+              if (!hasKey) ...[
+                _noKeyBanner(p),
                 const SizedBox(height: 16),
               ],
               // Document-gathering affordances. Autofill REQUIRES the AI to
@@ -120,9 +118,9 @@ extension _PipelinePickUi on _PipelineScreenState {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _mobileChooser(p),
-                                const SizedBox(height: 18),
+                                const SizedBox(height: 20),
                                 _mobileTargets(p),
-                                const SizedBox(height: 14),
+                                const SizedBox(height: 16),
                                 _privacyLockLine(p),
                               ],
                             )
@@ -140,22 +138,35 @@ extension _PipelinePickUi on _PipelineScreenState {
               // it persists across navigation into the wizard and back). The AI
               // is only called when the user taps "Read … with AI" in the tray.
               if (kept.isNotEmpty) ...[
-                const SizedBox(height: 22),
+                const SizedBox(height: 24),
                 _pendingDocsTray(p, hasKey, kept),
+              ],
               ],
               // Skip / Continue footer (standalone only; the modal uses its
               // AppBar close). WebSnapFill jsx L253-258.
               if (_standalone) ...[
                 const SizedBox(height: 24),
-                Row(
+                // Side by side when they fit; stacked, Continue on top, on a
+                // narrow phone or with large text (a Row overflowed 71px).
+                OverflowBar(
+                  alignment: MainAxisAlignment.spaceBetween,
+                  overflowAlignment: OverflowBarAlignment.center,
+                  overflowDirection: VerticalDirection.up,
+                  overflowSpacing: 8,
                   children: [
                     TextButton(
                       onPressed: _toWizard,
                       child: Text(context.l10n.pickSkipTypeAll),
                     ),
-                    const Spacer(),
                     FilledButton(
                       onPressed: _toWizard,
+                      // The theme's buttons are full-width (an infinite
+                      // minimum width); beside a Spacer that never laid out,
+                      // so the release build showed no Continue button.
+                      style: FilledButton.styleFrom(
+                        minimumSize:
+                            const Size(0, DesignTokens.buttonHeightMd),
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -172,6 +183,77 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
         );
       },
+    );
+  }
+
+  /// Copy-and-paste autofill: choose document or recording (decides which
+  /// AIs fit), then the shared handoff card; beside it on wide screens, what
+  /// kinds of documents work well (read-only).
+  Widget _handoffAutofill(MhadPalette p, bool wide) {
+    final t = Theme.of(context).textTheme;
+    final left = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(context.l10n.autofillWhatWillYouShare, style: t.titleSmall),
+        const SizedBox(height: 8),
+        SegmentedButton<HandoffAttachment>(
+          segments: [
+            ButtonSegment(
+              value: HandoffAttachment.document,
+              icon: const Icon(Icons.description_outlined),
+              label: Text(context.l10n.autofillShareDocument),
+            ),
+            ButtonSegment(
+              value: HandoffAttachment.audio,
+              icon: const Icon(Icons.mic_none),
+              label: Text(context.l10n.autofillShareRecording),
+            ),
+          ],
+          selected: {_handoffAttachment},
+          onSelectionChanged: (sel) =>
+              setState(() => _handoffAttachment = sel.first),
+          // Two equal halves across the column (no wrapped label).
+          expandedInsets: EdgeInsets.zero,
+        ),
+        const SizedBox(height: 16),
+        AiHandoffPanel(
+          kind: HandoffTaskKind.autofill,
+          attachment: _handoffAttachment,
+          // From the wizard's dialog, come back to the upload page: it holds
+          // the same card and survives a reload (the dialog doesn't).
+          resumeRoute: _standalone
+              ? null
+              : AppRoutes.uploadRoute(widget.directiveId),
+          title: context.l10n.autofillHandoffTitle,
+          subtitle: context.l10n.autofillHandoffSubtitle,
+          buildTask: (_) => HandoffTask(
+            kind: HandoffTaskKind.autofill,
+            // The SAME instructions the API path sends (one definition).
+            instructions: DocumentExtractor.promptFor(_activeFormType),
+            ref: directiveHandoffRef(widget.directiveId),
+            attachment: _handoffAttachment,
+          ),
+          onAnswer: _useHandoffAnswer,
+        ),
+      ],
+    );
+    if (!wide) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          left,
+          const SizedBox(height: 20),
+          _targetsPanel(p, interactive: false),
+        ],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(flex: 3, child: left),
+        const SizedBox(width: 16),
+        Expanded(flex: 2, child: _targetsPanel(p, interactive: false)),
+      ],
     );
   }
 
@@ -199,7 +281,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _pendingDocsTray(MhadPalette p, bool hasKey, List<PickedDocument> kept) {
     final n = kept.length;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -217,8 +299,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   context.l10n.pickFilesKeptInMemory(n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
+                    fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     color: p.textMuted,
                   ),
                 ),
@@ -237,21 +318,19 @@ extension _PipelinePickUi on _PipelineScreenState {
           ),
           const SizedBox(height: 6),
           for (final d in kept) _pendingDocRow(p, d),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.lock_outline, size: 13, color: p.textMuted),
-              const SizedBox(width: 7),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   hasKey
                       ? context.l10n.pickHeldWithKey
                       : context.l10n.pickHeldNoKey,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -277,7 +356,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _pendingDocRow(MhadPalette p, PickedDocument d) {
     final size = _humanSize(d.bytes?.length);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Container(
@@ -291,7 +370,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             alignment: Alignment.center,
             child: Icon(_docIcon(d), size: 16, color: p.textMuted),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +380,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: p.text,
@@ -311,7 +389,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   Text(
                     '${_docKind(d)} · $size',
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       color: p.textMuted,
                     ),
@@ -337,7 +414,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   Widget _noKeyBanner(MhadPalette p) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: p.primaryTint,
         borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
@@ -354,7 +431,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                 child: Text(
                   context.l10n.pickNoKeyTitle,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -367,13 +443,11 @@ extension _PipelinePickUi on _PipelineScreenState {
           Text(
             context.l10n.pickNoKeyBody,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.45,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: _goAiSetup,
             icon: const Icon(Icons.auto_awesome, size: 16),
@@ -426,7 +500,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               width: _dragOver ? 3 : 2,
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 30, 20, 22),
+          padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
         child: Column(
           children: [
             Container(
@@ -438,7 +512,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               ),
               child: Icon(Icons.upload_file, size: 28, color: p.onPrimary),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Text(
               // Phones can't drag-and-drop files; desktop / PC web can.
               deviceHasCamera
@@ -446,7 +520,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   : context.l10n.pickDropTitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -461,12 +534,11 @@ extension _PipelinePickUi on _PipelineScreenState {
                   : context.l10n.pickFormats,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 color: p.textMuted,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Wrap(
               spacing: 10,
               runSpacing: 8,
@@ -485,9 +557,9 @@ extension _PipelinePickUi on _PipelineScreenState {
                   ),
               ],
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.primaryLight),
@@ -501,9 +573,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     child: Text(
                       context.l10n.pickSentToProvider,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.text,
                       ),
                     ),
@@ -518,7 +588,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   );
   }
 
-  Widget _targetsPanel(MhadPalette p) {
+  Widget _targetsPanel(MhadPalette p, {bool interactive = true}) {
     final l10n = context.l10n;
     final targets = <(IconData, String, String)>[
       (Icons.badge_outlined, l10n.pickTargetId, l10n.pickTargetIdSub),
@@ -530,7 +600,7 @@ extension _PipelinePickUi on _PipelineScreenState {
     ];
     Widget tile((IconData, String, String) t) => Expanded(
           child: InkWell(
-            onTap: _browseFiles,
+            onTap: interactive ? _browseFiles : null,
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
               padding: const EdgeInsets.all(12),
@@ -556,7 +626,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   Text(
                     t.$2,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: p.text,
@@ -566,9 +635,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                   Text(
                     t.$3,
                     style: TextStyle(
-                      fontFamily: kSansFamily,
-                      fontSize: 12,
-                      height: 1.3,
+                      fontSize: 12, height: MhadType.leadingUi,
                       color: p.textMuted,
                     ),
                   ),
@@ -580,8 +647,11 @@ extension _PipelinePickUi on _PipelineScreenState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionLabel(
-            deviceHasCamera ? l10n.pickWhatYouCanAdd : l10n.pickWhatYouCanDrop),
+        SectionLabel(!interactive
+            ? l10n.autofillWhatWorksWell
+            : deviceHasCamera
+                ? l10n.pickWhatYouCanAdd
+                : l10n.pickWhatYouCanDrop),
         const SizedBox(height: 8),
         IntrinsicHeight(
           child: Row(
@@ -598,7 +668,7 @@ extension _PipelinePickUi on _PipelineScreenState {
         ),
         // Cross-device nudge — desktop / PC web only (no camera here). On a
         // phone this is redundant: the "Take a photo" button is right above.
-        if (!deviceHasCamera) ...[
+        if (interactive && !deviceHasCamera) ...[
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),
@@ -611,7 +681,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.smartphone_outlined, size: 18, color: p.primary),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -619,7 +689,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                       Text(
                         l10n.pickOnAPhone,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: p.text,
@@ -629,9 +698,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                       Text(
                         l10n.pickOnAPhoneBody,
                         style: TextStyle(
-                          fontFamily: kSansFamily,
-                          fontSize: 12,
-                          height: 1.35,
+                          fontSize: 12, height: MhadType.leadingUi,
                           color: p.textMuted,
                         ),
                       ),
@@ -704,7 +771,7 @@ extension _PipelinePickUi on _PipelineScreenState {
       onTap: onTap,
       borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(DesignTokens.buttonRadius),
@@ -723,11 +790,10 @@ extension _PipelinePickUi on _PipelineScreenState {
               ),
               child: Icon(icon, size: 18, color: iconFg ?? fg),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               title,
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: fg,
@@ -737,9 +803,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             Text(
               subtitle,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 12,
-                height: 1.35,
+                fontSize: 12, height: MhadType.leadingUi,
                 color: subtitleColor,
               ),
             ),
@@ -773,7 +837,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             onTap: _browseFiles,
             borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: p.card,
                 border: Border.all(color: p.border),
@@ -790,7 +854,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                     ),
                     child: Icon(t.$1, size: 14, color: p.primary),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -802,7 +866,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                                 t.$2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontFamily: kSansFamily,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: p.text,
@@ -813,7 +876,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                               const SizedBox(width: 6),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 1),
+                                    horizontal: 4, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: p.primaryLight,
                                   borderRadius: BorderRadius.circular(DesignTokens.radiusXs),
@@ -822,8 +885,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                                   l10n.pickFastest,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
+                                    fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
                                     color: p.onPrimaryLight,
                                   ),
                                 ),
@@ -835,7 +897,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                         Text(
                           t.$3,
                           style: TextStyle(
-                            fontFamily: kSansFamily,
                             fontSize: 12,
                             color: p.textMuted,
                           ),
@@ -858,7 +919,7 @@ extension _PipelinePickUi on _PipelineScreenState {
   // (WebSnapFillMobile jsx L621-631).
   Widget _privacyLockLine(MhadPalette p) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
         color: p.surface,
         border: Border.all(color: p.border),
@@ -873,9 +934,7 @@ extension _PipelinePickUi on _PipelineScreenState {
             child: Text(
               context.l10n.pickSentToProviderShort,
               style: TextStyle(
-                fontFamily: kSansFamily,
-                fontSize: 12,
-                height: 1.4,
+                fontSize: 12, height: MhadType.leadingParagraph,
                 color: p.textMuted,
               ),
             ),
@@ -926,7 +985,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   Text(
                     context.l10n.pickReadingDocs(_sourceDocs.length),
                     style: TextStyle(
-                      fontFamily: kSansFamily,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: p.textMuted,
@@ -953,7 +1011,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontFamily: kSansFamily,
                                 fontSize: 14,
                                 color: p.text,
                               ),
@@ -981,7 +1038,7 @@ extension _PipelinePickUi on _PipelineScreenState {
     final name = doc.path.split(RegExp(r'[\\/]')).last;
     final n = _sourceDocs.length;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.border),
@@ -1024,7 +1081,6 @@ extension _PipelinePickUi on _PipelineScreenState {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: p.text,
@@ -1034,9 +1090,7 @@ extension _PipelinePickUi on _PipelineScreenState {
                 Text(
                   context.l10n.pickReadByAi(n),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
-                    fontSize: 12,
-                    height: 1.4,
+                    fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -1060,9 +1114,7 @@ extension _PipelinePickUi on _PipelineScreenState {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.textMuted,
                 ),
               ),

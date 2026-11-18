@@ -49,7 +49,7 @@ class ExampleTextButton extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               ...examples.asMap().entries.map((entry) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),

@@ -1,4 +1,7 @@
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -23,7 +26,7 @@ class AudioGuideScreen extends StatelessWidget {
       final bytes = await buildAudioQuestionnairePdf();
       await Printing.layoutPdf(
         onLayout: (_) async => bytes,
-        name: 'MHAD-voice-questionnaire.pdf',
+        name: mhadFileName([kFileNamePrefix, 'voice-questionnaire']),
       );
     } catch (e) {
       debugPrint('Audio questionnaire print failed: $e');
@@ -39,19 +42,20 @@ class AudioGuideScreen extends StatelessWidget {
     final p = Theme.of(context).mhadPalette;
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
-      // Slim app bar (back only): the photo header below carries the
-      // title once, large, instead of twice.
-      appBar: AppBar(),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const BackLink(),
+          Expanded(
+            child: ListView(
+        padding: DesignTokens.pagePadding,
         children: [
           PageHero(
             art: AppArt.flowAudio,
             title: EditorialHeading(
               text: context.l10n.audioGuideRecordYourWishesByVoice,
-              size: 32,
             ),
-            lead: context.l10n.audioGuideDescribeYourWishesOutLoud,
+            lead: (appData.ai.apiModeVisible ? context.l10n.audioGuideDescribeYourWishesOutLoud : context.l10n.audioGuideDescribeYourWishesOutLoudHandoff),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -66,7 +70,6 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             context.l10n.audioGuidePrintItToReadAloud,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 12,
               color: p.textMuted,
             ),
@@ -79,14 +82,14 @@ class AudioGuideScreen extends StatelessWidget {
           _tip(p, Icons.high_quality_outlined,
               context.l10n.audioGuideTipQualityDoesnTMatterAny),
           _tip(p, Icons.timer_outlined,
-              context.l10n.audioGuideTipKeepEachClipShortUnder),
+              (appData.ai.apiModeVisible ? context.l10n.audioGuideTipKeepEachClipShortUnder : context.l10n.audioGuideTipKeepEachClipShortUnderHandoff)),
           _tip(p, Icons.spellcheck_outlined,
               context.l10n.audioGuideTipSayMedicationAndDoctorNames),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           InfoBanner(
             icon: Icons.privacy_tip_outlined,
             variant: InfoBannerVariant.warning,
-            text: context.l10n.audioGuideToTranscribeYourRecordingIncluding,
+            text: (appData.ai.apiModeVisible ? context.l10n.audioGuideToTranscribeYourRecordingIncluding : context.l10n.audioGuideToTranscribeYourRecordingIncludingHandoff),
           ),
           const SizedBox(height: 24),
 
@@ -110,9 +113,7 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             audioQIntro,
             style: TextStyle(
-              fontFamily: kSansFamily,
-              fontSize: 14,
-              height: 1.5,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
@@ -125,18 +126,16 @@ class AudioGuideScreen extends StatelessWidget {
           Text(
             context.l10n.audioGuideSetTheseInTheApp,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
             ),
           ),
           const SizedBox(height: 6),
           for (final item in audioQCantDo) _bullet(p, item, muted: true),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Text(
             context.l10n.audioGuideWorthSayingOutLoudAutofill,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               color: p.textMuted,
             ),
@@ -145,16 +144,17 @@ class AudioGuideScreen extends StatelessWidget {
           for (final item in audioQNowCaptured) _bullet(p, item, muted: true),
           const SizedBox(height: 6),
           _bullet(p, audioQFormTypeNote, muted: true),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           Text(
             audioQClosing,
             style: TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
-              fontStyle: FontStyle.italic,
-              height: 1.45,
+              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
               color: p.text,
             ),
+          ),
+        ],
+      ),
           ),
         ],
       ),
@@ -162,19 +162,17 @@ class AudioGuideScreen extends StatelessWidget {
   }
 
   Widget _tip(MhadPalette p, IconData icon, String text) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, size: 17, color: p.primary),
-            const SizedBox(width: 9),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: p.text,
                 ),
               ),
@@ -184,22 +182,19 @@ class AudioGuideScreen extends StatelessWidget {
       );
 
   Widget _bullet(MhadPalette p, String text, {bool muted = false}) => Padding(
-        padding: const EdgeInsets.only(bottom: 5),
+        padding: const EdgeInsets.only(bottom: 4),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('•  ',
                 style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
                     color: muted ? p.textMuted : p.text)),
             Expanded(
               child: Text(
                 text,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
-                  fontSize: 14,
-                  height: 1.45,
+                  fontSize: 14, height: MhadType.leadingParagraph,
                   color: muted ? p.textMuted : p.text,
                 ),
               ),
@@ -210,7 +205,7 @@ class AudioGuideScreen extends StatelessWidget {
 
   Widget _section(BuildContext context, MhadPalette p, AudioQSection s) => DesignCard(
         margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         radius: DesignTokens.inputRadius,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +213,6 @@ class AudioGuideScreen extends StatelessWidget {
             Text(
               '${s.number}.  ${s.title}',
               style: TextStyle(
-                fontFamily: kSansFamily,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: p.text,
@@ -229,7 +223,6 @@ class AudioGuideScreen extends StatelessWidget {
               Text(
                 s.appliesWhen!,
                 style: TextStyle(
-                  fontFamily: kSansFamily,
                   fontSize: 12,
                   fontStyle: FontStyle.italic,
                   color: p.textMuted,
@@ -242,7 +235,7 @@ class AudioGuideScreen extends StatelessWidget {
               const SizedBox(height: 6),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: p.surface,
                   borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
@@ -250,10 +243,8 @@ class AudioGuideScreen extends StatelessWidget {
                 child: Text(
                   context.l10n.audioGuideExample(s.example!),
                   style: TextStyle(
-                    fontFamily: kSansFamily,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    height: 1.45,
+                    fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
                     color: p.textMuted,
                   ),
                 ),
@@ -270,9 +261,7 @@ class AudioGuideScreen extends StatelessWidget {
                     child: Text(
                       s.note!,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),

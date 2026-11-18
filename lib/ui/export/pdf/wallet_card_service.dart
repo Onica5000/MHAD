@@ -1,3 +1,4 @@
+import 'package:mhad/utils/file_names.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/ui/export/pdf/wallet_card_generator.dart';
 import 'package:mhad/utils/background_runner.dart';
@@ -18,7 +19,7 @@ class WalletCardService {
       () => generator.generate(directive: directive, agents: agents),
     );
     final fname =
-        'PA_MHAD_WalletCard_${directive.fullName.replaceAll(' ', '_')}.pdf';
+        mhadFileName([kFileNamePrefix, 'WalletCard', directive.fullName]);
     final opened = await openPdfInViewer(bytes, filename: fname);
     if (!opened) {
       await Printing.layoutPdf(onLayout: (_) => bytes, name: fname);

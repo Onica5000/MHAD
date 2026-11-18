@@ -1,9 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
-/// Small uppercase mono "● LABEL" status/notice pill. Previously copy-pasted
-/// (status pill in past-detail, "PERMANENT ACTION" pill in revocation).
-class MonoPill extends StatelessWidget {
+/// Small uppercase "● LABEL" status pill (a directive's status, "PERMANENT
+/// ACTION" on Revoke). It HUGS its text wherever it is placed: in a ListView
+/// the old pill was stretched across the whole column (2026-11 overhaul).
+class StatusPill extends StatelessWidget {
   final String label;
   final Color foreground;
   final Color background;
@@ -11,7 +12,7 @@ class MonoPill extends StatelessWidget {
   /// Whether to prefix a "● " dot (the existing pills do).
   final bool dot;
 
-  const MonoPill({
+  const StatusPill({
     required this.label,
     required this.foreground,
     required this.background,
@@ -21,8 +22,11 @@ class MonoPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      widthFactor: 1,
+      child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(DesignTokens.chipRadius),
@@ -30,11 +34,11 @@ class MonoPill extends StatelessWidget {
       child: Text(
         '${dot ? '● ' : ''}${label.toUpperCase()}',
         style: TextStyle(
-          fontSize: 12,
-          letterSpacing: 1,
+          fontSize: 12, letterSpacing: MhadType.trackingEyebrow,
           fontWeight: FontWeight.w700,
           color: foreground,
         ),
+      ),
       ),
     );
   }

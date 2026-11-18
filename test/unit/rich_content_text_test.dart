@@ -13,6 +13,10 @@ void main() {
       expect(stripInlineMarkdown('• one\n• two\n1. three'), 'one two three');
     });
 
+    test('dash bullets too (the privacy policy uses them)', () {
+      expect(stripInlineMarkdown('  - one\n  - two'), 'one two');
+    });
+
     test('leaves a lone asterisk (e.g. a footnote star) alone', () {
       expect(stripInlineMarkdown('Required * field'), 'Required * field');
     });
@@ -58,5 +62,25 @@ void main() {
     expect(find.textContaining('**'), findsNothing);
     expect(find.textContaining('Bold lead.', findRichText: true), findsOneWidget);
     expect(find.textContaining('item one', findRichText: true), findsOneWidget);
+  });
+
+  testWidgets('dash bullets render as • with the text beside them',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: RichContentText('Your rights:\n  - Right to access\n  - Right '
+            'to erasure'),
+      ),
+    ));
+    expect(find.text('•'), findsNWidgets(2));
+    expect(find.textContaining('- Right'), findsNothing);
+    expect(find.textContaining('Right to access', findRichText: true),
+        findsOneWidget);
+  });
+
+  test('readingMinutes: words / 200, rounded up, at least 1', () {
+    expect(readingMinutes('**Short.**'), 1);
+    expect(readingMinutes(List.filled(401, 'word').join(' ')), 3);
+    expect(readingMinutes(List.filled(400, 'word').join(' ')), 2);
   });
 }

@@ -1,3 +1,4 @@
+import 'package:mhad/ui/ai/handoff_return_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -138,7 +139,12 @@ class ResponsiveShell extends StatelessWidget {
     // rebuilds it mid-notification ("markNeedsBuild during build"); only the
     // nav strip listens and rebuilds. Hidden on pre-app gate screens.
     if (!wide) {
-      return Column(
+      // The strip around the floating nav (and the "Back to paste" banner)
+      // takes the page background — unpainted, it showed the white canvas:
+      // a bright band under a dark app.
+      return ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Column(
         children: [
           Expanded(child: _pageSemantics(child)),
           _RouteListener(
@@ -158,13 +164,24 @@ class ResponsiveShell extends StatelessWidget {
               return _titled(
                 context,
                 route,
-                hideNav
-                    ? const SizedBox.shrink()
-                    : MhadBottomNav(activeRoute: route),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // "Back to paste your AI answer" (copy-and-paste
+                    // handoff) sits above the nav; never on the gates.
+                    if (!keyboardOpen && !_routeHidesSidebar(route))
+                      HandoffReturnBanner(current: currentAppLocation()),
+                    hideNav
+                        ? const SizedBox.shrink()
+                        : MhadBottomNav(activeRoute: route),
+                  ],
+                ),
               );
             },
           ),
         ],
+        ),
       );
     }
 
@@ -265,6 +282,16 @@ class ResponsiveShell extends StatelessWidget {
             // width (~760px) and float centered with empty gutters on a wide
             // monitor — the bug we keep chasing. A direct child forces it to
             // fill the whole content area, flush from sidebar to window edge.
+            Expanded(
+              // "Back to paste your AI answer" (copy-and-paste handoff) sits
+              // above the page; `stretch` keeps the page's width TIGHT.
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FocusTraversalOrder(
+                    order: const NumericFocusOrder(0.5),
+                    child: HandoffReturnBanner(current: currentAppLocation()),
+                  ),
             if (fullBleed)
               Expanded(
                 child: FocusTraversalOrder(
@@ -315,6 +342,9 @@ class ResponsiveShell extends StatelessWidget {
                   },
                 ),
               ),
+                ],
+              ),
+            ),
           ],
             ),
           ),

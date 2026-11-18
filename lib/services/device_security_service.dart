@@ -71,7 +71,7 @@ class DeviceSecurityService {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(ctx.l10n.deviceSecurityIUnderstand),
+            child: Text(ctx.l10n.ulyssesClauseIUnderstand),
           ),
         ],
       ),

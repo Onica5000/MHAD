@@ -191,7 +191,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     return Form(
       key: _formKey,
       child: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: DesignTokens.pagePadding,
         children: [
           WizardHelpButton(
             // The meaning of each category (Never give / Limitations /
@@ -222,8 +222,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     child: Text.rich(
                       TextSpan(
                         style: TextStyle(
-                          fontSize: 14,
-                          height: 1.45,
+                          fontSize: 14, height: MhadType.leadingParagraph,
                           color: Theme.of(context)
                               .colorScheme
                               .onSurfaceVariant,
@@ -270,6 +269,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           ],
           _MedTable(
             title: l10n.medsStepCurrentTitle,
+            icon: Icons.medication_outlined,
             subtitle: l10n.medsStepCurrentSubtitle,
             rows: _current,
             accentColor: Theme.of(context).colorScheme.secondary,
@@ -285,6 +285,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           const SizedBox(height: 16),
           _MedTable(
             title: l10n.medsStepNeverTitle,
+            icon: Icons.block,
             subtitle: l10n.medsStepNeverSubtitle,
             rows: _exceptions,
             accentColor: neverColor,
@@ -299,6 +300,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           const SizedBox(height: 16),
           _MedTable(
             title: l10n.medsStepLimitTitle,
+            icon: Icons.tune,
             subtitle: l10n.medsStepLimitSubtitle,
             rows: _limitations,
             accentColor: limitColor,
@@ -313,6 +315,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
           const SizedBox(height: 16),
           _MedTable(
             title: l10n.medsStepPreferredTitle,
+            icon: Icons.check_circle_outline,
             subtitle: l10n.medsStepPreferredSubtitle,
             rows: _preferred,
             accentColor: preferColor,
@@ -366,18 +369,15 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                     Text(
                       context.l10n.medsStepSideEffectsTitle,
                       style: const TextStyle(
-                        fontFamily: kSansFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      context.l10n.medsStepSideEffectsBody,
+                      (appData.ai.apiModeVisible ? context.l10n.medsStepSideEffectsBody : context.l10n.medsStepSideEffectsBodyHandoff),
                       style: TextStyle(
-                        fontFamily: kSansFamily,
-                        fontSize: 12,
-                        height: 1.4,
+                        fontSize: 12, height: MhadType.leadingParagraph,
                         color: p.textMuted,
                       ),
                     ),
@@ -419,6 +419,7 @@ class _MedTable extends StatelessWidget {
   final void Function(String medName)? onMedlineInfo;
   final void Function(String medName)? onFdaInfo;
   final Color? accentColor;
+  final IconData? icon;
   // Show a dosage field per row. Only the "currently taking" section sets this;
   // the preference sections (never/limitations/preferred) don't capture dosage.
   final bool showDosage;
@@ -432,28 +433,47 @@ class _MedTable extends StatelessWidget {
     this.onMedlineInfo,
     this.onFdaInfo,
     this.accentColor,
+    this.icon,
     this.showDosage = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final p = Theme.of(context).mhadPalette;
+    final accent = accentColor ?? p.primary;
+    // Calm card (2026-11 overhaul): a neutral border with the category's
+    // colour as a slim left stripe + icon. Four full coloured borders and
+    // coloured titles used to compete on one screen.
     return Card(
       color: cs.surfaceContainerLow,
-      shape: accentColor != null
-          ? RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
-              side: BorderSide(color: accentColor!, width: 2),
-            )
-          : null,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        side: BorderSide(color: p.border),
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(left: BorderSide(color: accent, width: 4)),
+        ),
+        child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700, color: accentColor)),
+            Row(
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 20, color: accent),
+                  const SizedBox(width: 8),
+                ],
+                Expanded(
+                  child: Text(title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700, color: p.text)),
+                ),
+              ],
+            ),
             Text(subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: cs.onSurfaceVariant)),
@@ -582,6 +602,7 @@ class _MedTable extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

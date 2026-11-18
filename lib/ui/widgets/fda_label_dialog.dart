@@ -16,7 +16,6 @@ Future<void> showFdaLabelDialog(
   BuildContext context, {
   required String medName,
 }) {
-  const kSans = kSansFamily;
   // One combined lookup so the dialog has a single loading state.
   final future = () async {
     final results = await Future.wait([
@@ -38,7 +37,6 @@ Future<void> showFdaLabelDialog(
           Text(
             heading,
             style: const TextStyle(
-              fontFamily: kSans,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
@@ -47,20 +45,18 @@ Future<void> showFdaLabelDialog(
           Text(
             body,
             style: TextStyle(
-              fontFamily: kSans,
-              fontSize: 14,
-              height: 1.45,
+              fontSize: 14, height: MhadType.leadingParagraph,
               color: p.text,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
         ],
       );
 
       return AlertDialog(
         title: Text(
           context.l10n.fdaLabelDialogFdaLabel(medName),
-          style: const TextStyle(fontFamily: kSans),
+          style: const TextStyle(),
         ),
         content: SizedBox(
           width: 460,
@@ -80,7 +76,6 @@ Future<void> showFdaLabelDialog(
                 return Text(
                   context.l10n.fdaLabelDialogNoFdaLabelInformationIs,
                   style: TextStyle(
-                    fontFamily: kSans,
                     fontSize: 14,
                     color: p.textMuted,
                   ),
@@ -104,7 +99,6 @@ Future<void> showFdaLabelDialog(
                     Text(
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
-                        fontFamily: kSans,
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
@@ -153,9 +147,7 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
     TextStyle body([Color? c]) => TextStyle(
-      fontFamily: kSansFamily,
-      fontSize: 14,
-      height: 1.45,
+      fontSize: 14, height: MhadType.leadingParagraph,
       color: c ?? p.text,
     );
 
@@ -167,7 +159,6 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
           Text(
             heading,
             style: const TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
@@ -192,7 +183,6 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
           title: Text(
             context.l10n.fdaLabelDialogFdaLabel(widget.medName),
             style: const TextStyle(
-              fontFamily: kSansFamily,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -242,7 +232,6 @@ class _FdaLabelCardState extends State<FdaLabelCard> {
                     Text(
                       context.l10n.fdaLabelDialogOfficialUSFdaDrug,
                       style: TextStyle(
-                        fontFamily: kSansFamily,
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: p.textMuted,
