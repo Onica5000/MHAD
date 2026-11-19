@@ -227,8 +227,25 @@ class MhadApp extends ConsumerWidget {
         (_, hasData) => setUnsavedGuard(hasData),
       );
       // Keeps the progress autosave running (without rebuilding the app on
-      // every save).
-      ref.listen(progressAutosaveProvider, (_, _) {});
+      // every save), and says so when it can't keep the work: another tab
+      // took it over, or the browser refused to store the locked copy.
+      ref.listen(progressAutosaveProvider, (prev, next) {
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx == null) return;
+        final String? notice;
+        if (next.openElsewhere && !(prev?.openElsewhere ?? false)) {
+          notice = ctx.l10n.progressOpenElsewhere;
+        } else if (next.refused && !(prev?.refused ?? false)) {
+          notice = ctx.l10n.progressRefused;
+        } else {
+          notice = null;
+        }
+        if (notice == null) return;
+        ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(SnackBar(
+          content: Text(notice),
+          duration: const Duration(seconds: 10),
+        ));
+      });
     }
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.mainAppTitle,
