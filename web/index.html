@@ -35,7 +35,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PA MHAD">
   <meta property="og:title" content="PA Mental Health Advance Directive">
-  <meta property="og:description" content="Plan how you want to be treated in a mental health crisis, in plain language. Free, anonymous, nothing is saved.">
+  <meta property="og:description" content="Plan how you want to be treated in a mental health crisis, in plain language. Free and anonymous; nothing is saved unless you choose.">
   <meta property="og:url" content="https://onica5000.github.io/MHAD/">
   <meta property="og:image" content="https://onica5000.github.io/MHAD/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -177,6 +177,13 @@
     For more details:
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
+  <!--
+    pdf.js for the Export page's PDF preview (printing package), served with
+    the app instead of from unpkg.com, so no code from another site runs in
+    the app. Pinned to the version printing 5.14.3 expects: pdfjs-dist
+    3.2.146 (Apache-2.0, web/pdfjs/LICENSE). Bump both together.
+  -->
+  <script>window.dartPdfJsBaseUrl = 'pdfjs/';</script>
   <script src="flutter_bootstrap.js" async></script>
   <!-- Accessible privacy/legal links before app loads (GDPR/CCPA compliance) -->
   <noscript>

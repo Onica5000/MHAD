@@ -230,6 +230,7 @@ Future<void> endPublicSession(WidgetRef ref) async {
   // session shows the privacy notice again.
   ref.read(pendingHandoffProvider.notifier).clear();
   ref.read(handoffPrivacyAcknowledgedProvider.notifier).state = false;
+  ref.read(preferredAiServiceProvider.notifier).forget();
   await DraftRecoveryService.clearDraft();
   await PublicSessionCache.clearAll();
 }

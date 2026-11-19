@@ -13,6 +13,7 @@ import 'package:mhad/ui/widgets/design/status_views.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
+import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/constants.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/data/database/app_database.dart';
@@ -223,8 +224,9 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
   /// a gap. Identity values (names, addresses, DOB, phone numbers, doctor/agent
   /// names, free-text content) are deliberately reduced to presence flags
   /// ("provided"/"empty"/"yes"/"no") or non-identifying choices (consent
-  /// decisions, facility-preference type); the assistant's sanitizer strips any
-  /// residual PII before it leaves the device. Best-effort.
+  /// decisions, facility-preference type); the app's PII filter
+  /// ([PiiStripper]) then strips any residual PII — for the copy-and-paste
+  /// handoff as well as the API path. Best-effort.
   Future<String> _buildSummary() async {
     final repo = ref.read(directiveRepositoryProvider);
     final b = StringBuffer();
@@ -363,7 +365,10 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     } catch (_) {
       // Best-effort: a partial summary is still reviewable.
     }
-    return b.toString();
+    // The app's PII filter runs here, for the copy-and-paste handoff as well
+    // as the API path: the "when it takes effect" condition is the person's
+    // own words, and names, phone numbers and the like are taken out of it.
+    return PiiStripper.strip(b.toString());
   }
 
   String _reviewPrompt(String summary) => '''You are giving a friendly, careful second look at a person's Pennsylvania Mental Health Advance Directive (PA Act 194 of 2004) — a final double-check before they sign. Below is a summary of what they entered (identifying details removed).

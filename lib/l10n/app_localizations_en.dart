@@ -3849,15 +3849,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
+      'If you are in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) may give you rights over your data. Here is how to use them in this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights:\n  - Right to access: Your data stays in your browser — you can see all of it in the app at any time.\n  - Right to erasure: Use “Start over” to erase everything in this browser, including a locked copy kept on this device; “Delete saved progress” erases just the locked copy.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: When you start, choose to keep nothing outside the browser tab.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'US state consumer health data laws (CA, WA, CT, NV, NY)';
+      'US state health-privacy laws (CA, WA, CT, NV)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'This app may be subject to state consumer-health-data privacy laws such as Washington’s My Health My Data Act (MHMDA), Connecticut’s CTDPA health provisions and Nevada’s SB 370. California’s CCPA/CPRA treats health information as “sensitive personal information”.\n\nMental-health-directive content is health data under each of these laws (“consumer health data” in Washington, Connecticut and Nevada; “sensitive personal information” in California). Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) Besides the lookups you start (a medication or condition name, a doctor’s name, or a ZIP code — see “No third-party tracking”), the only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you opt in to AI features each session. (4) We use no analytics, advertising or tracking code, no tracking pixels and no cookies. (5) You can erase everything in this browser at any time with “Start over”, which also erases a locked copy kept on this device.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below.';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
@@ -3865,7 +3865,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyToHelpYouFillIn =>
-      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
+      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nEach request contains only what you typed into that search, or the code it found — nothing else from your directive.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
 
   @override
   String get privacyPolicyPdfExportSharing => 'PDF export & sharing';
@@ -3886,7 +3886,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppDoesNotInclude =>
-      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.';
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only outside connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - Google’s servers (www.gstatic.com, fonts.gstatic.com) — each time the app loads, for its display engine and some fonts. Nothing you type is sent, but Google sees your IP address, as with any website that uses its fonts.\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n  - Zippopotam.us and the U.S. FCC’s Area API — only when you tap to fill city, county and state from a ZIP code (sends the ZIP code, then that area’s map coordinates)\n  - Your browser’s speech recognition — only if you use voice dictation; browsers such as Chrome and Edge send the recording to their maker’s servers to turn it into text.\n\nEach lookup receives only what you typed into that search, or the code or ZIP code being looked up — never your directive. No data is sent to the app developer at any time.';
 
   @override
   String get privacyPolicyHipaaCompliance => 'HIPAA & compliance';
@@ -3900,7 +3900,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
-      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.';
+      'In accordance with the FTC Health Breach Notification Rule, if a security breach exposes your health information, we will give notice within 60 calendar days of discovering it. Because the app collects no contact details, that notice is an in-app notice plus a notice posted on the hosted privacy policy page for at least 90 days.\n\nThis app keeps your directive in your browser and has no server-side database, so a breach would most likely involve the code the app is served from or one of the outside services named in this policy. If one of them notifies us of a breach affecting data sent through the app, we will pass that notification along in the same way.';
 
   @override
   String get privacyPolicyContact => 'Contact';
@@ -4356,7 +4356,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirth =>
-      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included, and an automatic filter removes names, phone numbers, email addresses and similar details from anything you wrote in your own words (it can miss some). Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofill =>
@@ -4368,11 +4368,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetSeparatelyToHelpYouFill =>
-      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA. ';
+      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA — and can fill in your city, county and state from a ZIP code (Zippopotam.us and the FCC). ';
 
   @override
   String get legalSheetNeverYourIdentityThePeople =>
-      ' — never your identity, the people you name, or your saved directive. They are reference information, not medical advice.';
+      ' — never your name, the people you name, or your saved directive. They are reference information, not medical advice.';
 
   @override
   String get legalSheetAiSuggestionsAreNotLegal =>
@@ -4538,7 +4538,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
-      'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+      'This permanently erases your work in this browser — all directives, a locked copy kept on this device, your AI key, and chat history — and returns you to a blank start. Your settings (such as theme and text size) stay.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
   String get moreSheetResetEverything => 'Erase and start over';
@@ -4801,7 +4801,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
-      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outbound flows are the opt-in AI features (your chosen AI provider) and NLM medical-reference lookups, both with PII stripping at a single chokepoint.';
+      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outside connections are the lookups you start (medical terms to U.S. government databases, a ZIP code to fill in your address) and loading the app’s display engine and fonts from Google’s servers; the privacy policy lists them all.';
 
   @override
   String get makeItFindableMakeItFindableInA => 'Make it findable in a crisis.';
@@ -5320,7 +5320,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
-    return 'The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).';
+    return 'Under the FTC Health Breach Notification Rule, notice goes by mail or email — or, when there are no contact details, as here (the app collects none), by a substitute notice posted for 90 days. We provide:\n\n  - In-app: a breach notice shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (where the substitute notice is posted for at least 90 days).';
   }
 
   @override
@@ -6078,7 +6078,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetBoldTheseLookupsSendOnlyThe =>
-      'These lookups send only the medical term, code, or provider name being searched';
+      'These lookups send only the term, code, name or ZIP code being searched';
 
   @override
   String get legalSheetYourRightsUnderAct194 => 'Your rights under Act 194';
@@ -7188,7 +7188,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiCheckHandoffSubtitle =>
-      'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.';
+      'Optional. Your AI reviews a summary of your directive (names and contact details taken out) for gaps and anything to double-check. The built-in check above always runs.';
 
   @override
   String get smartFillHandoffTitle => 'AI suggestions for your preferences';
@@ -7220,11 +7220,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedInHandoff =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.';
+      'If you are in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) may give you rights over your data. Here is how to use them in this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights:\n  - Right to access: Your data stays in your browser — you can see all of it in the app at any time.\n  - Right to erasure: Use “Start over” to erase everything in this browser, including a locked copy kept on this device; “Delete saved progress” erases just the locked copy.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: When you start, choose to keep nothing outside the browser tab.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.';
 
   @override
   String get privacyPolicyThisAppMayBeSubjectHandoff =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'This app may be subject to state consumer-health-data privacy laws such as Washington’s My Health My Data Act (MHMDA), Connecticut’s CTDPA health provisions and Nevada’s SB 370. California’s CCPA/CPRA treats health information as “sensitive personal information”.\n\nMental-health-directive content is health data under each of these laws (“consumer health data” in Washington, Connecticut and Nevada; “sensitive personal information” in California). Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your directive to a third party. The only things it sends are the lookups you start — a medication or condition name, a doctor’s name, or a ZIP code — to the services listed under “No third-party tracking”. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no analytics, advertising or tracking code, no tracking pixels and no cookies. (5) You can erase everything in this browser at any time with “Start over”, which also erases a locked copy kept on this device.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers your directive to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below.';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
@@ -7232,7 +7232,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppDoesNotIncludeHandoff =>
-      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.';
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only outside connections this app makes are:\n  - Google’s servers (www.gstatic.com, fonts.gstatic.com) — each time the app loads, for its display engine and some fonts. Nothing you type is sent, but Google sees your IP address, as with any website that uses its fonts.\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n  - Zippopotam.us and the U.S. FCC’s Area API — only when you tap to fill city, county and state from a ZIP code (sends the ZIP code, then that area’s map coordinates)\n  - Your browser’s speech recognition — only if you use voice dictation; browsers such as Chrome and Edge send the recording to their maker’s servers to turn it into text.\n\nEach lookup receives only what you typed into that search, or the code or ZIP code being looked up — never your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.';
 
   @override
   String get legalSheetIfYouUseTheOptionalHandoff =>
@@ -7244,7 +7244,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirthHandoff =>
-      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)';
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included, and an automatic filter removes names, phone numbers, email addresses and similar details from anything you wrote in your own words (it can miss some, so look over what you paste). Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofillHandoff =>
@@ -7263,7 +7263,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingInHandoff =>
-      'This permanently erases everything in this session — all directives and any AI answer you’re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+      'This permanently erases your work in this browser — all directives, a locked copy kept on this device, and any AI answer you’re waiting for — and returns you to a blank start. Your settings (such as theme and text size) stay.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
   String get audioGuideDescribeYourWishesOutLoudHandoff =>

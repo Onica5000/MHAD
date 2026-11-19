@@ -200,18 +200,41 @@ class DirectiveRepository {
         ),
       );
 
-  Future<void> deleteDirective(int id) =>
-      (_db.delete(_db.directives)..where((t) => t.id.equals(id))).go();
+  /// Every table whose rows belong to one directive. The schema declares
+  /// `ON DELETE CASCADE`, but SQLite only honours it with
+  /// `PRAGMA foreign_keys = ON`, which this database never sets — so deletes
+  /// remove these rows themselves (a deleted directive used to leave its
+  /// agents, medications, allergies and so on behind in memory).
+  /// `directive_delete_test` fails when a new directive table is missing here.
+  List<TableInfo<Table, Object?>> get directiveChildTables => [
+        _db.medicationEntries,
+        _db.diagnosisEntries,
+        _db.directiveAllergies,
+        _db.agents,
+        _db.witnesses,
+        _db.directivePrefs,
+        _db.additionalInstructionsTable,
+        _db.guardianNominations,
+      ];
 
+  /// Deletes directive [id] and everything that belongs to it.
+  Future<void> deleteDirective(int id) => _db.transaction(() async {
+        for (final table in directiveChildTables) {
+          await _db.customStatement(
+              'DELETE FROM ${table.actualTableName} WHERE directive_id = ?',
+              [id]);
+        }
+        // Raw deletes don't notify Drift's watchers; say what changed.
+        _db.markTablesUpdated(directiveChildTables);
+        await (_db.delete(_db.directives)..where((t) => t.id.equals(id))).go();
+      });
+
+  /// Deletes every directive and everything that belongs to them.
   Future<void> deleteAllDirectives() async {
     await _db.transaction(() async {
-      await _db.delete(_db.medicationEntries).go();
-      await _db.delete(_db.diagnosisEntries).go();
-      await _db.delete(_db.agents).go();
-      await _db.delete(_db.witnesses).go();
-      await _db.delete(_db.directivePrefs).go();
-      await _db.delete(_db.additionalInstructionsTable).go();
-      await _db.delete(_db.guardianNominations).go();
+      for (final table in directiveChildTables) {
+        await _db.delete(table).go();
+      }
       await _db.delete(_db.directives).go();
     });
   }

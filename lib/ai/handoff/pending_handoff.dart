@@ -237,6 +237,14 @@ class PreferredAiServiceNotifier extends Notifier<AiService?> {
         .then((prefs) => prefs.setString(_key, s.name))
         .catchError((_) => false);
   }
+
+  /// "Start over": forget which service was used.
+  void forget() {
+    state = null;
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.remove(_key))
+        .catchError((_) => false);
+  }
 }
 
 final preferredAiServiceProvider =
