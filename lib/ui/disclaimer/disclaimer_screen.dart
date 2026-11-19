@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/ui/widgets/design/split_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -200,7 +201,8 @@ class _GateLayout extends StatelessWidget {
                           // Accurate on each platform: web is in-memory only;
                           // native Private Mode stores encrypted on-device.
                           body: kIsWeb
-                              ? context.l10n.disclaimerYouWorkAnonymouslyInThis
+                              ? context.l10n.disclaimerYouWorkAnonymouslyInThis(
+                                  appData.config.progressWindowMinutes)
                               : context.l10n.disclaimerNoAccountNoCloudNo,
                         ),
                         const SizedBox(height: 12),

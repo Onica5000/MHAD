@@ -93,6 +93,15 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     super.dispose();
   }
 
+  /// How the work is kept, for the "kept" chip and its announcement: the
+  /// app's own storage off the web; on the web, the person's choice.
+  String _keptLabel(BuildContext context) {
+    if (!kIsWeb) return context.l10n.wizardSaved;
+    return ref.read(progressAutosaveProvider).mode == ProgressMode.locked
+        ? context.l10n.wizardKeptLocked
+        : context.l10n.wizardKeptInThisTab;
+  }
+
   /// Saves what's typed on the open step without showing warnings.
   Future<void> _saveOpenStepQuietly() async {
     final state = _stepKey.currentState;
@@ -113,7 +122,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     _lastSavedFlash = now;
     _savedHintTimer?.cancel();
     if (!mounted) return;
-    announce(context, context.l10n.wizardProgressSaved);
+    // On the web never a plain "saved": say how the work is kept.
+    announce(context,
+        kIsWeb ? _keptLabel(context) : context.l10n.wizardProgressSaved);
     setState(() => _showSavedHint = true);
     _savedHintTimer = Timer(const Duration(milliseconds: 1800), () {
       if (mounted) setState(() => _showSavedHint = false);
@@ -394,13 +405,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                           size: 14, color: p.textMuted),
                                       const SizedBox(width: 4),
                                       Text(
-                                        !kIsWeb
-                                            ? context.l10n.wizardSaved
-                                            : ref.watch(progressAutosaveProvider
-                                                        .select((s) => s.mode)) ==
-                                                    ProgressMode.locked
-                                                ? context.l10n.wizardKeptLocked
-                                                : context.l10n.wizardKeptInThisTab,
+                                        _keptLabel(context),
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: p.textMuted,
@@ -738,7 +743,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         title: Text(context.l10n.wizardExitWithoutSaving),
         content: Text(
             kIsWeb
-                ? context.l10n.wizardExitWebBody
+                ? context.l10n.wizardExitWebBody(
+                    appData.config.progressWindowMinutes)
                 : context.l10n.wizardExitPublicBody),
         actions: [
           TextButton(

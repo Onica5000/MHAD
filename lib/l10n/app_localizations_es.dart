@@ -472,10 +472,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get wizardExitWithoutSaving => '¿Salir sin guardar?';
 
   @override
-  String get wizardExitWebBody =>
-      'La aplicación web no guarda su progreso de forma permanente.\n\nSi sale, cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra. Exporte o imprima su documento para conservar una copia.';
-
-  @override
   String get wizardExitPublicBody =>
       'Está en Modo Público: sus datos solo se guardan en la memoria y se perderán cuando se cierre la aplicación.\n\nExporte o imprima su documento antes de salir. Para guardarlo entre sesiones, use el Modo Privado.';
 
@@ -2895,7 +2891,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homePrivateBodyWeb =>
-      'Su directiva nunca sale de este navegador: sin servidor, sin cuenta y sin rastreo. Solo existe en esta sesión, y solo usted decide con quién compartirla.';
+      'Su directiva nunca sale de este navegador: sin servidor, sin cuenta y sin rastreo. Se queda en esta pestaña salvo que usted conserve una copia bloqueada, y solo usted decide con quién compartirla.';
 
   @override
   String get homePrivateBodyDevice =>
@@ -3796,10 +3792,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get aiSetupHowYourDataIsHandled => 'Cómo se manejan sus datos';
 
   @override
-  String get aiSetupYourDirectiveDataIsHeld =>
-      '- Los datos de su directiva solo se guardan en memoria; si la aplicación se cierra o falla, se conservan unos 10 minutos para recuperarlos y luego se borran; nunca se escriben en el disco ni en un servidor\n- Las funciones de IA son opcionales y la aplicación funciona sin ellas\n- Solo sale de su dispositivo el texto que usted envía expresamente por el chat de IA o Sugerencia de IA\n- Esta aplicación no es un servicio médico ni legal\n- Esta aplicación no cumple con HIPAA';
-
-  @override
   String get aiSetupCommonQuestions => 'Preguntas frecuentes';
 
   @override
@@ -3912,10 +3904,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Cómo se guardan y protegen los datos';
 
   @override
-  String get privacyPolicyYourDirectiveDataIsNot =>
-      'Los datos de su directiva NO se transmiten al desarrollador de la aplicación ni a ningún tercero para su almacenamiento.\n\nEsta es una aplicación web: sus datos se guardan en una base de datos en memoria dentro de la pestaña de su navegador. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para que pueda volver a abrirlo y recuperarlo; luego se borra. No se escribe nada en un servidor. Exporte o imprima su directiva para conservar una copia permanente.';
-
-  @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
       'Funciones de IA y datos compartidos con terceros';
 
@@ -3967,7 +3955,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
-      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nPuede quitar las claves de API de sus proveedores de IA en cualquier momento desde la pantalla de configuración de la IA.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran todos sus datos (información personal, agentes, medicamentos y decisiones de tratamiento) de esta pestaña del navegador.\n\nPara borrar de inmediato una copia bloqueada guardada en este dispositivo, elija “Borrar el progreso guardado” o “Empezar de nuevo”, o borre los datos de este sitio en la configuración de su navegador.\n\nPuede quitar las claves de API de sus proveedores de IA en cualquier momento desde la pantalla de configuración de la IA.';
 
   @override
   String get privacyPolicyNoThirdPartyTracking => 'Sin rastreo de terceros';
@@ -4195,11 +4183,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webLandingYouReWorkingAnonymouslyNothing =>
-      'Está trabajando de forma anónima. No se guarda nada.';
-
-  @override
-  String get webLandingNoAccountNoCloudIf =>
-      'Sin cuenta ni nube. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra para siempre. Abra su PDF y guárdelo para conservar una copia.';
+      'Está trabajando de forma anónima. No se guarda nada salvo que usted lo elija.';
 
   @override
   String get webLandingHowThisWorks => 'CÓMO FUNCIONA →';
@@ -4443,11 +4427,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetThisIsAWebApp =>
-      'Esta es una aplicación web: su directiva se mantiene solo en la memoria de su navegador y ';
-
-  @override
-  String get legalSheetIfYouCloseTheTab =>
-      '; si cierra la pestaña o esta falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; nunca se envía a un servidor. Exporte o imprima para conservar una copia. Esta aplicación ';
+      'Esta es una aplicación web: su directiva se queda en su navegador y ';
 
   @override
   String get legalSheetHipaaCompliant => ' cumple con HIPAA.';
@@ -4521,7 +4501,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disclaimerNothingIsSavedOrSent =>
-      'No se guarda ni se nos envía nada';
+      'No se nos envía nada, y no se guarda nada salvo que usted lo elija';
 
   @override
   String get disclaimerYouCanStopOrChange =>
@@ -4949,7 +4929,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pastDirectiveDetailNoShareHistoryIsKept =>
-      'No se guarda historial de envíos: nada se conserva al cerrar la aplicación, así que esta lista está vacía a propósito.';
+      'No se guarda historial de envíos, así que esta lista está vacía a propósito.';
 
   @override
   String get wizardAiRailFullView => 'Vista completa';
@@ -5522,10 +5502,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
     return '$facilitatorCompletionStat Elija el tipo de apoyo que le convenga hoy.';
   }
-
-  @override
-  String get disclaimerYouWorkAnonymouslyInThis =>
-      'Trabaja de forma anónima en esta pestaña del navegador: sin cuenta, sin nube, sin rastreo. Si cierra la pestaña, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; abra y guarde su PDF para conservarlo.';
 
   @override
   String get disclaimerNoAccountNoCloudNo =>
@@ -6731,7 +6707,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingPillAct194 => 'Ley 194 de PA';
 
   @override
-  String get onboardingPillNothingSaved => 'No se guarda nada';
+  String get onboardingPillNothingSaved =>
+      'Nada se guarda salvo que usted lo elija';
 
   @override
   String get onboardingPillStaysOnDevice => 'Se queda en su dispositivo';
@@ -7008,11 +6985,8 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get aiHandoffExtend => 'Ampliar 30 min';
-
-  @override
   String aiHandoffExpiring(int minutes) {
-    return 'Su trabajo aquí se borrará en $minutes min. Amplíe el tiempo para conservarlo mientras usa su IA.';
+    return 'La espera de la respuesta de su IA termina en $minutes min. Amplíela si necesita más tiempo.';
   }
 
   @override
@@ -7379,7 +7353,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
-      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nLas conversaciones en un servicio de IA externo se conservan o se borran con los controles de ese servicio.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran todos sus datos (información personal, agentes, medicamentos y decisiones de tratamiento) de esta pestaña del navegador.\n\nPara borrar de inmediato una copia bloqueada guardada en este dispositivo, elija “Borrar el progreso guardado” o “Empezar de nuevo”, o borre los datos de este sitio en la configuración de su navegador.\n\nLas conversaciones en un servicio de IA externo se conservan o se borran con los controles de ese servicio.';
 
   @override
   String get privacyPolicyThisAppDoesNotIncludeHandoff =>
@@ -7802,4 +7776,39 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get importKeepCopyNo => 'No guardar nada';
+
+  @override
+  String wizardExitWebBody(int minutes) {
+    return 'La aplicación web no conserva su progreso por mucho tiempo.\n\nSi eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga. De lo contrario, su trabajo se borra al cerrar esta pestaña. Para terminar otro día, descargue su progreso, o exporte o imprima su documento.';
+  }
+
+  @override
+  String aiSetupYourDirectiveDataIsHeld(int minutes) {
+    return '- Los datos de su directiva se quedan en su navegador: solo en esta pestaña o, si así lo eligió, en una copia bloqueada con su frase de acceso que vence $minutes minutos después de que usted salga; nunca en un servidor\n- Las funciones de IA son opcionales y la aplicación funciona sin ellas\n- Solo sale de su dispositivo el texto que usted envía expresamente por el chat de IA o Sugerencia de IA\n- Esta aplicación no es un servicio médico ni legal\n- Esta aplicación no cumple con HIPAA';
+  }
+
+  @override
+  String privacyPolicyYourDirectiveDataIsNot(int minutes) {
+    return 'Los datos de su directiva NO se transmiten al desarrollador de la aplicación ni a ningún tercero para su almacenamiento.\n\nEsta es una aplicación web: sus datos se guardan en la pestaña de su navegador. Al empezar, usted elige si desea conservar una copia en este dispositivo. Si lo hace, la copia queda bloqueada con una frase de acceso que solo usted conoce (cifrado AES-256) y vence $minutes minutos después de que usted salga; una copia vencida se borra la próxima vez que se abra la aplicación en este navegador. Si no lo hace, su trabajo se borra al cerrar la pestaña. No se escribe nada en un servidor. Descargue su progreso, o exporte o imprima su directiva, para conservar una copia.';
+  }
+
+  @override
+  String webLandingNoAccountNoCloudIf(int minutes) {
+    return 'Sin cuenta ni nube. Al empezar, usted elige: conservar una copia en este dispositivo, bloqueada con su frase de acceso, hasta $minutes minutos después de salir, o no conservar nada al cerrar la pestaña. Para conservar su trabajo más tiempo, descárguelo.';
+  }
+
+  @override
+  String legalSheetIfYouCloseTheTab(int minutes) {
+    return '; nunca se envía a un servidor. Si eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga; de lo contrario, se borra al cerrar la pestaña. Exporte o imprima para conservar una copia. Esta aplicación ';
+  }
+
+  @override
+  String disclaimerYouWorkAnonymouslyInThis(int minutes) {
+    return 'Trabaja de forma anónima: sin cuenta, sin nube, sin rastreo. Al empezar, usted elige si desea conservar una copia en este dispositivo, bloqueada con su frase de acceso (vence $minutes minutos después de que usted salga), o no conservar nada al cerrar la pestaña.';
+  }
+
+  @override
+  String aiHandoffExtend(int minutes) {
+    return 'Ampliar $minutes min';
+  }
 }

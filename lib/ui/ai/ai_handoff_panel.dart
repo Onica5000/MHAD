@@ -631,7 +631,8 @@ class _WaitRow extends ConsumerWidget {
     final minutes = (pending.remaining().inSeconds / 60).ceil();
     final extend = TextButton(
       onPressed: () => ref.read(pendingHandoffProvider.notifier).extend(),
-      child: Text(context.l10n.aiHandoffExtend),
+      child: Text(context.l10n.aiHandoffExtend(
+          PendingHandoff.window.inMinutes)),
     );
     if (minutes <= 5) {
       return Padding(
@@ -640,7 +641,8 @@ class _WaitRow extends ConsumerWidget {
           icon: Icons.timer_outlined,
           variant: InfoBannerVariant.warning,
           text: context.l10n.aiHandoffExpiring(minutes),
-          actionLabel: context.l10n.aiHandoffExtend,
+          actionLabel: context.l10n.aiHandoffExtend(
+          PendingHandoff.window.inMinutes),
           onAction: () => ref.read(pendingHandoffProvider.notifier).extend(),
         ),
       );

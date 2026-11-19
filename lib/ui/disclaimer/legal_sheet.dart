@@ -319,7 +319,8 @@ List<_SectionData> _buildSections(BuildContext context, MhadPalette p) {
           _bold(context.l10n.legalSheetBoldNotSavedPermanently),
           TextSpan(
               text:
-                  context.l10n.legalSheetIfYouCloseTheTab),
+                  context.l10n.legalSheetIfYouCloseTheTab(
+                      appData.config.progressWindowMinutes)),
           _bold(context.l10n.legalSheetBoldNot),
           TextSpan(text: context.l10n.legalSheetHipaaCompliant),
         ], palette: p),

@@ -932,12 +932,6 @@ abstract class AppLocalizations {
   /// **'Exit Without Saving?'**
   String get wizardExitWithoutSaving;
 
-  /// No description provided for @wizardExitWebBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The web app does not save your progress permanently.\n\nIf you leave, close the tab, or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased. Export or print your document to keep a copy.'**
-  String get wizardExitWebBody;
-
   /// No description provided for @wizardExitPublicBody.
   ///
   /// In en, this message translates to:
@@ -4967,7 +4961,7 @@ abstract class AppLocalizations {
   /// No description provided for @homePrivateBodyWeb.
   ///
   /// In en, this message translates to:
-  /// **'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.'**
+  /// **'Your directive never leaves this browser — no server, no account, no tracking. It stays in this tab unless you keep a locked copy, and only you choose who to share it with.'**
   String get homePrivateBodyWeb;
 
   /// No description provided for @homePrivateBodyDevice.
@@ -6488,12 +6482,6 @@ abstract class AppLocalizations {
   /// **'How your data is handled'**
   String get aiSetupHowYourDataIsHandled;
 
-  /// No description provided for @aiSetupYourDirectiveDataIsHeld.
-  ///
-  /// In en, this message translates to:
-  /// **'- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant'**
-  String get aiSetupYourDirectiveDataIsHeld;
-
   /// No description provided for @aiSetupCommonQuestions.
   ///
   /// In en, this message translates to:
@@ -6686,12 +6674,6 @@ abstract class AppLocalizations {
   /// **'How data is stored & protected'**
   String get privacyPolicyHowDataIsStoredProtected;
 
-  /// No description provided for @privacyPolicyYourDirectiveDataIsNot.
-  ///
-  /// In en, this message translates to:
-  /// **'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.'**
-  String get privacyPolicyYourDirectiveDataIsNot;
-
   /// No description provided for @privacyPolicyAiFeaturesThirdPartyData.
   ///
   /// In en, this message translates to:
@@ -6773,7 +6755,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyYouCanDeleteAnyDirective.
   ///
   /// In en, this message translates to:
-  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.'**
+  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.'**
   String get privacyPolicyYouCanDeleteAnyDirective;
 
   /// No description provided for @privacyPolicyNoThirdPartyTracking.
@@ -7163,14 +7145,8 @@ abstract class AppLocalizations {
   /// No description provided for @webLandingYouReWorkingAnonymouslyNothing.
   ///
   /// In en, this message translates to:
-  /// **'You’re working anonymously. Nothing is saved.'**
+  /// **'You’re working anonymously. Nothing is saved unless you choose.'**
   String get webLandingYouReWorkingAnonymouslyNothing;
-
-  /// No description provided for @webLandingNoAccountNoCloudIf.
-  ///
-  /// In en, this message translates to:
-  /// **'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.'**
-  String get webLandingNoAccountNoCloudIf;
 
   /// No description provided for @webLandingHowThisWorks.
   ///
@@ -7577,14 +7553,8 @@ abstract class AppLocalizations {
   /// No description provided for @legalSheetThisIsAWebApp.
   ///
   /// In en, this message translates to:
-  /// **'This is a web app: your directive is held in memory in your browser only and is '**
+  /// **'This is a web app: your directive stays in your browser and is '**
   String get legalSheetThisIsAWebApp;
-
-  /// No description provided for @legalSheetIfYouCloseTheTab.
-  ///
-  /// In en, this message translates to:
-  /// **' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is '**
-  String get legalSheetIfYouCloseTheTab;
 
   /// No description provided for @legalSheetHipaaCompliant.
   ///
@@ -7703,7 +7673,7 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimerNothingIsSavedOrSent.
   ///
   /// In en, this message translates to:
-  /// **'Nothing is saved or sent to us'**
+  /// **'Nothing is sent to us — and nothing is saved unless you choose'**
   String get disclaimerNothingIsSavedOrSent;
 
   /// No description provided for @disclaimerYouCanStopOrChange.
@@ -8387,7 +8357,7 @@ abstract class AppLocalizations {
   /// No description provided for @pastDirectiveDetailNoShareHistoryIsKept.
   ///
   /// In en, this message translates to:
-  /// **'No share history is kept — nothing is saved after you close the app, so this list is empty by design.'**
+  /// **'No share history is kept, so this list is empty by design.'**
   String get pastDirectiveDetailNoShareHistoryIsKept;
 
   /// No description provided for @wizardAiRailFullView.
@@ -9230,12 +9200,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{facilitatorCompletionStat} Pick the kind of support that fits today.'**
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat);
-
-  /// No description provided for @disclaimerYouWorkAnonymouslyInThis.
-  ///
-  /// In en, this message translates to:
-  /// **'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.'**
-  String get disclaimerYouWorkAnonymouslyInThis;
 
   /// No description provided for @disclaimerNoAccountNoCloudNo.
   ///
@@ -11110,7 +11074,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPillNothingSaved.
   ///
   /// In en, this message translates to:
-  /// **'Nothing is saved'**
+  /// **'Nothing saved unless you choose'**
   String get onboardingPillNothingSaved;
 
   /// No description provided for @onboardingPillStaysOnDevice.
@@ -11575,16 +11539,10 @@ abstract class AppLocalizations {
   /// **'Waiting for your answer · {minutes} min left'**
   String aiHandoffWaiting(int minutes);
 
-  /// No description provided for @aiHandoffExtend.
-  ///
-  /// In en, this message translates to:
-  /// **'Extend 30 min'**
-  String get aiHandoffExtend;
-
   /// No description provided for @aiHandoffExpiring.
   ///
   /// In en, this message translates to:
-  /// **'Your work here will be cleared in {minutes} min. Extend to keep it while you’re in your AI.'**
+  /// **'The wait for your AI’s answer ends in {minutes} min. Extend it if you need more time.'**
   String aiHandoffExpiring(int minutes);
 
   /// No description provided for @aiHandoffBackToPaste.
@@ -12190,7 +12148,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyYouCanDeleteAnyDirectiveHandoff.
   ///
   /// In en, this message translates to:
-  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.\n\nUninstalling the app removes all locally stored data.'**
+  /// **'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.'**
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff;
 
   /// No description provided for @privacyPolicyThisAppDoesNotIncludeHandoff.
@@ -12870,6 +12828,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep nothing'**
   String get importKeepCopyNo;
+
+  /// No description provided for @wizardExitWebBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.'**
+  String wizardExitWebBody(int minutes);
+
+  /// No description provided for @aiSetupYourDirectiveDataIsHeld.
+  ///
+  /// In en, this message translates to:
+  /// **'- Your directive data stays in your browser: in this tab only or, if you chose, in a copy locked with your passphrase that expires {minutes} minutes after you leave; never on a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant'**
+  String aiSetupYourDirectiveDataIsHeld(int minutes);
+
+  /// No description provided for @privacyPolicyYourDirectiveDataIsNot.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in your browser tab. When you start, you choose whether to keep a copy on this device. If you do, it is locked with a passphrase only you know (AES-256 encryption) and expires {minutes} minutes after you leave; an expired copy is erased the next time the app is opened in this browser. If you don’t, your work is erased when you close the tab. Nothing is written to a server. Download your progress, or export or print your directive, to keep a copy.'**
+  String privacyPolicyYourDirectiveDataIsNot(int minutes);
+
+  /// No description provided for @webLandingNoAccountNoCloudIf.
+  ///
+  /// In en, this message translates to:
+  /// **'No account, no cloud. When you start, you choose: keep a copy on this device, locked with your passphrase, until {minutes} minutes after you leave — or keep nothing once you close the tab. To keep your work longer, download it.'**
+  String webLandingNoAccountNoCloudIf(int minutes);
+
+  /// No description provided for @legalSheetIfYouCloseTheTab.
+  ///
+  /// In en, this message translates to:
+  /// **' — it is never sent to a server. If you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave; otherwise it is erased when you close the tab. Export or print to keep a copy. This app is '**
+  String legalSheetIfYouCloseTheTab(int minutes);
+
+  /// No description provided for @disclaimerYouWorkAnonymouslyInThis.
+  ///
+  /// In en, this message translates to:
+  /// **'You work anonymously — no account, no cloud, no tracking. When you start, you choose whether to keep a copy on this device, locked with your passphrase (it expires {minutes} minutes after you leave), or to keep nothing once you close the tab.'**
+  String disclaimerYouWorkAnonymouslyInThis(int minutes);
+
+  /// No description provided for @aiHandoffExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend {minutes} min'**
+  String aiHandoffExtend(int minutes);
 }
 
 class _AppLocalizationsDelegate

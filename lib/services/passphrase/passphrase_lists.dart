@@ -48,6 +48,11 @@ class PassphraseLists {
   /// cached, so the next call tries again.
   static Future<PassphraseLists> load() => _loading ??= _loadAsset();
 
+  /// Tests: what [load] returns, without reading the asset bundle.
+  @visibleForTesting
+  static void debugUseLists(PassphraseLists lists) =>
+      _loading = Future.value(lists);
+
   static Future<PassphraseLists> _loadAsset() async {
     try {
       return PassphraseLists.fromJson(await rootBundle.loadString(assetPath));

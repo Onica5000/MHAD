@@ -244,7 +244,7 @@ class _ResumeProgressScreenState extends ConsumerState<ResumeProgressScreen> {
     if (!mounted) return;
     switch (result) {
       case Unlocked(:final payload):
-        noteStrengthOf(ref, _field.text);
+        noteStrengthOf(ref.read(progressAutosaveProvider.notifier), _field.text);
         ref.read(progressAutosaveProvider.notifier).choiceChanged();
         final restored = await restoreProgressPayload(
             ref.read(directiveRepositoryProvider), payload);

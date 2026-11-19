@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/ui/progress/progress_gate.dart';
@@ -49,19 +48,22 @@ Future<void> importSavedDirectiveFile(
     final locked = DirectiveExportService.lockedFile(bytes);
     final int id;
     if (locked != null) {
-      if (!context.mounted) return;
-      final payload = await openLockedFile(context, ref, locked);
+      final payload = await openLockedFile(ref, locked);
       if (payload == null) return; // cancelled
-      id = await repo.restoreFromSnapshot(
-          DirectiveExportService.dataFromWrapped(payload));
-      if (context.mounted) await offerKeepCopyAfterFile(context, ref);
+      final data = DirectiveExportService.dataFromWrapped(payload);
+      // Ask before restoring: once a directive exists, Home swaps the page
+      // that started this import out.
+      await offerKeepCopyAfterFile(ref);
+      id = await repo.restoreFromSnapshot(data);
     } else {
       DirectiveExportService.parseFile(bytes); // unreadable? say so first
       if (!await ensureProgressChoice()) return;
       id = await DirectiveExportService(repo).importFile(bytes);
     }
-    if (context.mounted) {
-      context.go(AppRoutes.wizardRoute(id));
+    // The global router: the widget that started the import may be gone by
+    // now (Home swaps its landing out once a directive exists).
+    {
+      appRouter.go(AppRoutes.wizardRoute(id));
       // Imported files come back as an editable draft (see
       // DirectiveRepository.restoreFromSnapshot) — make the re-sign step clear
       // so the user doesn't assume the old signature still makes it valid.

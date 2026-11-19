@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/progress/progress_gate.dart' show startDirective;
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
@@ -183,7 +184,8 @@ class _AnonBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 1),
                 Text(
-                  context.l10n.webLandingNoAccountNoCloudIf,
+                  context.l10n.webLandingNoAccountNoCloudIf(
+                      appData.config.progressWindowMinutes),
                   style: TextStyle(
                     fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,

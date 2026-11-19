@@ -96,7 +96,7 @@ key would need a **relay server** — keys never ship to the browser.
 | The card | `AiHandoffPanel` (`ui/ai/`) | ONE card everywhere: choose AI → copy (+ Open, see what's included) → paste. Privacy notice once per session |
 | Prompts | `buildHandoffPrompt` + `assets/data/ai_handoff.json` (versioned: services + what each accepts, legal facts, en/es envelope) | Task instructions come from the API path's own builders — never fork them |
 | Answers | `parseHandoffReply` | Forgiving about format; strict about `mhad_task` + `mhad_ref` (`directiveHandoffRef` = the one `d<id>` format) |
-| The wait | `PendingHandoff` (30 min, extendable) | Keeps the web recovery copy; a reload restores the work and returns to the paste page; "Back to paste your AI answer" banner elsewhere |
+| The wait | `PendingHandoff` (`progressWindowMinutes`, extendable; tab storage) | A locked progress copy lasts at least until its deadline; a reload restores the work (after the passphrase) and returns to the paste page; "Back to paste your AI answer" banner elsewhere |
 | After a paste | panel | Clipboard cleared; a failed paste says a fresh copy may be needed |
 | API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
 
@@ -135,6 +135,17 @@ key would need a **relay server** — keys never ship to the browser.
   smart-fill. **Document autofill is the one PII-exempt path** (sends the doc as-is, with
   explicit consent). Keep AI copy provider-agnostic (don't hardcode "Gemini").
 - "Not legal advice" disclaimer always shown in UI.
+
+## Saved progress (web — user decisions 2026-11-18)
+| Piece | Where | Rule |
+|---|---|---|
+| The choice | `ensureProgressChoice` (`ui/progress/progress_gate.dart`) | Asked at the start (new / upload / import), once per tab: a passphrase-locked copy on this device, or nothing outside the tab (`sessionStorage`, names left out) |
+| Lock | `services/locked_progress/` (`lock_crypto*`, `locked_format`) | AES-256-GCM + PBKDF2-SHA-256 600,000 rounds, random salt/nonce, header sealed as AAD. Web Crypto (non-extractable key) on web, pointycastle elsewhere; one Web Crypto test vector keeps them identical |
+| Life | `LockedProgressStore` | Expires `progressWindowMinutes` (30) after the page was last open. A closed tab can't erase it, so `sweep()` erases it unopened at the next start. 10 wrong passphrases erase it; one tab writes at a time |
+| Saving | `ProgressAutosave` | 2 s after any DB change; quietly when hidden (`WizardStepMixin.saveQuietly` — steps use `showWarnings` / `saveSubStep`, `quiet_save_rule_test`); 60 s heartbeat |
+| Passphrase | `services/passphrase/` | Min 4, no max; lowercase + capital + symbol or space; common-passphrase blocklist (zxcvbn-ts lists, MIT + ODC-BY notice); strength gauge; never stored |
+| Files | `downloadLockedProgress`, `saved_file_import.dart` | Downloads are always locked (no expiry); older readable / app-key `.mhad` files still open |
+| Wording | ARB | Never an unqualified "Nothing is saved" ("unless you choose"); the window comes from the setting, never a typed "30" |
 
 ## Navigation (current model — no hamburger drawer)
 - **Mobile**: floating `MhadBottomNav` (Home · Learn · Ask · Settings · More), every tab
@@ -193,7 +204,7 @@ the Learn articles (as `main()` does) and makes `ArtImage` paint placeholders.
 ## Multi-Platform
 - Platform utility: `lib/utils/platform_utils.dart` (safe checks for web)
 - Conditional imports: `_native.dart` / `_web.dart` / `_stub.dart` pattern
-- Web: public mode only (in-memory DB, no encryption)
+- Web: public mode only (in-memory DB; optional passphrase-locked progress copy — see *Saved progress*)
 - Camera/gallery: mobile only; file picker: all platforms
 - NFC: mobile only; notifications: no Windows/Web; biometrics: no Web
 

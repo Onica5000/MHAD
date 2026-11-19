@@ -468,10 +468,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wizardExitWithoutSaving => 'Exit Without Saving?';
 
   @override
-  String get wizardExitWebBody =>
-      'The web app does not save your progress permanently.\n\nIf you leave, close the tab, or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased. Export or print your document to keep a copy.';
-
-  @override
   String get wizardExitPublicBody =>
       'You are in Public Mode — your data is stored in memory only and will be lost when the app closes.\n\nExport or print your document before leaving. To save across sessions, use Private Mode instead.';
 
@@ -2839,7 +2835,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homePrivateBodyWeb =>
-      'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.';
+      'Your directive never leaves this browser — no server, no account, no tracking. It stays in this tab unless you keep a locked copy, and only you choose who to share it with.';
 
   @override
   String get homePrivateBodyDevice =>
@@ -3723,10 +3719,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSetupHowYourDataIsHandled => 'How your data is handled';
 
   @override
-  String get aiSetupYourDirectiveDataIsHeld =>
-      '- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
-
-  @override
   String get aiSetupCommonQuestions => 'Common questions';
 
   @override
@@ -3836,10 +3828,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'How data is stored & protected';
 
   @override
-  String get privacyPolicyYourDirectiveDataIsNot =>
-      'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.';
-
-  @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
       'AI features & third-party data sharing';
 
@@ -3891,7 +3879,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
-      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.';
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.';
 
   @override
   String get privacyPolicyNoThirdPartyTracking => 'No third-party tracking';
@@ -4113,11 +4101,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webLandingYouReWorkingAnonymouslyNothing =>
-      'You’re working anonymously. Nothing is saved.';
-
-  @override
-  String get webLandingNoAccountNoCloudIf =>
-      'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.';
+      'You’re working anonymously. Nothing is saved unless you choose.';
 
   @override
   String get webLandingHowThisWorks => 'HOW THIS WORKS →';
@@ -4358,11 +4342,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetThisIsAWebApp =>
-      'This is a web app: your directive is held in memory in your browser only and is ';
-
-  @override
-  String get legalSheetIfYouCloseTheTab =>
-      ' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is ';
+      'This is a web app: your directive stays in your browser and is ';
 
   @override
   String get legalSheetHipaaCompliant => ' HIPAA-compliant.';
@@ -4434,7 +4414,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'PA law requires your signature (or someone signing at your direction), the date, and two witnesses aged 18 or older who watch you sign. Print it and sign it in ink — the app can’t sign for you.';
 
   @override
-  String get disclaimerNothingIsSavedOrSent => 'Nothing is saved or sent to us';
+  String get disclaimerNothingIsSavedOrSent =>
+      'Nothing is sent to us — and nothing is saved unless you choose';
 
   @override
   String get disclaimerYouCanStopOrChange =>
@@ -4854,7 +4835,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pastDirectiveDetailNoShareHistoryIsKept =>
-      'No share history is kept — nothing is saved after you close the app, so this list is empty by design.';
+      'No share history is kept, so this list is empty by design.';
 
   @override
   String get wizardAiRailFullView => 'Full view';
@@ -5418,10 +5399,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
     return '$facilitatorCompletionStat Pick the kind of support that fits today.';
   }
-
-  @override
-  String get disclaimerYouWorkAnonymouslyInThis =>
-      'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.';
 
   @override
   String get disclaimerNoAccountNoCloudNo =>
@@ -6616,7 +6593,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingPillAct194 => 'PA Act 194';
 
   @override
-  String get onboardingPillNothingSaved => 'Nothing is saved';
+  String get onboardingPillNothingSaved => 'Nothing saved unless you choose';
 
   @override
   String get onboardingPillStaysOnDevice => 'Stays on your device';
@@ -6890,11 +6867,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get aiHandoffExtend => 'Extend 30 min';
-
-  @override
   String aiHandoffExpiring(int minutes) {
-    return 'Your work here will be cleared in $minutes min. Extend to keep it while you’re in your AI.';
+    return 'The wait for your AI’s answer ends in $minutes min. Extend it if you need more time.';
   }
 
   @override
@@ -7254,7 +7228,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
-      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.\n\nUninstalling the app removes all locally stored data.';
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.';
 
   @override
   String get privacyPolicyThisAppDoesNotIncludeHandoff =>
@@ -7673,4 +7647,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importKeepCopyNo => 'Keep nothing';
+
+  @override
+  String wizardExitWebBody(int minutes) {
+    return 'The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.';
+  }
+
+  @override
+  String aiSetupYourDirectiveDataIsHeld(int minutes) {
+    return '- Your directive data stays in your browser: in this tab only or, if you chose, in a copy locked with your passphrase that expires $minutes minutes after you leave; never on a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
+  }
+
+  @override
+  String privacyPolicyYourDirectiveDataIsNot(int minutes) {
+    return 'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in your browser tab. When you start, you choose whether to keep a copy on this device. If you do, it is locked with a passphrase only you know (AES-256 encryption) and expires $minutes minutes after you leave; an expired copy is erased the next time the app is opened in this browser. If you don’t, your work is erased when you close the tab. Nothing is written to a server. Download your progress, or export or print your directive, to keep a copy.';
+  }
+
+  @override
+  String webLandingNoAccountNoCloudIf(int minutes) {
+    return 'No account, no cloud. When you start, you choose: keep a copy on this device, locked with your passphrase, until $minutes minutes after you leave — or keep nothing once you close the tab. To keep your work longer, download it.';
+  }
+
+  @override
+  String legalSheetIfYouCloseTheTab(int minutes) {
+    return ' — it is never sent to a server. If you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave; otherwise it is erased when you close the tab. Export or print to keep a copy. This app is ';
+  }
+
+  @override
+  String disclaimerYouWorkAnonymouslyInThis(int minutes) {
+    return 'You work anonymously — no account, no cloud, no tracking. When you start, you choose whether to keep a copy on this device, locked with your passphrase (it expires $minutes minutes after you leave), or to keep nothing once you close the tab.';
+  }
+
+  @override
+  String aiHandoffExtend(int minutes) {
+    return 'Extend $minutes min';
+  }
 }

@@ -58,7 +58,11 @@ Future<void> downloadLockedProgress(
     BuildContext context, WidgetRef ref, int directiveId) async {
   final l = context.l10n;
   final messenger = ScaffoldMessenger.of(context);
+  // Read everything up front: the widget behind [ref] may be gone after
+  // the awaits below.
   final store = ref.read(lockedProgressProvider);
+  final autosave = ref.read(progressAutosaveProvider.notifier);
+  final service = DirectiveExportService(ref.read(directiveRepositoryProvider));
   if (!store.hasPassphrase) {
     final chosen = await Navigator.of(context).push<ChosenPassphrase>(
       MaterialPageRoute(
@@ -68,13 +72,11 @@ Future<void> downloadLockedProgress(
     );
     if (chosen == null) return;
     await store.setDownloadPassphrase(chosen.passphrase);
-    ref.read(progressAutosaveProvider.notifier).noteStrength(chosen.estimate);
+    autosave.noteStrength(chosen.estimate);
   }
   try {
-    final wrapped = await DirectiveExportService(
-            ref.read(directiveRepositoryProvider))
-        .buildFilePayload(directiveId,
-            nowMillis: DateTime.now().millisecondsSinceEpoch);
+    final wrapped = await service.buildFilePayload(directiveId,
+        nowMillis: DateTime.now().millisecondsSinceEpoch);
     final text = await store.lockForDownload(wrapped);
     if (text == null) return;
     final name = mhadFileName([
@@ -89,8 +91,7 @@ Future<void> downloadLockedProgress(
       ],
       subject: l.exportShareSubjectEditable,
     ));
-    final strength =
-        ref.read(progressAutosaveProvider.notifier).passphraseStrength;
+    final strength = autosave.passphraseStrength;
     final weak = strength != null &&
         strength.strength.index <= PassphraseStrength.fair.index;
     messenger.showSnackBar(SnackBar(
@@ -109,13 +110,15 @@ Future<void> downloadLockedProgress(
 
 /// Asks for a locked file's passphrase until it opens (or the person
 /// cancels). Returns the opened payload, or null. No try limit: a file can
-/// be copied and guessed at elsewhere anyway.
-Future<Object?> openLockedFile(BuildContext context, WidgetRef ref,
-    LockedBlob blob) async {
+/// be copied and guessed at elsewhere anyway. Shown on the root navigator,
+/// so it doesn't depend on the page that started the import.
+Future<Object?> openLockedFile(WidgetRef ref, LockedBlob blob) async {
   final store = ref.read(lockedProgressProvider);
+  final autosave = ref.read(progressAutosaveProvider.notifier);
   var wrong = false;
   while (true) {
-    if (!context.mounted) return null;
+    final context = rootNavigatorKey.currentContext;
+    if (context == null || !context.mounted) return null;
     final passphrase = await showDialog<String>(
       context: context,
       builder: (_) => _FilePassphraseDialog(wrong: wrong),
@@ -123,7 +126,7 @@ Future<Object?> openLockedFile(BuildContext context, WidgetRef ref,
     if (passphrase == null) return null;
     try {
       final payload = await store.openFile(blob, passphrase);
-      noteStrengthOf(ref, passphrase);
+      noteStrengthOf(autosave, passphrase);
       return payload;
     } on LockOpenException {
       wrong = true;
@@ -133,17 +136,19 @@ Future<Object?> openLockedFile(BuildContext context, WidgetRef ref,
 
 /// Remembers how strong [passphrase] is (never the passphrase itself), for
 /// the warning when a weak one locks a download.
-void noteStrengthOf(WidgetRef ref, String passphrase) {
-  final autosave = ref.read(progressAutosaveProvider.notifier);
+void noteStrengthOf(ProgressAutosave autosave, String passphrase) {
   PassphraseLists.load().then(
       (lists) => autosave.noteStrength(estimatePassphrase(passphrase, lists)));
 }
 
-/// After a locked file opened: if this tab hasn't chosen yet, offer to keep
-/// a locked copy with the file's own passphrase (or keep nothing).
-Future<void> offerKeepCopyAfterFile(BuildContext context, WidgetRef ref) async {
+/// After a locked file opened, before it is restored: if this tab hasn't
+/// chosen yet, offer to keep a locked copy with the file's own passphrase (or
+/// keep nothing).
+Future<void> offerKeepCopyAfterFile(WidgetRef ref) async {
   final store = ref.read(lockedProgressProvider);
-  if (store.mode != ProgressMode.undecided) return;
+  final autosave = ref.read(progressAutosaveProvider.notifier);
+  final context = rootNavigatorKey.currentContext;
+  if (store.mode != ProgressMode.undecided || context == null) return;
   final l = context.l10n;
   final keep = await showDialog<bool>(
     context: context,
@@ -166,7 +171,7 @@ Future<void> offerKeepCopyAfterFile(BuildContext context, WidgetRef ref) async {
   } else {
     store.startTabOnly();
   }
-  ref.read(progressAutosaveProvider.notifier).choiceChanged();
+  autosave.choiceChanged();
 }
 
 class _FilePassphraseDialog extends StatefulWidget {
