@@ -1,0 +1,28 @@
+PA Mental Health Advance Directive (PA MHAD)
+Copyright (c) 2026 Onica5000. All rights reserved.
+
+SOURCE AVAILABLE FOR REVIEW — NOT OPEN SOURCE
+
+The source code is public so that anyone can see how the app works and check
+its legal content. You may read the code, and build and run it privately to
+review or test it.
+
+Without prior written permission from the copyright holder, you may not:
+  - modify the code, the legal text, the educational content, or the forms;
+  - copy, distribute, sell, or sublicense it, in original or modified form;
+  - publish, host, or deploy a modified version, or present one as PA MHAD.
+
+Why: this app explains Pennsylvania law (20 Pa.C.S. Chapter 58) and prints
+legal forms. Changes made without review could give people wrong legal
+information, so every change goes through the copyright holder.
+
+To request permission, open an issue in this repository.
+
+Third-party packages used by the app remain under their own licenses; their
+notices ship with every build (assets/NOTICES in the web build).
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IT IS NOT LEGAL OR MEDICAL ADVICE.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.

@@ -1,6 +1,6 @@
 # PA Mental Health Advance Directive (MHAD)
 
-A free, open-source app for creating, managing, and exporting Pennsylvania Mental Health Advance Directives under [PA Act 194 of 2004](https://www.legis.state.pa.us/cfdocs/legis/li/uconsCheck.cfm?yr=2004&sessInd=0&act=194) (codified at [20 Pa.C.S. Ch. 58](https://www.palegis.us/statutes/consolidated/view-statute?iFrame=true&txtType=HTM&ttl=20&div=0&chpt=58)).
+A free app for creating, managing, and exporting Pennsylvania Mental Health Advance Directives under [PA Act 194 of 2004](https://www.legis.state.pa.us/cfdocs/legis/li/uconsCheck.cfm?yr=2004&sessInd=0&act=194) (codified at [20 Pa.C.S. Ch. 58](https://www.palegis.us/statutes/consolidated/view-statute?iFrame=true&txtType=HTM&ttl=20&div=0&chpt=58)).
 
 **Try it on the web:** [https://onica5000.github.io/MHAD/](https://onica5000.github.io/MHAD/)
 
@@ -163,8 +163,8 @@ Web deployment is automated to GitHub Pages via GitHub Actions.
 
 ## License
 
-This project is provided as-is for public benefit. See the in-app disclaimer and [`PRIVACY_POLICY.md`](./PRIVACY_POLICY.md) for terms of use.
+**Source available for review — not open source. All rights reserved.** The code is public so anyone can see how the app works and check its legal content; you may read it and build it privately to review it. Modifying, copying, redistributing, or hosting it (in original or modified form) requires the copyright holder's written permission, because changes could put wrong legal information in front of people. Full terms: [`LICENSE`](./LICENSE). Terms of use: the in-app disclaimer and [`PRIVACY_POLICY.md`](./PRIVACY_POLICY.md).
 
 ## Contributing
 
-Issues and pull requests are welcome. Please read the in-app disclaimer before contributing — all content related to PA Act 194 must be sourced verbatim from official documents. New contributors should also skim [`CLAUDE.md`](./CLAUDE.md) (project conventions) and [`docs/GAP_ANALYSIS_V4.md`](./docs/GAP_ANALYSIS_V4.md) (current backlog).
+Issues are welcome. Pull requests are accepted only with prior permission (see [License](#license)) — open an issue first. Please read the in-app disclaimer before contributing — all content related to PA Act 194 must be sourced verbatim from official documents. New contributors should also skim [`CLAUDE.md`](./CLAUDE.md) (project conventions) and [`docs/GAP_ANALYSIS_V4.md`](./docs/GAP_ANALYSIS_V4.md) (current backlog).

@@ -103,8 +103,6 @@ List<pw.Page> buildPoaPages({
         ...roomPreferencesBlock(prefs),
         pw.SizedBox(height: 8),
 
-        if (prefs != null) ...hospitalizationAuthorityBlock(prefs),
-
         pw.Text(
           '2. Preferences regarding medications for psychiatric treatment.',
           style: boldStyle(),

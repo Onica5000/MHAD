@@ -55,7 +55,8 @@ class PermissionsOverviewScreen extends StatelessWidget {
             icon: Icons.fingerprint,
             title: context.l10n.permissionsOverviewBiometricsPasscode,
             usedFor: context.l10n.permissionsOverviewUnlockingEncryptedOnDeviceStorage,
-            promises: [
+            // Native-only promises would read as claims on the web.
+            promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewUsedOnlyToVerifyYour,
               context.l10n.permissionsOverviewBiometricDataNeverLeavesThe,
               context.l10n.permissionsOverviewNoBiometricDataIsSent,
@@ -72,7 +73,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
             title: context.l10n.permissionsOverviewNotifications,
             usedFor:
                 context.l10n.permissionsOverviewRemindingYouAboutWitnessSigning,
-            promises: [
+            promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewYouChooseWhichRemindersTo,
               context.l10n.permissionsOverviewNotificationsAreScheduledLocallyOn,
               context.l10n.permissionsOverviewNoContentPiiDirectiveText,

@@ -260,14 +260,10 @@ $extracted''';
       'trigger_two_professionals': Schema.boolean(nullable: true),
       'trigger_court_order': Schema.boolean(nullable: true),
       'trigger_involuntary_commitment': Schema.boolean(nullable: true),
-      // Guardianship conditions — set only on an explicit statement about a
-      // court-appointed guardian; each note carries the stated qualification.
+      // Guardianship condition — set only on an explicit statement about a
+      // court-appointed guardian; the note carries the stated qualification.
       'guardian_can_revoke': Schema.boolean(nullable: true),
       'guardian_can_revoke_note': Schema.string(nullable: true),
-      'guardian_can_change_agent': Schema.boolean(nullable: true),
-      'guardian_can_change_agent_note': Schema.string(nullable: true),
-      'guardian_must_consult_agent': Schema.boolean(nullable: true),
-      'guardian_must_consult_agent_note': Schema.string(nullable: true),
       // Room-preference chips (subset of: singleRoom, windowIfPossible,
       // quietFloor, sameGenderRoommate) + the same-gender match detail
       // ("women" | "men" | "sameAsIdentity").
@@ -292,8 +288,7 @@ $extracted''';
       'avoid_facility': Schema.string(nullable: true),
       'effective_condition': Schema.string(nullable: true),
       'agent_authority_limitations': Schema.string(nullable: true),
-      // Agent authority on/off toggles — set ONLY on an explicit statement.
-      'agent_can_consent_hospitalization': Schema.boolean(nullable: true),
+      // Agent authority on/off toggle — set ONLY on an explicit statement.
       'agent_can_consent_medication': Schema.boolean(nullable: true),
       // Self-binding ("Ulysses") clause opt-in — true ONLY if the person
       // explicitly says their directive should be honored even if they object
@@ -353,7 +348,7 @@ $extracted''';
 
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
-EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_hospitalization; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note); guardian_can_change_agent (+ note); guardian_must_consult_agent (+ note).
+EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note).
 LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
@@ -361,7 +356,7 @@ LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allerg
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
 The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
 EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
-LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_hospitalization, agent_can_consent_medication, agent_authority_limitations, guardian_can_revoke (+ note), guardian_can_change_agent (+ note), guardian_must_consult_agent (+ note). Ignore any agent designation even if it appears in the document.''';
+LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_medication, agent_authority_limitations, guardian_can_revoke (+ note). Ignore any agent designation even if it appears in the document.''';
       default:
         return ''; // Combined — extract everything as described above.
     }
@@ -512,15 +507,9 @@ same_gender_roommate
 roommate_gender_match
   → ONLY when same_gender_roommate is true: which match the person asked for — "women" | "men" | "sameAsIdentity" (they said "same as my gender/identity" without naming one). Leave null when not stated or not applicable.
 
-guardian_can_revoke / guardian_can_change_agent / guardian_must_consult_agent (+ *_note)
-  → Guardianship conditions, set ONLY on an explicit statement about a court-appointed guardian:
-    • guardian_can_revoke — true/false if the person explicitly states whether a guardian MAY override/revoke this directive.
-    • guardian_can_change_agent — whether a guardian may replace the named agent.
-    • guardian_must_consult_agent — whether a guardian must consult the agent before acting.
-  → Each *_note carries the person's stated qualification for that condition, verbatim (e.g. "only if my agent is unavailable"). Leave everything null when guardianship conditions aren't addressed — never infer from the mere nomination of a guardian.
-
-agent_can_consent_hospitalization
-  → true if the person explicitly says their agent MAY admit them to / consent to hospitalization (voluntary inpatient admission); false if they explicitly say their agent may NOT. Leave null if not addressed. Do NOT infer from naming an agent.
+guardian_can_revoke (+ guardian_can_revoke_note)
+  → Guardianship condition, set ONLY on an explicit statement about a court-appointed guardian: true/false if the person explicitly states whether a guardian MAY override/revoke this directive.
+  → The note carries the person's stated qualification, verbatim (e.g. "only if my agent is unavailable"). Leave both null when this isn't addressed — never infer from the mere nomination of a guardian.
 
 agent_can_consent_medication
   → true if the person explicitly says their agent MAY decide / consent to their (general psychiatric) medications; false if they explicitly say the agent may NOT. Leave null if not addressed. Do NOT infer from naming an agent. (This is the agent's authority — distinct from the person's own medication preferences.)

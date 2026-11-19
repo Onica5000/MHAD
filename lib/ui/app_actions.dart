@@ -1,3 +1,5 @@
+import 'package:mhad/ui/education/education_article_detail.dart';
+import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,6 +45,27 @@ Future<void> openForDirective(
             FormType.combined,
           );
   appRouter.go(route(id));
+}
+
+/// "Revoke a directive" (More): the Revoke page for this session's directive;
+/// with none in this tab (the web keeps nothing between visits), the Learn
+/// article on how to revoke one signed earlier. Always reachable.
+Future<void> openRevokeOrGuide(WidgetRef ref) async {
+  final id =
+      mostRecentDirectiveId(ref.read(allDirectivesProvider).value ?? const []);
+  if (id != null) {
+    appRouter.go(AppRoutes.revocationRoute(id));
+    return;
+  }
+  final nav = rootNavigatorKey.currentState;
+  final ctx = rootNavigatorKey.currentContext;
+  if (nav == null || ctx == null) return;
+  final guide = EducationalContent.sectionsFor(
+          Localizations.localeOf(ctx).languageCode)
+      .where((s) => s.id == 'faq_revoke');
+  if (guide.isEmpty) return;
+  await nav.push(MaterialPageRoute<void>(
+      builder: (_) => ArticleDetailScreen(section: guide.first)));
 }
 
 /// Erases everything in this session after a confirmation (destructive), then

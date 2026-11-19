@@ -97,7 +97,7 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
     // Agent-authorization review. PA Act 194 lets a principal BOTH record their
     // own consent AND, separately, authorize their agent to consent on their
     // behalf (for ECT, experimental studies, and drug trials that agent
-    // authorization needs the principal's physical initials, §5836(c)).
+    // authority must be specifically granted, §5836(c); the official form asks for initials).
     // Because the app stores a single choice per procedure, some valid
     // combinations print statements that read as contradictory — so surface
     // them as "confirm this is intended" notes (the official form allows both;
@@ -333,8 +333,6 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
             prefs.roommateGenderMatch.trim().isNotEmpty;
         b.writeln('Room preferences: ${hasRoom ? "provided" : "empty"}');
         if (hasAgent) {
-          b.writeln('Agent may consent to hospitalization: '
-              '${prefs.agentCanConsentHospitalization ? "yes" : "no"}');
           b.writeln('Agent may consent to medication: '
               '${prefs.agentCanConsentMedication ? "yes" : "no"}');
           b.writeln('Limits on agent authority: '

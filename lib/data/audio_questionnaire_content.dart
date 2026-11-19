@@ -175,10 +175,11 @@ const List<AudioQSection> audioQSections = [
     example:
         'For ECT, I do not consent. For experimental studies, I want my agent '
         'to decide. For drug trials, I do not consent.',
-    note: 'If you choose "my agent decides" for any of these three, '
-        'Pennsylvania law (§5836(c)) requires you to physically INITIAL '
-        'that authorization on the PRINTED form — the recording captures your '
-        'choice, but it can\'t initial for you.',
+    note: 'If you choose "my agent decides" for any of these three, the '
+        'official form asks you to initial that choice on the PRINTED form '
+        '(Pennsylvania law, §5836(c), lets your agent decide these only if you '
+        'specifically say so) — the recording captures your choice, but it '
+        'can\'t initial for you.',
   ),
   AudioQSection(
     number: '12',
@@ -213,8 +214,9 @@ const List<AudioQSection> audioQSections = [
 /// Things the recording can NOT fill — the user must do these in the app.
 const List<String> audioQCantDo = [
   'Your signature and your witnesses\' signatures.',
-  'Physical INITIALS for letting your agent decide ECT, experimental studies, '
-      'or drug trials (a legal requirement — see section 11).',
+  'Your initials on the printed form for letting your agent decide ECT, '
+      'experimental studies, or drug trials (the official form asks for them '
+      '— see section 11).',
   'The specific room-preference checkboxes (e.g. private room) — though your '
       'spoken room notes ARE captured, and a same-gender-roommate request is '
       'now auto-filled.',
@@ -227,8 +229,7 @@ const List<String> audioQCantDo = [
 /// Things the recording now CAN fill if you say them clearly — called out so
 /// users know they're worth speaking aloud.
 const List<String> audioQNowCaptured = [
-  'Whether your agent may consent to your hospitalization, and whether your '
-      'agent may decide your medications (say it explicitly).',
+  'Whether your agent may decide your medications (say it explicitly).',
   'A self-binding ("Ulysses") instruction — that your directive should be '
       'followed even if you object during a future crisis.',
   'Dosages for the medications you currently take.',

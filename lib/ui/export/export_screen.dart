@@ -34,7 +34,6 @@ import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/background_runner.dart';
-import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/utils/open_pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
@@ -973,24 +972,17 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   /// Expiry date of the directive, or null when it isn't signed yet.
-  DateTime? get _expiry {
-    final exp = _directive?.expirationDate;
-    if (exp == null || exp == 0) return null;
-    return DateTime.fromMillisecondsSinceEpoch(exp);
-  }
-
   /// "Add to calendar": the in-app renewal nudge only fires when the app is
   /// opened, and on the web the directive is gone once the tab closes, so
   /// this hands the user a calendar file with the renewal dates instead.
   List<Widget> _renewalReminderSection() {
-    final expiry = _expiry;
-    if (expiry == null) return const [];
+    if (_directive == null) return const [];
     final l = context.l10n;
     return [
       const SizedBox(height: 16),
       _railTitle(l.exportRenewalReminderTitle),
-      _railBody(l.exportRenewalReminderBody(
-          formatLongDate(expiry), appData.config.renewalWindowDays)),
+      _railBody(l.exportRenewalReminderBodyNoDate(
+          appData.config.renewalWindowDays)),
       const SizedBox(height: 8),
       Semantics(
         button: true,
@@ -1008,9 +1000,20 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   }
 
   Future<void> _downloadRenewalCalendar() async {
-    final expiry = _expiry;
-    if (expiry == null) return;
     final l = context.l10n;
+    // The person picks the day they sign (or signed): the app stamps no
+    // signing date, and validity runs from the real signing day.
+    final now = DateTime.now();
+    final signed = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(now.year - 2, now.month, now.day),
+      lastDate: DateTime(now.year + 1, now.month, now.day),
+      helpText: l.calendarWhenWillYouSign,
+    );
+    if (signed == null || !mounted) return;
+    final expiry = DateTime(
+        signed.year + appData.legal.validityYears, signed.month, signed.day);
     try {
       final ics = CalendarReminderService.buildRenewalIcs(
         expiration: expiry,

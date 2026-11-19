@@ -71,15 +71,10 @@ class DocumentExtractionResult {
   // 'women' | 'men' | 'sameAsIdentity' → DirectivePrefs.roommateGenderMatch.
   final String? roommateGenderMatch;
   // Guardianship conditions (explicit statements only) →
-  // GuardianNominations.guardianCanRevoke / CanChangeAgent / MustConsultAgent.
+  // GuardianNominations.guardianCanRevoke.
   final bool? guardianCanRevoke;
   final String? guardianCanRevokeNote;
-  final bool? guardianCanChangeAgent;
-  final String? guardianCanChangeAgentNote;
-  final bool? guardianMustConsultAgent;
-  final String? guardianMustConsultAgentNote;
-  // Agent authority → DirectivePrefs.agentCanConsentHospitalization / Medication.
-  final bool? agentCanConsentHospitalization;
+  // Agent authority → DirectivePrefs.agentCanConsentMedication.
   final bool? agentCanConsentMedication;
   // Self-binding ("Ulysses") opt-in → DirectivePrefs.selfBindingEnabled.
   final bool? selfBindingUlysses;
@@ -132,12 +127,7 @@ class DocumentExtractionResult {
     this.roommateGenderMatch,
     this.guardianCanRevoke,
     this.guardianCanRevokeNote,
-    this.guardianCanChangeAgent,
-    this.guardianCanChangeAgentNote,
-    this.guardianMustConsultAgent,
-    this.guardianMustConsultAgentNote,
     this.crisisPlan,
-    this.agentCanConsentHospitalization,
     this.agentCanConsentMedication,
     this.selfBindingUlysses,
     this.healthHistory,
@@ -176,10 +166,7 @@ class DocumentExtractionResult {
       roomPreferenceChips.isEmpty &&
       roommateGenderMatch == null &&
       guardianCanRevoke == null &&
-      guardianCanChangeAgent == null &&
-      guardianMustConsultAgent == null &&
       (crisisPlan == null || crisisPlan!.isEmpty) &&
-      agentCanConsentHospitalization == null &&
       agentCanConsentMedication == null &&
       selfBindingUlysses == null &&
       healthHistory == null &&
@@ -229,19 +216,9 @@ class DocumentExtractionResult {
       guardianCanRevoke: guardianCanRevoke ?? other.guardianCanRevoke,
       guardianCanRevokeNote:
           _mergeText(guardianCanRevokeNote, other.guardianCanRevokeNote),
-      guardianCanChangeAgent:
-          guardianCanChangeAgent ?? other.guardianCanChangeAgent,
-      guardianCanChangeAgentNote: _mergeText(
-          guardianCanChangeAgentNote, other.guardianCanChangeAgentNote),
-      guardianMustConsultAgent:
-          guardianMustConsultAgent ?? other.guardianMustConsultAgent,
-      guardianMustConsultAgentNote: _mergeText(
-          guardianMustConsultAgentNote, other.guardianMustConsultAgentNote),
       crisisPlan: crisisPlan == null
           ? other.crisisPlan
           : crisisPlan!.merge(other.crisisPlan),
-      agentCanConsentHospitalization:
-          agentCanConsentHospitalization ?? other.agentCanConsentHospitalization,
       agentCanConsentMedication:
           agentCanConsentMedication ?? other.agentCanConsentMedication,
       selfBindingUlysses: selfBindingUlysses ?? other.selfBindingUlysses,
@@ -406,18 +383,10 @@ class DocumentExtractionResult {
       roommateGenderMatch: optStr(json['roommate_gender_match']),
       guardianCanRevoke: json['guardian_can_revoke'] as bool?,
       guardianCanRevokeNote: optStr(json['guardian_can_revoke_note']),
-      guardianCanChangeAgent: json['guardian_can_change_agent'] as bool?,
-      guardianCanChangeAgentNote:
-          optStr(json['guardian_can_change_agent_note']),
-      guardianMustConsultAgent: json['guardian_must_consult_agent'] as bool?,
-      guardianMustConsultAgentNote:
-          optStr(json['guardian_must_consult_agent_note']),
       crisisPlan: json['crisis_plan'] is Map<String, dynamic>
           ? ExtractedCrisisPlan.fromJson(
               json['crisis_plan'] as Map<String, dynamic>)
           : null,
-      agentCanConsentHospitalization:
-          json['agent_can_consent_hospitalization'] as bool?,
       agentCanConsentMedication: json['agent_can_consent_medication'] as bool?,
       selfBindingUlysses: json['self_binding_ulysses'] as bool?,
       healthHistory: optStr(json['health_history']),

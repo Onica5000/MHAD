@@ -164,7 +164,6 @@ List<pw.Page> buildCombinedPages({
         pw.Text(ft.authorityPreamble, style: bodyStyle()),
         pw.SizedBox(height: 6),
         if (prefs != null) ...[
-          ...hospitalizationAuthorityBlock(prefs),
           ...medicationAuthorityBlock(prefs),
           ...procedureAgentAuthoritySection(
             header: '2. Preferences regarding electroconvulsive therapy (ECT).',

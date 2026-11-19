@@ -52,13 +52,9 @@ class _SignScreenState extends ConsumerState<SignScreen> {
     final repo = ref.read(directiveRepositoryProvider);
     final d = await repo.getDirectiveById(widget.directiveId);
     if (d == null || !mounted) return;
-    // Stamp executionDate on first landing — arriving at Sign means the
-    // user has accepted the "print + sign + 2 witnesses" path. Idempotent
-    // when the field already carries a value.
-    if (d.executionDate == null) {
-      await repo.setExecutionDate(
-          widget.directiveId, DateTime.now().millisecondsSinceEpoch);
-    }
+    // No signing date is stamped here: the person dates the printed form
+    // when they sign it (the official date line stays blank — reaching this
+    // page is not signing). The calendar reminder asks for the day instead.
     if (!mounted) return;
     setState(() {
       _formType = FormType.values.firstWhere(

@@ -281,8 +281,9 @@ List<pw.Widget> _sharedMedTables({
           preferred.isNotEmpty) ...[
         pw.Text(genericNote, style: smallBodyStyle()),
         pw.Text(
-          'Note: Narrow therapeutic index (NTI) drugs (e.g., lithium, carbamazepine, '
-          'valproic acid) cannot have generics substituted under PA law (35 P.S. §960.3).',
+          'Note: Narrow therapeutic index (NTI) drugs (e.g., lithium, carbamazepine) '
+          "have special generic-substitution rules under Pennsylvania's Generic "
+          'Equivalent Drug Law.',
           style: smallBodyStyle(),
         ),
       ],
@@ -687,23 +688,7 @@ List<pw.Widget> alternateAgentSection({
       ),
     ];
 
-// ─── Agent authority (hospitalization / medications / limitations) ──────────
-
-List<pw.Widget> hospitalizationAuthorityBlock(DirectivePref prefs) => [
-      pw.Text('Preferences regarding hospitalization.', style: boldStyle()),
-      pw.SizedBox(height: 2),
-      checkRow(
-        'My agent is authorized to consent to my voluntary admission to a '
-        'treatment facility for mental health care.',
-        checked: prefs.agentCanConsentHospitalization,
-      ),
-      checkRow(
-        'My agent is not authorized to consent to my voluntary admission to a '
-        'treatment facility for mental health care.',
-        checked: !prefs.agentCanConsentHospitalization,
-      ),
-      pw.SizedBox(height: 4),
-    ];
+// ─── Agent authority (medications / limitations) ────────────────────────────
 
 List<pw.Widget> medicationAuthorityBlock(DirectivePref prefs) => [
       pw.Text(
@@ -782,25 +767,6 @@ List<pw.Widget> guardianSection({
     ),
     if (guardian != null && guardian.guardianCanRevoke)
       guardianNote(guardian.guardianCanRevokeNote),
-    if (guardian != null &&
-        (guardian.guardianCanChangeAgent ||
-            guardian.guardianMustConsultAgent)) ...[
-      pw.SizedBox(height: 4),
-      if (guardian.guardianCanChangeAgent)
-        checkRow(
-          'The guardian may change my designated agent.',
-          checked: true,
-        ),
-      if (guardian.guardianCanChangeAgent)
-        guardianNote(guardian.guardianCanChangeAgentNote),
-      if (guardian.guardianMustConsultAgent)
-        checkRow(
-          'The guardian must consult my agent before acting.',
-          checked: true,
-        ),
-      if (guardian.guardianMustConsultAgent)
-        guardianNote(guardian.guardianMustConsultAgentNote),
-    ],
   ];
 }
 

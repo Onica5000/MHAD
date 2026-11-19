@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 
 /// Locks the audit-added extraction fields (docs/AI_AUDIT_2026-07-08.md C1-C4):
-/// medication consent + conditional values, statutory triggers, guardianship
-/// conditions, room-preference chips + roommate match, and the structured
+/// medication consent + conditional values, statutory triggers, the guardian
+/// revoke condition, room-preference chips + roommate match, and the structured
 /// crisis plan — parse, merge, and shape.
 void main() {
   test('parses the C1 fields: medication consent, conditional, triggers', () {
@@ -25,16 +25,13 @@ void main() {
       () {
     final r = DocumentExtractionResult.fromJson({
       'guardian_can_revoke': false,
-      'guardian_must_consult_agent': true,
-      'guardian_must_consult_agent_note': 'unless unreachable for 48 hours',
+      'guardian_can_revoke_note': 'unless unreachable for 48 hours',
       'room_preference_chips': ['singleRoom', 'quietFloor', ''],
       'same_gender_roommate': true,
       'roommate_gender_match': 'women',
     });
     expect(r.guardianCanRevoke, isFalse);
-    expect(r.guardianCanChangeAgent, isNull);
-    expect(r.guardianMustConsultAgent, isTrue);
-    expect(r.guardianMustConsultAgentNote, 'unless unreachable for 48 hours');
+    expect(r.guardianCanRevokeNote, 'unless unreachable for 48 hours');
     expect(r.roomPreferenceChips, ['singleRoom', 'quietFloor'],
         reason: 'empty entries dropped');
     expect(r.roommateGenderMatch, 'women');

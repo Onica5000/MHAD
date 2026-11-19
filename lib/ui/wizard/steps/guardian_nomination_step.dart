@@ -1,4 +1,5 @@
-﻿import 'package:drift/drift.dart' show Value;
+﻿import 'package:mhad/domain/model/directive.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,14 +71,10 @@ class _GuardianNominationStepState
   late final TextEditingController _zipCtrl;
   late final TextEditingController _phoneCtrl;
   late final TextEditingController _relationshipCtrl;
-  // Free-form detail for each "yes" condition (revealed only when Yes).
-  late final TextEditingController _changeAgentNoteCtrl;
+  // Free-form detail for the "yes" condition (revealed only when Yes).
   late final TextEditingController _revokeNoteCtrl;
-  late final TextEditingController _consultNoteCtrl;
   int? _existingId;
   bool _guardianCanRevoke = false;
-  bool _guardianCanChangeAgent = false;
-  bool _guardianMustConsultAgent = false;
   _GuardianRel _relation = _GuardianRel.noPreference;
 
   @override
@@ -91,9 +88,7 @@ class _GuardianNominationStepState
     _zipCtrl = TextEditingController();
     _phoneCtrl = TextEditingController();
     _relationshipCtrl = TextEditingController();
-    _changeAgentNoteCtrl = TextEditingController();
     _revokeNoteCtrl = TextEditingController();
-    _consultNoteCtrl = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
   }
 
@@ -107,16 +102,19 @@ class _GuardianNominationStepState
     _zipCtrl.dispose();
     _phoneCtrl.dispose();
     _relationshipCtrl.dispose();
-    _changeAgentNoteCtrl.dispose();
     _revokeNoteCtrl.dispose();
-    _consultNoteCtrl.dispose();
     super.dispose();
   }
 
+  /// The official Declaration has no agent, so its guardian part (form part
+  /// E) shows only the nominee and the revoke / suspend / end choice.
+  bool _isDeclaration = false;
+
   Future<void> _loadData() async {
-    final g = await ref
-        .read(directiveRepositoryProvider)
-        .getGuardianNomination(widget.directiveId);
+    final repo = ref.read(directiveRepositoryProvider);
+    final d = await repo.getDirectiveById(widget.directiveId);
+    _isDeclaration = d?.formType == FormType.declaration.name;
+    final g = await repo.getGuardianNomination(widget.directiveId);
     markLoaded();
     if (g != null && mounted) {
       setState(() {
@@ -130,11 +128,7 @@ class _GuardianNominationStepState
         _phoneCtrl.text = g.nomineePhone;
         _relationshipCtrl.text = g.nomineeRelationship;
         _guardianCanRevoke = g.guardianCanRevoke;
-        _guardianCanChangeAgent = g.guardianCanChangeAgent;
-        _guardianMustConsultAgent = g.guardianMustConsultAgent;
-        _changeAgentNoteCtrl.text = g.guardianCanChangeAgentNote;
         _revokeNoteCtrl.text = g.guardianCanRevokeNote;
-        _consultNoteCtrl.text = g.guardianMustConsultAgentNote;
         _relation = _GuardianRel.fromId(g.guardianRelation);
       });
     }
@@ -167,23 +161,17 @@ class _GuardianNominationStepState
             nomineePhone: Value(_phoneCtrl.text.trim()),
             nomineeRelationship: Value(_relationshipCtrl.text.trim()),
             guardianCanRevoke: Value(_guardianCanRevoke),
-            guardianCanChangeAgent: Value(_guardianCanChangeAgent),
-            guardianMustConsultAgent: Value(_guardianMustConsultAgent),
-            // Persist notes only while the matching condition is Yes; clear
+            // Persist the note only while the condition is Yes; clear
             // otherwise so a later "No" doesn't leave orphaned detail.
-            guardianCanChangeAgentNote: Value(
-                _guardianCanChangeAgent ? _changeAgentNoteCtrl.text.trim() : ''),
             guardianCanRevokeNote: Value(
                 _guardianCanRevoke ? _revokeNoteCtrl.text.trim() : ''),
-            guardianMustConsultAgentNote: Value(
-                _guardianMustConsultAgent ? _consultNoteCtrl.text.trim() : ''),
             guardianRelation: Value(_relation.id),
           ),
         );
     return true;
   }
 
-  /// Free-form detail box revealed under a guardianship condition set to Yes.
+  /// Free-form detail box revealed under the guardian condition set to Yes.
   Widget _conditionNote(TextEditingController ctrl, String hint) {
     return Padding(
       padding: const EdgeInsets.only(left: 8, top: 2, bottom: 8),
@@ -224,12 +212,14 @@ class _GuardianNominationStepState
                 ),
           ),
           const SizedBox(height: 12),
-          InfoBanner(
-            icon: Icons.info_outline,
-            margin: EdgeInsets.zero,
-            text: context.l10n.guardianNomGuardianVsAgent,
-          ),
-          const SizedBox(height: 12),
+          if (!_isDeclaration) ...[
+            InfoBanner(
+              icon: Icons.info_outline,
+              margin: EdgeInsets.zero,
+              text: context.l10n.guardianNomGuardianVsAgent,
+            ),
+            const SizedBox(height: 12),
+          ],
           // Phase 2 — 4-radio Opt pattern per v2 prototype's `ScrWizardGuardian`.
           // The 'Someone different' branch expands inline to show the existing
           // free-text fields; other branches hide them (and clear on save).
@@ -243,7 +233,10 @@ class _GuardianNominationStepState
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
-          for (final rel in _GuardianRel.values) ...[
+          for (final rel in _GuardianRel.values.where((r) =>
+              !_isDeclaration ||
+              (r != _GuardianRel.sameAsPrimary &&
+                  r != _GuardianRel.sameAsAlternate))) ...[
             _GuardianRelOptCard(
               option: rel,
               selected: _relation == rel,
@@ -314,20 +307,12 @@ class _GuardianNominationStepState
           ),
           const SizedBox(height: 4),
           Text(
-            context.l10n.guardianNomConditionsIntro,
+            _isDeclaration
+                ? context.l10n.guardianNomConditionsIntroDeclaration
+                : context.l10n.guardianNomConditionsIntro,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
-          _GuardianConditionRow(
-            label: context.l10n.guardianNomCanChangeAgent,
-            value: _guardianCanChangeAgent,
-            onChanged: (v) => setState(() => _guardianCanChangeAgent = v),
-          ),
-          if (_guardianCanChangeAgent)
-            _conditionNote(
-              _changeAgentNoteCtrl,
-              context.l10n.guardianNomCanChangeAgentHint,
-            ),
           _GuardianConditionRow(
             label: context.l10n.guardianNomCanOverride,
             sub: context.l10n.guardianNomCanOverrideSub,
@@ -338,16 +323,6 @@ class _GuardianNominationStepState
             _conditionNote(
               _revokeNoteCtrl,
               context.l10n.guardianNomCanOverrideHint,
-            ),
-          _GuardianConditionRow(
-            label: context.l10n.guardianNomMustConsult,
-            value: _guardianMustConsultAgent,
-            onChanged: (v) => setState(() => _guardianMustConsultAgent = v),
-          ),
-          if (_guardianMustConsultAgent)
-            _conditionNote(
-              _consultNoteCtrl,
-              context.l10n.guardianNomMustConsultHint,
             ),
         ],
       ),

@@ -35,12 +35,12 @@
     "Pennsylvania facts to rely on (Act 194 of 2004, 20 Pa.C.S. Chapter 58):",
     "- A mental health advance directive can be a declaration (treatment instructions), a power of attorney (naming an agent), or both combined.",
     "- To be valid it is signed and dated by the person and by two witnesses who are 18 or older and physically present. No notary is required.",
-    "- These people cannot be witnesses: the agent or alternate agent; the person's health care or mental health care provider; an employee of the facility where the person receives treatment — unless the witness is related to the person by blood, marriage, or adoption.",
+    "- A witness may not be the agent or the person who signs on the person's behalf (to be safe, not the alternate agent either). Providers, facility staff and relatives may be witnesses.",
     "- It is valid for two years from signing, unless the person is incapable of making mental health care decisions when it would expire — then it stays in effect until their capacity returns.",
     "- It can be revoked at any time while the person has capacity, orally or in writing; the revocation takes effect when it is communicated to the attending physician or mental health care provider (§§ 5825, 5839).",
-    "- It takes effect when the person is found incapable of making mental health care decisions, after examination by a psychiatrist and one of: another psychiatrist, a psychologist, a family physician, an attending physician, or a mental health treatment professional (§§ 5823, 5833).",
+    "- It takes effect under the condition the person chose; by default, when the person is found incapable of making mental health care decisions after examination by a psychiatrist and one of: another psychiatrist, a psychologist, a family physician, an attending physician, or a mental health treatment professional (§§ 5823, 5833).",
     "- Electroconvulsive therapy (ECT), experimental procedures and research need the person's specific authorization (§ 5836(c)). Psychosurgery and the termination of parental rights can never be authorized (§ 5836(b)).",
-    "- Medication dosage instructions are not binding on the physician (§ 5823(b)(2)). Involuntary treatment under the Mental Health Procedures Act is not affected (§ 5843(a)).",
+    "- Medication dosage instructions are not binding on the physician (the statutory form in § 5823). The commitment rules of the Mental Health Procedures Act still apply (§ 5843(a)(4)).",
     "- This is not legal or medical advice. For legal questions, suggest a licensed Pennsylvania attorney or PA Protection & Advocacy at {paPhone}."
   ],
   "envelope": {

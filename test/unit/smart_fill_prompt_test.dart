@@ -78,11 +78,11 @@ void main() {
     test('agent-authority lines appear for combined/poa but not declaration',
         () {
       final combined = SmartFillService.buildPrompt(input(formType: 'combined'));
-      expect(combined, contains('Agent consent to hospitalization:'));
+      expect(combined, contains('Agent consent to medication:'));
       expect(combined, contains('"agent_guidance"'));
 
       final declaration = SmartFillService.buildPrompt(input(formType: 'declaration'));
-      expect(declaration, isNot(contains('Agent consent to hospitalization:')));
+      expect(declaration, isNot(contains('Agent consent to medication:')));
       expect(declaration, isNot(contains('"agent_guidance"')),
           reason: 'a declaration has no agent, so the agent field must be '
               'omitted from the requested JSON');

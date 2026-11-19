@@ -52,8 +52,8 @@ List<pw.Page> buildSupplementaryPages() {
         item(
           'Asking about your directive (§ 5807)',
           'Providers must ask whether you have a directive when you come into '
-              'their care, and may NOT require you to make (or forgo) one as '
-              'a condition of receiving treatment or insurance.',
+              'their care, may NOT require one as a condition of treatment, and '
+              'may not accept or refuse you based only on whether you have one.',
         ),
         item(
           'Emergencies and involuntary treatment (§ 5843(a))',
@@ -140,10 +140,10 @@ List<pw.Page> buildSupplementaryPages() {
         ),
         item(
           'Tampering is a crime (§ 5806)',
-          'Concealing, altering, forging, or destroying a directive without '
-              'consent — or causing one to be signed or revoked through '
-              'fraud, duress, or undue influence — is a felony of the third '
-              'degree.',
+          'Willfully concealing, cancelling, altering, defacing or destroying '
+              'a directive without your consent, forging one so that your care '
+              'changes, or causing someone to sign one through fraud, duress, '
+              'or undue influence is a felony of the third degree.',
         ),
       ],
     ),

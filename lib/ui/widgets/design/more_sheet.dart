@@ -143,6 +143,15 @@ class _MoreSheet extends StatelessWidget {
                 },
               ),
               _MoreRow(
+                icon: Icons.cancel_outlined,
+                title: context.l10n.moreSheetRevokeADirective,
+                detail: context.l10n.moreSheetRevokeDetail,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  openRevokeOrGuide(ref);
+                },
+              ),
+              _MoreRow(
                 icon: Icons.support_agent_outlined,
                 title: context.l10n.moreSheetGetHelp,
                 detail: context.l10n.webSidebarPeerSupportAdvocatesReferrals,
