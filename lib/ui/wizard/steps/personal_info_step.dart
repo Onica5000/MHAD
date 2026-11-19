@@ -171,7 +171,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't overwrite identity fields before load
-    _formKey.currentState?.validate(); // Show warnings but don't block
+    showWarnings(_formKey); // Show warnings but don't block
     await ref.read(directiveRepositoryProvider).updatePersonalInfo(
       widget.directiveId,
       fullName: _fullNameCtrl.text.trim(),
@@ -225,7 +225,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
           '${picked.day.toString().padLeft(2, '0')}/'
           '${picked.year}';
       // Trigger validation
-      _formKey.currentState?.validate();
+      showWarnings(_formKey);
     }
   }
 

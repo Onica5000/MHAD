@@ -41,7 +41,7 @@ class _PeopleITrustStepState extends ConsumerState<PeopleITrustStep>
     for (final k in [_primaryKey, _alternateKey, _authorityKey]) {
       final s = k.currentState;
       if (s is WizardStepMixin) {
-        ok = await (s as WizardStepMixin).validateAndSave() && ok;
+        ok = await saveSubStep(s as WizardStepMixin) && ok;
       }
     }
     return ok;

@@ -2,12 +2,12 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/progress/progress_gate.dart' show startDirective;
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
-import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/onboarding_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_art.dart';
@@ -56,11 +56,8 @@ class OnboardingScreen extends ConsumerWidget {
     await notifier.complete();
     // Create a fresh directive to autofill, then open the standalone
     // snap-to-fill page (mirrors web_landing.dart::_start).
-    final id =
-        await ref.read(directiveRepositoryProvider).createDirective(
-              FormType.combined,
-            );
-    if (!context.mounted) return;
+    final id = await startDirective(ref, FormType.combined);
+    if (id == null || !context.mounted) return;
     context.go(AppRoutes.uploadRoute(id));
   }
 

@@ -30,7 +30,7 @@ class _WhenItKicksInStepState extends ConsumerState<WhenItKicksInStep>
   Future<bool> validateAndSave() async {
     final es = _effectiveKey.currentState;
     if (es is WizardStepMixin) {
-      return (es as WizardStepMixin).validateAndSave();
+      return saveSubStep(es as WizardStepMixin);
     }
     return true;
   }

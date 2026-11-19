@@ -171,6 +171,11 @@ def inventory(url: str) -> dict:
                 print(f"[{vp_name}] could not find 'Start now'; per-directive routes may be empty",
                       file=sys.stderr)
             page.wait_for_timeout(2000)
+            # The start question (how to keep the work, 2026-11-18): keep
+            # nothing outside the tab — no passphrase needed for a survey.
+            enable_semantics(page)
+            click_named(page, "button", "No, keep nothing", timeout=4000)
+            page.wait_for_timeout(2000)
             routes: dict = {}
             for route in ROUTES:
                 page.evaluate(f"() => {{ location.hash = '#{route}'; }}")

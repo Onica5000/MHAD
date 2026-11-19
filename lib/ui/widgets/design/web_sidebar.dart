@@ -5,6 +5,9 @@ import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/locked_progress/locked_progress_store.dart'
+    show ProgressMode;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 
@@ -147,6 +150,32 @@ class WebSidebar extends ConsumerWidget {
       onTap: () => confirmAndResetSession(ref),
     );
 
+    // Actions below the divider: the progress file and the locked copy (web),
+    // then Reset.
+    final hasWork =
+        (ref.watch(allDirectivesProvider).value ?? const []).isNotEmpty;
+    final locked = ref.watch(
+            progressAutosaveProvider.select((s) => s.mode)) ==
+        ProgressMode.locked;
+    final actions = <_SidebarItem>[
+      if (hasWork)
+        _SidebarItem(
+          icon: Icons.download_outlined,
+          label: context.l10n.moreSheetDownloadToFinishLater,
+          isActive: false,
+          onTap: () => downloadToFinishLater(ref, preferredId: focusedId),
+        ),
+      if (locked)
+        _SidebarItem(
+          icon: Icons.lock_reset_outlined,
+          label: context.l10n.moreSheetDeleteSavedProgress,
+          isActive: false,
+          danger: true,
+          onTap: () => confirmDeleteSavedProgress(ref),
+        ),
+      reset,
+    ];
+
     // Material root: the sidebar is built in MaterialApp.router's builder,
     // ABOVE the routed Navigator, so without its own Material the brand text
     // fell back to Flutter's no-Material text style (the yellow double
@@ -154,7 +183,7 @@ class WebSidebar extends ConsumerWidget {
     if (compact) {
       return Material(
         color: p.card,
-        child: _CompactRail(items: items, reset: reset),
+        child: _CompactRail(items: items, actions: actions),
       );
     }
     return Material(
@@ -219,11 +248,12 @@ class WebSidebar extends ConsumerWidget {
                   const SizedBox(height: 12),
                   Divider(color: p.border, height: 1),
                   const SizedBox(height: 12),
-                  _SidebarItemRow(
-                    item: reset,
-                    active: false,
-                    onTap: reset.onTap,
-                  ),
+                  for (final a in actions)
+                    _SidebarItemRow(
+                      item: a,
+                      active: false,
+                      onTap: a.onTap,
+                    ),
                 ],
               ),
             ),
@@ -374,8 +404,9 @@ class _SidebarItemRow extends StatelessWidget {
 /// show only on hover / long-press) and a full screen-reader label.
 class _CompactRail extends StatelessWidget {
   final List<_SidebarItem> items;
-  final _SidebarItem reset;
-  const _CompactRail({required this.items, required this.reset});
+  /// Below the divider: download, delete the locked copy, Reset.
+  final List<_SidebarItem> actions;
+  const _CompactRail({required this.items, required this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -420,14 +451,17 @@ class _CompactRail extends StatelessWidget {
                   const SizedBox(height: 8),
                   Divider(color: p.border, height: 1),
                   const SizedBox(height: 8),
-                  _RailButton(
-                    icon: reset.icon,
-                    label: reset.label,
-                    tooltip: reset.label,
-                    selected: false,
-                    iconColor: SemanticColors.errorText(brightness),
-                    onTap: reset.onTap,
-                  ),
+                  for (final a in actions)
+                    _RailButton(
+                      icon: a.icon,
+                      label: a.label,
+                      tooltip: a.label,
+                      selected: false,
+                      iconColor: a.danger
+                          ? SemanticColors.errorText(brightness)
+                          : null,
+                      onTap: a.onTap,
+                    ),
                 ],
               ),
             ),

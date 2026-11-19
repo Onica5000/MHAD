@@ -468,10 +468,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wizardExitWithoutSaving => 'Exit Without Saving?';
 
   @override
-  String get wizardExitWebBody =>
-      'The web app does not save your progress permanently.\n\nIf you leave, close the tab, or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased. Export or print your document to keep a copy.';
-
-  @override
   String get wizardExitPublicBody =>
       'You are in Public Mode — your data is stored in memory only and will be lost when the app closes.\n\nExport or print your document before leaving. To save across sessions, use Private Mode instead.';
 
@@ -2839,7 +2835,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homePrivateBodyWeb =>
-      'Your directive never leaves this browser — no server, no account, no tracking. It lives only in this session, and only you choose who to share it with.';
+      'Your directive never leaves this browser — no server, no account, no tracking. It stays in this tab unless you keep a locked copy, and only you choose who to share it with.';
 
   @override
   String get homePrivateBodyDevice =>
@@ -3562,9 +3558,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportOpenWalletCardPdf => 'Open wallet card (PDF)';
 
   @override
-  String get exportEncryptTheFile => 'Encrypt the file';
-
-  @override
   String get exportDownload => 'Download';
 
   @override
@@ -3643,7 +3636,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDownloadAnEditableCopyOf =>
-      'Download an editable copy of your directive';
+      'Download a locked, editable copy of your directive';
 
   @override
   String get exportExportAsFhirJsonFor =>
@@ -3724,10 +3717,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiSetupHowYourDataIsHandled => 'How your data is handled';
-
-  @override
-  String get aiSetupYourDirectiveDataIsHeld =>
-      '- Your directive data is held in memory only; on close or crash it is kept ~10 minutes for recovery, then wiped — never written to disk or a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
 
   @override
   String get aiSetupCommonQuestions => 'Common questions';
@@ -3839,10 +3828,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'How data is stored & protected';
 
   @override
-  String get privacyPolicyYourDirectiveDataIsNot =>
-      'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in an in-memory database in your browser tab. If you close the tab or the app crashes, your work is kept on this device for about 10 minutes so you can reopen and recover it — then it is wiped. Nothing is written to a server. Export or print your directive to keep a permanent copy.';
-
-  @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
       'AI features & third-party data sharing';
 
@@ -3864,15 +3849,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
+      'If you are in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) may give you rights over your data. Here is how to use them in this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and AI consent dialogs.\n\nYour rights:\n  - Right to access: Your data stays in your browser — you can see all of it in the app at any time.\n  - Right to erasure: Use “Start over” to erase everything in this browser, including a locked copy kept on this device; “Delete saved progress” erases just the locked copy.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using AI features at any time; remove your API key to prevent further data transmission.\n  - Right to restriction: When you start, choose to keep nothing outside the browser tab.\n\nData sent to your chosen AI provider is processed under that provider’s own privacy policy and data processing terms. We cannot control or delete data once it has been sent.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'US state consumer health data laws (CA, WA, CT, NV, NY)';
+      'US state health-privacy laws (CA, WA, CT, NV)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) The only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you affirmatively opt in to AI features each session. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'This app may be subject to state consumer-health-data privacy laws such as Washington’s My Health My Data Act (MHMDA), Connecticut’s CTDPA health provisions and Nevada’s SB 370. California’s CCPA/CPRA treats health information as “sensitive personal information”.\n\nMental-health-directive content is health data under each of these laws (“consumer health data” in Washington, Connecticut and Nevada; “sensitive personal information” in California). Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) Besides the lookups you start (a medication or condition name, a doctor’s name, or a ZIP code — see “No third-party tracking”), the only third party that may receive any of your text is the AI provider you choose (Google Gemini by default, or Anthropic, OpenAI, or xAI), and **only** if you opt in to AI features each session. (4) We use no analytics, advertising or tracking code, no tracking pixels and no cookies. (5) You can erase everything in this browser at any time with “Start over”, which also erases a locked copy kept on this device.\n\nWashington MHMDA includes a **private right of action**; we have designed the app to require explicit, per-session consent before any third-party transfer of consumer health data, and we treat written consent as conditional on the specific terms shown in the AI consent dialog.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below.';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
@@ -3880,7 +3865,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyToHelpYouFillIn =>
-      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nNo personal or identifying information is included in any of these requests — only the medical term, code, or provider name being looked up.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
+      'To help you fill in and understand your directive, the app looks things up in free, public U.S. government databases. These lookups use ONLY the single term or code needed for that lookup. They never receive your identity (your name, date of birth, address, or phone), the people you name (agents, witnesses, guardian), or your saved directive.\n\nWhat is sent, and to whom:\n  - Medication name you type → NLM RxTerms (autocomplete).\n  - Condition name you type → NLM ICD-10-CM (diagnosis lookup).\n  - A doctor / provider name you type into the optional doctor search → NLM NPI registry, used only to look that provider up in the public registry of healthcare providers.\n  - A condition (by its ICD-10 code) or a medication (by name, resolved to a code via NLM RxNav) → NLM MedlinePlus Connect, to fetch a plain-language explanation.\n  - A medication name → openFDA (U.S. Food & Drug Administration), to fetch that drug’s official FDA label, which is used to ground the side-effects list.\n\nEach request contains only what you typed into that search, or the code it found — nothing else from your directive.\n\nNLM, NIH, and the FDA are not responsible for this product and do not endorse or recommend it. These services are for information only and are not medical advice — consult a qualified professional. The NLM Clinical Table services are rate-limited to 20 requests/second.\n\nSources: U.S. National Library of Medicine (RxTerms, ICD-10-CM, NPI registry, RxNav, MedlinePlus Connect); U.S. Food & Drug Administration (openFDA).';
 
   @override
   String get privacyPolicyPdfExportSharing => 'PDF export & sharing';
@@ -3894,14 +3879,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
-      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.\n\nUninstalling the app removes all locally stored data.';
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nYou can remove your AI provider API key(s) at any time from the AI Setup screen.';
 
   @override
   String get privacyPolicyNoThirdPartyTracking => 'No third-party tracking';
 
   @override
   String get privacyPolicyThisAppDoesNotInclude =>
-      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. No data is sent to the app developer at any time.';
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only outside connections this app makes are:\n  - Your chosen AI provider — Google Gemini (default), Anthropic, OpenAI, or xAI — only when you use AI features\n  - Google’s servers (www.gstatic.com, fonts.gstatic.com) — each time the app loads, for its display engine and some fonts. Nothing you type is sent, but Google sees your IP address, as with any website that uses its fonts.\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n  - Zippopotam.us and the U.S. FCC’s Area API — only when you tap to fill city, county and state from a ZIP code (sends the ZIP code, then that area’s map coordinates)\n  - Your browser’s speech recognition — only if you use voice dictation; browsers such as Chrome and Edge send the recording to their maker’s servers to turn it into text.\n\nEach lookup receives only what you typed into that search, or the code or ZIP code being looked up — never your directive. No data is sent to the app developer at any time.';
 
   @override
   String get privacyPolicyHipaaCompliance => 'HIPAA & compliance';
@@ -3915,7 +3900,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
-      'In accordance with the FTC Health Breach Notification Rule, if any unauthorized disclosure of your health information occurs through a security breach, we will notify affected users within 60 calendar days of discovering the breach.\n\nBecause this app stores data locally on your device and does not maintain a server-side database, breach risk is limited to the optional AI features. If your chosen AI provider notifies us of a breach affecting data sent through the app, we will pass that notification along through an in-app notice and a posting on the hosted privacy policy page.';
+      'In accordance with the FTC Health Breach Notification Rule, if a security breach exposes your health information, we will give notice within 60 calendar days of discovering it. Because the app collects no contact details, that notice is an in-app notice plus a notice posted on the hosted privacy policy page for at least 90 days.\n\nThis app keeps your directive in your browser and has no server-side database, so a breach would most likely involve the code the app is served from or one of the outside services named in this policy. If one of them notifies us of a breach affecting data sent through the app, we will pass that notification along in the same way.';
 
   @override
   String get privacyPolicyContact => 'Contact';
@@ -4116,11 +4101,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webLandingYouReWorkingAnonymouslyNothing =>
-      'You’re working anonymously. Nothing is saved.';
-
-  @override
-  String get webLandingNoAccountNoCloudIf =>
-      'No account, no cloud. If you close the tab or the app crashes, your work is kept on this device for 10 minutes so you can reopen and recover it — then it’s erased for good. Open your PDF and save it to keep a copy.';
+      'You’re working anonymously. Nothing is saved unless you choose.';
 
   @override
   String get webLandingHowThisWorks => 'HOW THIS WORKS →';
@@ -4361,11 +4342,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetThisIsAWebApp =>
-      'This is a web app: your directive is held in memory in your browser only and is ';
-
-  @override
-  String get legalSheetIfYouCloseTheTab =>
-      ' — if you close the tab or it crashes, your work is kept on this device for about 10 minutes for recovery, then wiped; it is never sent to a server. Export or print to keep a copy. This app is ';
+      'This is a web app: your directive stays in your browser and is ';
 
   @override
   String get legalSheetHipaaCompliant => ' HIPAA-compliant.';
@@ -4379,7 +4356,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirth =>
-      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included, and an automatic filter removes names, phone numbers, email addresses and similar details from anything you wrote in your own words (it can miss some). Only non-identifying context (such as conditions, medications, and care preferences) is shared, and only if you choose to use the assistant. (Uploading a document for autofill is the one exception, described next.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofill =>
@@ -4391,11 +4368,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetSeparatelyToHelpYouFill =>
-      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA. ';
+      'Separately, to help you fill in and understand your directive, the app looks up medications, conditions, and (optionally) your doctor in free, public U.S. government databases — the NIH/NLM Clinical Tables, MedlinePlus, and the FDA’s openFDA — and can fill in your city, county and state from a ZIP code (Zippopotam.us and the FCC). ';
 
   @override
   String get legalSheetNeverYourIdentityThePeople =>
-      ' — never your identity, the people you name, or your saved directive. They are reference information, not medical advice.';
+      ' — never your name, the people you name, or your saved directive. They are reference information, not medical advice.';
 
   @override
   String get legalSheetAiSuggestionsAreNotLegal =>
@@ -4437,7 +4414,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'PA law requires your signature (or someone signing at your direction), the date, and two witnesses aged 18 or older who watch you sign. Print it and sign it in ink — the app can’t sign for you.';
 
   @override
-  String get disclaimerNothingIsSavedOrSent => 'Nothing is saved or sent to us';
+  String get disclaimerNothingIsSavedOrSent =>
+      'Nothing is sent to us — and nothing is saved unless you choose';
 
   @override
   String get disclaimerYouCanStopOrChange =>
@@ -4560,7 +4538,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
-      'This permanently erases everything in this session — all directives, your AI key, and chat history — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+      'This permanently erases your work in this browser — all directives, a locked copy kept on this device, your AI key, and chat history — and returns you to a blank start. Your settings (such as theme and text size) stay.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
   String get moreSheetResetEverything => 'Erase and start over';
@@ -4823,7 +4801,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
-      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outbound flows are the opt-in AI features (your chosen AI provider) and NLM medical-reference lookups, both with PII stripping at a single chokepoint.';
+      'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outside connections are the lookups you start (medical terms to U.S. government databases, a ZIP code to fill in your address) and loading the app’s display engine and fonts from Google’s servers; the privacy policy lists them all.';
 
   @override
   String get makeItFindableMakeItFindableInA => 'Make it findable in a crisis.';
@@ -4857,7 +4835,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pastDirectiveDetailNoShareHistoryIsKept =>
-      'No share history is kept — nothing is saved after you close the app, so this list is empty by design.';
+      'No share history is kept, so this list is empty by design.';
 
   @override
   String get wizardAiRailFullView => 'Full view';
@@ -5342,7 +5320,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
-    return 'The FTC Health Breach Notification Rule requires at least two contact methods. We provide:\n\n  - In-app: an in-app breach notice will be shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (also used for breach postings if direct contact information is insufficient).';
+    return 'Under the FTC Health Breach Notification Rule, notice goes by mail or email — or, when there are no contact details, as here (the app collects none), by a substitute notice posted for 90 days. We provide:\n\n  - In-app: a breach notice shown the next time you open the app if a breach affects you.\n  - Online: $privacyPolicyUrl (where the substitute notice is posted for at least 90 days).';
   }
 
   @override
@@ -5421,10 +5399,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
     return '$facilitatorCompletionStat Pick the kind of support that fits today.';
   }
-
-  @override
-  String get disclaimerYouWorkAnonymouslyInThis =>
-      'You work anonymously in this browser tab — no account, no cloud, no tracking. If you close the tab your work is kept on this device for about 10 minutes for recovery, then wiped — open and save your PDF to keep it.';
 
   @override
   String get disclaimerNoAccountNoCloudNo =>
@@ -5558,11 +5532,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportNotAFinishedDocumentThis =>
-      'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.';
-
-  @override
-  String get exportEncryptingHindersOthersFromReading =>
-      'Encrypting hinders others from reading it; the app still opens it with no passphrase.';
+      'Not a finished document — this is how you keep your progress for another day. The file is locked with your passphrase: open it later with “Continue from a saved file”, here or on another device. Nothing is stored online.';
 
   @override
   String get exportMachineReadableFormats => 'Machine-readable formats';
@@ -6108,7 +6078,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetBoldTheseLookupsSendOnlyThe =>
-      'These lookups send only the medical term, code, or provider name being searched';
+      'These lookups send only the term, code, name or ZIP code being searched';
 
   @override
   String get legalSheetYourRightsUnderAct194 => 'Your rights under Act 194';
@@ -6623,7 +6593,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingPillAct194 => 'PA Act 194';
 
   @override
-  String get onboardingPillNothingSaved => 'Nothing is saved';
+  String get onboardingPillNothingSaved => 'Nothing saved unless you choose';
 
   @override
   String get onboardingPillStaysOnDevice => 'Stays on your device';
@@ -6897,11 +6867,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get aiHandoffExtend => 'Extend 30 min';
-
-  @override
   String aiHandoffExpiring(int minutes) {
-    return 'Your work here will be cleared in $minutes min. Extend to keep it while you’re in your AI.';
+    return 'The wait for your AI’s answer ends in $minutes min. Extend it if you need more time.';
   }
 
   @override
@@ -7221,7 +7188,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiCheckHandoffSubtitle =>
-      'Optional. Your AI reviews a summary of your directive (identifying details removed) for gaps and anything to double-check. The built-in check above always runs.';
+      'Optional. Your AI reviews a summary of your directive (names and contact details taken out) for gaps and anything to double-check. The built-in check above always runs.';
 
   @override
   String get smartFillHandoffTitle => 'AI suggestions for your preferences';
@@ -7253,19 +7220,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedInHandoff =>
-      'If you are located in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) applies to your use of this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights under GDPR:\n  - Right to access: All your data is stored locally on your device — you have direct access at all times.\n  - Right to erasure: Use “Delete All Data” in the app menu to permanently erase all local data.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: You may use the app in Public Mode without any data persistence.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.';
+      'If you are in the European Economic Area (EEA), the UK, or Switzerland, the General Data Protection Regulation (GDPR) may give you rights over your data. Here is how to use them in this app.\n\nLegal basis for processing: Your explicit consent, given through the in-app disclaimer and the notice shown before you first copy anything to an outside AI service.\n\nYour rights:\n  - Right to access: Your data stays in your browser — you can see all of it in the app at any time.\n  - Right to erasure: Use “Start over” to erase everything in this browser, including a locked copy kept on this device; “Delete saved progress” erases just the locked copy.\n  - Right to data portability: Export your directives as PDF or FHIR JSON (a standard health-records format) at any time.\n  - Right to withdraw consent: Stop using the AI help at any time — this app never sends anything to an AI service itself.\n  - Right to restriction: When you start, choose to keep nothing outside the browser tab.\n\nData you paste or attach in an outside AI service is processed under that service’s own privacy policy and data processing terms. We cannot control or delete it once it has been sent.';
 
   @override
   String get privacyPolicyThisAppMayBeSubjectHandoff =>
-      'This app may be subject to state consumer-health-data privacy laws including California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (CTDPA health provisions), Nevada (SB 370), and New York (Health Information Privacy Act).\n\nMental-health-directive content is “consumer health data” under each of these laws. Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your content to a third party itself. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no third-party SDKs, no analytics, no advertising frameworks, no tracking pixels or cookies. (5) You may delete all locally stored data at any time via “Delete All Data” in the app menu.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers consumer health data to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below (multiple methods are provided per the FTC Health Breach Notification Rule).';
+      'This app may be subject to state consumer-health-data privacy laws such as Washington’s My Health My Data Act (MHMDA), Connecticut’s CTDPA health provisions and Nevada’s SB 370. California’s CCPA/CPRA treats health information as “sensitive personal information”.\n\nMental-health-directive content is health data under each of these laws (“consumer health data” in Washington, Connecticut and Nevada; “sensitive personal information” in California). Under all of them: (1) We collect mental-health treatment-preference data **solely** to help you create your advance directive. (2) We **do not sell** your health data — there is no commercial recipient. (3) This app never sends your directive to a third party. The only things it sends are the lookups you start — a medication or condition name, a doctor’s name, or a ZIP code — to the services listed under “No third-party tracking”. If you choose to use the AI help, you copy instructions into an outside AI service yourself; that service receives **only** what you paste or attach there. (4) We use no analytics, advertising or tracking code, no tracking pixels and no cookies. (5) You can erase everything in this browser at any time with “Start over”, which also erases a locked copy kept on this device.\n\nWashington MHMDA includes a **private right of action**; we have designed the app so that it never transfers your directive to a third party itself, and so that, before you first copy anything to an outside AI service in a session, it shows a notice explaining that the service’s own terms apply.\n\nFor questions about your privacy rights, contact the developer using the channels listed in the Contact section below.';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
-      'You can delete any directive at any time from the home screen. Deleting a directive removes all associated data (personal info, agents, medications, witnesses, signatures) from the local database.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.\n\nUninstalling the app removes all locally stored data.';
+      'You can delete any directive at any time from the home screen. Deleting a directive removes all its data (personal information, agents, medications and treatment choices) from this browser tab.\n\nTo erase a locked copy kept on this device right away, choose “Delete saved progress” or “Start over”, or clear this site’s data in your browser settings.\n\nConversations in an outside AI service are kept or deleted with that service’s own controls.';
 
   @override
   String get privacyPolicyThisAppDoesNotIncludeHandoff =>
-      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only external network connections this app makes are:\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n\nEach of these receives only the term or code being looked up — never your identity or your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.';
+      'This app does not include any third-party analytics SDKs, advertising frameworks, crash reporting services (such as Firebase, Crashlytics, or Sentry), or tracking pixels.\n\nThe only outside connections this app makes are:\n  - Google’s servers (www.gstatic.com, fonts.gstatic.com) — each time the app loads, for its display engine and some fonts. Nothing you type is sent, but Google sees your IP address, as with any website that uses its fonts.\n  - NIH/NLM Clinical Table Search Service — medication, condition, and provider (doctor) lookups\n  - NLM MedlinePlus Connect & RxNav — plain-language condition and medication explanations (sends only an ICD-10 code or a medication name)\n  - openFDA / U.S. FDA — official drug labels used to ground the side-effects list (sends only a medication name)\n  - Zippopotam.us and the U.S. FCC’s Area API — only when you tap to fill city, county and state from a ZIP code (sends the ZIP code, then that area’s map coordinates)\n  - Your browser’s speech recognition — only if you use voice dictation; browsers such as Chrome and Edge send the recording to their maker’s servers to turn it into text.\n\nEach lookup receives only what you typed into that search, or the code or ZIP code being looked up — never your directive. The app never connects to an AI service: when you use the AI help, you open that service yourself. No data is sent to the app developer at any time.';
 
   @override
   String get legalSheetIfYouUseTheOptionalHandoff =>
@@ -7277,7 +7244,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirthHandoff =>
-      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included. Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)';
+      ' — your name, date of birth, address, and the names and contact details of your agents and guardian are never included, and an automatic filter removes names, phone numbers, email addresses and similar details from anything you wrote in your own words (it can miss some, so look over what you paste). Only non-identifying context (such as conditions, medications, and care preferences) goes in, and only if you choose to use the AI help. (A document you attach for autofill is the one exception, described next.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofillHandoff =>
@@ -7296,7 +7263,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingInHandoff =>
-      'This permanently erases everything in this session — all directives and any AI answer you’re waiting for — and returns you to a blank start.\n\nExport or print anything you want to keep first. This cannot be undone.';
+      'This permanently erases your work in this browser — all directives, a locked copy kept on this device, and any AI answer you’re waiting for — and returns you to a blank start. Your settings (such as theme and text size) stay.\n\nExport or print anything you want to keep first. This cannot be undone.';
 
   @override
   String get audioGuideDescribeYourWishesOutLoudHandoff =>
@@ -7419,4 +7386,300 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetRevokeDetail => 'Cancel one you signed, and who to tell';
+
+  @override
+  String get progressChoiceAppBar => 'Before you start';
+
+  @override
+  String get progressChoiceTitle => 'Keep your progress on this device?';
+
+  @override
+  String get progressChoiceLead =>
+      'If your browser closes or your phone reloads this page, a saved copy lets you pick up where you left off.';
+
+  @override
+  String get progressChoiceYesTitle => 'Yes, lock it with a passphrase';
+
+  @override
+  String progressChoiceYesBody(int minutes) {
+    return 'A locked copy is kept on this device while you work. Only your passphrase opens it. It expires $minutes minutes after you leave, and PA MHAD erases it the next time it’s opened here.';
+  }
+
+  @override
+  String get progressChoiceNoTitle => 'No, keep nothing';
+
+  @override
+  String get progressChoiceNoBody =>
+      'Nothing is saved. Your work is erased when you close this tab.';
+
+  @override
+  String get progressChoiceDownloadNote =>
+      'Either way, you can download your progress as a locked file to finish another day.';
+
+  @override
+  String get progressLocking => 'Locking…';
+
+  @override
+  String get passphraseSetupTitle => 'Choose a passphrase';
+
+  @override
+  String get passphraseSetupLead =>
+      'It locks your saved progress, here and in any file you download.';
+
+  @override
+  String get passphraseForgetWarning =>
+      'If you forget it, nobody can open your saved progress — there’s no way to recover it. Keep it somewhere safe.';
+
+  @override
+  String get passphraseFieldLabel => 'Passphrase';
+
+  @override
+  String get passphraseConfirmLabel => 'Type it again';
+
+  @override
+  String get passphraseShow => 'Show passphrase';
+
+  @override
+  String get passphraseHide => 'Hide passphrase';
+
+  @override
+  String get passphraseNeeds => 'Your passphrase needs:';
+
+  @override
+  String passphraseRuleMinLength(int count) {
+    return 'At least $count characters';
+  }
+
+  @override
+  String get passphraseRuleLowercase => 'A lowercase letter';
+
+  @override
+  String get passphraseRuleUppercase => 'A capital letter';
+
+  @override
+  String get passphraseRuleSpecial =>
+      'A symbol or a space (like ! ? # or a space)';
+
+  @override
+  String get passphraseRuleNotCommon => 'Not to be a common passphrase';
+
+  @override
+  String get passphraseRuleMatch => 'Both entries to match';
+
+  @override
+  String get passphraseRuleMet => 'done';
+
+  @override
+  String get passphraseRuleNotMet => 'not yet';
+
+  @override
+  String passphraseStrength(String level) {
+    return 'Strength: $level';
+  }
+
+  @override
+  String get passphraseStrengthWeak => 'Weak';
+
+  @override
+  String get passphraseStrengthFair => 'Fair';
+
+  @override
+  String get passphraseStrengthGood => 'Good';
+
+  @override
+  String get passphraseStrengthStrong => 'Strong';
+
+  @override
+  String passphraseCrackTime(String time) {
+    return 'Someone who got your locked file could guess it in $time.';
+  }
+
+  @override
+  String get crackTimeUnderAMinute => 'less than a minute';
+
+  @override
+  String get crackTimeMinutes => 'minutes';
+
+  @override
+  String get crackTimeHours => 'hours';
+
+  @override
+  String get crackTimeDays => 'days';
+
+  @override
+  String get crackTimeMonths => 'months';
+
+  @override
+  String get crackTimeYears => 'years';
+
+  @override
+  String get crackTimeCenturies => 'centuries';
+
+  @override
+  String get passphraseTip =>
+      'Tip: three or four unrelated words, with a capital and a symbol, are easy to remember and hard to guess.';
+
+  @override
+  String get passphraseLockProgress => 'Lock my progress';
+
+  @override
+  String get passphraseLockAndDownload => 'Lock and download';
+
+  @override
+  String get resumeTitle => 'Welcome back';
+
+  @override
+  String resumeSavedAt(String time) {
+    return 'There’s progress saved on this device from $time. Enter your passphrase to continue.';
+  }
+
+  @override
+  String resumeOpenUntil(String time) {
+    return 'It can be opened until $time.';
+  }
+
+  @override
+  String get resumeUnlock => 'Unlock';
+
+  @override
+  String get resumeChecking => 'Checking…';
+
+  @override
+  String resumeWrong(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more wrong tries erase the saved progress.',
+      one: '1 more wrong try erases the saved progress.',
+    );
+    return 'That passphrase didn’t work. $_temp0';
+  }
+
+  @override
+  String resumeErased(int count) {
+    return 'To protect it, the saved progress was erased after $count wrong passphrases.';
+  }
+
+  @override
+  String get resumeGone =>
+      'The saved progress is gone: it expired or was erased.';
+
+  @override
+  String get resumeDelete => 'Delete it and start over';
+
+  @override
+  String get resumeDeleteConfirmTitle => 'Delete the saved progress?';
+
+  @override
+  String get resumeDeleteConfirmBody =>
+      'It’s erased from this device now. This can’t be undone.';
+
+  @override
+  String get resumeDeleteConfirm => 'Delete it';
+
+  @override
+  String get resumeDeleted => 'The saved progress was deleted.';
+
+  @override
+  String get resumeStartOver => 'Start over';
+
+  @override
+  String get progressRestored => 'Your saved progress is back.';
+
+  @override
+  String get wizardKeptLocked => 'Locked on this device';
+
+  @override
+  String get moreSheetDownloadToFinishLater => 'Download to finish later';
+
+  @override
+  String get moreSheetDownloadToFinishLaterDetail =>
+      'A locked file you can open on any device';
+
+  @override
+  String get moreSheetDeleteSavedProgress => 'Delete saved progress';
+
+  @override
+  String get moreSheetDeleteSavedProgressDetail =>
+      'Erase the locked copy on this device now';
+
+  @override
+  String get deleteSavedProgressBody =>
+      'The locked copy on this device is erased now, and nothing more is kept after this tab closes. Your work stays open in this tab.';
+
+  @override
+  String get progressOpenElsewhere =>
+      'This directive is open in another tab. Changes here aren’t being kept.';
+
+  @override
+  String get progressRefused =>
+      'Your browser didn’t let PA MHAD keep a copy. Download your progress to keep it.';
+
+  @override
+  String progressDownloadWeakWarning(String time) {
+    return 'Someone who gets this file could guess your passphrase in $time. Keep the file somewhere private.';
+  }
+
+  @override
+  String get progressDownloadedLocked =>
+      'Locked file downloaded. To keep editing later, choose “Continue from a saved file” and enter your passphrase.';
+
+  @override
+  String get importLockedTitle => 'This file is locked';
+
+  @override
+  String get importLockedBody => 'Enter the passphrase it was locked with.';
+
+  @override
+  String get importLockedWrong =>
+      'That passphrase didn’t work. Check it and try again.';
+
+  @override
+  String get importLockedOpen => 'Open';
+
+  @override
+  String importKeepCopyBody(int minutes) {
+    return 'PA MHAD can keep a locked copy on this device while you work, with the same passphrase as this file. It expires $minutes minutes after you leave.';
+  }
+
+  @override
+  String get importKeepCopyYes => 'Keep a locked copy';
+
+  @override
+  String get importKeepCopyNo => 'Keep nothing';
+
+  @override
+  String wizardExitWebBody(int minutes) {
+    return 'The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.';
+  }
+
+  @override
+  String aiSetupYourDirectiveDataIsHeld(int minutes) {
+    return '- Your directive data stays in your browser: in this tab only or, if you chose, in a copy locked with your passphrase that expires $minutes minutes after you leave; never on a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant';
+  }
+
+  @override
+  String privacyPolicyYourDirectiveDataIsNot(int minutes) {
+    return 'Your directive data is NOT transmitted to the app developer or any third party for storage.\n\nThis is a web app: your data is held in your browser tab. When you start, you choose whether to keep a copy on this device. If you do, it is locked with a passphrase only you know (AES-256 encryption) and expires $minutes minutes after you leave; an expired copy is erased the next time the app is opened in this browser. If you don’t, your work is erased when you close the tab. Nothing is written to a server. Download your progress, or export or print your directive, to keep a copy.';
+  }
+
+  @override
+  String webLandingNoAccountNoCloudIf(int minutes) {
+    return 'No account, no cloud. When you start, you choose: keep a copy on this device, locked with your passphrase, until $minutes minutes after you leave — or keep nothing once you close the tab. To keep your work longer, download it.';
+  }
+
+  @override
+  String legalSheetIfYouCloseTheTab(int minutes) {
+    return ' — it is never sent to a server. If you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave; otherwise it is erased when you close the tab. Export or print to keep a copy. This app is ';
+  }
+
+  @override
+  String disclaimerYouWorkAnonymouslyInThis(int minutes) {
+    return 'You work anonymously — no account, no cloud, no tracking. When you start, you choose whether to keep a copy on this device, locked with your passphrase (it expires $minutes minutes after you leave), or to keep nothing once you close the tab.';
+  }
+
+  @override
+  String aiHandoffExtend(int minutes) {
+    return 'Extend $minutes min';
+  }
 }

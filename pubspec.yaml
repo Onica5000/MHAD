@@ -72,6 +72,10 @@ dependencies:
   # pointycastle — works on Android/Windows/web; the pdf package cannot itself
   # produce password-protected PDFs).
   encrypt: ^5.0.3
+  # AES-256-GCM + PBKDF2 for the passphrase-locked progress copy and file off
+  # the web (on the web the browser's Web Crypto does it). Already in the app
+  # through `encrypt`; listed because lib/ imports it directly.
+  pointycastle: ^3.9.1
 
   # Document import (camera, gallery, file picker)
   image_picker: ^1.1.2
@@ -118,6 +122,7 @@ flutter:
   assets:
     - assets/
     - assets/data/
+    - assets/licenses/
     # Photos (Grok Imagine, natural-light photography). One folder per group;
     # lib/ui/theme/app_art.dart lists every file and test/unit/app_art_test.dart
     # fails if a folder here, a file on disk, or the manifest falls out of step.

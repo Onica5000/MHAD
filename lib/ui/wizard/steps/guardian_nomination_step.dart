@@ -137,7 +137,7 @@ class _GuardianNominationStepState
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't overwrite the guardian before load
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
     // PRESERVE the nominee text fields even when the user is currently on a
     // non-'different' radio: we always write whatever's in the controllers
     // back to the row. The downstream consumers (PDF generators, clinician

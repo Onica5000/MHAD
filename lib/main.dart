@@ -23,6 +23,9 @@ import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/breach_notice_gate.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 import 'package:mhad/utils/platform_utils.dart';
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
+import 'package:mhad/services/passphrase/passphrase_lists.dart'
+    show registerPassphraseListLicense;
 import 'package:mhad/utils/unsaved_guard.dart';
 
 void main() {
@@ -97,6 +100,15 @@ Future<void> _bootstrap() async {
     disclaimerLoad,
     onboardingLoad,
   ]);
+  // Saved progress (web): erase an expired, damaged or out-of-tries locked
+  // copy — unopened — and the old readable recovery copies, before anything
+  // is shown. A closed tab can't erase its copy on time; this is where it
+  // happens (user decision 2026-11-18).
+  if (kIsWeb) {
+    lockedProgress.sweep();
+    lockedProgress.forgetChoiceIfNothingToUnlock();
+  }
+  registerPassphraseListLicense();
   // Learn articles in Spanish, once a reviewer has approved them
   // (app_data.json "learn"). Needs AppData and the English corpus first.
   if (AppData.instance.learn.spanishArticles) {
@@ -214,6 +226,26 @@ class MhadApp extends ConsumerWidget {
         ),
         (_, hasData) => setUnsavedGuard(hasData),
       );
+      // Keeps the progress autosave running (without rebuilding the app on
+      // every save), and says so when it can't keep the work: another tab
+      // took it over, or the browser refused to store the locked copy.
+      ref.listen(progressAutosaveProvider, (prev, next) {
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx == null) return;
+        final String? notice;
+        if (next.openElsewhere && !(prev?.openElsewhere ?? false)) {
+          notice = ctx.l10n.progressOpenElsewhere;
+        } else if (next.refused && !(prev?.refused ?? false)) {
+          notice = ctx.l10n.progressRefused;
+        } else {
+          notice = null;
+        }
+        if (notice == null) return;
+        ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(SnackBar(
+          content: Text(notice),
+          duration: const Duration(seconds: 10),
+        ));
+      });
     }
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.mainAppTitle,

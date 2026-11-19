@@ -3,7 +3,11 @@ import 'package:mhad/ui/app_actions.dart';
 import 'package:mhad/ui/widgets/design/primary_destinations.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mhad/providers/app_providers.dart' show allDirectivesProvider;
 import 'package:mhad/providers/assistant_providers.dart';
+import 'package:mhad/services/locked_progress/locked_progress_store.dart'
+    show ProgressMode;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
@@ -142,6 +146,29 @@ class _MoreSheet extends StatelessWidget {
                   openForDirective(ref, AppRoutes.exportRoute);
                 },
               ),
+              if ((ref.read(allDirectivesProvider).value ?? const [])
+                  .isNotEmpty)
+                _MoreRow(
+                  icon: Icons.download_outlined,
+                  title: context.l10n.moreSheetDownloadToFinishLater,
+                  detail: context.l10n.moreSheetDownloadToFinishLaterDetail,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    downloadToFinishLater(ref);
+                  },
+                ),
+              if (ref.read(progressAutosaveProvider).mode ==
+                  ProgressMode.locked)
+                _MoreRow(
+                  icon: Icons.lock_reset_outlined,
+                  title: context.l10n.moreSheetDeleteSavedProgress,
+                  detail: context.l10n.moreSheetDeleteSavedProgressDetail,
+                  destructive: true,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    confirmDeleteSavedProgress(ref);
+                  },
+                ),
               _MoreRow(
                 icon: Icons.cancel_outlined,
                 title: context.l10n.moreSheetRevokeADirective,

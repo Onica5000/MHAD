@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
 import 'package:mhad/data/repository/directive_repository.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/services/directive_file_codec.dart';
+import 'package:mhad/services/locked_progress/locked_format.dart';
 
 /// Thrown when an imported directive file can't be opened (corrupt, not a
 /// directive file, or made by a newer app).
@@ -34,22 +37,43 @@ class DirectiveExportService {
   static const fileVersion = 1;
   static const fileExtension = 'mhad';
 
-  /// Build the portable file bytes for [directiveId]. [encrypted] obfuscates
-  /// with the app key; otherwise plaintext JSON. [nowMillis] stamps the export
+  /// The portable directive data for [directiveId] — what a progress file
+  /// holds. The person downloads it passphrase-locked
+  /// (`LockedProgressStore.lockForDownload`). [nowMillis] stamps the export
   /// time (passed in so the result is deterministic / testable).
-  Future<Uint8List> buildFile(
+  Future<Map<String, dynamic>> buildFilePayload(
+    int directiveId, {
+    required int nowMillis,
+  }) async =>
+      {
+        'format': fileFormat,
+        'version': fileVersion,
+        'exportedAt': nowMillis,
+        'data': await repo.snapshotDirective(directiveId, full: true),
+      };
+
+  /// The two OLDER file forms — readable JSON, or scrambled with the
+  /// app-embedded key — which the app no longer writes (downloads are
+  /// passphrase-locked since 2026-11-18) but still opens. Kept to build test
+  /// files that prove older downloads keep opening.
+  @visibleForTesting
+  Future<Uint8List> buildLegacyFile(
     int directiveId, {
     required bool encrypted,
     required int nowMillis,
-  }) async {
-    final data = await repo.snapshotDirective(directiveId, full: true);
-    final wrapped = jsonEncode({
-      'format': fileFormat,
-      'version': fileVersion,
-      'exportedAt': nowMillis,
-      'data': data,
-    });
-    return DirectiveFileCodec.encode(wrapped, encrypted: encrypted);
+  }) async =>
+      DirectiveFileCodec.encode(
+          jsonEncode(await buildFilePayload(directiveId, nowMillis: nowMillis)),
+          encrypted: encrypted);
+
+  /// A passphrase-locked progress file, or null for an older file
+  /// ([parseFile] reads those).
+  static LockedBlob? lockedFile(Uint8List bytes) {
+    try {
+      return LockedBlob.tryParse(utf8.decode(bytes));
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Decode + validate [bytes], returning the inner snapshot data map. Throws
@@ -68,6 +92,12 @@ class DirectiveExportService {
       throw DirectiveImportException(
           'The file is corrupted.', (l) => l.importFileCorrupted);
     }
+    return dataFromWrapped(decoded);
+  }
+
+  /// Validates an opened file's contents ([buildFilePayload]'s shape) and
+  /// returns the inner snapshot data. Throws [DirectiveImportException].
+  static Map<String, dynamic> dataFromWrapped(Object? decoded) {
     if (decoded is! Map<String, dynamic>) {
       throw DirectiveImportException(
           'This is not a directive file.', (l) => l.importNotDirectiveFile);

@@ -660,7 +660,8 @@ class _AiSetupScreenState extends ConsumerState<AiSetupScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    context.l10n.aiSetupYourDirectiveDataIsHeld,
+                    context.l10n.aiSetupYourDirectiveDataIsHeld(
+                        appData.config.progressWindowMinutes),
                     style: TextStyle(fontSize: 12, color: cs.onSurface),
                   ),
                 ],

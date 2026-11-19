@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/progress/progress_gate.dart' show startDirective;
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +14,6 @@ import 'package:mhad/ui/wizard/widgets/saved_file_import.dart';
 import 'package:mhad/ui/widgets/design/photo_action_card.dart';
 import 'package:mhad/ui/widgets/design/page_hero.dart';
 import 'package:mhad/ui/theme/app_art.dart';
-import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/domain/model/directive.dart';
 
 /// Editorial web landing — a faithful Flutter port of the Claude Design
@@ -34,10 +35,8 @@ class WebDashboardLanding extends ConsumerWidget {
   /// Same as onboarding's "Upload a document to autofill": a fresh
   /// Combined directive, then the standalone autofill page.
   Future<void> _startUpload(BuildContext context, WidgetRef ref) async {
-    final id = await ref
-        .read(directiveRepositoryProvider)
-        .createDirective(FormType.combined);
-    if (!context.mounted) return;
+    final id = await startDirective(ref, FormType.combined);
+    if (id == null || !context.mounted) return;
     context.go(AppRoutes.uploadRoute(id));
   }
 
@@ -185,7 +184,8 @@ class _AnonBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 1),
                 Text(
-                  context.l10n.webLandingNoAccountNoCloudIf,
+                  context.l10n.webLandingNoAccountNoCloudIf(
+                      appData.config.progressWindowMinutes),
                   style: TextStyle(
                     fontSize: 12, height: MhadType.leadingParagraph,
                     color: p.textMuted,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/ui/progress/progress_screens.dart' show ResumeProgressScreen;
 import 'package:mhad/ui/ai/ask_ai_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +39,8 @@ abstract class AppRoutes {
   static const home = '/';
   static const disclaimer = '/disclaimer';
   static const onboarding = '/onboarding';
+  /// "Welcome back": unlock the passphrase-locked progress copy.
+  static const resumeProgress = '/resume';
   static const modeSelection = '/mode';
   static const wizard = '/wizard/:directiveId';
   static const education = '/education';
@@ -193,6 +196,10 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         GoRoute(
           path: AppRoutes.home,
           builder: (_, _) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.resumeProgress,
+          builder: (_, _) => const ResumeProgressScreen(),
         ),
         GoRoute(
           path: AppRoutes.wizard,

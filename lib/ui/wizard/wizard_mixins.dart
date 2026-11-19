@@ -9,6 +9,31 @@ mixin WizardStepMixin {
   /// Validate the current step's form and persist data to the database.
   /// Returns [true] if valid and saved successfully, [false] otherwise.
   Future<bool> validateAndSave();
+
+  /// True while a background save (not the person) is saving this step.
+  bool _savingQuietly = false;
+
+  /// Saves what's typed without showing validation warnings — the progress
+  /// autosave when the page is hidden (`ProgressAutosave`).
+  Future<bool> saveQuietly() async {
+    _savingQuietly = true;
+    try {
+      return await validateAndSave();
+    } finally {
+      _savingQuietly = false;
+    }
+  }
+
+  /// Shows the form's warnings, unless this is a quiet background save.
+  /// Steps call this instead of `formKey.currentState?.validate()` inside
+  /// [validateAndSave] (checked by `quiet_save_rule_test`).
+  void showWarnings(GlobalKey<FormState> formKey) {
+    if (!_savingQuietly) formKey.currentState?.validate();
+  }
+
+  /// Saves a sub-step the way this step is being saved (quietly or not).
+  Future<bool> saveSubStep(WizardStepMixin step) =>
+      _savingQuietly ? step.saveQuietly() : step.validateAndSave();
 }
 
 /// Mixin for wizard steps that auto-saves non-PII field data on change.

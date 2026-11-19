@@ -151,7 +151,7 @@ void main() {
   group('dated + facts blocks', () {
     test('bundled asset carries dated/version + facts copy', () async {
       final data = await AppData.load();
-      expect(data.dateFact('privacyPolicyVersion'), 'v1.3');
+      expect(data.dateFact('privacyPolicyVersion'), 'v1.4');
       expect(data.dateFact('privacyPolicyUpdated'), '2026-11');
       expect(data.fact('facilitatorCompletionStat'), contains('Swanson'));
       expect(data.geminiApiKeyUrl, startsWith('https://'));

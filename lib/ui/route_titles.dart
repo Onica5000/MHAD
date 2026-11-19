@@ -15,6 +15,7 @@ String? routePageName(AppLocalizations l, String location) {
   return switch (first) {
     AppRoutes.disclaimer => l.disclaimerBeforeYouBegin,
     AppRoutes.onboarding => l.tabPageWelcome,
+    AppRoutes.resumeProgress => l.resumeTitle,
     AppRoutes.education => l.navLearn,
     AppRoutes.assistant => l.navAiAssistant,
     AppRoutes.aiSetup => l.tabPageAiSetup,

@@ -4,16 +4,20 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/directive_export_service.dart';
+import 'package:mhad/ui/progress/progress_gate.dart';
 import 'package:mhad/ui/router.dart';
 
 /// "Continue from a saved file": pick a previously-downloaded directive file
-/// (`.mhad`, encrypted or plaintext), restore it into a fresh working directive,
-/// and open the wizard. Distinct from snap-to-fill (which reads an arbitrary
-/// document); this rehydrates the user's own exact export. Decodes via
-/// [DirectiveExportService] (no passphrase — the app reads it directly).
+/// (`.mhad`), restore it into a fresh working directive, and open the wizard.
+/// Distinct from snap-to-fill (which reads an arbitrary document); this
+/// rehydrates the user's own exact export.
+///
+/// A passphrase-locked file (what downloads are since 2026-11-18) asks for
+/// its passphrase, then offers to keep a locked copy on this device with that
+/// same passphrase. An older file (readable, or scrambled with the app key)
+/// opens directly, after the usual start question ([ensureProgressChoice]).
 Future<void> importSavedDirectiveFile(
     BuildContext context, WidgetRef ref) async {
   // App-level messenger captured before any await so the post-import notice
@@ -41,9 +45,25 @@ Future<void> importSavedDirectiveFile(
   }
   try {
     final repo = ref.read(directiveRepositoryProvider);
-    final id = await DirectiveExportService(repo).importFile(bytes);
-    if (context.mounted) {
-      context.go(AppRoutes.wizardRoute(id));
+    final locked = DirectiveExportService.lockedFile(bytes);
+    final int id;
+    if (locked != null) {
+      final payload = await openLockedFile(ref, locked);
+      if (payload == null) return; // cancelled
+      final data = DirectiveExportService.dataFromWrapped(payload);
+      // Ask before restoring: once a directive exists, Home swaps the page
+      // that started this import out.
+      await offerKeepCopyAfterFile(ref);
+      id = await repo.restoreFromSnapshot(data);
+    } else {
+      DirectiveExportService.parseFile(bytes); // unreadable? say so first
+      if (!await ensureProgressChoice()) return;
+      id = await DirectiveExportService(repo).importFile(bytes);
+    }
+    // The global router: the widget that started the import may be gone by
+    // now (Home swaps its landing out once a directive exists).
+    {
+      appRouter.go(AppRoutes.wizardRoute(id));
       // Imported files come back as an editable draft (see
       // DirectiveRepository.restoreFromSnapshot) — make the re-sign step clear
       // so the user doesn't assume the old signature still makes it valid.

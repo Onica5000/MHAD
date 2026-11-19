@@ -472,10 +472,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get wizardExitWithoutSaving => '¿Salir sin guardar?';
 
   @override
-  String get wizardExitWebBody =>
-      'La aplicación web no guarda su progreso de forma permanente.\n\nSi sale, cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra. Exporte o imprima su documento para conservar una copia.';
-
-  @override
   String get wizardExitPublicBody =>
       'Está en Modo Público: sus datos solo se guardan en la memoria y se perderán cuando se cierre la aplicación.\n\nExporte o imprima su documento antes de salir. Para guardarlo entre sesiones, use el Modo Privado.';
 
@@ -2895,7 +2891,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homePrivateBodyWeb =>
-      'Su directiva nunca sale de este navegador: sin servidor, sin cuenta y sin rastreo. Solo existe en esta sesión, y solo usted decide con quién compartirla.';
+      'Su directiva nunca sale de este navegador: sin servidor, sin cuenta y sin rastreo. Se queda en esta pestaña salvo que usted conserve una copia bloqueada, y solo usted decide con quién compartirla.';
 
   @override
   String get homePrivateBodyDevice =>
@@ -3634,9 +3630,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportOpenWalletCardPdf => 'Abrir la tarjeta de billetera (PDF)';
 
   @override
-  String get exportEncryptTheFile => 'Cifrar el archivo';
-
-  @override
   String get exportDownload => 'Descargar';
 
   @override
@@ -3715,7 +3708,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportDownloadAnEditableCopyOf =>
-      'Descargue una copia editable de su directiva';
+      'Descargue una copia editable y bloqueada de su directiva';
 
   @override
   String get exportExportAsFhirJsonFor =>
@@ -3797,10 +3790,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiSetupHowYourDataIsHandled => 'Cómo se manejan sus datos';
-
-  @override
-  String get aiSetupYourDirectiveDataIsHeld =>
-      '- Los datos de su directiva solo se guardan en memoria; si la aplicación se cierra o falla, se conservan unos 10 minutos para recuperarlos y luego se borran; nunca se escriben en el disco ni en un servidor\n- Las funciones de IA son opcionales y la aplicación funciona sin ellas\n- Solo sale de su dispositivo el texto que usted envía expresamente por el chat de IA o Sugerencia de IA\n- Esta aplicación no es un servicio médico ni legal\n- Esta aplicación no cumple con HIPAA';
 
   @override
   String get aiSetupCommonQuestions => 'Preguntas frecuentes';
@@ -3915,10 +3904,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Cómo se guardan y protegen los datos';
 
   @override
-  String get privacyPolicyYourDirectiveDataIsNot =>
-      'Los datos de su directiva NO se transmiten al desarrollador de la aplicación ni a ningún tercero para su almacenamiento.\n\nEsta es una aplicación web: sus datos se guardan en una base de datos en memoria dentro de la pestaña de su navegador. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para que pueda volver a abrirlo y recuperarlo; luego se borra. No se escribe nada en un servidor. Exporte o imprima su directiva para conservar una copia permanente.';
-
-  @override
   String get privacyPolicyAiFeaturesThirdPartyData =>
       'Funciones de IA y datos compartidos con terceros';
 
@@ -3940,15 +3925,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedIn =>
-      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y los diálogos de consentimiento de IA.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use “Eliminar todos los datos” en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar las funciones de IA cuando quiera; quite su clave de API para evitar más transmisiones de datos.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLos datos enviados al proveedor de IA que elija se procesan según la política de privacidad y las condiciones de tratamiento de datos de ese proveedor. No podemos controlar ni borrar los datos una vez enviados.';
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) puede darle derechos sobre sus datos. Así puede ejercerlos en esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y los diálogos de consentimiento de IA.\n\nSus derechos:\n  - Derecho de acceso: sus datos se quedan en su navegador; puede verlos todos en la aplicación en cualquier momento.\n  - Derecho de supresión: use “Empezar de nuevo” para borrar todo lo que hay en este navegador, incluida la copia bloqueada guardada en este dispositivo; “Borrar el progreso guardado” borra solo la copia bloqueada.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar las funciones de IA cuando quiera; quite su clave de API para evitar más transmisiones de datos.\n  - Derecho a la limitación: al empezar, elija no conservar nada fuera de la pestaña del navegador.\n\nLos datos enviados al proveedor de IA que elija se procesan según la política de privacidad y las condiciones de tratamiento de datos de ese proveedor. No podemos controlar ni borrar los datos una vez enviados.';
 
   @override
   String get privacyPolicyUsStateConsumerHealthData =>
-      'Leyes estatales de EE. UU. sobre datos de salud del consumidor (CA, WA, CT, NV, NY)';
+      'Leyes estatales de EE. UU. sobre privacidad de datos de salud (CA, WA, CT, NV)';
 
   @override
   String get privacyPolicyThisAppMayBeSubject =>
-      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera “datos de salud del consumidor” según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) El único tercero que puede recibir parte de su texto es el proveedor de IA que usted elija (Google Gemini de forma predeterminada, o Anthropic, OpenAI o xAI), y **solo** si usted acepta expresamente las funciones de IA en cada sesión. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con “Eliminar todos los datos” en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para exigir un consentimiento explícito en cada sesión antes de cualquier transferencia de datos de salud del consumidor a terceros, y consideramos que el consentimiento por escrito está condicionado a los términos específicos que se muestran en el diálogo de consentimiento de IA.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como la My Health My Data Act (MHMDA) de Washington, las disposiciones de salud de la CTDPA de Connecticut y la SB 370 de Nevada. La CCPA/CPRA de California trata la información de salud como “información personal sensible”.\n\nEl contenido de una directiva de salud mental se considera datos de salud según cada una de estas leyes (“datos de salud del consumidor” en Washington, Connecticut y Nevada; “información personal sensible” en California). Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Además de las consultas que usted inicia (el nombre de un medicamento o una afección, el nombre de un médico o un código postal; vea “Sin rastreo de terceros”), el único tercero que puede recibir parte de su texto es el proveedor de IA que usted elija (Google Gemini de forma predeterminada, o Anthropic, OpenAI o xAI), y **solo** si usted acepta expresamente las funciones de IA en cada sesión. (4) No usamos código de análisis, publicidad ni rastreo, ni píxeles de seguimiento ni cookies. (5) Puede borrar todo lo que hay en este navegador en cualquier momento con “Empezar de nuevo”, que también borra la copia bloqueada guardada en este dispositivo.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para exigir un consentimiento explícito en cada sesión antes de cualquier transferencia de datos de salud del consumidor a terceros, y consideramos que el consentimiento por escrito está condicionado a los términos específicos que se muestran en el diálogo de consentimiento de IA.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo.';
 
   @override
   String get privacyPolicyMedicalReferenceLookupsUS =>
@@ -3956,7 +3941,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyToHelpYouFillIn =>
-      'Para ayudarle a completar y entender su directiva, la aplicación consulta bases de datos públicas y gratuitas del gobierno de EE. UU. Estas consultas usan ÚNICAMENTE el término o código necesario para cada búsqueda. Nunca reciben su identidad (su nombre, fecha de nacimiento, dirección o teléfono), las personas que usted nombra (agentes, testigos, tutor) ni su directiva guardada.\n\nQué se envía y a quién:\n  - El nombre del medicamento que escribe → NLM RxTerms (autocompletado).\n  - El nombre de la condición que escribe → NLM ICD-10-CM (búsqueda de diagnósticos).\n  - El nombre de un médico o proveedor que escribe en la búsqueda opcional de médicos → registro NPI de la NLM, que se usa solo para buscar a ese proveedor en el registro público de proveedores de salud.\n  - Una condición (por su código CIE-10) o un medicamento (por su nombre, convertido en un código mediante NLM RxNav) → NLM MedlinePlus Connect, para obtener una explicación en lenguaje sencillo.\n  - El nombre de un medicamento → openFDA (Administración de Alimentos y Medicamentos de EE. UU.), para obtener la etiqueta oficial de la FDA de ese medicamento, que se usa como base para la lista de efectos secundarios.\n\nNinguna de estas solicitudes incluye información personal ni que permita identificarle; solo el término médico, el código o el nombre del proveedor que se busca.\n\nLa NLM, los NIH y la FDA no son responsables de este producto ni lo respaldan o recomiendan. Estos servicios son solo informativos y no constituyen consejo médico; consulte a un profesional calificado. Los servicios Clinical Table de la NLM tienen un límite de 20 solicitudes por segundo.\n\nFuentes: Biblioteca Nacional de Medicina de EE. UU. (RxTerms, ICD-10-CM, registro NPI, RxNav, MedlinePlus Connect); Administración de Alimentos y Medicamentos de EE. UU. (openFDA).';
+      'Para ayudarle a completar y entender su directiva, la aplicación consulta bases de datos públicas y gratuitas del gobierno de EE. UU. Estas consultas usan ÚNICAMENTE el término o código necesario para cada búsqueda. Nunca reciben su identidad (su nombre, fecha de nacimiento, dirección o teléfono), las personas que usted nombra (agentes, testigos, tutor) ni su directiva guardada.\n\nQué se envía y a quién:\n  - El nombre del medicamento que escribe → NLM RxTerms (autocompletado).\n  - El nombre de la condición que escribe → NLM ICD-10-CM (búsqueda de diagnósticos).\n  - El nombre de un médico o proveedor que escribe en la búsqueda opcional de médicos → registro NPI de la NLM, que se usa solo para buscar a ese proveedor en el registro público de proveedores de salud.\n  - Una condición (por su código CIE-10) o un medicamento (por su nombre, convertido en un código mediante NLM RxNav) → NLM MedlinePlus Connect, para obtener una explicación en lenguaje sencillo.\n  - El nombre de un medicamento → openFDA (Administración de Alimentos y Medicamentos de EE. UU.), para obtener la etiqueta oficial de la FDA de ese medicamento, que se usa como base para la lista de efectos secundarios.\n\nCada solicitud contiene solo lo que usted escribió en esa búsqueda, o el código que encontró; nada más de su directiva.\n\nLa NLM, los NIH y la FDA no son responsables de este producto ni lo respaldan o recomiendan. Estos servicios son solo informativos y no constituyen consejo médico; consulte a un profesional calificado. Los servicios Clinical Table de la NLM tienen un límite de 20 solicitudes por segundo.\n\nFuentes: Biblioteca Nacional de Medicina de EE. UU. (RxTerms, ICD-10-CM, registro NPI, RxNav, MedlinePlus Connect); Administración de Alimentos y Medicamentos de EE. UU. (openFDA).';
 
   @override
   String get privacyPolicyPdfExportSharing => 'Exportación y envío del PDF';
@@ -3970,14 +3955,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirective =>
-      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nPuede quitar las claves de API de sus proveedores de IA en cualquier momento desde la pantalla de configuración de la IA.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran todos sus datos (información personal, agentes, medicamentos y decisiones de tratamiento) de esta pestaña del navegador.\n\nPara borrar de inmediato una copia bloqueada guardada en este dispositivo, elija “Borrar el progreso guardado” o “Empezar de nuevo”, o borre los datos de este sitio en la configuración de su navegador.\n\nPuede quitar las claves de API de sus proveedores de IA en cualquier momento desde la pantalla de configuración de la IA.';
 
   @override
   String get privacyPolicyNoThirdPartyTracking => 'Sin rastreo de terceros';
 
   @override
   String get privacyPolicyThisAppDoesNotInclude =>
-      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones de red externas que realiza esta aplicación son:\n  - El proveedor de IA que elija (Google Gemini de forma predeterminada, Anthropic, OpenAI o xAI), solo cuando usa funciones de IA\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n\nCada uno recibe solo el término o código que se busca, nunca su identidad ni su directiva. En ningún momento se envían datos al desarrollador de la aplicación.';
+      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones externas que realiza esta aplicación son:\n  - El proveedor de IA que elija (Google Gemini de forma predeterminada, Anthropic, OpenAI o xAI), solo cuando usa funciones de IA\n  - Los servidores de Google (www.gstatic.com, fonts.gstatic.com): cada vez que se carga la aplicación, para su motor de pantalla y algunas fuentes. No se envía nada de lo que usted escribe, pero Google ve su dirección IP, como en cualquier sitio web que use sus fuentes.\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n  - Zippopotam.us y la Area API de la FCC de EE. UU.: solo cuando toca para completar la ciudad, el condado y el estado a partir de un código postal (envía el código postal y luego las coordenadas de esa zona)\n  - El reconocimiento de voz de su navegador: solo si usa el dictado por voz; navegadores como Chrome y Edge envían la grabación a los servidores de su fabricante para convertirla en texto.\n\nCada consulta recibe solo lo que usted escribió en esa búsqueda, o el código o código postal que se busca; nunca su directiva. En ningún momento se envían datos al desarrollador de la aplicación.';
 
   @override
   String get privacyPolicyHipaaCompliance => 'HIPAA y cumplimiento normativo';
@@ -3992,7 +3977,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyInAccordanceWithTheFtc =>
-      'De acuerdo con la Norma de Notificación de Violaciones de Datos de Salud de la FTC, si se produce una divulgación no autorizada de su información de salud debido a una violación de seguridad, avisaremos a los usuarios afectados dentro de los 60 días calendario siguientes a su descubrimiento.\n\nComo esta aplicación guarda los datos localmente en su dispositivo y no mantiene una base de datos en un servidor, el riesgo de violación se limita a las funciones opcionales de IA. Si el proveedor de IA que usted eligió nos avisa de una violación que afecte a datos enviados a través de la aplicación, transmitiremos ese aviso mediante una notificación dentro de la aplicación y una publicación en la página de la política de privacidad.';
+      'De acuerdo con la Norma de Notificación de Violaciones de Datos de Salud de la FTC, si una violación de seguridad expone su información de salud, daremos aviso dentro de los 60 días calendario siguientes a su descubrimiento. Como la aplicación no recopila datos de contacto, ese aviso consiste en una notificación dentro de la aplicación y un aviso publicado en la página de la política de privacidad durante al menos 90 días.\n\nEsta aplicación guarda su directiva en su navegador y no tiene una base de datos en un servidor, así que una violación probablemente afectaría al código desde el que se sirve la aplicación o a alguno de los servicios externos mencionados en esta política. Si alguno de ellos nos avisa de una violación que afecte a datos enviados a través de la aplicación, transmitiremos ese aviso de la misma forma.';
 
   @override
   String get privacyPolicyContact => 'Contacto';
@@ -4198,11 +4183,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webLandingYouReWorkingAnonymouslyNothing =>
-      'Está trabajando de forma anónima. No se guarda nada.';
-
-  @override
-  String get webLandingNoAccountNoCloudIf =>
-      'Sin cuenta ni nube. Si cierra la pestaña o la aplicación falla, su trabajo se conserva en este dispositivo durante 10 minutos para que pueda volver a abrirlo y recuperarlo; después se borra para siempre. Abra su PDF y guárdelo para conservar una copia.';
+      'Está trabajando de forma anónima. No se guarda nada salvo que usted lo elija.';
 
   @override
   String get webLandingHowThisWorks => 'CÓMO FUNCIONA →';
@@ -4446,11 +4427,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetThisIsAWebApp =>
-      'Esta es una aplicación web: su directiva se mantiene solo en la memoria de su navegador y ';
-
-  @override
-  String get legalSheetIfYouCloseTheTab =>
-      '; si cierra la pestaña o esta falla, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; nunca se envía a un servidor. Exporte o imprima para conservar una copia. Esta aplicación ';
+      'Esta es una aplicación web: su directiva se queda en su navegador y ';
 
   @override
   String get legalSheetHipaaCompliant => ' cumple con HIPAA.';
@@ -4464,7 +4441,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirth =>
-      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor. Solo se comparte contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar el asistente. (Subir un documento para autocompletar es la única excepción, descrita a continuación.)';
+      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor, y un filtro automático quita nombres, números de teléfono, correos electrónicos y datos similares de lo que usted escribió con sus propias palabras (puede pasar por alto alguno). Solo se comparte contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar el asistente. (Subir un documento para autocompletar es la única excepción, descrita a continuación.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofill =>
@@ -4476,11 +4453,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetSeparatelyToHelpYouFill =>
-      'Por otra parte, para ayudarle a completar y entender su directiva, la aplicación consulta medicamentos, afecciones y (opcionalmente) a su médico en bases de datos públicas y gratuitas del gobierno de EE. UU.: NIH/NLM Clinical Tables, MedlinePlus y openFDA de la FDA. ';
+      'Por otra parte, para ayudarle a completar y entender su directiva, la aplicación consulta medicamentos, afecciones y (opcionalmente) a su médico en bases de datos públicas y gratuitas del gobierno de EE. UU. (NIH/NLM Clinical Tables, MedlinePlus y openFDA de la FDA) y puede completar su ciudad, condado y estado a partir de un código postal (Zippopotam.us y la FCC). ';
 
   @override
   String get legalSheetNeverYourIdentityThePeople =>
-      ', nunca su identidad, las personas que nombra ni su directiva guardada. Es información de referencia, no asesoramiento médico.';
+      ', nunca su nombre, las personas que nombra ni su directiva guardada. Es información de referencia, no asesoramiento médico.';
 
   @override
   String get legalSheetAiSuggestionsAreNotLegal =>
@@ -4524,7 +4501,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disclaimerNothingIsSavedOrSent =>
-      'No se guarda ni se nos envía nada';
+      'No se nos envía nada, y no se guarda nada salvo que usted lo elija';
 
   @override
   String get disclaimerYouCanStopOrChange =>
@@ -4650,7 +4627,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingIn =>
-      'Esto borra de forma permanente todo lo de esta sesión (todas las directivas, su clave de IA y el historial del chat) y le devuelve a un inicio en blanco.\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
+      'Esto borra de forma permanente su trabajo en este navegador (todas las directivas, la copia bloqueada guardada en este dispositivo, su clave de IA y el historial del chat) y le devuelve a un inicio en blanco. Se conserva su configuración (como el tema y el tamaño del texto).\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
 
   @override
   String get moreSheetResetEverything => 'Borrar y empezar de nuevo';
@@ -4917,7 +4894,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
-      'Sin analíticas. Sin píxeles de rastreo. Sin cookies. Sin SDK de terceros para publicidad o medición. Los únicos datos que salen son los de las funciones de IA opcionales (el proveedor de IA que usted elija) y las consultas de referencia médica de la NLM, ambos con eliminación de datos personales en un único punto de control.';
+      'Sin analíticas. Sin píxeles de rastreo. Sin cookies. Sin SDK de terceros para publicidad o medición. Las únicas conexiones externas son las consultas que usted inicia (términos médicos a bases de datos del gobierno de EE. UU. y un código postal para completar su dirección) y la carga del motor de pantalla y las fuentes de la aplicación desde los servidores de Google; la política de privacidad las enumera todas.';
 
   @override
   String get makeItFindableMakeItFindableInA =>
@@ -4952,7 +4929,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pastDirectiveDetailNoShareHistoryIsKept =>
-      'No se guarda historial de envíos: nada se conserva al cerrar la aplicación, así que esta lista está vacía a propósito.';
+      'No se guarda historial de envíos, así que esta lista está vacía a propósito.';
 
   @override
   String get wizardAiRailFullView => 'Vista completa';
@@ -5443,7 +5420,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String privacyPolicyYouCanReachTheDeveloper(Object privacyPolicyUrl) {
-    return 'La Norma de Notificación de Violaciones de Datos de Salud de la FTC exige al menos dos medios de contacto. Ofrecemos:\n\n  - En la aplicación: si una violación de datos le afecta, se mostrará un aviso la próxima vez que abra la aplicación.\n  - En línea: $privacyPolicyUrl (también se usa para publicar avisos de violaciones si la información de contacto directo no es suficiente).';
+    return 'Según la Norma de Notificación de Violaciones de Datos de Salud de la FTC, el aviso se envía por correo postal o electrónico o, cuando no hay datos de contacto, como en este caso (la aplicación no recopila ninguno), mediante un aviso sustitutivo publicado durante 90 días. Ofrecemos:\n\n  - En la aplicación: si una violación de datos le afecta, se mostrará un aviso la próxima vez que abra la aplicación.\n  - En línea: $privacyPolicyUrl (donde el aviso sustitutivo se publica durante al menos 90 días).';
   }
 
   @override
@@ -5525,10 +5502,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String facilitatorPickTheKindOfSupport(Object facilitatorCompletionStat) {
     return '$facilitatorCompletionStat Elija el tipo de apoyo que le convenga hoy.';
   }
-
-  @override
-  String get disclaimerYouWorkAnonymouslyInThis =>
-      'Trabaja de forma anónima en esta pestaña del navegador: sin cuenta, sin nube, sin rastreo. Si cierra la pestaña, su trabajo se conserva en este dispositivo durante unos 10 minutos para poder recuperarlo y luego se borra; abra y guarde su PDF para conservarlo.';
 
   @override
   String get disclaimerNoAccountNoCloudNo =>
@@ -5663,11 +5636,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportNotAFinishedDocumentThis =>
-      'No es un documento terminado: así es como guarda su progreso. La aplicación web no puede almacenar su trabajo en este dispositivo, así que descargue este archivo para conservarlo y luego vuelva a subirlo (aquí o en otro dispositivo) para seguir editando. No se almacena nada en línea.';
-
-  @override
-  String get exportEncryptingHindersOthersFromReading =>
-      'El cifrado dificulta que otros lo lean; la aplicación lo sigue abriendo sin frase de contraseña.';
+      'No es un documento terminado: así conserva su progreso para otro día. El archivo queda bloqueado con su frase de acceso: ábralo después con “Continuar desde un archivo guardado”, aquí o en otro dispositivo. No se almacena nada en línea.';
 
   @override
   String get exportMachineReadableFormats => 'Formatos legibles por máquina';
@@ -6218,7 +6187,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetBoldTheseLookupsSendOnlyThe =>
-      'Estas consultas solo envían el término médico, el código o el nombre del proveedor que se busca';
+      'Estas consultas solo envían el término, el código, el nombre o el código postal que se busca';
 
   @override
   String get legalSheetYourRightsUnderAct194 => 'Sus derechos según la Ley 194';
@@ -6738,7 +6707,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingPillAct194 => 'Ley 194 de PA';
 
   @override
-  String get onboardingPillNothingSaved => 'No se guarda nada';
+  String get onboardingPillNothingSaved =>
+      'Nada se guarda salvo que usted lo elija';
 
   @override
   String get onboardingPillStaysOnDevice => 'Se queda en su dispositivo';
@@ -7015,11 +6985,8 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get aiHandoffExtend => 'Ampliar 30 min';
-
-  @override
   String aiHandoffExpiring(int minutes) {
-    return 'Su trabajo aquí se borrará en $minutes min. Amplíe el tiempo para conservarlo mientras usa su IA.';
+    return 'La espera de la respuesta de su IA termina en $minutes min. Amplíela si necesita más tiempo.';
   }
 
   @override
@@ -7346,7 +7313,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiCheckHandoffSubtitle =>
-      'Opcional. Su IA revisa un resumen de su directiva (sin datos de identificación) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace.';
+      'Opcional. Su IA revisa un resumen de su directiva (sin nombres ni datos de contacto) en busca de vacíos y cosas que conviene revisar. La revisión integrada de arriba siempre se hace.';
 
   @override
   String get smartFillHandoffTitle => 'Sugerencias de IA para sus preferencias';
@@ -7378,19 +7345,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyIfYouAreLocatedInHandoff =>
-      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) se aplica a su uso de esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y el aviso que se muestra antes de que copie algo por primera vez para un servicio de IA externo.\n\nSus derechos según el RGPD:\n  - Derecho de acceso: todos sus datos se guardan localmente en su dispositivo; usted tiene acceso directo en todo momento.\n  - Derecho de supresión: use “Eliminar todos los datos” en el menú de la aplicación para borrar de forma permanente todos los datos locales.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar la ayuda de IA cuando quiera; esta aplicación nunca envía nada por sí misma a un servicio de IA.\n  - Derecho a la limitación: puede usar la aplicación en Modo Público sin que se conserven datos.\n\nLo que pegue o adjunte en un servicio de IA externo se procesa según la política de privacidad y las condiciones de tratamiento de datos de ese servicio. No podemos controlarlo ni borrarlo una vez enviado.';
+      'Si se encuentra en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, el Reglamento General de Protección de Datos (RGPD) puede darle derechos sobre sus datos. Así puede ejercerlos en esta aplicación.\n\nBase legal del tratamiento: su consentimiento explícito, otorgado mediante el aviso legal de la aplicación y el aviso que se muestra antes de que copie algo por primera vez para un servicio de IA externo.\n\nSus derechos:\n  - Derecho de acceso: sus datos se quedan en su navegador; puede verlos todos en la aplicación en cualquier momento.\n  - Derecho de supresión: use “Empezar de nuevo” para borrar todo lo que hay en este navegador, incluida la copia bloqueada guardada en este dispositivo; “Borrar el progreso guardado” borra solo la copia bloqueada.\n  - Derecho a la portabilidad de los datos: exporte sus directivas como PDF o FHIR JSON (un formato estándar de expedientes médicos) en cualquier momento.\n  - Derecho a retirar el consentimiento: deje de usar la ayuda de IA cuando quiera; esta aplicación nunca envía nada por sí misma a un servicio de IA.\n  - Derecho a la limitación: al empezar, elija no conservar nada fuera de la pestaña del navegador.\n\nLo que pegue o adjunte en un servicio de IA externo se procesa según la política de privacidad y las condiciones de tratamiento de datos de ese servicio. No podemos controlarlo ni borrarlo una vez enviado.';
 
   @override
   String get privacyPolicyThisAppMayBeSubjectHandoff =>
-      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como las de California (CCPA/CPRA), Washington (My Health My Data Act / MHMDA), Connecticut (disposiciones de salud de la CTDPA), Nevada (SB 370) y Nueva York (Health Information Privacy Act).\n\nEl contenido de una directiva de salud mental se considera “datos de salud del consumidor” según cada una de estas leyes. Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Esta aplicación nunca envía su contenido a terceros por sí misma. Si decide usar la ayuda de IA, usted mismo copia instrucciones en un servicio de IA externo; ese servicio recibe **solo** lo que usted pegue o adjunte allí. (4) No usamos SDK de terceros, herramientas de análisis, plataformas de publicidad, píxeles de seguimiento ni cookies. (5) Puede eliminar todos los datos guardados localmente en cualquier momento con “Eliminar todos los datos” en el menú de la aplicación.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para que nunca transfiera por sí misma datos de salud del consumidor a terceros y para que, antes de que copie algo por primera vez en una sesión para un servicio de IA externo, muestre un aviso que explica que se aplican las condiciones de ese servicio.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo (se ofrecen varios medios, según la Norma de Notificación de Violaciones de Datos de Salud de la FTC).';
+      'Esta aplicación puede estar sujeta a leyes estatales de privacidad de datos de salud del consumidor, como la My Health My Data Act (MHMDA) de Washington, las disposiciones de salud de la CTDPA de Connecticut y la SB 370 de Nevada. La CCPA/CPRA de California trata la información de salud como “información personal sensible”.\n\nEl contenido de una directiva de salud mental se considera datos de salud según cada una de estas leyes (“datos de salud del consumidor” en Washington, Connecticut y Nevada; “información personal sensible” en California). Según todas ellas: (1) Recopilamos datos sobre preferencias de tratamiento de salud mental **únicamente** para ayudarle a crear su directiva anticipada. (2) **No vendemos** sus datos de salud; no hay ningún destinatario comercial. (3) Esta aplicación nunca envía su directiva a terceros. Lo único que envía son las consultas que usted inicia (el nombre de un medicamento o una afección, el nombre de un médico o un código postal) a los servicios indicados en “Sin rastreo de terceros”. Si decide usar la ayuda de IA, usted mismo copia instrucciones en un servicio de IA externo; ese servicio recibe **solo** lo que usted pegue o adjunte allí. (4) No usamos código de análisis, publicidad ni rastreo, ni píxeles de seguimiento ni cookies. (5) Puede borrar todo lo que hay en este navegador en cualquier momento con “Empezar de nuevo”, que también borra la copia bloqueada guardada en este dispositivo.\n\nLa MHMDA de Washington incluye un **derecho privado de acción**; hemos diseñado la aplicación para que nunca transfiera por sí misma su directiva a terceros y para que, antes de que copie algo por primera vez en una sesión para un servicio de IA externo, muestre un aviso que explica que se aplican las condiciones de ese servicio.\n\nSi tiene preguntas sobre sus derechos de privacidad, comuníquese con el desarrollador por los medios indicados en la sección Contacto más abajo.';
 
   @override
   String get privacyPolicyYouCanDeleteAnyDirectiveHandoff =>
-      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran de la base de datos local todos los datos asociados (información personal, agentes, medicamentos, testigos, firmas).\n\nLas conversaciones en un servicio de IA externo se conservan o se borran con los controles de ese servicio.\n\nDesinstalar la aplicación elimina todos los datos guardados localmente.';
+      'Puede eliminar cualquier directiva en cualquier momento desde la pantalla de inicio. Al eliminar una directiva se borran todos sus datos (información personal, agentes, medicamentos y decisiones de tratamiento) de esta pestaña del navegador.\n\nPara borrar de inmediato una copia bloqueada guardada en este dispositivo, elija “Borrar el progreso guardado” o “Empezar de nuevo”, o borre los datos de este sitio en la configuración de su navegador.\n\nLas conversaciones en un servicio de IA externo se conservan o se borran con los controles de ese servicio.';
 
   @override
   String get privacyPolicyThisAppDoesNotIncludeHandoff =>
-      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones de red externas que realiza esta aplicación son:\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n\nCada uno recibe solo el término o código que se busca, nunca su identidad ni su directiva. La aplicación nunca se conecta a un servicio de IA: cuando usa la ayuda de IA, usted mismo abre ese servicio. En ningún momento se envían datos al desarrollador de la aplicación.';
+      'Esta aplicación no incluye SDK de análisis de terceros, plataformas de publicidad, servicios de informes de fallos (como Firebase, Crashlytics o Sentry) ni píxeles de seguimiento.\n\nLas únicas conexiones externas que realiza esta aplicación son:\n  - Los servidores de Google (www.gstatic.com, fonts.gstatic.com): cada vez que se carga la aplicación, para su motor de pantalla y algunas fuentes. No se envía nada de lo que usted escribe, pero Google ve su dirección IP, como en cualquier sitio web que use sus fuentes.\n  - NIH/NLM Clinical Table Search Service: búsquedas de medicamentos, condiciones y proveedores (médicos)\n  - NLM MedlinePlus Connect y RxNav: explicaciones en lenguaje sencillo sobre condiciones y medicamentos (solo envía un código CIE-10 o el nombre de un medicamento)\n  - openFDA / FDA de EE. UU.: etiquetas oficiales de medicamentos que sirven de base para la lista de efectos secundarios (solo envía el nombre de un medicamento)\n  - Zippopotam.us y la Area API de la FCC de EE. UU.: solo cuando toca para completar la ciudad, el condado y el estado a partir de un código postal (envía el código postal y luego las coordenadas de esa zona)\n  - El reconocimiento de voz de su navegador: solo si usa el dictado por voz; navegadores como Chrome y Edge envían la grabación a los servidores de su fabricante para convertirla en texto.\n\nCada consulta recibe solo lo que usted escribió en esa búsqueda, o el código o código postal que se busca; nunca su directiva. La aplicación nunca se conecta a un servicio de IA: cuando usa la ayuda de IA, usted mismo abre ese servicio. En ningún momento se envían datos al desarrollador de la aplicación.';
 
   @override
   String get legalSheetIfYouUseTheOptionalHandoff =>
@@ -7402,7 +7369,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalSheetYourNameDateOfBirthHandoff =>
-      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor. Solo se incluye contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar la ayuda de IA. (Un documento que adjunte para autocompletar es la única excepción, descrita a continuación.)';
+      ': nunca se incluyen su nombre, fecha de nacimiento, dirección ni los nombres y datos de contacto de sus agentes y tutor, y un filtro automático quita nombres, números de teléfono, correos electrónicos y datos similares de lo que usted escribió con sus propias palabras (puede pasar por alto alguno, así que revise lo que pega). Solo se incluye contexto que no le identifica (como afecciones, medicamentos y preferencias de atención), y solo si decide usar la ayuda de IA. (Un documento que adjunte para autocompletar es la única excepción, descrita a continuación.)';
 
   @override
   String get legalSheetDocumentsYouUploadForAutofillHandoff =>
@@ -7422,7 +7389,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get moreSheetThisPermanentlyErasesEverythingInHandoff =>
-      'Esto borra de forma permanente todo lo de esta sesión (todas las directivas y cualquier respuesta de IA que esté esperando) y le devuelve a un inicio en blanco.\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
+      'Esto borra de forma permanente su trabajo en este navegador (todas las directivas, la copia bloqueada guardada en este dispositivo y cualquier respuesta de IA que esté esperando) y le devuelve a un inicio en blanco. Se conserva su configuración (como el tema y el tamaño del texto).\n\nExporte o imprima primero lo que quiera conservar. No se puede deshacer.';
 
   @override
   String get audioGuideDescribeYourWishesOutLoudHandoff =>
@@ -7545,4 +7512,303 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get moreSheetRevokeDetail => 'Cancelar una que firmó y a quién avisar';
+
+  @override
+  String get progressChoiceAppBar => 'Antes de empezar';
+
+  @override
+  String get progressChoiceTitle =>
+      '¿Desea conservar su progreso en este dispositivo?';
+
+  @override
+  String get progressChoiceLead =>
+      'Si el navegador se cierra o el teléfono vuelve a cargar esta página, una copia guardada le permite continuar donde lo dejó.';
+
+  @override
+  String get progressChoiceYesTitle => 'Sí, protegerla con una frase de acceso';
+
+  @override
+  String progressChoiceYesBody(int minutes) {
+    return 'Se guarda una copia bloqueada en este dispositivo mientras trabaja. Solo su frase de acceso la abre. Vence $minutes minutos después de que usted salga, y PA MHAD la borra la próxima vez que se abra aquí.';
+  }
+
+  @override
+  String get progressChoiceNoTitle => 'No, no guardar nada';
+
+  @override
+  String get progressChoiceNoBody =>
+      'No se guarda nada. Su trabajo se borra cuando cierra esta pestaña.';
+
+  @override
+  String get progressChoiceDownloadNote =>
+      'En cualquier caso, puede descargar su progreso como un archivo bloqueado para terminarlo otro día.';
+
+  @override
+  String get progressLocking => 'Bloqueando…';
+
+  @override
+  String get passphraseSetupTitle => 'Elija una frase de acceso';
+
+  @override
+  String get passphraseSetupLead =>
+      'Bloquea su progreso guardado, aquí y en cualquier archivo que descargue.';
+
+  @override
+  String get passphraseForgetWarning =>
+      'Si la olvida, nadie podrá abrir su progreso guardado: no hay forma de recuperarla. Guárdela en un lugar seguro.';
+
+  @override
+  String get passphraseFieldLabel => 'Frase de acceso';
+
+  @override
+  String get passphraseConfirmLabel => 'Escríbala otra vez';
+
+  @override
+  String get passphraseShow => 'Mostrar la frase de acceso';
+
+  @override
+  String get passphraseHide => 'Ocultar la frase de acceso';
+
+  @override
+  String get passphraseNeeds => 'Su frase de acceso necesita:';
+
+  @override
+  String passphraseRuleMinLength(int count) {
+    return 'Al menos $count caracteres';
+  }
+
+  @override
+  String get passphraseRuleLowercase => 'Una letra minúscula';
+
+  @override
+  String get passphraseRuleUppercase => 'Una letra mayúscula';
+
+  @override
+  String get passphraseRuleSpecial =>
+      'Un símbolo o un espacio (como ! ? # o un espacio)';
+
+  @override
+  String get passphraseRuleNotCommon => 'Que no sea una frase de acceso común';
+
+  @override
+  String get passphraseRuleMatch => 'Que las dos coincidan';
+
+  @override
+  String get passphraseRuleMet => 'cumplido';
+
+  @override
+  String get passphraseRuleNotMet => 'pendiente';
+
+  @override
+  String passphraseStrength(String level) {
+    return 'Seguridad: $level';
+  }
+
+  @override
+  String get passphraseStrengthWeak => 'Débil';
+
+  @override
+  String get passphraseStrengthFair => 'Regular';
+
+  @override
+  String get passphraseStrengthGood => 'Buena';
+
+  @override
+  String get passphraseStrengthStrong => 'Fuerte';
+
+  @override
+  String passphraseCrackTime(String time) {
+    return 'Alguien que obtuviera su archivo bloqueado podría adivinarla en $time.';
+  }
+
+  @override
+  String get crackTimeUnderAMinute => 'menos de un minuto';
+
+  @override
+  String get crackTimeMinutes => 'minutos';
+
+  @override
+  String get crackTimeHours => 'horas';
+
+  @override
+  String get crackTimeDays => 'días';
+
+  @override
+  String get crackTimeMonths => 'meses';
+
+  @override
+  String get crackTimeYears => 'años';
+
+  @override
+  String get crackTimeCenturies => 'siglos';
+
+  @override
+  String get passphraseTip =>
+      'Consejo: tres o cuatro palabras sin relación entre sí, con una mayúscula y un símbolo, son fáciles de recordar y difíciles de adivinar.';
+
+  @override
+  String get passphraseLockProgress => 'Bloquear mi progreso';
+
+  @override
+  String get passphraseLockAndDownload => 'Bloquear y descargar';
+
+  @override
+  String get resumeTitle => 'Le damos la bienvenida otra vez';
+
+  @override
+  String resumeSavedAt(String time) {
+    return 'Hay progreso guardado en este dispositivo a las $time. Escriba su frase de acceso para continuar.';
+  }
+
+  @override
+  String resumeOpenUntil(String time) {
+    return 'Se puede abrir hasta las $time.';
+  }
+
+  @override
+  String get resumeUnlock => 'Desbloquear';
+
+  @override
+  String get resumeChecking => 'Comprobando…';
+
+  @override
+  String resumeWrong(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count intentos incorrectos más borran el progreso guardado.',
+      one: 'Un intento incorrecto más borra el progreso guardado.',
+    );
+    return 'Esa frase de acceso no funcionó. $_temp0';
+  }
+
+  @override
+  String resumeErased(int count) {
+    return 'Para protegerlo, el progreso guardado se borró después de $count frases de acceso incorrectas.';
+  }
+
+  @override
+  String get resumeGone =>
+      'El progreso guardado ya no está: venció o se borró.';
+
+  @override
+  String get resumeDelete => 'Borrarlo y empezar de nuevo';
+
+  @override
+  String get resumeDeleteConfirmTitle => '¿Borrar el progreso guardado?';
+
+  @override
+  String get resumeDeleteConfirmBody =>
+      'Se borra de este dispositivo ahora. No se puede deshacer.';
+
+  @override
+  String get resumeDeleteConfirm => 'Borrarlo';
+
+  @override
+  String get resumeDeleted => 'Se borró el progreso guardado.';
+
+  @override
+  String get resumeStartOver => 'Empezar de nuevo';
+
+  @override
+  String get progressRestored => 'Su progreso guardado se recuperó.';
+
+  @override
+  String get wizardKeptLocked => 'Bloqueado en este dispositivo';
+
+  @override
+  String get moreSheetDownloadToFinishLater =>
+      'Descargar para terminar después';
+
+  @override
+  String get moreSheetDownloadToFinishLaterDetail =>
+      'Un archivo bloqueado que puede abrir en cualquier dispositivo';
+
+  @override
+  String get moreSheetDeleteSavedProgress => 'Borrar el progreso guardado';
+
+  @override
+  String get moreSheetDeleteSavedProgressDetail =>
+      'Borrar ahora la copia bloqueada de este dispositivo';
+
+  @override
+  String get deleteSavedProgressBody =>
+      'La copia bloqueada de este dispositivo se borra ahora y no se guarda nada más al cerrar esta pestaña. Su trabajo sigue abierto en esta pestaña.';
+
+  @override
+  String get progressOpenElsewhere =>
+      'Esta DASM está abierta en otra pestaña. Los cambios de aquí no se están guardando.';
+
+  @override
+  String get progressRefused =>
+      'Su navegador no permitió que PA MHAD guarde una copia. Descargue su progreso para conservarlo.';
+
+  @override
+  String progressDownloadWeakWarning(String time) {
+    return 'Alguien que obtenga este archivo podría adivinar su frase de acceso en $time. Guarde el archivo en un lugar privado.';
+  }
+
+  @override
+  String get progressDownloadedLocked =>
+      'Se descargó el archivo bloqueado. Para seguir editando después, elija “Continuar desde un archivo guardado” y escriba su frase de acceso.';
+
+  @override
+  String get importLockedTitle => 'Este archivo está bloqueado';
+
+  @override
+  String get importLockedBody =>
+      'Escriba la frase de acceso con la que se bloqueó.';
+
+  @override
+  String get importLockedWrong =>
+      'Esa frase de acceso no funcionó. Revísela e inténtelo de nuevo.';
+
+  @override
+  String get importLockedOpen => 'Abrir';
+
+  @override
+  String importKeepCopyBody(int minutes) {
+    return 'PA MHAD puede guardar una copia bloqueada en este dispositivo mientras trabaja, con la misma frase de acceso que este archivo. Vence $minutes minutos después de que usted salga.';
+  }
+
+  @override
+  String get importKeepCopyYes => 'Guardar una copia bloqueada';
+
+  @override
+  String get importKeepCopyNo => 'No guardar nada';
+
+  @override
+  String wizardExitWebBody(int minutes) {
+    return 'La aplicación web no conserva su progreso por mucho tiempo.\n\nSi eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga. De lo contrario, su trabajo se borra al cerrar esta pestaña. Para terminar otro día, descargue su progreso, o exporte o imprima su documento.';
+  }
+
+  @override
+  String aiSetupYourDirectiveDataIsHeld(int minutes) {
+    return '- Los datos de su directiva se quedan en su navegador: solo en esta pestaña o, si así lo eligió, en una copia bloqueada con su frase de acceso que vence $minutes minutos después de que usted salga; nunca en un servidor\n- Las funciones de IA son opcionales y la aplicación funciona sin ellas\n- Solo sale de su dispositivo el texto que usted envía expresamente por el chat de IA o Sugerencia de IA\n- Esta aplicación no es un servicio médico ni legal\n- Esta aplicación no cumple con HIPAA';
+  }
+
+  @override
+  String privacyPolicyYourDirectiveDataIsNot(int minutes) {
+    return 'Los datos de su directiva NO se transmiten al desarrollador de la aplicación ni a ningún tercero para su almacenamiento.\n\nEsta es una aplicación web: sus datos se guardan en la pestaña de su navegador. Al empezar, usted elige si desea conservar una copia en este dispositivo. Si lo hace, la copia queda bloqueada con una frase de acceso que solo usted conoce (cifrado AES-256) y vence $minutes minutos después de que usted salga; una copia vencida se borra la próxima vez que se abra la aplicación en este navegador. Si no lo hace, su trabajo se borra al cerrar la pestaña. No se escribe nada en un servidor. Descargue su progreso, o exporte o imprima su directiva, para conservar una copia.';
+  }
+
+  @override
+  String webLandingNoAccountNoCloudIf(int minutes) {
+    return 'Sin cuenta ni nube. Al empezar, usted elige: conservar una copia en este dispositivo, bloqueada con su frase de acceso, hasta $minutes minutos después de salir, o no conservar nada al cerrar la pestaña. Para conservar su trabajo más tiempo, descárguelo.';
+  }
+
+  @override
+  String legalSheetIfYouCloseTheTab(int minutes) {
+    return '; nunca se envía a un servidor. Si eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga; de lo contrario, se borra al cerrar la pestaña. Exporte o imprima para conservar una copia. Esta aplicación ';
+  }
+
+  @override
+  String disclaimerYouWorkAnonymouslyInThis(int minutes) {
+    return 'Trabaja de forma anónima: sin cuenta, sin nube, sin rastreo. Al empezar, usted elige si desea conservar una copia en este dispositivo, bloqueada con su frase de acceso (vence $minutes minutos después de que usted salga), o no conservar nada al cerrar la pestaña.';
+  }
+
+  @override
+  String aiHandoffExtend(int minutes) {
+    return 'Ampliar $minutes min';
+  }
 }

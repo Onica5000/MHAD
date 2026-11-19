@@ -1,35 +1,14 @@
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// On the web the draft recovery keeps nothing (2026-11-18): the progress
+// autosave (lib/services/locked_progress/) keeps the work the way the person
+// chose — a passphrase-locked copy, or nothing outside the tab — instead of
+// this readable copy in localStorage. The old copy is erased at startup
+// (LockedProgressStore.legacyKeys).
 
-const _key = 'mhad_draft_recovery';
+/// Nothing is written on the web.
+Future<void> saveDraftPlatform(String jsonString) async {}
 
-/// Save draft JSON to shared_preferences on web.
-Future<void> saveDraftPlatform(String jsonString) async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_key, jsonString);
-  } catch (e) {
-    debugPrint('Draft save failed: $e');
-  }
-}
+/// Nothing to read on the web.
+Future<String?> readDraftPlatform() async => null;
 
-/// Read draft JSON from shared_preferences. Returns null if not found.
-Future<String?> readDraftPlatform() async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_key);
-  } catch (e) {
-    debugPrint('Draft read failed: $e');
-    return null;
-  }
-}
-
-/// Delete the draft from shared_preferences.
-Future<void> clearDraftPlatform() async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_key);
-  } catch (e) {
-    debugPrint('Draft clear failed: $e');
-  }
-}
+/// Nothing to delete on the web.
+Future<void> clearDraftPlatform() async {}

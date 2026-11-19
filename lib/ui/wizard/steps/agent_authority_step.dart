@@ -63,7 +63,7 @@ class _AgentAuthorityStepState
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't reset agent authority before load
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     await ref.read(directiveRepositoryProvider).upsertPreferences(
           DirectivePrefsCompanion(

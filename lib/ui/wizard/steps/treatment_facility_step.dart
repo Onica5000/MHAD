@@ -142,7 +142,7 @@ class _TreatmentFacilityStepState
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't overwrite facilities before load
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     final preferred = _serializeFacilities(_preferred);
     final avoid = _serializeFacilities(_avoid);

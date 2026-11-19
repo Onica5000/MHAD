@@ -115,7 +115,11 @@ def body_html(body: str) -> str:
 def render() -> str:
     data = json.loads(APP_DATA.read_text(encoding="utf-8"))
     arb = json.loads(ARB.read_text(encoding="utf-8"))
-    facts = {"appData.privacyPolicyUrl": data["urls"]["privacyPolicy"]}
+    facts = {
+        "appData.privacyPolicyUrl": data["urls"]["privacyPolicy"],
+        "appData.config.progressWindowMinutes":
+            str(data["config"]["progressWindowMinutes"]),
+    }
     dart = SCREEN.read_text(encoding="utf-8")
     api_visible = bool(data.get("ai", {}).get("apiModeVisible", False))
     secs = list(sections(dart, arb, facts, api_visible))

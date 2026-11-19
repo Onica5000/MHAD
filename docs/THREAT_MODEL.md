@@ -5,6 +5,15 @@
 ## Assets
 - User-entered mental-health directive PII (names, agents, diagnoses, meds, signatures).
 - Private-mode SQLCipher DB encryption key (device secure storage).
+- Web: the optional **passphrase-locked progress copy** (2026-11-18) in `localStorage` —
+  AES-256-GCM, key from PBKDF2-SHA-256 (600,000 rounds, random salt), derived as a
+  non-extractable Web Crypto key; the passphrase is never stored. It expires 30 minutes
+  after the page was last open and is erased unopened at the next start once expired
+  (a closed tab can't run code); 10 wrong passphrases erase it. Downloaded progress
+  files use the same lock without an expiry. **Residual risk:** anyone who copies the
+  locked data can guess offline with no try limit — the owner allows passphrases from
+  4 characters (lowercase + capital + symbol required, common ones blocked), so the
+  strength gauge and the download warning are the mitigation.
 - Optional **per-provider** AI API keys (Gemini default; Anthropic/OpenAI/xAI optional).
   Each is the user's own key, stored per provider (private: secure storage; public:
   in-memory + 10-min crash-recovery cache), and is only ever sent to that provider's
@@ -32,7 +41,7 @@
 
 | MASVS group | Status | Notes |
 |---|---|---|
-| Storage (MASVS-STORAGE) | ✅ L1/L2 | SQLCipher AES-256 (private), in-memory (public), secure keystore for keys |
+| Storage (MASVS-STORAGE) | ✅ L1/L2 | SQLCipher AES-256 (private), in-memory + optional passphrase-locked copy (public/web), secure keystore for keys |
 | Crypto (MASVS-CRYPTO) | ✅ | Platform keystore; random 32-byte key |
 | Auth (MASVS-AUTH) | ✅ | Biometric/passcode gate for private mode |
 | Network (MASVS-NETWORK) | ✅ | Strict TLS + cert pinning + host allowlist (AI providers: Gemini / Anthropic / OpenAI / xAI; plus NIH/NLM Clinical Tables, MedlinePlus, RxNav, FDA openFDA) |
@@ -54,6 +63,6 @@ introduced. This is an explicit, reviewed choice — not an unaddressed gap.
 the browser sandbox with no native binary to harden, and the resilience controls in the
 table above (FLAG_SECURE, root/jailbreak warning, cert pinning, obfuscation) are
 native-only and gracefully absent on web. Web's exposure is instead governed by the
-local-first, public-mode-only posture (in-memory DB, no persistence) and the network
+local-first, public-mode-only posture (in-memory DB; nothing persists except the optional passphrase-locked copy) and the network
 allowlist — not by anti-tamper RASP. The deferral therefore stands unchanged for the
 surface that actually ships.

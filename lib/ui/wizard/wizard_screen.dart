@@ -13,7 +13,9 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/l10n/model_labels.dart';
 import 'package:mhad/providers/app_providers.dart';
-import 'package:mhad/services/web_session_cache.dart';
+import 'package:mhad/services/locked_progress/locked_progress_store.dart'
+    show ProgressMode;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/responsive_shell.dart';
@@ -71,31 +73,41 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   /// freshly persisted values.
   final GlobalKey _stepKey = GlobalKey();
 
-  /// Web only: keeps the crash-recovery cache's freshness timestamp current
-  /// while the tab is open, so the 10-minute recovery window starts when the
-  /// page is closed/crashes rather than at the last step save.
-  Timer? _webCacheHeartbeat;
+  /// The progress autosave (web): it asks this page to save the open step's
+  /// typing quietly when the page is hidden ([_saveOpenStepQuietly]).
+  late final ProgressAutosave _autosave =
+      ref.read(progressAutosaveProvider.notifier);
 
   @override
   void initState() {
     super.initState();
-    // The beforeunload "leave site?" guard is now armed app-wide from
-    // main.dart whenever any directive exists in the in-memory DB (UX
-    // audit B12) — the wizard no longer owns it, so leaving the wizard
-    // for Sign/Export/Assistant stays protected.
-    if (kIsWeb) {
-      _webCacheHeartbeat = Timer.periodic(
-        const Duration(minutes: 1),
-        (_) => WebSessionCache.touch(),
-      );
-    }
+    // The beforeunload "leave site?" guard is armed app-wide from main.dart
+    // whenever any directive exists in the in-memory DB (UX audit B12).
+    _autosave.registerOpenStep(widget.directiveId, _saveOpenStepQuietly);
   }
 
   @override
   void dispose() {
-    _webCacheHeartbeat?.cancel();
+    _autosave.unregisterOpenStep(widget.directiveId);
     _savedHintTimer?.cancel();
     super.dispose();
+  }
+
+  /// How the work is kept, for the "kept" chip and its announcement: the
+  /// app's own storage off the web; on the web, the person's choice.
+  String _keptLabel(BuildContext context) {
+    if (!kIsWeb) return context.l10n.wizardSaved;
+    return ref.read(progressAutosaveProvider).mode == ProgressMode.locked
+        ? context.l10n.wizardKeptLocked
+        : context.l10n.wizardKeptInThisTab;
+  }
+
+  /// Saves what's typed on the open step without showing warnings.
+  Future<void> _saveOpenStepQuietly() async {
+    final state = _stepKey.currentState;
+    if (state is WizardStepMixin) {
+      await (state as WizardStepMixin).saveQuietly();
+    }
   }
 
   /// Flashes a transient "✓ Saved" hint (throttled to one per 4s so rapid
@@ -110,7 +122,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     _lastSavedFlash = now;
     _savedHintTimer?.cancel();
     if (!mounted) return;
-    announce(context, context.l10n.wizardProgressSaved);
+    // On the web never a plain "saved": say how the work is kept.
+    announce(context,
+        kIsWeb ? _keptLabel(context) : context.l10n.wizardProgressSaved);
     setState(() => _showSavedHint = true);
     _savedHintTimer = Timer(const Duration(milliseconds: 1800), () {
       if (mounted) setState(() => _showSavedHint = false);
@@ -121,7 +135,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     await ref
         .read(directiveRepositoryProvider)
         .updateLastStepIndex(widget.directiveId, index);
-    await _cacheForWebReload();
   }
 
   /// Navigate to [index] by changing the URL, so the move is a real history
@@ -131,12 +144,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
     context.go(AppRoutes.wizardStepRoute(widget.directiveId, index));
     unawaited(_persistStep(index));
   }
-
-  /// On web, snapshot the directive so the user can resume after a page
-  /// reload within the TTL window. Never blocks navigation (callers await
-  /// this before advancing the step) — see [WebSessionCache.cacheDirective].
-  Future<void> _cacheForWebReload() => WebSessionCache.cacheDirective(
-      ref.read(directiveRepositoryProvider), widget.directiveId);
 
   @override
   Widget build(BuildContext context) {
@@ -398,9 +405,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                                           size: 14, color: p.textMuted),
                                       const SizedBox(width: 4),
                                       Text(
-                                        kIsWeb
-                                            ? context.l10n.wizardKeptInThisTab
-                                            : context.l10n.wizardSaved,
+                                        _keptLabel(context),
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: p.textMuted,
@@ -661,7 +666,6 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
 
       if (mounted) {
         if (isLastStep) {
-          if (kIsWeb) unawaited(WebSessionCache.clear());
           if (context.mounted) {
             // Prototype split (2026-06-04): Review → Sign → Done.
             // The wizard's last step ends at Review; "Continue" hands
@@ -739,7 +743,8 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
         title: Text(context.l10n.wizardExitWithoutSaving),
         content: Text(
             kIsWeb
-                ? context.l10n.wizardExitWebBody
+                ? context.l10n.wizardExitWebBody(
+                    appData.config.progressWindowMinutes)
                 : context.l10n.wizardExitPublicBody),
         actions: [
           TextButton(

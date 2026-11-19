@@ -84,7 +84,7 @@ class _EffectiveConditionStepState
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't overwrite the trigger fields before load
-    _formKey.currentState?.validate(); // Show warnings but don't block
+    showWarnings(_formKey); // Show warnings but don't block
     final repo = ref.read(directiveRepositoryProvider);
     await repo.updateEffectiveCondition(
       widget.directiveId,

@@ -56,7 +56,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _PolicySection(
               title: context.l10n.privacyPolicyHowDataIsStoredProtected,
               body:
-                  context.l10n.privacyPolicyYourDirectiveDataIsNot,
+                  context.l10n.privacyPolicyYourDirectiveDataIsNot(
+                      appData.config.progressWindowMinutes),
               headingStyle: headingStyle,
               bodyStyle: bodyStyle,
             ),

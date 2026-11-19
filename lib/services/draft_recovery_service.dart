@@ -22,8 +22,9 @@ import 'draft_recovery_stub.dart'
 class DraftRecoveryService {
   DraftRecoveryService._();
 
-  /// 10 minutes — matches [sessionCacheTtl] / [WebSessionCache] so every
-  /// crash-recovery window in the app is the same length.
+  /// 10 minutes — [sessionCacheTtl]. Native only: on the web this keeps
+  /// nothing (draft_recovery_web.dart); the progress autosave
+  /// (lib/services/locked_progress/) keeps the work the way the person chose.
   static Duration get ttl => sessionCacheTtl;
 
   /// PII fields that are NEVER saved to the draft.
