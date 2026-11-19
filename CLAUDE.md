@@ -147,6 +147,14 @@ key would need a **relay server** — keys never ship to the browser.
 | Files | `downloadLockedProgress`, `saved_file_import.dart` | Downloads are always locked (no expiry); older readable / app-key `.mhad` files still open |
 | Wording | ARB | Never an unqualified "Nothing is saved" ("unless you choose"); the window comes from the setting, never a typed "30" |
 
+## Privacy facts (verified in a browser 2026-11-19)
+| Fact | Where | Rule |
+|---|---|---|
+| Outside hosts on load | `tool/web_smoke.py` `LOAD_HOSTS` | Google's `www.gstatic.com` (CanvasKit) + `fonts.gstatic.com`; the smoke test fails on any other — name a new host in the privacy policy first |
+| Lookups the person starts | privacy policy "No third-party tracking" | NIH/NLM, MedlinePlus/RxNav, openFDA, Zippopotam.us + FCC (ZIP fill), browser speech service (dictation). Never claim "nothing leaves your browser" without naming them |
+| pdf.js | `web/pdfjs/` (index.html `dartPdfJsBaseUrl`) | Served with the app, not unpkg; pinned to printing's version (`pdfjs_bundle_test`) |
+| Deleting | `DirectiveRepository.directiveChildTables` | No FK cascade (no `PRAGMA foreign_keys`): deletes remove child rows themselves (`directive_delete_test`) |
+
 ## Navigation (current model — no hamburger drawer)
 - **Mobile**: floating `MhadBottomNav` (Home · Learn · Ask · Settings · More), every tab
   labelled. **Wide ≥1000px** (total window width): persistent `WebSidebar` via `ResponsiveShell`.
