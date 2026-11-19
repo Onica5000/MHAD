@@ -122,6 +122,7 @@ flutter:
   assets:
     - assets/
     - assets/data/
+    - assets/licenses/
     # Photos (Grok Imagine, natural-light photography). One folder per group;
     # lib/ui/theme/app_art.dart lists every file and test/unit/app_art_test.dart
     # fails if a folder here, a file on disk, or the manifest falls out of step.
