@@ -1,3 +1,4 @@
+import 'package:mhad/ui/progress/progress_gate.dart' show downloadLockedProgress;
 import 'package:mhad/utils/file_names.dart';
 import 'dart:convert';
 
@@ -29,7 +30,6 @@ import 'package:mhad/ui/widgets/design/wallet_card.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/services/blank_form_service.dart';
 import 'package:mhad/services/calendar_reminder_service.dart';
-import 'package:mhad/services/directive_export_service.dart';
 import 'package:mhad/services/export_formats_service.dart';
 import 'package:mhad/services/fhir_export_service.dart';
 import 'package:mhad/utils/a11y_announce.dart';
@@ -55,7 +55,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   bool _isGenerating = false;
 
   /// Whether the "editable copy" download is obfuscated (default) or plaintext.
-  bool _encryptEditableCopy = true;
 
   /// Printed-copy types to produce. The user can tick more than one and get a
   /// separate PDF for each (e.g. a clean final copy AND a watermarked draft).
@@ -723,20 +722,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           _railBody(
             context.l10n.exportNotAFinishedDocumentThis,
           ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Checkbox(
-                value: _encryptEditableCopy,
-                onChanged: (v) =>
-                    setState(() => _encryptEditableCopy = v ?? true),
-              ),
-              Expanded(child: Text(context.l10n.exportEncryptTheFile)),
-            ],
-          ),
-          _railBody(
-            context.l10n.exportEncryptingHindersOthersFromReading,
-          ),
           const SizedBox(height: 8),
           Semantics(
             button: true,
@@ -744,7 +729,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.tonalIcon(
-                onPressed: _isGenerating ? null : _downloadEditableCopy,
+                onPressed: _isGenerating
+                    ? null
+                    : () => downloadLockedProgress(
+                        context, ref, widget.directiveId),
                 icon: const Icon(Icons.download_outlined),
                 label: Text(context.l10n.exportDownload),
               ),
@@ -935,37 +923,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(context.l10n.exportCopiedToClipboard)),
-        );
-      }
-    }
-  }
-
-  /// Build + download the portable directive file (encrypted or plaintext per
-  /// [_encryptEditableCopy]). Re-importable via "Continue from a saved file".
-  Future<void> _downloadEditableCopy() async {
-    try {
-      final repo = ref.read(directiveRepositoryProvider);
-      final subject = context.l10n.exportShareSubjectEditable;
-      final bytes = await DirectiveExportService(repo).buildFile(
-        widget.directiveId,
-        encrypted: _encryptEditableCopy,
-        nowMillis: DateTime.now().millisecondsSinceEpoch,
-      );
-      final name =
-          _encryptEditableCopy ? 'directive.mhad' : 'directive-readable.mhad';
-      await SharePlus.instance.share(ShareParams(
-        files: [
-          XFile.fromData(bytes,
-              mimeType: 'application/octet-stream', name: name)
-        ],
-        subject: subject,
-      ));
-    } catch (e) {
-      debugPrint('Editable-file export failed: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(context.l10n.exportCouldnTSaveTheFile)),
         );
       }
     }

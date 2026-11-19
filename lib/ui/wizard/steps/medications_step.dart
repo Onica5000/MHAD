@@ -133,7 +133,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't wipe meds before the load populates them
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
     final repo = ref.read(directiveRepositoryProvider);
 
     int order = 0;

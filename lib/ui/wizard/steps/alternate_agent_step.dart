@@ -85,7 +85,7 @@ class _AlternateAgentStepState
 
   @override
   Future<bool> validateAndSave() async {
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     // All fields are optional; only save if a name was provided.
     final name = _nameCtrl.text.trim();

@@ -187,7 +187,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't reset the consent choice before load
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     final String consentValue;
     if (_consent == ConsentOption.conditional) {

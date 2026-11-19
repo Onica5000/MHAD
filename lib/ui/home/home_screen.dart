@@ -1,4 +1,5 @@
-﻿import 'package:mhad/ai/handoff/pending_handoff.dart';
+﻿import 'package:mhad/ui/progress/progress_gate.dart' show startDirective;
+import 'package:mhad/ai/handoff/pending_handoff.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,11 @@ import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/services/device_security_service.dart';
 import 'package:mhad/services/reminder_scheduler.dart';
-import 'package:mhad/services/web_session_cache.dart';
+import 'package:mhad/services/locked_progress/locked_progress_store.dart'
+    show ProgressMode;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
+import 'package:mhad/services/locked_progress/progress_payload.dart';
+import 'package:mhad/ui/progress/progress_restore.dart';
 import 'package:mhad/services/notification_service.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/ui/router.dart';
@@ -30,7 +35,6 @@ import 'package:mhad/ui/widgets/design/brand_motif.dart';
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/reveal.dart';
 import 'package:mhad/ui/widgets/draft_recovery_dialog.dart';
-import 'package:mhad/utils/a11y_announce.dart';
 import 'package:mhad/utils/date_format.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -60,7 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
         if (kIsWeb && mounted) {
-          await _tryWebSessionRestore();
+          await _offerProgressRestore();
         }
         if (mounted) unawaited(checkAndOfferDraftRecovery(context, ref));
         // Reminder auto-fire (in-app, per-launch). Runs after onboarding +
@@ -455,46 +459,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Future<void> _tryWebSessionRestore() async {
+  /// Brings back the work kept the way the person chose (web). A tab-only
+  /// copy comes back by itself after a reload of this tab (names and
+  /// addresses aren't in it). A locked copy waits on the resume page for the
+  /// passphrase. Nothing happens when this tab already has work.
+  Future<void> _offerProgressRestore() async {
     try {
-      final snap = await WebSessionCache.getCachedDirective();
-      if (snap == null || !mounted) {
-        // Nothing to restore: a wait for an AI answer about that work can't
-        // be finished (web data lives in the tab) — drop it and its banner.
-        if (mounted) ref.read(pendingHandoffProvider.notifier).clear();
+      final repo = ref.read(directiveRepositoryProvider);
+      if ((await repo.getAllDirectives()).isNotEmpty || !mounted) return;
+      final store = ref.read(lockedProgressProvider);
+      if (store.savedCopy != null) {
+        unawaited(context.push(AppRoutes.resumeProgress));
         return;
       }
-
-      final repo = ref.read(directiveRepositoryProvider);
-      final newId = await repo.restoreFromSnapshot(snap);
-      // Waiting for an AI answer (copy and paste)? Go back to that page under
-      // the restored directive's id, and keep the recovery copy until the
-      // answer is in (the tab may unload again).
-      final pending = await ref
-          .read(pendingHandoffProvider.notifier)
-          .remapDirective(newId);
-      final resume =
-          pending != null && pending.resumable ? pending.route : null;
-      if (resume == null) {
-        if (pending != null) ref.read(pendingHandoffProvider.notifier).clear();
-        await WebSessionCache.clear();
-      } else {
-        unawaited(WebSessionCache.cacheDirective(repo, newId));
+      final copy =
+          store.mode == ProgressMode.tabOnly ? store.tabCopy : null;
+      if (copy == null) {
+        // Nothing to restore: a wait for an AI answer about that work can't
+        // be finished (web data lives in the tab) — drop it and its banner.
+        ref.read(pendingHandoffProvider.notifier).clear();
+        return;
       }
-
-      if (mounted && context.mounted) {
-        announce(context, context.l10n.homeSessionRestoredPersonalInfoMust);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.homeSessionRestoredPersonalInfoMust),
-            duration: Duration(seconds: 4),
-          ),
-        );
-        unawaited(context.push(resume ?? AppRoutes.wizardRoute(newId)));
+      final restored = await restoreProgressPayload(repo, copy);
+      if (!restored.isEmpty && mounted && context.mounted) {
+        openRestoredProgress(context, ref, restored,
+            personalInfoMissing: true);
       }
     } catch (e) {
-      debugPrint('Web session restore failed: $e');
-      await WebSessionCache.clear();
+      debugPrint('Progress restore failed: $e');
     }
   }
 
@@ -627,7 +619,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       orElse: () => FormType.combined,
     );
     final repo = ref.read(directiveRepositoryProvider);
-    final newId = await repo.createDirective(formType);
+    final newId = await startDirective(ref, formType);
+    if (newId == null) return;
 
     await repo.updateEffectiveCondition(newId, old.effectiveCondition);
 

@@ -6212,12 +6212,6 @@ abstract class AppLocalizations {
   /// **'Open wallet card (PDF)'**
   String get exportOpenWalletCardPdf;
 
-  /// No description provided for @exportEncryptTheFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Encrypt the file'**
-  String get exportEncryptTheFile;
-
   /// No description provided for @exportDownload.
   ///
   /// In en, this message translates to:
@@ -6353,7 +6347,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDownloadAnEditableCopyOf.
   ///
   /// In en, this message translates to:
-  /// **'Download an editable copy of your directive'**
+  /// **'Download a locked, editable copy of your directive'**
   String get exportDownloadAnEditableCopyOf;
 
   /// No description provided for @exportExportAsFhirJsonFor.
@@ -9432,14 +9426,8 @@ abstract class AppLocalizations {
   /// No description provided for @exportNotAFinishedDocumentThis.
   ///
   /// In en, this message translates to:
-  /// **'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.'**
+  /// **'Not a finished document — this is how you keep your progress for another day. The file is locked with your passphrase: open it later with “Continue from a saved file”, here or on another device. Nothing is stored online.'**
   String get exportNotAFinishedDocumentThis;
-
-  /// No description provided for @exportEncryptingHindersOthersFromReading.
-  ///
-  /// In en, this message translates to:
-  /// **'Encrypting hinders others from reading it; the app still opens it with no passphrase.'**
-  String get exportEncryptingHindersOthersFromReading;
 
   /// No description provided for @exportMachineReadableFormats.
   ///
@@ -12444,6 +12432,444 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel one you signed, and who to tell'**
   String get moreSheetRevokeDetail;
+
+  /// No description provided for @progressChoiceAppBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you start'**
+  String get progressChoiceAppBar;
+
+  /// No description provided for @progressChoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your progress on this device?'**
+  String get progressChoiceTitle;
+
+  /// No description provided for @progressChoiceLead.
+  ///
+  /// In en, this message translates to:
+  /// **'If your browser closes or your phone reloads this page, a saved copy lets you pick up where you left off.'**
+  String get progressChoiceLead;
+
+  /// No description provided for @progressChoiceYesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, lock it with a passphrase'**
+  String get progressChoiceYesTitle;
+
+  /// No description provided for @progressChoiceYesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A locked copy is kept on this device while you work. Only your passphrase opens it. It expires {minutes} minutes after you leave, and PA MHAD erases it the next time it’s opened here.'**
+  String progressChoiceYesBody(int minutes);
+
+  /// No description provided for @progressChoiceNoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No, keep nothing'**
+  String get progressChoiceNoTitle;
+
+  /// No description provided for @progressChoiceNoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is saved. Your work is erased when you close this tab.'**
+  String get progressChoiceNoBody;
+
+  /// No description provided for @progressChoiceDownloadNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Either way, you can download your progress as a locked file to finish another day.'**
+  String get progressChoiceDownloadNote;
+
+  /// No description provided for @progressLocking.
+  ///
+  /// In en, this message translates to:
+  /// **'Locking…'**
+  String get progressLocking;
+
+  /// No description provided for @passphraseSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a passphrase'**
+  String get passphraseSetupTitle;
+
+  /// No description provided for @passphraseSetupLead.
+  ///
+  /// In en, this message translates to:
+  /// **'It locks your saved progress, here and in any file you download.'**
+  String get passphraseSetupLead;
+
+  /// No description provided for @passphraseForgetWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'If you forget it, nobody can open your saved progress — there’s no way to recover it. Keep it somewhere safe.'**
+  String get passphraseForgetWarning;
+
+  /// No description provided for @passphraseFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get passphraseFieldLabel;
+
+  /// No description provided for @passphraseConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type it again'**
+  String get passphraseConfirmLabel;
+
+  /// No description provided for @passphraseShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show passphrase'**
+  String get passphraseShow;
+
+  /// No description provided for @passphraseHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide passphrase'**
+  String get passphraseHide;
+
+  /// No description provided for @passphraseNeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Your passphrase needs:'**
+  String get passphraseNeeds;
+
+  /// No description provided for @passphraseRuleMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {count} characters'**
+  String passphraseRuleMinLength(int count);
+
+  /// No description provided for @passphraseRuleLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'A lowercase letter'**
+  String get passphraseRuleLowercase;
+
+  /// No description provided for @passphraseRuleUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'A capital letter'**
+  String get passphraseRuleUppercase;
+
+  /// No description provided for @passphraseRuleSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'A symbol or a space (like ! ? # or a space)'**
+  String get passphraseRuleSpecial;
+
+  /// No description provided for @passphraseRuleNotCommon.
+  ///
+  /// In en, this message translates to:
+  /// **'Not to be a common passphrase'**
+  String get passphraseRuleNotCommon;
+
+  /// No description provided for @passphraseRuleMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Both entries to match'**
+  String get passphraseRuleMatch;
+
+  /// No description provided for @passphraseRuleMet.
+  ///
+  /// In en, this message translates to:
+  /// **'done'**
+  String get passphraseRuleMet;
+
+  /// No description provided for @passphraseRuleNotMet.
+  ///
+  /// In en, this message translates to:
+  /// **'not yet'**
+  String get passphraseRuleNotMet;
+
+  /// No description provided for @passphraseStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength: {level}'**
+  String passphraseStrength(String level);
+
+  /// No description provided for @passphraseStrengthWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passphraseStrengthWeak;
+
+  /// No description provided for @passphraseStrengthFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get passphraseStrengthFair;
+
+  /// No description provided for @passphraseStrengthGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get passphraseStrengthGood;
+
+  /// No description provided for @passphraseStrengthStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passphraseStrengthStrong;
+
+  /// No description provided for @passphraseCrackTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone who got your locked file could guess it in {time}.'**
+  String passphraseCrackTime(String time);
+
+  /// No description provided for @crackTimeUnderAMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'less than a minute'**
+  String get crackTimeUnderAMinute;
+
+  /// No description provided for @crackTimeMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'minutes'**
+  String get crackTimeMinutes;
+
+  /// No description provided for @crackTimeHours.
+  ///
+  /// In en, this message translates to:
+  /// **'hours'**
+  String get crackTimeHours;
+
+  /// No description provided for @crackTimeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get crackTimeDays;
+
+  /// No description provided for @crackTimeMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'months'**
+  String get crackTimeMonths;
+
+  /// No description provided for @crackTimeYears.
+  ///
+  /// In en, this message translates to:
+  /// **'years'**
+  String get crackTimeYears;
+
+  /// No description provided for @crackTimeCenturies.
+  ///
+  /// In en, this message translates to:
+  /// **'centuries'**
+  String get crackTimeCenturies;
+
+  /// No description provided for @passphraseTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: three or four unrelated words, with a capital and a symbol, are easy to remember and hard to guess.'**
+  String get passphraseTip;
+
+  /// No description provided for @passphraseLockProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock my progress'**
+  String get passphraseLockProgress;
+
+  /// No description provided for @passphraseLockAndDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock and download'**
+  String get passphraseLockAndDownload;
+
+  /// No description provided for @resumeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get resumeTitle;
+
+  /// No description provided for @resumeSavedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s progress saved on this device from {time}. Enter your passphrase to continue.'**
+  String resumeSavedAt(String time);
+
+  /// No description provided for @resumeOpenUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'It can be opened until {time}.'**
+  String resumeOpenUntil(String time);
+
+  /// No description provided for @resumeUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get resumeUnlock;
+
+  /// No description provided for @resumeChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get resumeChecking;
+
+  /// No description provided for @resumeWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That passphrase didn’t work. {count, plural, =1{1 more wrong try erases the saved progress.} other{{count} more wrong tries erase the saved progress.}}'**
+  String resumeWrong(int count);
+
+  /// No description provided for @resumeErased.
+  ///
+  /// In en, this message translates to:
+  /// **'To protect it, the saved progress was erased after {count} wrong passphrases.'**
+  String resumeErased(int count);
+
+  /// No description provided for @resumeGone.
+  ///
+  /// In en, this message translates to:
+  /// **'The saved progress is gone: it expired or was erased.'**
+  String get resumeGone;
+
+  /// No description provided for @resumeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete it and start over'**
+  String get resumeDelete;
+
+  /// No description provided for @resumeDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the saved progress?'**
+  String get resumeDeleteConfirmTitle;
+
+  /// No description provided for @resumeDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s erased from this device now. This can’t be undone.'**
+  String get resumeDeleteConfirmBody;
+
+  /// No description provided for @resumeDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete it'**
+  String get resumeDeleteConfirm;
+
+  /// No description provided for @resumeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'The saved progress was deleted.'**
+  String get resumeDeleted;
+
+  /// No description provided for @resumeStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get resumeStartOver;
+
+  /// No description provided for @progressRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saved progress is back.'**
+  String get progressRestored;
+
+  /// No description provided for @wizardKeptLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked on this device'**
+  String get wizardKeptLocked;
+
+  /// No description provided for @moreSheetDownloadToFinishLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Download to finish later'**
+  String get moreSheetDownloadToFinishLater;
+
+  /// No description provided for @moreSheetDownloadToFinishLaterDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'A locked file you can open on any device'**
+  String get moreSheetDownloadToFinishLaterDetail;
+
+  /// No description provided for @moreSheetDeleteSavedProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete saved progress'**
+  String get moreSheetDeleteSavedProgress;
+
+  /// No description provided for @moreSheetDeleteSavedProgressDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase the locked copy on this device now'**
+  String get moreSheetDeleteSavedProgressDetail;
+
+  /// No description provided for @deleteSavedProgressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The locked copy on this device is erased now, and nothing more is kept after this tab closes. Your work stays open in this tab.'**
+  String get deleteSavedProgressBody;
+
+  /// No description provided for @progressOpenElsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'This directive is open in another tab. Changes here aren’t being kept.'**
+  String get progressOpenElsewhere;
+
+  /// No description provided for @progressRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Your browser didn’t let PA MHAD keep a copy. Download your progress to keep it.'**
+  String get progressRefused;
+
+  /// No description provided for @progressDownloadWeakWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone who gets this file could guess your passphrase in {time}. Keep the file somewhere private.'**
+  String progressDownloadWeakWarning(String time);
+
+  /// No description provided for @progressDownloadedLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked file downloaded. To keep editing later, choose “Continue from a saved file” and enter your passphrase.'**
+  String get progressDownloadedLocked;
+
+  /// No description provided for @importLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is locked'**
+  String get importLockedTitle;
+
+  /// No description provided for @importLockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the passphrase it was locked with.'**
+  String get importLockedBody;
+
+  /// No description provided for @importLockedWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That passphrase didn’t work. Check it and try again.'**
+  String get importLockedWrong;
+
+  /// No description provided for @importLockedOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get importLockedOpen;
+
+  /// No description provided for @importKeepCopyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD can keep a locked copy on this device while you work, with the same passphrase as this file. It expires {minutes} minutes after you leave.'**
+  String importKeepCopyBody(int minutes);
+
+  /// No description provided for @importKeepCopyYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a locked copy'**
+  String get importKeepCopyYes;
+
+  /// No description provided for @importKeepCopyNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep nothing'**
+  String get importKeepCopyNo;
 }
 
 class _AppLocalizationsDelegate

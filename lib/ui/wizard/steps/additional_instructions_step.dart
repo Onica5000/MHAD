@@ -207,7 +207,7 @@ class _AdditionalInstructionsStepState
   @override
   Future<bool> validateAndSave() async {
     if (!isLoaded) return true; // don't overwrite instructions before load
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     await ref.read(directiveRepositoryProvider).upsertAdditionalInstructions(
           AdditionalInstructionsTableCompanion(

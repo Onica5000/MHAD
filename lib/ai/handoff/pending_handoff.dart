@@ -177,6 +177,14 @@ class PendingHandoffNotifier extends Notifier<PendingHandoff?> {
     PendingHandoffStore.write(null);
   }
 
+  /// Takes over a wait that came back with a restored progress copy (already
+  /// moved onto its directive's new id).
+  void adopt(PendingHandoff p) {
+    _touched = true;
+    state = p;
+    PendingHandoffStore.write(p);
+  }
+
   /// Moves the wait onto directive [newId] after a reload restored the work
   /// under a new id ([PendingHandoff.remappedTo]). Reads browser storage
   /// itself: the restore can run before this notifier's own load. Returns

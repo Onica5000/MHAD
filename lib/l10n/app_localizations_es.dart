@@ -3634,9 +3634,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportOpenWalletCardPdf => 'Abrir la tarjeta de billetera (PDF)';
 
   @override
-  String get exportEncryptTheFile => 'Cifrar el archivo';
-
-  @override
   String get exportDownload => 'Descargar';
 
   @override
@@ -3715,7 +3712,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportDownloadAnEditableCopyOf =>
-      'Descargue una copia editable de su directiva';
+      'Descargue una copia editable y bloqueada de su directiva';
 
   @override
   String get exportExportAsFhirJsonFor =>
@@ -5663,11 +5660,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exportNotAFinishedDocumentThis =>
-      'No es un documento terminado: así es como guarda su progreso. La aplicación web no puede almacenar su trabajo en este dispositivo, así que descargue este archivo para conservarlo y luego vuelva a subirlo (aquí o en otro dispositivo) para seguir editando. No se almacena nada en línea.';
-
-  @override
-  String get exportEncryptingHindersOthersFromReading =>
-      'El cifrado dificulta que otros lo lean; la aplicación lo sigue abriendo sin frase de contraseña.';
+      'No es un documento terminado: así conserva su progreso para otro día. El archivo queda bloqueado con su frase de acceso: ábralo después con “Continuar desde un archivo guardado”, aquí o en otro dispositivo. No se almacena nada en línea.';
 
   @override
   String get exportMachineReadableFormats => 'Formatos legibles por máquina';
@@ -7545,4 +7538,268 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get moreSheetRevokeDetail => 'Cancelar una que firmó y a quién avisar';
+
+  @override
+  String get progressChoiceAppBar => 'Antes de empezar';
+
+  @override
+  String get progressChoiceTitle =>
+      '¿Desea conservar su progreso en este dispositivo?';
+
+  @override
+  String get progressChoiceLead =>
+      'Si el navegador se cierra o el teléfono vuelve a cargar esta página, una copia guardada le permite continuar donde lo dejó.';
+
+  @override
+  String get progressChoiceYesTitle => 'Sí, protegerla con una frase de acceso';
+
+  @override
+  String progressChoiceYesBody(int minutes) {
+    return 'Se guarda una copia bloqueada en este dispositivo mientras trabaja. Solo su frase de acceso la abre. Vence $minutes minutos después de que usted salga, y PA MHAD la borra la próxima vez que se abra aquí.';
+  }
+
+  @override
+  String get progressChoiceNoTitle => 'No, no guardar nada';
+
+  @override
+  String get progressChoiceNoBody =>
+      'No se guarda nada. Su trabajo se borra cuando cierra esta pestaña.';
+
+  @override
+  String get progressChoiceDownloadNote =>
+      'En cualquier caso, puede descargar su progreso como un archivo bloqueado para terminarlo otro día.';
+
+  @override
+  String get progressLocking => 'Bloqueando…';
+
+  @override
+  String get passphraseSetupTitle => 'Elija una frase de acceso';
+
+  @override
+  String get passphraseSetupLead =>
+      'Bloquea su progreso guardado, aquí y en cualquier archivo que descargue.';
+
+  @override
+  String get passphraseForgetWarning =>
+      'Si la olvida, nadie podrá abrir su progreso guardado: no hay forma de recuperarla. Guárdela en un lugar seguro.';
+
+  @override
+  String get passphraseFieldLabel => 'Frase de acceso';
+
+  @override
+  String get passphraseConfirmLabel => 'Escríbala otra vez';
+
+  @override
+  String get passphraseShow => 'Mostrar la frase de acceso';
+
+  @override
+  String get passphraseHide => 'Ocultar la frase de acceso';
+
+  @override
+  String get passphraseNeeds => 'Su frase de acceso necesita:';
+
+  @override
+  String passphraseRuleMinLength(int count) {
+    return 'Al menos $count caracteres';
+  }
+
+  @override
+  String get passphraseRuleLowercase => 'Una letra minúscula';
+
+  @override
+  String get passphraseRuleUppercase => 'Una letra mayúscula';
+
+  @override
+  String get passphraseRuleSpecial =>
+      'Un símbolo o un espacio (como ! ? # o un espacio)';
+
+  @override
+  String get passphraseRuleNotCommon => 'Que no sea una frase de acceso común';
+
+  @override
+  String get passphraseRuleMatch => 'Que las dos coincidan';
+
+  @override
+  String get passphraseRuleMet => 'cumplido';
+
+  @override
+  String get passphraseRuleNotMet => 'pendiente';
+
+  @override
+  String passphraseStrength(String level) {
+    return 'Seguridad: $level';
+  }
+
+  @override
+  String get passphraseStrengthWeak => 'Débil';
+
+  @override
+  String get passphraseStrengthFair => 'Regular';
+
+  @override
+  String get passphraseStrengthGood => 'Buena';
+
+  @override
+  String get passphraseStrengthStrong => 'Fuerte';
+
+  @override
+  String passphraseCrackTime(String time) {
+    return 'Alguien que obtuviera su archivo bloqueado podría adivinarla en $time.';
+  }
+
+  @override
+  String get crackTimeUnderAMinute => 'menos de un minuto';
+
+  @override
+  String get crackTimeMinutes => 'minutos';
+
+  @override
+  String get crackTimeHours => 'horas';
+
+  @override
+  String get crackTimeDays => 'días';
+
+  @override
+  String get crackTimeMonths => 'meses';
+
+  @override
+  String get crackTimeYears => 'años';
+
+  @override
+  String get crackTimeCenturies => 'siglos';
+
+  @override
+  String get passphraseTip =>
+      'Consejo: tres o cuatro palabras sin relación entre sí, con una mayúscula y un símbolo, son fáciles de recordar y difíciles de adivinar.';
+
+  @override
+  String get passphraseLockProgress => 'Bloquear mi progreso';
+
+  @override
+  String get passphraseLockAndDownload => 'Bloquear y descargar';
+
+  @override
+  String get resumeTitle => 'Le damos la bienvenida otra vez';
+
+  @override
+  String resumeSavedAt(String time) {
+    return 'Hay progreso guardado en este dispositivo a las $time. Escriba su frase de acceso para continuar.';
+  }
+
+  @override
+  String resumeOpenUntil(String time) {
+    return 'Se puede abrir hasta las $time.';
+  }
+
+  @override
+  String get resumeUnlock => 'Desbloquear';
+
+  @override
+  String get resumeChecking => 'Comprobando…';
+
+  @override
+  String resumeWrong(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count intentos incorrectos más borran el progreso guardado.',
+      one: 'Un intento incorrecto más borra el progreso guardado.',
+    );
+    return 'Esa frase de acceso no funcionó. $_temp0';
+  }
+
+  @override
+  String resumeErased(int count) {
+    return 'Para protegerlo, el progreso guardado se borró después de $count frases de acceso incorrectas.';
+  }
+
+  @override
+  String get resumeGone =>
+      'El progreso guardado ya no está: venció o se borró.';
+
+  @override
+  String get resumeDelete => 'Borrarlo y empezar de nuevo';
+
+  @override
+  String get resumeDeleteConfirmTitle => '¿Borrar el progreso guardado?';
+
+  @override
+  String get resumeDeleteConfirmBody =>
+      'Se borra de este dispositivo ahora. No se puede deshacer.';
+
+  @override
+  String get resumeDeleteConfirm => 'Borrarlo';
+
+  @override
+  String get resumeDeleted => 'Se borró el progreso guardado.';
+
+  @override
+  String get resumeStartOver => 'Empezar de nuevo';
+
+  @override
+  String get progressRestored => 'Su progreso guardado se recuperó.';
+
+  @override
+  String get wizardKeptLocked => 'Bloqueado en este dispositivo';
+
+  @override
+  String get moreSheetDownloadToFinishLater =>
+      'Descargar para terminar después';
+
+  @override
+  String get moreSheetDownloadToFinishLaterDetail =>
+      'Un archivo bloqueado que puede abrir en cualquier dispositivo';
+
+  @override
+  String get moreSheetDeleteSavedProgress => 'Borrar el progreso guardado';
+
+  @override
+  String get moreSheetDeleteSavedProgressDetail =>
+      'Borrar ahora la copia bloqueada de este dispositivo';
+
+  @override
+  String get deleteSavedProgressBody =>
+      'La copia bloqueada de este dispositivo se borra ahora y no se guarda nada más al cerrar esta pestaña. Su trabajo sigue abierto en esta pestaña.';
+
+  @override
+  String get progressOpenElsewhere =>
+      'Esta DASM está abierta en otra pestaña. Los cambios de aquí no se están guardando.';
+
+  @override
+  String get progressRefused =>
+      'Su navegador no permitió que PA MHAD guarde una copia. Descargue su progreso para conservarlo.';
+
+  @override
+  String progressDownloadWeakWarning(String time) {
+    return 'Alguien que obtenga este archivo podría adivinar su frase de acceso en $time. Guarde el archivo en un lugar privado.';
+  }
+
+  @override
+  String get progressDownloadedLocked =>
+      'Se descargó el archivo bloqueado. Para seguir editando después, elija “Continuar desde un archivo guardado” y escriba su frase de acceso.';
+
+  @override
+  String get importLockedTitle => 'Este archivo está bloqueado';
+
+  @override
+  String get importLockedBody =>
+      'Escriba la frase de acceso con la que se bloqueó.';
+
+  @override
+  String get importLockedWrong =>
+      'Esa frase de acceso no funcionó. Revísela e inténtelo de nuevo.';
+
+  @override
+  String get importLockedOpen => 'Abrir';
+
+  @override
+  String importKeepCopyBody(int minutes) {
+    return 'PA MHAD puede guardar una copia bloqueada en este dispositivo mientras trabaja, con la misma frase de acceso que este archivo. Vence $minutes minutos después de que usted salga.';
+  }
+
+  @override
+  String get importKeepCopyYes => 'Guardar una copia bloqueada';
+
+  @override
+  String get importKeepCopyNo => 'No guardar nada';
 }

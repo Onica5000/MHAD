@@ -3562,9 +3562,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportOpenWalletCardPdf => 'Open wallet card (PDF)';
 
   @override
-  String get exportEncryptTheFile => 'Encrypt the file';
-
-  @override
   String get exportDownload => 'Download';
 
   @override
@@ -3643,7 +3640,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDownloadAnEditableCopyOf =>
-      'Download an editable copy of your directive';
+      'Download a locked, editable copy of your directive';
 
   @override
   String get exportExportAsFhirJsonFor =>
@@ -5558,11 +5555,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportNotAFinishedDocumentThis =>
-      'Not a finished document — this is how you save your progress. The web app can’t store your work on this device, so download this file to keep it, then re-upload it later (here or on another device) to keep editing. Nothing is stored online.';
-
-  @override
-  String get exportEncryptingHindersOthersFromReading =>
-      'Encrypting hinders others from reading it; the app still opens it with no passphrase.';
+      'Not a finished document — this is how you keep your progress for another day. The file is locked with your passphrase: open it later with “Continue from a saved file”, here or on another device. Nothing is stored online.';
 
   @override
   String get exportMachineReadableFormats => 'Machine-readable formats';
@@ -7419,4 +7412,265 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreSheetRevokeDetail => 'Cancel one you signed, and who to tell';
+
+  @override
+  String get progressChoiceAppBar => 'Before you start';
+
+  @override
+  String get progressChoiceTitle => 'Keep your progress on this device?';
+
+  @override
+  String get progressChoiceLead =>
+      'If your browser closes or your phone reloads this page, a saved copy lets you pick up where you left off.';
+
+  @override
+  String get progressChoiceYesTitle => 'Yes, lock it with a passphrase';
+
+  @override
+  String progressChoiceYesBody(int minutes) {
+    return 'A locked copy is kept on this device while you work. Only your passphrase opens it. It expires $minutes minutes after you leave, and PA MHAD erases it the next time it’s opened here.';
+  }
+
+  @override
+  String get progressChoiceNoTitle => 'No, keep nothing';
+
+  @override
+  String get progressChoiceNoBody =>
+      'Nothing is saved. Your work is erased when you close this tab.';
+
+  @override
+  String get progressChoiceDownloadNote =>
+      'Either way, you can download your progress as a locked file to finish another day.';
+
+  @override
+  String get progressLocking => 'Locking…';
+
+  @override
+  String get passphraseSetupTitle => 'Choose a passphrase';
+
+  @override
+  String get passphraseSetupLead =>
+      'It locks your saved progress, here and in any file you download.';
+
+  @override
+  String get passphraseForgetWarning =>
+      'If you forget it, nobody can open your saved progress — there’s no way to recover it. Keep it somewhere safe.';
+
+  @override
+  String get passphraseFieldLabel => 'Passphrase';
+
+  @override
+  String get passphraseConfirmLabel => 'Type it again';
+
+  @override
+  String get passphraseShow => 'Show passphrase';
+
+  @override
+  String get passphraseHide => 'Hide passphrase';
+
+  @override
+  String get passphraseNeeds => 'Your passphrase needs:';
+
+  @override
+  String passphraseRuleMinLength(int count) {
+    return 'At least $count characters';
+  }
+
+  @override
+  String get passphraseRuleLowercase => 'A lowercase letter';
+
+  @override
+  String get passphraseRuleUppercase => 'A capital letter';
+
+  @override
+  String get passphraseRuleSpecial =>
+      'A symbol or a space (like ! ? # or a space)';
+
+  @override
+  String get passphraseRuleNotCommon => 'Not to be a common passphrase';
+
+  @override
+  String get passphraseRuleMatch => 'Both entries to match';
+
+  @override
+  String get passphraseRuleMet => 'done';
+
+  @override
+  String get passphraseRuleNotMet => 'not yet';
+
+  @override
+  String passphraseStrength(String level) {
+    return 'Strength: $level';
+  }
+
+  @override
+  String get passphraseStrengthWeak => 'Weak';
+
+  @override
+  String get passphraseStrengthFair => 'Fair';
+
+  @override
+  String get passphraseStrengthGood => 'Good';
+
+  @override
+  String get passphraseStrengthStrong => 'Strong';
+
+  @override
+  String passphraseCrackTime(String time) {
+    return 'Someone who got your locked file could guess it in $time.';
+  }
+
+  @override
+  String get crackTimeUnderAMinute => 'less than a minute';
+
+  @override
+  String get crackTimeMinutes => 'minutes';
+
+  @override
+  String get crackTimeHours => 'hours';
+
+  @override
+  String get crackTimeDays => 'days';
+
+  @override
+  String get crackTimeMonths => 'months';
+
+  @override
+  String get crackTimeYears => 'years';
+
+  @override
+  String get crackTimeCenturies => 'centuries';
+
+  @override
+  String get passphraseTip =>
+      'Tip: three or four unrelated words, with a capital and a symbol, are easy to remember and hard to guess.';
+
+  @override
+  String get passphraseLockProgress => 'Lock my progress';
+
+  @override
+  String get passphraseLockAndDownload => 'Lock and download';
+
+  @override
+  String get resumeTitle => 'Welcome back';
+
+  @override
+  String resumeSavedAt(String time) {
+    return 'There’s progress saved on this device from $time. Enter your passphrase to continue.';
+  }
+
+  @override
+  String resumeOpenUntil(String time) {
+    return 'It can be opened until $time.';
+  }
+
+  @override
+  String get resumeUnlock => 'Unlock';
+
+  @override
+  String get resumeChecking => 'Checking…';
+
+  @override
+  String resumeWrong(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more wrong tries erase the saved progress.',
+      one: '1 more wrong try erases the saved progress.',
+    );
+    return 'That passphrase didn’t work. $_temp0';
+  }
+
+  @override
+  String resumeErased(int count) {
+    return 'To protect it, the saved progress was erased after $count wrong passphrases.';
+  }
+
+  @override
+  String get resumeGone =>
+      'The saved progress is gone: it expired or was erased.';
+
+  @override
+  String get resumeDelete => 'Delete it and start over';
+
+  @override
+  String get resumeDeleteConfirmTitle => 'Delete the saved progress?';
+
+  @override
+  String get resumeDeleteConfirmBody =>
+      'It’s erased from this device now. This can’t be undone.';
+
+  @override
+  String get resumeDeleteConfirm => 'Delete it';
+
+  @override
+  String get resumeDeleted => 'The saved progress was deleted.';
+
+  @override
+  String get resumeStartOver => 'Start over';
+
+  @override
+  String get progressRestored => 'Your saved progress is back.';
+
+  @override
+  String get wizardKeptLocked => 'Locked on this device';
+
+  @override
+  String get moreSheetDownloadToFinishLater => 'Download to finish later';
+
+  @override
+  String get moreSheetDownloadToFinishLaterDetail =>
+      'A locked file you can open on any device';
+
+  @override
+  String get moreSheetDeleteSavedProgress => 'Delete saved progress';
+
+  @override
+  String get moreSheetDeleteSavedProgressDetail =>
+      'Erase the locked copy on this device now';
+
+  @override
+  String get deleteSavedProgressBody =>
+      'The locked copy on this device is erased now, and nothing more is kept after this tab closes. Your work stays open in this tab.';
+
+  @override
+  String get progressOpenElsewhere =>
+      'This directive is open in another tab. Changes here aren’t being kept.';
+
+  @override
+  String get progressRefused =>
+      'Your browser didn’t let PA MHAD keep a copy. Download your progress to keep it.';
+
+  @override
+  String progressDownloadWeakWarning(String time) {
+    return 'Someone who gets this file could guess your passphrase in $time. Keep the file somewhere private.';
+  }
+
+  @override
+  String get progressDownloadedLocked =>
+      'Locked file downloaded. To keep editing later, choose “Continue from a saved file” and enter your passphrase.';
+
+  @override
+  String get importLockedTitle => 'This file is locked';
+
+  @override
+  String get importLockedBody => 'Enter the passphrase it was locked with.';
+
+  @override
+  String get importLockedWrong =>
+      'That passphrase didn’t work. Check it and try again.';
+
+  @override
+  String get importLockedOpen => 'Open';
+
+  @override
+  String importKeepCopyBody(int minutes) {
+    return 'PA MHAD can keep a locked copy on this device while you work, with the same passphrase as this file. It expires $minutes minutes after you leave.';
+  }
+
+  @override
+  String get importKeepCopyYes => 'Keep a locked copy';
+
+  @override
+  String get importKeepCopyNo => 'Keep nothing';
 }

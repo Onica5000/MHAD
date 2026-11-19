@@ -66,7 +66,7 @@ void main() {
 
   test('plaintext round-trip preserves PII + agents', () async {
     final id = await seedDirective();
-    final bytes = await svc.buildFile(id, encrypted: false, nowMillis: 1);
+    final bytes = await svc.buildLegacyFile(id, encrypted: false, nowMillis: 1);
     // Plaintext file is human-readable JSON.
     expect(utf8.decode(bytes), contains('Jane Q. Public'));
     expect(DirectiveFileCodec.isEncrypted(bytes), isFalse);
@@ -77,7 +77,7 @@ void main() {
   test('encrypted round-trip preserves PII + agents and hides the plaintext',
       () async {
     final id = await seedDirective();
-    final bytes = await svc.buildFile(id, encrypted: true, nowMillis: 2);
+    final bytes = await svc.buildLegacyFile(id, encrypted: true, nowMillis: 2);
     // Obfuscated: starts with the MHAD magic and does NOT leak the name.
     expect(DirectiveFileCodec.isEncrypted(bytes), isTrue);
     expect(utf8.decode(bytes, allowMalformed: true), isNot(contains('Jane')));
@@ -87,8 +87,8 @@ void main() {
 
   test('exportedAt is recoverable from both forms', () async {
     final id = await seedDirective();
-    final plain = await svc.buildFile(id, encrypted: false, nowMillis: 111);
-    final encd = await svc.buildFile(id, encrypted: true, nowMillis: 222);
+    final plain = await svc.buildLegacyFile(id, encrypted: false, nowMillis: 111);
+    final encd = await svc.buildLegacyFile(id, encrypted: true, nowMillis: 222);
     expect(DirectiveExportService.exportedAtOf(plain), 111);
     expect(DirectiveExportService.exportedAtOf(encd), 222);
   });

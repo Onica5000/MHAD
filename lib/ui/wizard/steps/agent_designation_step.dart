@@ -93,7 +93,7 @@ class _AgentDesignationStepState
     // insert a second, empty 'primary' agent (id absent) → duplicate.
     if (!isLoaded) return true;
     // Validate but don't block — always save whatever is entered
-    _formKey.currentState?.validate();
+    showWarnings(_formKey);
 
     final phone = _phoneCtrl.text.trim();
 

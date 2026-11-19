@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mhad/services/web_session_cache.dart';
-import 'package:mhad/providers/app_providers.dart' show directiveRepositoryProvider;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:flutter_riverpod/legacy.dart' show StateController;
 import 'package:mhad/ai/handoff/ai_handoff_data.dart';
 import 'package:mhad/ai/handoff/handoff_parser.dart';
@@ -202,11 +201,11 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
                 : widget.resumeRoute ?? currentAppLocation().toString(),
           );
       // A phone may unload this tab while the person is in their AI app:
-      // keep the latest work for the reload restore (web only).
-      final id = directiveIdOfHandoffRef(task.ref);
-      if (widget.resumable && id != null) {
-        unawaited(WebSessionCache.cacheDirective(
-            ref.read(directiveRepositoryProvider), id));
+      // save the latest work (and the wait) now, the way they chose.
+      if (widget.resumable) {
+        unawaited(ref
+            .read(progressAutosaveProvider.notifier)
+            .saveNow(includeOpenStep: true));
       }
     }
     if (!mounted) return;

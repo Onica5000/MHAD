@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/l10n.dart';
-import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -28,9 +27,7 @@ import 'package:mhad/ui/wizard/wizard_mixins.dart';
 ///   1. Renders editorial step-by-step instructions for how to sign on
 ///      paper (print packet → gather two qualified witnesses → everyone
 ///      signs together).
-///   2. On `validateAndSave`, stamps the directive's `executionDate` to
-///      today if not already set, so downstream views (Done screen,
-///      "Signed in effect" status pills) flip from draft to complete.
+///   2. Stamps nothing: the signing date is written on the printed form.
 ///   3. Offers a "Download signing packet (PDF)" CTA that jumps to the
 ///      Export screen so the user can print.
 ///
@@ -56,15 +53,9 @@ class _ExecutionStepState extends ConsumerState<ExecutionStep>
     with WizardStepMixin {
   @override
   Future<bool> validateAndSave() async {
-    // Stamp execution date (today) if not yet set. No witness fields to
-    // validate — those are captured on the printed paper, not in-app.
-    final repo = ref.read(directiveRepositoryProvider);
-    final directive = await repo.getDirectiveById(widget.directiveId);
-    if (directive == null) return true;
-    if (directive.executionDate == null) {
-      await repo.setExecutionDate(
-          widget.directiveId, DateTime.now().millisecondsSinceEpoch);
-    }
+    // Nothing to save: witnesses and the signing date are written on the
+    // printed form, and no date is stamped in the app (user decision
+    // 2026-11-18 — the person dates the form when they sign it).
     return true;
   }
 

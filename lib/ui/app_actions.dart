@@ -1,3 +1,5 @@
+import 'package:mhad/ui/progress/progress_gate.dart'
+    show downloadLockedProgress, startDirective;
 import 'package:mhad/ui/education/education_article_detail.dart';
 import 'package:mhad/data/educational_content.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
@@ -8,7 +10,7 @@ import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart' show endPublicSession;
-import 'package:mhad/services/web_session_cache.dart';
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
@@ -41,9 +43,8 @@ Future<void> openForDirective(
   final id = preferredId ??
       mostRecentDirectiveId(
           ref.read(allDirectivesProvider).value ?? const []) ??
-      await ref.read(directiveRepositoryProvider).createDirective(
-            FormType.combined,
-          );
+      await startDirective(ref, FormType.combined);
+  if (id == null) return; // backed out of the start choice
   appRouter.go(route(id));
 }
 
@@ -98,11 +99,54 @@ Future<void> confirmAndResetSession(WidgetRef ref) async {
   if (confirmed != true) return;
 
   await endPublicSession(ref);
-  await WebSessionCache.clear();
+  // The locked copy, the tab-only copy, the choice and the passphrase.
+  ref.read(lockedProgressProvider).eraseAll();
+  ref.read(progressAutosaveProvider.notifier).choiceChanged();
   try {
     await ref.read(directiveRepositoryProvider).deleteAllDirectives();
   } catch (_) {}
   appRouter.go(AppRoutes.home);
+}
+
+/// "Download to finish later" (More sheet, sidebar): the directive being
+/// worked on — [preferredId], else the most recent — as a passphrase-locked
+/// file ([downloadLockedProgress]). Nothing to download in a fresh tab.
+Future<void> downloadToFinishLater(WidgetRef ref, {int? preferredId}) async {
+  final id = preferredId ??
+      mostRecentDirectiveId(ref.read(allDirectivesProvider).value ?? const []);
+  final ctx = rootNavigatorKey.currentContext;
+  if (id == null || ctx == null) return;
+  await downloadLockedProgress(ctx, ref, id);
+}
+
+/// "Delete saved progress": erases the locked copy on this device now and
+/// keeps nothing more outside this tab; the work stays open here.
+Future<void> confirmDeleteSavedProgress(WidgetRef ref) async {
+  final ctx = rootNavigatorKey.currentContext;
+  if (ctx == null) return;
+  final l = ctx.l10n;
+  final yes = await showDialog<bool>(
+    context: ctx,
+    builder: (dctx) => AlertDialog(
+      title: Text(l.resumeDeleteConfirmTitle),
+      content: Text(l.deleteSavedProgressBody),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.pop(dctx, false),
+            child: Text(l.cancel)),
+        FilledButton(
+            onPressed: () => Navigator.pop(dctx, true),
+            child: Text(l.resumeDeleteConfirm)),
+      ],
+    ),
+  );
+  if (yes != true) return;
+  ref.read(lockedProgressProvider).stopKeeping();
+  ref.read(progressAutosaveProvider.notifier).choiceChanged();
+  if (ctx.mounted) {
+    ScaffoldMessenger.maybeOf(ctx)
+        ?.showSnackBar(SnackBar(content: Text(l.resumeDeleted)));
+  }
 }
 
 /// Opens the crisis-resources sheet (988 and more) on the root navigator.
