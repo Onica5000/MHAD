@@ -23,11 +23,22 @@ import http.server
 import pathlib
 import sys
 import threading
+from urllib.parse import urlparse
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeout
 from playwright.sync_api import sync_playwright
 
 BASE = "/MHAD/"
+
+# Outside hosts the app may contact just by loading (no user action). The
+# privacy policy names each one ("No third-party tracking" section); a new
+# host here means the policy must name it too, so the check fails until both
+# change together. Lookups the person starts (NIH/NLM, FDA, ZIP) don't run on
+# load and aren't listed.
+LOAD_HOSTS = {
+    "www.gstatic.com",  # Flutter's display engine (CanvasKit)
+    "fonts.gstatic.com",  # fallback fonts
+}
 FIRST_FRAME_TIMEOUT_MS = 90_000
 
 
@@ -60,6 +71,7 @@ def main() -> int:
 
     page_errors: list[str] = []
     failed_requests: list[str] = []
+    outside_hosts: set[str] = set()
     console_errors: list[str] = []
     first_frame = False
     has_view = False
@@ -88,6 +100,14 @@ def main() -> int:
                 else None,
             )
 
+            page.on(
+                "request",
+                lambda r: outside_hosts.add(urlparse(r.url).hostname or "")
+                if not r.url.startswith(url)
+                and urlparse(r.url).scheme in ("http", "https")
+                else None,
+            )
+
             page.goto(url, wait_until="load")
             try:
                 # index.html removes #boot-splash on Flutter's first frame.
@@ -105,12 +125,17 @@ def main() -> int:
     finally:
         server.shutdown()
 
-    ok = first_frame and has_view and not page_errors and not failed_requests
+    unlisted = sorted(outside_hosts - LOAD_HOSTS)
+    ok = (first_frame and has_view and not page_errors and not failed_requests
+          and not unlisted)
     print(f"first frame reached: {first_frame}; flutter-view present: {has_view}")
     for e in page_errors:
         print(f"page error: {e}")
     for r in failed_requests:
         print(f"failed request: {r}")
+    for h in unlisted:
+        print(f"outside host not named in the privacy policy: {h} "
+              "(add it there and to LOAD_HOSTS, or stop contacting it)")
     for c in console_errors:  # informational; not a failure on its own
         print(f"console error (not fatal): {c}")
     print("PASS" if ok else "FAIL")
