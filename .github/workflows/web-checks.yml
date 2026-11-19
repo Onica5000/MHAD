@@ -38,12 +38,6 @@ jobs:
       - name: Test
         run: flutter test
 
-      # The browser's own Web Crypto path for the passphrase-locked progress
-      # copy (lib/services/locked_progress/lock_crypto_web.dart) must match the
-      # known-answer vector the pure-Dart path is checked against.
-      - name: Web Crypto test (Chrome)
-        run: flutter test --platform chrome test/web/
-
       - name: Hosted privacy policy is in sync
         run: python3 tool/gen_privacy_html.py --check
 

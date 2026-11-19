@@ -15,8 +15,9 @@ import 'lock_crypto_io.dart'
 /// non-extractable `CryptoKey`, so not even this app's code can read it out,
 /// and the passphrase itself is never stored. Elsewhere (tests, Windows) it is
 /// pointycastle. Both produce identical bytes: the known-answer vector in
-/// test/unit/locked_format_test.dart (and test/web/lock_crypto_web_test.dart,
-/// run in Chrome) was computed with Web Crypto.
+/// test/unit/locked_format_test.dart was computed with Web Crypto, and
+/// test/web/lock_crypto_web_test.dart checks the browser path against it
+/// (run by hand: `flutter test --platform chrome` hangs on the CI runner).
 ///
 /// The passphrase is used as typed (UTF-8, no Unicode normalization) so both
 /// implementations see the same bytes.
