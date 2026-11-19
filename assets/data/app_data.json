@@ -58,6 +58,7 @@
       "checkInCooldownDays": 90
     },
     "sessionCacheMinutes": 10,
+    "progressWindowMinutes": 30,
     "clinical": {
       "cacheHours": 12,
       "maxCacheEntries": 500,

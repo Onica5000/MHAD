@@ -72,6 +72,10 @@ dependencies:
   # pointycastle — works on Android/Windows/web; the pdf package cannot itself
   # produce password-protected PDFs).
   encrypt: ^5.0.3
+  # AES-256-GCM + PBKDF2 for the passphrase-locked progress copy and file off
+  # the web (on the web the browser's Web Crypto does it). Already in the app
+  # through `encrypt`; listed because lib/ imports it directly.
+  pointycastle: ^3.9.1
 
   # Document import (camera, gallery, file picker)
   image_picker: ^1.1.2

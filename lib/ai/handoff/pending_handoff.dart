@@ -4,16 +4,20 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:mhad/ai/handoff/ai_handoff_data.dart';
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/services/locked_progress/key_value_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// An answer MHAD is waiting for while the person is in their AI chat.
 ///
 /// Kept for [window] (30 minutes, user decision 2026-11-17) and extendable:
-/// while one is pending, the web session's recovery copy is kept that long
-/// too ([PendingHandoffStore.activeDeadline]), so a phone that unloads the
-/// MHAD tab while the person is in another app doesn't lose their work.
+/// while one is pending, a passphrase-locked progress copy is kept at least
+/// that long too ([PendingHandoffStore.activeDeadline]), so a phone that
+/// unloads the MHAD tab while the person is in another app doesn't lose
+/// their work.
 class PendingHandoff {
-  static const window = Duration(minutes: 30);
+  /// The same window as the locked progress copy (`progressWindowMinutes`).
+  static Duration get window => appData.config.progressWindow;
 
   /// The task tag the answer must carry.
   final String taskTag;
@@ -93,15 +97,15 @@ class PendingHandoff {
   }
 }
 
-/// Browser-storage persistence (survives a tab reload) — the same storage the
-/// web session's recovery copy uses.
+/// Tab storage (`sessionStorage`): survives a reload of this tab and is
+/// erased when the tab closes. A passphrase-locked progress copy carries the
+/// wait too, so it comes back with the work after the tab was closed.
 abstract final class PendingHandoffStore {
   static const _key = 'ai_handoff_pending';
 
   static Future<PendingHandoff?> read() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_key);
+      final raw = tabStore.read(_key);
       if (raw == null) return null;
       return PendingHandoff.fromJson(jsonDecode(raw) as Map<String, dynamic>);
     } catch (_) {
@@ -110,14 +114,11 @@ abstract final class PendingHandoffStore {
   }
 
   static Future<void> write(PendingHandoff? p) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      if (p == null) {
-        await prefs.remove(_key);
-      } else {
-        await prefs.setString(_key, jsonEncode(p.toJson()));
-      }
-    } catch (_) {}
+    if (p == null) {
+      tabStore.remove(_key);
+    } else {
+      tabStore.write(_key, jsonEncode(p.toJson()));
+    }
   }
 
   /// The deadline of a pending, unexpired handoff — the web session cache

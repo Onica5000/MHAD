@@ -157,6 +157,10 @@ class AppConfig {
   final int checkInCooldownDays;
   // Ephemeral session cache TTL (minutes).
   final int sessionCacheMinutes;
+  // How long the passphrase-locked progress copy lasts after the person
+  // leaves the page, and how long a copy-and-paste AI answer is waited for
+  // (minutes; user decision 2026-11-18 — one setting for both).
+  final int progressWindowMinutes;
   // NIH clinical-data service.
   final int clinicalCacheHours;
   final int clinicalMaxCacheEntries;
@@ -189,6 +193,7 @@ class AppConfig {
     this.renewalCooldownDays = 7,
     this.checkInCooldownDays = 90,
     this.sessionCacheMinutes = 10,
+    this.progressWindowMinutes = 30,
     this.clinicalCacheHours = 12,
     this.clinicalMaxCacheEntries = 500,
     this.clinicalMaxRequestsPerSecond = 20,
@@ -219,6 +224,7 @@ class AppConfig {
   List<Duration> get retryBackoffs =>
       [for (final ms in retryBackoffsMs) Duration(milliseconds: ms)];
   Duration get sessionCacheTtl => Duration(minutes: sessionCacheMinutes);
+  Duration get progressWindow => Duration(minutes: progressWindowMinutes);
   Duration get clinicalCacheTtl => Duration(hours: clinicalCacheHours);
 
   factory AppConfig.fromJson(Map<String, dynamic> m) {
@@ -258,6 +264,8 @@ class AppConfig {
           i(rem, 'checkInCooldownDays', d.checkInCooldownDays),
       sessionCacheMinutes:
           i(m, 'sessionCacheMinutes', d.sessionCacheMinutes),
+      progressWindowMinutes:
+          i(m, 'progressWindowMinutes', d.progressWindowMinutes),
       clinicalCacheHours: i(cl, 'cacheHours', d.clinicalCacheHours),
       clinicalMaxCacheEntries:
           i(cl, 'maxCacheEntries', d.clinicalMaxCacheEntries),
