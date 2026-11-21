@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:mhad/data/app_data/breach_notice.dart';
+import 'package:mhad/data/app_data/localized_text.dart';
 
 export 'package:mhad/data/app_data/breach_notice.dart';
+export 'package:mhad/data/app_data/localized_text.dart';
 
 /// A single contact / resource entry (crisis line, advocacy org, etc.).
 class ContactEntry {
@@ -41,7 +43,9 @@ class ContactEntry {
 /// A "Get help" referral partner row (a [ContactEntry] plus its display sub).
 class ReferralPartner {
   final ContactEntry contact;
-  final String sub;
+
+  /// One line under the name — `{"en", "es"}` in app_data.json.
+  final LocalizedText sub;
   const ReferralPartner({required this.contact, required this.sub});
 }
 
@@ -377,7 +381,7 @@ class AppData {
   final LearnConfig learn;
   final AppConfig config;
   final Map<String, String> dated;
-  final Map<String, String> facts;
+  final Map<String, LocalizedText> facts;
 
   /// Active FTC HBNR breach notice, or null (the normal state). See
   /// [BreachNotice] and `docs/BREACH_PLAN.md`.
@@ -421,8 +425,10 @@ class AppData {
         : DateFormat.yMMMMd(locale).format(d);
   }
 
-  /// Null-safe lookup into the `facts` block (updatable user-facing copy).
-  String fact(String key) => facts[key] ?? '';
+  /// Null-safe lookup into the `facts` block (updatable user-facing copy) in
+  /// [language] (e.g. `'es'`), falling back to English.
+  String fact(String key, {String language = 'en'}) =>
+      (facts[key] ?? LocalizedText.empty).forLanguage(language);
 
   /// Look up a contact by its key (e.g. `'crisis988'`). Returns an empty
   /// [ContactEntry] rather than null so call sites never crash on a missing key.
@@ -449,7 +455,7 @@ class AppData {
       final c = contacts[m['contact']?.toString()];
       if (c != null) {
         partners.add(
-            ReferralPartner(contact: c, sub: (m['sub'] ?? '').toString()));
+            ReferralPartner(contact: c, sub: LocalizedText.fromJson(m['sub'])));
       }
     }
     final urls = <String, String>{
@@ -471,7 +477,13 @@ class AppData {
       config: AppConfig.fromJson(
           (json['config'] as Map?)?.cast<String, dynamic>() ?? const {}),
       dated: _stringMap(json['dated']),
-      facts: _stringMap(json['facts']),
+      facts: {
+        for (final e in ((json['facts'] as Map?)?.cast<String, dynamic>() ??
+                const {})
+            .entries)
+          if (!e.key.startsWith('_') && e.key != 'autonomy')
+            e.key: LocalizedText.fromJson(e.value),
+      },
       breachNotice: BreachNotice.fromJson(json['breachNotice']),
     );
   }

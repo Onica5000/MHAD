@@ -57,7 +57,9 @@ class FacilitatorScreen extends StatelessWidget {
                   eyebrow: context.l10n.facilitatorGetHelpEvidenceBased,
                   title: EditorialHeading(text: context.l10n.facilitatorYouDonTHaveTo),
                   lead: context.l10n.facilitatorPickTheKindOfSupport(
-                      appData.fact('facilitatorCompletionStat')),
+                      appData.fact('facilitatorCompletionStat',
+                          language: Localizations.localeOf(context)
+                              .languageCode)),
                 ),
                 const SizedBox(height: 20),
 
@@ -81,7 +83,8 @@ class FacilitatorScreen extends StatelessWidget {
                 for (final partner in appData.referralPartners)
                   _ReferralRow(
                     label: partner.contact.name,
-                    sub: partner.sub,
+                    sub: partner.sub.forLanguage(
+                        Localizations.localeOf(context).languageCode),
                     onCall: partner.contact.phone == null
                         ? null
                         : () => _tel(context, partner.contact.phone!),

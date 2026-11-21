@@ -92,12 +92,17 @@ class _BreachNoticeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    // The notice's own text is data ({"en", "es"} in app_data.json).
+    final lang = Localizations.localeOf(context).languageCode;
+    final title = notice.title.forLanguage(lang);
     final sections = <(String, String)>[
-      (l10n.breachNoticeWhatHappened, notice.whatHappened),
-      (l10n.breachNoticeInformationInvolved, notice.informationInvolved),
-      (l10n.breachNoticeThirdParties, notice.thirdParties),
-      (l10n.breachNoticeWhatWeAreDoing, notice.whatWeAreDoing),
-      (l10n.breachNoticeWhatYouCanDo, notice.whatYouCanDo),
+      (l10n.breachNoticeWhatHappened, notice.whatHappened.forLanguage(lang)),
+      (l10n.breachNoticeInformationInvolved,
+          notice.informationInvolved.forLanguage(lang)),
+      (l10n.breachNoticeThirdParties, notice.thirdParties.forLanguage(lang)),
+      (l10n.breachNoticeWhatWeAreDoing,
+          notice.whatWeAreDoing.forLanguage(lang)),
+      (l10n.breachNoticeWhatYouCanDo, notice.whatYouCanDo.forLanguage(lang)),
     ];
     return Material(
       color: theme.colorScheme.surface,
@@ -120,8 +125,8 @@ class _BreachNoticeView extends StatelessWidget {
                       Semantics(
                         header: true,
                         child: Text(
-                          notice.title.isNotEmpty
-                              ? notice.title
+                          title.isNotEmpty
+                              ? title
                               : l10n.breachNoticeDefaultTitle,
                           style: theme.textTheme.headlineSmall,
                         ),
@@ -160,7 +165,7 @@ class _BreachNoticeView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: SelectableText(
-                              '• $c',
+                              '• ${c.forLanguage(lang)}',
                               style: theme.textTheme.bodyMedium,
                             ),
                           ),

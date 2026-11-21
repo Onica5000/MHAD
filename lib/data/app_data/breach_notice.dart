@@ -1,3 +1,5 @@
+import 'package:mhad/data/app_data/localized_text.dart';
+
 /// An FTC Health Breach Notification Rule notice (16 CFR Part 318, as amended
 /// eff. 2024-07-29), published through `app_data.json` → `breachNotice`.
 ///
@@ -8,6 +10,9 @@
 /// Absent / empty `id` → no notice (the normal state). Each notice is shown
 /// until acknowledged; acknowledgement is remembered per [id], so a *new*
 /// notice (new id) is shown even to users who acknowledged an older one.
+///
+/// Every text field may be a plain string or `{"en": "...", "es": "..."}`
+/// ([LocalizedText]); publish a notice in both languages.
 class BreachNotice {
   /// Stable identifier, e.g. `2026-10-01-ai-provider`. Keys the acknowledgement.
   final String id;
@@ -15,37 +20,37 @@ class BreachNotice {
   /// Date the notice was issued (free text, shown as-is).
   final String date;
 
-  final String title;
+  final LocalizedText title;
 
   /// What happened, when, and when it was discovered.
-  final String whatHappened;
+  final LocalizedText whatHappened;
 
   /// Types of PHR-identifiable information involved.
-  final String informationInvolved;
+  final LocalizedText informationInvolved;
 
   /// Full identity of any third party that acquired the information (required
   /// content under the amended rule). Empty when none.
-  final String thirdParties;
+  final LocalizedText thirdParties;
 
   /// What we are doing to protect affected people / mitigate harm.
-  final String whatWeAreDoing;
+  final LocalizedText whatWeAreDoing;
 
   /// Steps affected people should take.
-  final String whatYouCanDo;
+  final LocalizedText whatYouCanDo;
 
   /// Contact methods — the amended rule requires **at least two** (toll-free
   /// phone, email, website, in-app, postal). This in-app notice counts as one.
-  final List<String> contactMethods;
+  final List<LocalizedText> contactMethods;
 
   const BreachNotice({
     required this.id,
     this.date = '',
-    this.title = '',
-    this.whatHappened = '',
-    this.informationInvolved = '',
-    this.thirdParties = '',
-    this.whatWeAreDoing = '',
-    this.whatYouCanDo = '',
+    this.title = LocalizedText.empty,
+    this.whatHappened = LocalizedText.empty,
+    this.informationInvolved = LocalizedText.empty,
+    this.thirdParties = LocalizedText.empty,
+    this.whatWeAreDoing = LocalizedText.empty,
+    this.whatYouCanDo = LocalizedText.empty,
     this.contactMethods = const [],
   });
 
@@ -56,19 +61,19 @@ class BreachNotice {
     final m = raw.cast<String, dynamic>();
     final id = (m['id'] ?? '').toString().trim();
     if (id.isEmpty) return null;
-    String s(String k) => (m[k] ?? '').toString().trim();
+    LocalizedText t(String k) => LocalizedText.fromJson(m[k]);
     return BreachNotice(
       id: id,
-      date: s('date'),
-      title: s('title'),
-      whatHappened: s('whatHappened'),
-      informationInvolved: s('informationInvolved'),
-      thirdParties: s('thirdParties'),
-      whatWeAreDoing: s('whatWeAreDoing'),
-      whatYouCanDo: s('whatYouCanDo'),
+      date: (m['date'] ?? '').toString().trim(),
+      title: t('title'),
+      whatHappened: t('whatHappened'),
+      informationInvolved: t('informationInvolved'),
+      thirdParties: t('thirdParties'),
+      whatWeAreDoing: t('whatWeAreDoing'),
+      whatYouCanDo: t('whatYouCanDo'),
       contactMethods: [
         for (final c in (m['contactMethods'] as List?) ?? const [])
-          if (c.toString().trim().isNotEmpty) c.toString().trim(),
+          if (LocalizedText.fromJson(c).isNotEmpty) LocalizedText.fromJson(c),
       ],
     );
   }

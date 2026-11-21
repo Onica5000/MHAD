@@ -35,7 +35,7 @@ void main() {
       // Unknown referral contact key is dropped, not crashed on.
       expect(data.referralPartners.length, 2);
       expect(data.referralPartners.first.contact.name, 'PMHCA');
-      expect(data.referralPartners.first.sub, 'Peer support');
+      expect(data.referralPartners.first.sub.en, 'Peer support');
     });
 
     test('missing contact key returns a safe empty entry, never null', () {

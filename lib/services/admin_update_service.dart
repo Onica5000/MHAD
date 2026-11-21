@@ -268,7 +268,7 @@ class AdminUpdateService {
     final tierRules = switch (target) {
       AdminDataTarget.appData => '''
 - "autonomy": use "verify" for ANYTHING under "legal" or "dated" (legal/statutory facts, compliance statements, version/effective dates); use "auto" for "contacts", "ai", "urls", "config", and "facts".
-- "path" examples: "contacts.trevorProject.phone", "ai.rpm", "config.timeoutsSeconds.chat", "config.reminders.renewalWindowDays", "legal.validityYears", "dated.privacyPolicyVersion", "facts.facilitatorCompletionStat". Only paths that already exist.''',
+- "path" examples: "contacts.trevorProject.phone", "ai.rpm", "config.timeoutsSeconds.chat", "config.reminders.renewalWindowDays", "legal.validityYears", "dated.privacyPolicyVersion", "facts.facilitatorCompletionStat.en" (reader-facing text is an {en, es} pair — change both). Only paths that already exist.''',
       AdminDataTarget.educational => '''
 - This is the educational corpus (Learn-page + AI-reference prose). EVERY change is "autonomy":"verify" — a human must confirm accuracy (the legal-wording canon governs it).
 - "path" is always "sections.<id>.title", "sections.<id>.content", or "sections.<id>.category" for an EXISTING section id. Only change leaf values; never add/remove/rename sections or change ids.''',

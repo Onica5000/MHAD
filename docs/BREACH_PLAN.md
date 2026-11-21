@@ -90,7 +90,8 @@ Because the app is local-first and stores no contact information server-side, th
 **primary channel is in-app notice** (a full-screen blocker banner shown on next
 launch). It is implemented: fill the `breachNotice` block in
 `assets/data/app_data.json` (id, what happened, information involved, third parties,
-what we're doing, what you can do, contact methods) and push to `main`. The web
+what we're doing, what you can do, contact methods) — each text in English and Spanish
+(`{"en": ..., "es": ...}`; Spanish readers see the Spanish) — and push to `main`. The web
 deploy publishes it, and every user sees it on their next page load until they
 acknowledge that notice id (`BreachNoticeGate`, `lib/ui/widgets/breach_notice_gate.dart`).
 Leave `id` empty when there is no active notice. The other channels are used to the extent we have addresses for affected
