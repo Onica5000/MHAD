@@ -105,7 +105,7 @@ class _CrisisSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               _CrisisRow(
-                name: '988 Suicide & Crisis Lifeline',
+                name: context.l10n.legalSheet988SuicideCrisisLifeline,
                 detail: context.l10n.legalSheetCallOrText988,
                 icon: Icons.phone_outlined,
                 accent: true,
@@ -146,7 +146,7 @@ class _CrisisSheet extends StatelessWidget {
                     copyValue: appData.phoneOf('veteransCrisis')),
               ),
               _CrisisRow(
-                name: 'The Trevor Project (LGBTQ+ youth)',
+                name: context.l10n.crisisSheetTrevorProjectName,
                 detail: context.l10n.crisisSheetCallTextChat,
                 icon: Icons.diversity_1_outlined,
                 onTap: () => _launch(context, 'tel:${appData.phoneOf('trevorProject')}',

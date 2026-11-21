@@ -140,7 +140,7 @@ key would need a **relay server** — keys never ship to the browser.
 | Piece | Where | Rule |
 |---|---|---|
 | The choice | `ensureProgressChoice` (`ui/progress/progress_gate.dart`) | Asked at the start (new / upload / import), once per tab: a passphrase-locked copy on this device, or nothing outside the tab (`sessionStorage`, names left out) |
-| Lock | `services/locked_progress/` (`lock_crypto*`, `locked_format`) | AES-256-GCM + PBKDF2-SHA-256 600,000 rounds, random salt/nonce, header sealed as AAD. Web Crypto (non-extractable key) on web, pointycastle elsewhere; one Web Crypto test vector keeps them identical |
+| Lock | `services/locked_progress/` (`lock_crypto*`, `locked_format`) | AES-256-GCM + PBKDF2-SHA-256 600,000 rounds, random salt/nonce, header sealed as AAD. Web Crypto (non-extractable key) on web, pointycastle elsewhere; one Web Crypto test vector keeps them identical. CI's browser smoke test (`tool/web_smoke.py`) locks, independently decrypts, reloads and unlocks a copy in the release build |
 | Life | `LockedProgressStore` | Expires `progressWindowMinutes` (30) after the page was last open. A closed tab can't erase it, so `sweep()` erases it unopened at the next start. 10 wrong passphrases erase it; one tab writes at a time |
 | Saving | `ProgressAutosave` | 2 s after any DB change; quietly when hidden (`WizardStepMixin.saveQuietly` — steps use `showWarnings` / `saveSubStep`, `quiet_save_rule_test`); 60 s heartbeat |
 | Passphrase | `services/passphrase/` | Min 4, no max; lowercase + capital + symbol or space; common-passphrase blocklist (zxcvbn-ts lists, MIT + ODC-BY notice); strength gauge; never stored |
@@ -194,8 +194,16 @@ the Learn articles (as `main()` does) and makes `ArtImage` paint placeholders.
 - Use **only** the generated `AppLocalizations` (ARB files in `lib/l10n/app_*.arb`,
   `l10n.yaml`). The old `lib/ui/strings.dart` `AppStrings` layer was **deleted** — do
   not add a parallel string-constants class.
-- Migrate hardcoded UI strings to ARB screen-by-screen; only ship a locale (`es`) for a
-  screen once it is fully covered (partial localization is worse than none).
+- **No hardcoded English on screens** (sweep 2026-11-21, Jev over every literal in `lib/`):
+  `hardcoded_ui_text_test` fails on a word-bearing literal passed to `Text(` or a text
+  parameter in `lib/ui` (PDF form text + admin excluded; exceptions listed with a reason).
+  A scan can't see text built in a service/model and shown later — keep display words in
+  ARB (e.g. `NtiNote` enum → `medNtiNote*`, `smartFillLabel()`, `AudioQuestionnaire(l)`).
+- **Text in data files** (`app_data.json`: facts, referral lines, breach notice) is
+  `LocalizedText` — a string or `{"en", "es"}` (`app_data_localized_text_test`).
+- Left English on purpose: the official PDF form, AI prompts, exported data files, the
+  owner-only admin screen, the hidden API-key path, logs, proper names. Labels autofill
+  writes INTO the directive text are document content (still English — open question).
 - **Spanish style** (terms, typography, names): `docs/SPANISH_STYLE.md`, one source for
   `app_es.arb` and the Learn articles.
 - **Learn articles** are content, not strings: `assets/data/educational_content_es.json`

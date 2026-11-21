@@ -8,6 +8,9 @@ import 'package:mhad/l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/providers/app_providers.dart';
+import 'package:mhad/services/locked_progress/locked_progress_store.dart'
+    show ProgressMode;
+import 'package:mhad/services/locked_progress/progress_autosave.dart';
 import 'package:mhad/services/privacy_mode_service.dart';
 import 'package:mhad/services/screenshot_protection_service.dart';
 import 'package:mhad/ui/disclaimer/disclaimer_screen.dart';
@@ -420,11 +423,17 @@ class _ProfileChip extends ConsumerWidget {
         .toUpperCase();
   }
 
-  String _statusFor(BuildContext context, PrivacyModeNotifier mode) {
-    // The web app is the only shipping surface — always in-memory, no
-    // public/private mode choice exists.
+  String _statusFor(
+      BuildContext context, WidgetRef ref, PrivacyModeNotifier mode) {
+    // The web app (the only shipping surface): where the work is kept — the
+    // same two answers as the wizard's "kept" chip. Called from build, so it
+    // follows the start choice and "Delete saved progress".
     final l = context.l10n;
-    if (kIsWeb) return l.settingsStatusWebInMemory;
+    if (kIsWeb) {
+      final locked = ref.watch(progressAutosaveProvider.select((s) => s.mode)) ==
+          ProgressMode.locked;
+      return locked ? l.settingsStatusWebLocked : l.settingsStatusWebTab;
+    }
     // Native (deferred): public/private mode + auth method.
     final modeWord = mode.isPrivate
         ? l.settingsStatusPrivate
@@ -500,7 +509,7 @@ class _ProfileChip extends ConsumerWidget {
                 ),
                 const SizedBox(height: 1),
                 Text(
-                  _statusFor(context, mode),
+                  _statusFor(context, ref, mode),
                   style: TextStyle(
                     fontSize: 12, letterSpacing: MhadType.trackingLabel,
                     color: p.onPrimary.withValues(alpha: 0.85),

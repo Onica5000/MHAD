@@ -8,11 +8,50 @@ part of 'document_pipeline_flow.dart';
 // ignore_for_file: invalid_use_of_protected_member
 // (extension methods on the State legitimately call its protected setState)
 
-// Display-only badges appended to a facility's review value to show whether the
-// name matched the NPI organization registry. Stripped before saving (see
-// `_facilityValue` in pipeline_apply_service.dart).
-const String facilityVerifiedBadge = ' [NPI verified]';
-const String facilityUnverifiedBadge = ' [unverified]';
+// Display-only badges appended to review values: whether a medication or
+// drug allergy matched RxNorm, a condition an ICD-10-CM code, a facility the
+// NPI organization registry. Removed again before anything is saved (see
+// `_facilityValue` and `medFromReview` in pipeline_apply_service.dart).
+String _reviewBadge(String word) => ' [$word]';
+
+/// Every badge in every supported language, so apply removes whichever one
+/// the person saw — badge text never lands in the directive.
+final List<String> allReviewBadges = [
+  for (final locale in AppLocalizations.supportedLocales)
+    for (final word in _badgeWords(lookupAppLocalizations(locale)))
+      _reviewBadge(word),
+];
+
+List<String> _badgeWords(AppLocalizations l) => [
+      l.reviewBadgeRxNormVerified,
+      l.reviewBadgeNpiVerified,
+      l.reviewBadgeUnverified,
+    ];
+
+/// The title of a smart-fill suggestion row. The keys stay English
+/// ([SmartFillResult.toDisplayMap]; apply and [_smartGuidanceOnlyKeys] match
+/// on them); the person sees their own language.
+String smartFillLabel(AppLocalizations l, String key) => switch (key) {
+      'Effective Condition' => l.effectiveCondition,
+      'Health History' => l.reviewLabelHh,
+      'Facility Notes (preferred)' => l.smartFillFacilityNotesPreferred,
+      'Facility Notes (avoid)' => l.smartFillFacilityNotesAvoid,
+      'ECT Guidance' => l.smartFillEctGuidance,
+      'Experimental Studies Guidance' => l.smartFillExperimentalGuidance,
+      'Drug Trials Guidance' => l.smartFillDrugTrialsGuidance,
+      'Crisis Intervention' => l.reviewLabelCrisis,
+      'De-escalation Techniques' => l.addlInstrDeescTitle,
+      'Crisis Triggers' => l.addlInstrTriggersTitle,
+      'Helpful Activities' => l.addlInstrActivitiesTitle,
+      'Dietary Considerations' => l.addlInstrDietaryTitle,
+      'Religious/Spiritual' => l.addlInstrReligiousTitle,
+      'Children/Dependent Care' => l.reviewLabelChildrenCustody,
+      'Family Notification' => l.addlInstrFamilyNotifyTitle,
+      'Records Disclosure' => l.reviewStepRecordsDisclosure,
+      'Pet Care' => l.reviewStepPetCare,
+      'Agent Guidance' => l.smartFillAgentGuidance,
+      _ => key,
+    };
 
 /// Smart-fill display keys that are drafting GUIDANCE for the user to read,
 /// deliberately never written into the directive (AI meta-text must not print
@@ -26,28 +65,33 @@ const Set<String> _smartGuidanceOnlyKeys = {
 
 extension _PipelineReviewUi on _PipelineScreenState {
   void _buildReviewData(ValidatedExtractionResult v) {
+    final l = context.l10n;
     _reviewChecked = {};
     _reviewEdited = {};
 
     for (final m in v.preferredMeds) {
       final key = 'med_prefer_${m.originalName}';
       _reviewChecked[key] = true;
-      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final badge = _reviewBadge(m.isValidated
+          ? l.reviewBadgeRxNormVerified
+          : l.reviewBadgeUnverified);
       final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
       _reviewEdited[key] = '${m.displayName}$reason$badge';
     }
     for (final m in v.avoidMeds) {
       final key = 'med_avoid_${m.originalName}';
       _reviewChecked[key] = true;
-      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final badge = _reviewBadge(m.isValidated
+          ? l.reviewBadgeRxNormVerified
+          : l.reviewBadgeUnverified);
       final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
       _reviewEdited[key] = '${m.displayName}$reason$badge';
     }
     for (final c in v.conditions) {
       final key = 'cond_${c.originalText}';
       _reviewChecked[key] = true;
-      final badge =
-          c.isValidated ? ' [${c.code}]' : ' [no ICD match]';
+      final badge = _reviewBadge(
+          c.isValidated ? c.code : l.reviewBadgeNoIcdMatch);
       _reviewEdited[key] = '${c.displayName}$badge';
     }
     // Health history is verbatim prose (one reviewable note), not split into
@@ -70,12 +114,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (v.preferredFacility != null) {
       _reviewChecked['facility_prefer'] = true;
       _reviewEdited['facility_prefer'] =
-          '${v.preferredFacility!}${v.preferredFacilityVerified ? facilityVerifiedBadge : facilityUnverifiedBadge}';
+          '${v.preferredFacility!}${_reviewBadge(v.preferredFacilityVerified ? l.reviewBadgeNpiVerified : l.reviewBadgeUnverified)}';
     }
     if (v.avoidFacility != null) {
       _reviewChecked['facility_avoid'] = true;
       _reviewEdited['facility_avoid'] =
-          '${v.avoidFacility!}${v.avoidFacilityVerified ? facilityVerifiedBadge : facilityUnverifiedBadge}';
+          '${v.avoidFacility!}${_reviewBadge(v.avoidFacilityVerified ? l.reviewBadgeNpiVerified : l.reviewBadgeUnverified)}';
     }
     if (v.dietary != null) {
       _reviewChecked['dietary'] = true;
@@ -128,7 +172,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
       final key = 'allergy_${a.substance}';
       _reviewChecked[key] = true;
       final badge = a.kind == 'drug'
-          ? (a.rxNormVerified ? ' [RxNorm verified]' : ' [unverified]')
+          ? _reviewBadge(a.rxNormVerified
+              ? l.reviewBadgeRxNormVerified
+              : l.reviewBadgeUnverified)
           : '';
       _reviewEdited[key] = '${a.display}$badge';
     }
@@ -138,7 +184,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
     for (final m in v.currentMeds) {
       final key = 'med_current_${m.originalName}';
       _reviewChecked[key] = true;
-      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final badge = _reviewBadge(m.isValidated
+          ? l.reviewBadgeRxNormVerified
+          : l.reviewBadgeUnverified);
       final dose = m.dosage.isNotEmpty ? ' (${m.dosage})' : '';
       _reviewEdited[key] = '${m.displayName}$dose$badge';
     }
@@ -147,7 +195,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
     for (final m in v.limitedMeds) {
       final key = 'med_limit_${m.originalName}';
       _reviewChecked[key] = true;
-      final badge = m.isValidated ? ' [RxNorm verified]' : ' [unverified]';
+      final badge = _reviewBadge(m.isValidated
+          ? l.reviewBadgeRxNormVerified
+          : l.reviewBadgeUnverified);
       final reason = m.reason.isNotEmpty ? ' — ${m.reason}' : '';
       _reviewEdited[key] = '${m.displayName}$reason$badge';
     }
@@ -179,18 +229,18 @@ extension _PipelineReviewUi on _PipelineScreenState {
     // ── Statutory activation triggers (set only on an explicit designation)
     if (v.triggerTwoProfessionals == true) {
       _reviewChecked['trigger_two_professionals'] = true;
-      _reviewEdited['trigger_two_professionals'] =
-          'Activate when professionals determine I cannot make '
-          'mental-health decisions';
+      // The wizard's own wording for each trigger (display only — apply
+      // reads the checkbox).
+      _reviewEdited['trigger_two_professionals'] = l.effCondTriggerTwoTitle;
     }
     if (v.triggerCourtOrder == true) {
       _reviewChecked['trigger_court_order'] = true;
-      _reviewEdited['trigger_court_order'] = 'Activate upon a court order';
+      _reviewEdited['trigger_court_order'] = l.effCondTriggerCourtTitle;
     }
     if (v.triggerInvoluntaryCommitment == true) {
       _reviewChecked['trigger_involuntary_commitment'] = true;
       _reviewEdited['trigger_involuntary_commitment'] =
-          'Activate upon involuntary commitment';
+          l.effCondTriggerCommitTitle;
     }
 
     // ── Room preferences note
@@ -205,31 +255,31 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (v.agentCanConsentMedication != null) {
       _reviewChecked['authority_medication'] = true;
       _reviewEdited['authority_medication'] = v.agentCanConsentMedication!
-          ? 'Agent MAY decide medications'
-          : 'Agent may NOT decide medications';
+          ? l.reviewValueAgentMayDecideMeds
+          : l.reviewValueAgentMayNotDecideMeds;
     }
     if (v.selfBindingUlysses == true) {
       _reviewChecked['ulysses_optin'] = true;
-      _reviewEdited['ulysses_optin'] =
-          'Self-binding (Ulysses): follow my directive even if I object';
+      _reviewEdited['ulysses_optin'] = l.reviewValueUlyssesOptin;
     }
     if (v.sameGenderRoommate == true) {
       final match = switch (v.roommateGenderMatch) {
-        'women' => ' (women)',
-        'men' => ' (men)',
-        'sameAsIdentity' => ' (same as my identity)',
+        'women' => ' (${l.facilityRoommateWomen.toLowerCase()})',
+        'men' => ' (${l.facilityRoommateMen.toLowerCase()})',
+        'sameAsIdentity' =>
+          ' (${l.facilityRoommateSameAsIdentity.toLowerCase()})',
         _ => '',
       };
       _reviewChecked['roommate_same_gender'] = true;
       _reviewEdited['roommate_same_gender'] =
-          'Same-gender roommate requested$match';
+          '${l.facilityRoomSameGender}$match';
     }
     // Room-preference chips beyond the same-gender one — a single
     // confirmable row; apply reads the ids from the validated result.
-    const chipLabels = {
-      'singleRoom': 'Single room',
-      'windowIfPossible': 'Window if possible',
-      'quietFloor': 'Quiet floor',
+    final chipLabels = {
+      'singleRoom': l.facilityRoomSingle,
+      'windowIfPossible': l.facilityRoomWindow,
+      'quietFloor': l.facilityRoomQuietFloor,
     };
     final extraChips = v.roomPreferenceChips
         .where(chipLabels.containsKey)
@@ -251,14 +301,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
 
     guardianCondition('guardian_can_revoke', v.guardianCanRevoke,
         v.guardianCanRevokeNote,
-        yes: 'A guardian MAY override this directive',
-        no: 'A guardian may NOT override this directive');
+        yes: l.reviewValueGuardianMayOverride,
+        no: l.reviewValueGuardianMayNotOverride);
 
     // Structured crisis plan — one confirmable row; apply reads the lists
     // from the validated result and merges into crisisPlanJson.
     if (v.crisisPlan != null && !v.crisisPlan!.isEmpty) {
       _reviewChecked['crisis_plan'] = true;
-      _reviewEdited['crisis_plan'] = v.crisisPlan!.display();
+      _reviewEdited['crisis_plan'] = v.crisisPlan!.display(l);
     }
 
     // ── Personal info (PII) — autofill the declarant + the people they
@@ -1198,7 +1248,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(key,
+                            Text(smartFillLabel(context.l10n, key),
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelLarge

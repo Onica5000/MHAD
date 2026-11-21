@@ -23,6 +23,18 @@
   "no": "No",
   "ok": "OK",
   "retry": "Retry",
+  "bootErrorTitle": "The app couldn’t start",
+  "@bootErrorTitle": {
+    "description": "Startup failure screen title (shown in the device language; the app's settings may not have loaded)."
+  },
+  "bootErrorBody": "Something needed at startup failed to load. Your saved data has not been changed.\n\n{error}",
+  "@bootErrorBody": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
   "required": "Required",
   "personalInfo": "Personal information",
   "fullName": "Full name",
@@ -438,6 +450,15 @@
       "note": {"type": "String"}
     }
   },
+  "medNtiNoteBipolar": "Bipolar disorder — blood level monitoring required",
+  "@medNtiNoteBipolar": {
+    "description": "NTI note for lithium (fills {note} in medsStepNtiNote)."
+  },
+  "medNtiNoteBipolarSeizures": "Bipolar/seizures — blood level monitoring required",
+  "medNtiNoteSeizures": "Seizures — blood level monitoring required",
+  "medNtiNoteBloodThinner": "Blood thinner — commonly co-prescribed, strict monitoring",
+  "medNtiNoteRespiratory": "Respiratory — commonly co-prescribed, strict monitoring",
+  "medNtiNoteThyroid": "Thyroid — commonly co-prescribed with lithium",
   "medsStepDosageLabel": "Dosage (e.g. 20 mg twice daily)",
   "medsStepReasonLabel": "Reason / notes (optional)",
   "medsStepLearnAbout": "Learn about {name}",
@@ -997,6 +1018,36 @@
   "reviewLabelMedCurrent": "Currently taking",
   "reviewLabelMedLimit": "Restricted-use medication",
   "reviewLabelCond": "Condition",
+  "reviewBadgeRxNormVerified": "RxNorm verified",
+  "@reviewBadgeRxNormVerified": {
+    "description": "Autofill review: badge after a medication the RxNorm registry recognized, shown as \" [RxNorm verified]\". Display only — removed before saving."
+  },
+  "reviewBadgeUnverified": "unverified",
+  "@reviewBadgeUnverified": {
+    "description": "Autofill review badge: the name did not match a registry (worth a second look)."
+  },
+  "reviewBadgeNoIcdMatch": "no ICD match",
+  "@reviewBadgeNoIcdMatch": {
+    "description": "Autofill review badge after a condition with no ICD-10-CM code."
+  },
+  "reviewBadgeNpiVerified": "NPI verified",
+  "@reviewBadgeNpiVerified": {
+    "description": "Autofill review badge after a facility found in the NPI organization registry."
+  },
+  "reviewValueAgentMayDecideMeds": "Agent MAY decide medications",
+  "reviewValueAgentMayNotDecideMeds": "Agent may NOT decide medications",
+  "reviewValueUlyssesOptin": "Self-binding (Ulysses): follow my directive even if I object",
+  "reviewValueGuardianMayOverride": "A guardian MAY override this directive",
+  "reviewValueGuardianMayNotOverride": "A guardian may NOT override this directive",
+  "smartFillFacilityNotesPreferred": "Facility notes (preferred)",
+  "@smartFillFacilityNotesPreferred": {
+    "description": "Title of a smart-fill suggestion row (autofill results)."
+  },
+  "smartFillFacilityNotesAvoid": "Facility notes (avoid)",
+  "smartFillEctGuidance": "ECT guidance",
+  "smartFillExperimentalGuidance": "Experimental studies guidance",
+  "smartFillDrugTrialsGuidance": "Drug trials guidance",
+  "smartFillAgentGuidance": "Guidance for your agent",
   "reviewLabelDiag": "Diagnosis",
   "reviewLabelAllergy": "Allergy",
   "reviewLabelHh": "Health history",
@@ -1199,6 +1250,10 @@
   "crisisPlanDonTDoThese": "Don’t do these",
   "crisisPlanTypeAShortNote": "Type a short note",
   "permissionsOverviewPaMhadRequestsSystemPermissions": "PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.",
+  "permissionsOverviewWebIntro": "On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.",
+  "@permissionsOverviewWebIntro": {
+    "description": "Permissions screen intro on the web (replaces the native intro)."
+  },
   "permissionsOverviewWhatThisAppMayAsk": "What this app may ask for",
   "permissionsOverviewBiometricsPasscode": "Biometrics / passcode",
   "permissionsOverviewNotifications": "Notifications",
@@ -1462,7 +1517,7 @@
   "privacyPolicyPaMhadAppPrivacyPolicy": "PA MHAD privacy policy",
   "privacyPolicyReviewLegalDisclaimer": "Review legal disclaimer",
   "privacyPolicyDataWeCollect": "Data we collect",
-  "privacyPolicyThisAppCollectsOnlyThe": "This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.",
+  "privacyPolicyThisAppCollectsOnlyThe": "This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.",
   "privacyPolicyHowDataIsStoredProtected": "How data is stored & protected",
   "privacyPolicyAiFeaturesThirdPartyData": "AI features & third-party data sharing",
   "privacyPolicyIfYouChooseToUse": "If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google’s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.",
@@ -1758,6 +1813,10 @@
       "notAdvice": {"type": "String"}
     }
   },
+  "aiNotAdvice": "AI-generated — not legal or medical advice.",
+  "@aiNotAdvice": {
+    "description": "The short caveat shown wherever AI generates content (AI check, chat replies). One wording everywhere (legal-wording canon)."
+  },
   "aiConsistencyCheckFailed": "Couldn’t run the consistency check.\n{error}",
   "@aiConsistencyCheckFailed": {
     "placeholders": {
@@ -1786,6 +1845,10 @@
   "crisisPlanHeadsUpThisSectionIs": "Heads up: this section is yours alone — it isn’t required by PA Act 194, but in practice it’s the part agents and ER staff read first.",
   "permissionsOverviewOnlyWhatWeNeed": "Only what we need.",
   "permissionsOverviewPermissionsAreManagedByYour": "Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.",
+  "permissionsOverviewManagedByBrowser": "Permissions are managed by your browser, not by this app. Use the site settings next to the address bar to review or turn off the microphone.",
+  "@permissionsOverviewManagedByBrowser": {
+    "description": "Permissions screen footer on the web."
+  },
   "permissionsOverviewNoAnalyticsNoTrackingPixels": "No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outside connections are the lookups you start (medical terms to U.S. government databases, a ZIP code to fill in your address) and loading the app’s display engine and fonts from Google’s servers; the privacy policy lists them all.",
   "makeItFindableMakeItFindableInA": "Make it findable in a crisis.",
   "makeItFindablePennsylvaniaHasNoStatewideDirective": "Pennsylvania has no statewide directive registry, so the people in your life are the registry: make sure your agent, a trusted person, and your providers all know you have a directive and where to find it.",
@@ -1836,6 +1899,10 @@
   "crisisSheetYouAreNotAlone": "You are not alone.",
   "crisisSheetCall988Press1": "Call 988, press 1",
   "crisisSheetCallTextChat": "Call · text · chat",
+  "crisisSheetTrevorProjectName": "The Trevor Project (LGBTQ+ youth)",
+  "@crisisSheetTrevorProjectName": {
+    "description": "Crisis sheet row title. The organization's name stays in English (docs/SPANISH_STYLE.md); the description is translated."
+  },
   "assistantSenderYou": "You",
   "aiSetupApiKeySetForThis": "API key set for this session",
   "aiSetupApiKeySaved": "API key saved",
@@ -2254,6 +2321,10 @@
       "medicalDisclaimer": {"type": "Object"}
     }
   },
+  "nlmNoMedicalAdvice": "NLM does not provide specific medical advice. Consult with a qualified physician for medical advice.",
+  "@nlmNoMedicalAdvice": {
+    "description": "Fills {medicalDisclaimer} in nlmAttributionSourceUSNationalLibrary (NLM terms of service)."
+  },
   "aiConsentDialogToAutofillYourDirectiveThe": "To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to {label} so it can read it and fill in your fields.",
   "@aiConsentDialogToAutofillYourDirectiveThe": {
     "placeholders": {
@@ -2389,6 +2460,14 @@
   "permissionsOverviewYouReviewEveryFieldBefore": "You review every field before it’s used",
   "permissionsOverviewNotYetWiredFeatureIn": "Not yet wired — feature in a future release",
   "permissionsOverviewSpeakingLongFormAnswersE": "Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.",
+  "permissionsOverviewMicWebUsedFor": "Dictating an answer instead of typing it (the microphone button by a field).",
+  "@permissionsOverviewMicWebUsedFor": {
+    "description": "Microphone card 'used for' on the web."
+  },
+  "permissionsOverviewMicWebAsksFirst": "Your browser asks before the microphone is used",
+  "permissionsOverviewMicWebSpeechService": "Your browser’s speech service turns speech into text (Chrome sends the audio to Google, Edge to Microsoft)",
+  "permissionsOverviewMicWebNothingKept": "PA MHAD keeps no audio — you review the text in the field",
+  "permissionsOverviewMicWebStatus": "Used for dictation — your browser asks first",
   "permissionsOverviewAudioIsProcessedOnDevice": "Audio is processed on-device when possible",
   "permissionsOverviewIfSentToAiFor": "If sent to AI for transcription, it isn’t stored",
   "permissionsOverviewTranscriptStaysInYourSession": "Transcript stays in your session — never uploaded",
@@ -2416,12 +2495,21 @@
   "webLandingPreferPaperOpenAnyOf": "Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.",
   "webLandingNoAccountRequired": "No account required",
   "webLandingNoEmailNoPasswordNo": "No email, no password, no sign-up.",
-  "webLandingNothingLeavesYourBrowser": "Nothing leaves your browser",
-  "webLandingYourAnswersLiveInThis": "Your answers live in this tab. We never see them.",
+  "webLandingWeNeverSeeYourAnswers": "We never see your answers",
+  "@webLandingWeNeverSeeYourAnswers": {
+    "description": "Home privacy promise row title (web)."
+  },
+  "webLandingTheyStayInThisBrowser": "They stay in this browser. Only what you choose leaves it — a lookup, dictation, or text you copy into an AI.",
+  "@webLandingTheyStayInThisBrowser": {
+    "description": "Body under webLandingWeNeverSeeYourAnswers. Must name what can leave the browser (privacy facts in CLAUDE.md)."
+  },
   "webLandingNoCookiesNoTracking": "No cookies, no tracking",
-  "webLandingNoAnalyticsNoThirdParty": "No analytics, no third-party scripts.",
+  "webLandingNoAnalyticsNoAds": "No analytics, no ads, no trackers.",
+  "@webLandingNoAnalyticsNoAds": {
+    "description": "Body under webLandingNoCookiesNoTracking. Not 'no third-party scripts': the display engine is loaded from Google's servers."
+  },
   "webLandingYouKeepTheFile": "You keep the file",
-  "webLandingSaveThePdfFromYour": "Save the PDF from your viewer — that’s the only copy.",
+  "webLandingSaveThePdfFromYour": "Save the PDF from your viewer — we never keep a copy.",
   "pinDialogPasscodeTooShort": "Passcode must be at least 4 characters.",
   "pinDialogPasscodesDontMatch": "Passcodes do not match.",
   "pinDialogUnlockPrivateMode": "Unlock private mode",
@@ -2573,9 +2661,117 @@
   "sideEffectsNoneFound": "We couldn’t find common side effects to list right now. You can add anything you’re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.",
   "sideEffectsGenerateError": "Something went wrong generating the list. Please try again, or note side effects yourself.",
   "inputZipInvalid": "Enter a 5-digit or 5+4-digit ZIP",
-  "audioGuideTipQualityDoesnTMatterAny": "Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.",
+  "audioGuideTipQualityDoesnTMatterAny": "Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.",
   "audioGuideTipKeepEachClipShortUnder": "Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.",
   "audioGuideTipSayMedicationAndDoctorNames": "Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.",
+  "audioQTitle": "Voice questionnaire",
+  "@audioQTitle": {
+    "description": "Voice questionnaire (Audio guide screen + its printout): a script the person reads aloud; lib/data/audio_questionnaire_content.dart builds it from these keys."
+  },
+  "audioQIntroApi": "Read this out loud and answer each prompt in your own words, then upload the recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.",
+  "@audioQIntroApi": {
+    "description": "Intro when the API path is shown (appData.ai.apiModeVisible)."
+  },
+  "audioQIntroHandoff": "Read this out loud and answer each prompt in your own words. Then open the Autofill page: it shows you how to attach the recording in your own AI and bring its answer back, and PA MHAD fills in your directive from it — you review every field before anything is added.",
+  "@audioQIntroHandoff": {
+    "description": "Intro with the copy-and-paste AI (what the web shows)."
+  },
+  "audioQIntroTips": "Speak naturally; you don’t need exact wording. Say “skip” for anything that doesn’t apply. For unusual medication or doctor names, say the name slowly and spell it. Keep each recording under about 2 minutes — record one clip per section.",
+  "audioQPrintSubtitle": "Read aloud to record an audio file that autofills your PA Mental Health Advance Directive.",
+  "@audioQPrintSubtitle": {
+    "description": "Printout only, under the title."
+  },
+  "audioQNote": "Note: {note}",
+  "@audioQNote": {
+    "description": "Printout: a section's caveat.",
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQ1Title": "About you",
+  "audioQ1Prompt1": "Your full legal name.",
+  "audioQ1Prompt2": "Your date of birth (month, day, year).",
+  "audioQ1Prompt3": "Your home address: street and number, apartment or unit, city, county, state, and ZIP code.",
+  "audioQ1Prompt4": "A phone number where you can be reached.",
+  "audioQ1Example": "My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.",
+  "@audioQ1Example": {
+    "description": "A made-up example; the names and numbers are fictional."
+  },
+  "audioQ2Title": "Your doctors",
+  "audioQ2Prompt1": "Your primary doctor / treating physician: name, specialty (e.g. psychiatry), and phone number.",
+  "audioQ2Prompt2": "If you want a specific doctor to evaluate your capacity (different from your primary doctor): their name and how to reach them.",
+  "audioQ3Title": "Your mental-health agent",
+  "audioQ3AppliesWhen": "only if you are naming an agent — Combined or Power of Attorney form",
+  "audioQ3Prompt1": "Your agent’s full name, their relationship to you, their address, and a phone number.",
+  "audioQ3Prompt2": "If you have a backup / alternate agent, give the same details for them.",
+  "audioQ3Example": "My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.",
+  "audioQ4Title": "Guardian nomination",
+  "audioQ4AppliesWhen": "optional",
+  "audioQ4Prompt1": "If you want to nominate someone to be your guardian should a court ever appoint one: their name, relationship, address, and phone.",
+  "audioQ5Title": "When this directive takes effect",
+  "audioQ5Prompt1": "Describe the circumstances that should trigger this directive — for example, “when a psychiatrist and one other professional find that I can’t make my own mental health decisions.” This is the “when it kicks in” language, not your diagnoses.",
+  "@audioQ5Prompt1": {
+    "description": "The example follows 20 Pa.C.S. § 5807(a)(1): a psychiatrist plus one other professional."
+  },
+  "audioQ6Title": "Your diagnoses",
+  "audioQ6Prompt1": "List your mental-health diagnoses / conditions. If you happen to know a diagnosis code (ICD-10) you can say it, but it’s optional.",
+  "audioQ6Example": "I have bipolar disorder type 1 and generalized anxiety disorder.",
+  "audioQ7Title": "Medications",
+  "audioQ7Prompt1": "Say these in FOUR separate groups (they go to different places on the form). For each, add a short reason if you like:",
+  "audioQ7Prompt2": "1. Medications I am CURRENTLY taking — what you take now, for reference.",
+  "audioQ7Prompt3": "2. Medications I PREFER — ones that have worked well.",
+  "audioQ7Prompt4": "3. Medications I NEVER want / refuse — and why.",
+  "audioQ7Prompt5": "4. Medications with LIMITATIONS — may be given, but only under conditions you state.",
+  "audioQ7Example": "I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I prefer quetiapine, it has worked well. I never want haloperidol, it caused a severe reaction. Clozapine only with weekly blood monitoring.",
+  "audioQ7Note": "Say the dose if you know it (e.g. “lithium 300 mg twice a day”) — autofill captures the dose for medications you currently take. Always double-check it in the app afterward.",
+  "audioQ8Title": "Allergies",
+  "audioQ8Prompt1": "List your allergies — drug, food, or material. For each, say the severity (mild, moderate, or severe), the reactions it causes, and any notes.",
+  "audioQ8Example": "I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.",
+  "audioQ9Title": "Treatment facility preferences",
+  "audioQ9Prompt1": "A hospital or treatment center you PREFER to be treated at.",
+  "audioQ9Prompt2": "A facility you want to AVOID, if any.",
+  "audioQ10Title": "Room and environment preferences",
+  "audioQ10Prompt1": "Any room or environment preferences — for example a private room, a quiet floor, a window, or a same-gender roommate.",
+  "audioQ11Title": "ECT, experimental studies, and drug trials",
+  "audioQ11Prompt1": "For EACH of these three, say clearly which you want: “I consent,” “I do not consent,” or “I want my agent to decide.”",
+  "audioQ11Prompt2": "Electroconvulsive therapy (ECT).",
+  "audioQ11Prompt3": "Experimental studies / research.",
+  "audioQ11Prompt4": "Drug trials.",
+  "audioQ11Example": "For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.",
+  "audioQ11Note": "If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.",
+  "audioQ12Title": "Limits on your agent’s authority",
+  "audioQ12AppliesWhen": "only if naming an agent",
+  "audioQ12Prompt1": "Any limits or conditions on what your agent may or may not do — e.g. “my agent must consult my sister first,” or “my agent may not consent to ECT.”",
+  "audioQ13Title": "Additional instructions",
+  "audioQ13Prompt1": "Cover any of these that apply (say “skip” for the rest):",
+  "audioQ13Prompt2": "Activities that help or worsen your symptoms.",
+  "audioQ13Prompt3": "What helps you during a crisis — preferred interventions, what calms you, what to avoid.",
+  "audioQ13Prompt4": "Health history — past hospitalizations, what has or hasn’t worked.",
+  "audioQ13Prompt5": "Dietary needs or restrictions.",
+  "audioQ13Prompt6": "Religious or cultural preferences relevant to your care.",
+  "audioQ13Prompt7": "Children / custody arrangements to be aware of.",
+  "audioQ13Prompt8": "Who to notify, and who NOT to notify.",
+  "audioQ13Prompt9": "Records disclosure — who may see your records.",
+  "audioQ13Prompt10": "Pet care — who cares for your pets if you’re hospitalized.",
+  "audioQ13Prompt11": "Anything else you want your care team and agent to know.",
+  "audioQCantDoSignatures": "Your signature and your witnesses’ signatures.",
+  "@audioQCantDoSignatures": {
+    "description": "Under “What the recording can’t fill”."
+  },
+  "audioQCantDoInitials": "Your initials on the printed form for letting your agent decide ECT, experimental studies, or drug trials (the official form asks for them — see section 11).",
+  "audioQCantDoSideEffects": "The side-effects checklist is built in the app — autofill doesn’t complete it. Open and fill in (or review) that section yourself.",
+  "audioQCapturedMedAuthority": "Whether your agent may decide your medications (say it explicitly).",
+  "@audioQCapturedMedAuthority": {
+    "description": "Under “Worth saying out loud — autofill now captures these”."
+  },
+  "audioQCapturedUlysses": "A self-binding (“Ulysses”) instruction — that your directive should be followed even if you object during a future crisis.",
+  "audioQCapturedDosages": "Dosages for the medications you currently take.",
+  "audioQCapturedRoom": "Room preferences: a private room, a window, a quiet floor, or a same-gender roommate.",
+  "audioQCapturedCrisisPlan": "Your crisis plan: early warning signs, triggers, what helps, things to say to you, and what not to do.",
+  "audioQFormTypeNote": "You don’t pick your form type while recording. Autofill fills in the form your directive already uses (Combined, unless you chose another), and you can switch form types later.",
+  "audioQClosing": "Always review every autofilled field before you add it — correct any misheard medications, conditions, names, or numbers.",
   "stepSubtitleAboutYou": "Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.",
   "stepSubtitleWhenItKicksIn": "The conditions under which your directive becomes active. You can pick more than one.",
   "stepSubtitlePeopleITrust": "They speak for you if you can’t. You can name a primary, an alternate, and set limits on what they decide.",
@@ -2758,7 +2954,14 @@
   "settingsThemeAuto": "Auto",
   "settingsThemeLight": "Light",
   "settingsThemeDark": "Dark",
-  "settingsStatusWebInMemory": "● WEB APP · IN-MEMORY ONLY",
+  "settingsStatusWebTab": "● WEB APP · KEPT IN THIS TAB",
+  "@settingsStatusWebTab": {
+    "description": "Settings header status on the web when no locked copy is kept."
+  },
+  "settingsStatusWebLocked": "● WEB APP · LOCKED COPY ON THIS DEVICE",
+  "@settingsStatusWebLocked": {
+    "description": "Settings header status on the web when the person keeps a passphrase-locked progress copy."
+  },
   "settingsStatusNative": "● {mode} MODE · {auth}",
   "@settingsStatusNative": {
     "placeholders": {

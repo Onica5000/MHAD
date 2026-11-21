@@ -79,14 +79,17 @@
   "dated": {
     "_note": "Date/version-stamped facts shown to users that go stale. VERIFY tier — confirm before changing.",
     "autonomy": "verify",
-    "privacyPolicyVersion": "v1.4",
+    "privacyPolicyVersion": "v1.5",
     "privacyPolicyUpdated": "2026-11",
     "playStoreRulesAsOf": "Jan 2026"
   },
   "facts": {
     "_note": "Updatable user-facing factual copy (research stats, etc.). 'auto' tier for low-risk resource/research facts.",
     "autonomy": "auto",
-    "facilitatorCompletionStat": "People who complete this with facilitator support are estimated to be substantially more likely to finish the process (Swanson et al. 2006; individual results vary)."
+    "facilitatorCompletionStat": {
+      "en": "People who complete this with facilitator support are estimated to be substantially more likely to finish the process (Swanson et al. 2006; individual results vary).",
+      "es": "Se estima que las personas que hacen este proceso con el apoyo de un facilitador tienen muchas más probabilidades de terminarlo (Swanson et al. 2006; los resultados individuales varían)."
+    }
   },
   "legal": {
     "_note": "Canonical PA MHAD legal facts. VERIFY tier — a human must approve any change (AND the matching prose edits in proseLocations) before it ships. These facts are authored as prose throughout the app; this block is the single structured reference + the admin-flow update target, NOT a runtime template (the legal-wording-canon governs the prose).",
@@ -220,32 +223,44 @@
   "referralPartners": [
     {
       "contact": "pmhca",
-      "sub": "Statewide peer support · 1-800-887-6422"
+      "sub": {
+        "en": "Statewide peer support · 1-800-887-6422",
+        "es": "Apoyo entre pares en todo el estado · 1-800-887-6422"
+      }
     },
     {
       "contact": "mhapa",
-      "sub": "Advocacy + education · 1-866-578-3659"
+      "sub": {
+        "en": "Advocacy + education · 1-866-578-3659",
+        "es": "Defensa y educación · 1-866-578-3659"
+      }
     },
     {
       "contact": "paProtectionAdvocacy",
-      "sub": "Your rights under Act 194 · 1-800-692-7443"
+      "sub": {
+        "en": "Your rights under Act 194 · 1-800-692-7443",
+        "es": "Sus derechos según la Ley 194 de 2004 (Act 194) · 1-800-692-7443"
+      }
     },
     {
       "contact": "nrcPad",
-      "sub": "State-specific PAD information"
+      "sub": {
+        "en": "State-specific PAD information",
+        "es": "Información sobre directivas anticipadas psiquiátricas en cada estado"
+      }
     }
   ],
   "breachNotice": {
-    "_note": "FTC Health Breach Notification Rule (16 CFR 318) in-app notice; see docs/BREACH_PLAN.md. Leave 'id' EMPTY when there is no active notice (the normal state); an empty id is never shown. To publish: fill every field, set a new unique id (e.g. '2026-10-01-ai-provider'), list at least one contact method besides this in-app notice, and push to main (deploys to web). Each user sees it until they acknowledge that id.",
+    "_note": "FTC Health Breach Notification Rule (16 CFR 318) in-app notice; see docs/BREACH_PLAN.md. Leave 'id' EMPTY when there is no active notice (the normal state); an empty id is never shown. To publish: fill every field in English and Spanish (\"en\" / \"es\"; a contact method may be a plain string or the same pair), set a new unique id (e.g. '2026-10-01-ai-provider'), list at least one contact method besides this in-app notice, and push to main (deploys to web). Each user sees it until they acknowledge that id.",
     "autonomy": "verify",
     "id": "",
     "date": "",
-    "title": "",
-    "whatHappened": "",
-    "informationInvolved": "",
-    "thirdParties": "",
-    "whatWeAreDoing": "",
-    "whatYouCanDo": "",
+    "title": {"en": "", "es": ""},
+    "whatHappened": {"en": "", "es": ""},
+    "informationInvolved": {"en": "", "es": ""},
+    "thirdParties": {"en": "", "es": ""},
+    "whatWeAreDoing": {"en": "", "es": ""},
+    "whatYouCanDo": {"en": "", "es": ""},
     "contactMethods": []
   }
 }

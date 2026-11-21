@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ai/ai_assistant.dart';
-import 'package:mhad/constants.dart';
 import 'package:mhad/utils/date_format.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,7 +79,7 @@ class MessageBubble extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(
-                        aiNotAdvice,
+                        context.l10n.aiNotAdvice,
                         style: TextStyle(
                           fontSize: 12,
                           fontStyle: FontStyle.italic,

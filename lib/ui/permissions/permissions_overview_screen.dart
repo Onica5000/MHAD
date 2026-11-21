@@ -48,7 +48,9 @@ class PermissionsOverviewScreen extends StatelessWidget {
             title: EditorialHeading(
               text: context.l10n.permissionsOverviewOnlyWhatWeNeed,
             ),
-            lead: context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
+            lead: kIsWeb
+                ? context.l10n.permissionsOverviewWebIntro
+                : context.l10n.permissionsOverviewPaMhadRequestsSystemPermissions,
           ),
           const SizedBox(height: 20),
           _PermissionCard(
@@ -90,29 +92,44 @@ class PermissionsOverviewScreen extends StatelessWidget {
             title: context.l10n.permissionsOverviewCamera,
             usedFor:
                 context.l10n.permissionsOverviewSnappingAPhotoOfYour,
-            promises: [
+            // The web app never uses the camera: with the copy-and-paste AI,
+            // photos are attached in the person's own AI service.
+            promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewPhotoIsSentToAi,
               context.l10n.permissionsOverviewPhotoIsDiscardedRightAfter,
               context.l10n.permissionsOverviewNothingIsSavedToYour,
               context.l10n.permissionsOverviewYouReviewEveryFieldBefore,
             ],
-            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
+            statusLine: kIsWeb
+                ? context.l10n.permissionsOverviewNotApplicableOnThisPlatform
+                : context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.mic_outlined,
             title: context.l10n.permissionsOverviewMicrophone,
-            usedFor:
-                context.l10n.permissionsOverviewSpeakingLongFormAnswersE,
-            promises: [
-              context.l10n.permissionsOverviewAudioIsProcessedOnDevice,
-              context.l10n.permissionsOverviewIfSentToAiFor,
-              context.l10n.permissionsOverviewTranscriptStaysInYourSession,
-              context.l10n.permissionsOverviewToggleOffAtAnyTime,
-            ],
-            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
-            statusOk: false,
+            // The web app's dictation (voice_record_overlay) uses the
+            // browser's own speech service — what the privacy policy says.
+            usedFor: kIsWeb
+                ? context.l10n.permissionsOverviewMicWebUsedFor
+                : context.l10n.permissionsOverviewSpeakingLongFormAnswersE,
+            promises: kIsWeb
+                ? [
+                    context.l10n.permissionsOverviewMicWebAsksFirst,
+                    context.l10n.permissionsOverviewMicWebSpeechService,
+                    context.l10n.permissionsOverviewMicWebNothingKept,
+                  ]
+                : [
+                    context.l10n.permissionsOverviewAudioIsProcessedOnDevice,
+                    context.l10n.permissionsOverviewIfSentToAiFor,
+                    context.l10n.permissionsOverviewTranscriptStaysInYourSession,
+                    context.l10n.permissionsOverviewToggleOffAtAnyTime,
+                  ],
+            statusLine: kIsWeb
+                ? context.l10n.permissionsOverviewMicWebStatus
+                : context.l10n.permissionsOverviewNotYetWiredFeatureIn,
+            statusOk: kIsWeb,
           ),
           const SizedBox(height: 12),
           _PermissionCard(
@@ -120,20 +137,24 @@ class PermissionsOverviewScreen extends StatelessWidget {
             title: context.l10n.permissionsOverviewContacts,
             usedFor:
                 context.l10n.permissionsOverviewPickingAnAgentOrWitness,
-            promises: [
+            promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewWeNeverUploadYourContacts,
               context.l10n.permissionsOverviewSearchRunsLocallyOnThis,
               context.l10n.permissionsOverviewOnlyTheContactYouPick,
               context.l10n.permissionsOverviewYouCanRevokeAccessIn,
             ],
-            statusLine: context.l10n.permissionsOverviewNotYetWiredFeatureIn,
+            statusLine: kIsWeb
+                ? context.l10n.permissionsOverviewNotApplicableOnThisPlatform
+                : context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
           const SizedBox(height: 20),
           InfoBanner(
             icon: Icons.settings_outlined,
             variant: InfoBannerVariant.info,
-            text: context.l10n.permissionsOverviewPermissionsAreManagedByYour,
+            text: kIsWeb
+                ? context.l10n.permissionsOverviewManagedByBrowser
+                : context.l10n.permissionsOverviewPermissionsAreManagedByYour,
           ),
           const SizedBox(height: 12),
           InfoBanner(

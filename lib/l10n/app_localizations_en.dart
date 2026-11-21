@@ -78,6 +78,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
+  String get bootErrorTitle => 'The app couldn’t start';
+
+  @override
+  String bootErrorBody(Object error) {
+    return 'Something needed at startup failed to load. Your saved data has not been changed.\n\n$error';
+  }
+
+  @override
   String get required => 'Required';
 
   @override
@@ -1061,6 +1069,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String medsStepNtiNote(String note) {
     return 'Narrow therapeutic index drug — $note. Pennsylvania law bars generic substitution for these; note any monitoring needs below. (Informational, not medical advice.)';
   }
+
+  @override
+  String get medNtiNoteBipolar =>
+      'Bipolar disorder — blood level monitoring required';
+
+  @override
+  String get medNtiNoteBipolarSeizures =>
+      'Bipolar/seizures — blood level monitoring required';
+
+  @override
+  String get medNtiNoteSeizures => 'Seizures — blood level monitoring required';
+
+  @override
+  String get medNtiNoteBloodThinner =>
+      'Blood thinner — commonly co-prescribed, strict monitoring';
+
+  @override
+  String get medNtiNoteRespiratory =>
+      'Respiratory — commonly co-prescribed, strict monitoring';
+
+  @override
+  String get medNtiNoteThyroid =>
+      'Thyroid — commonly co-prescribed with lithium';
 
   @override
   String get medsStepDosageLabel => 'Dosage (e.g. 20 mg twice daily)';
@@ -2427,6 +2458,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelCond => 'Condition';
 
   @override
+  String get reviewBadgeRxNormVerified => 'RxNorm verified';
+
+  @override
+  String get reviewBadgeUnverified => 'unverified';
+
+  @override
+  String get reviewBadgeNoIcdMatch => 'no ICD match';
+
+  @override
+  String get reviewBadgeNpiVerified => 'NPI verified';
+
+  @override
+  String get reviewValueAgentMayDecideMeds => 'Agent MAY decide medications';
+
+  @override
+  String get reviewValueAgentMayNotDecideMeds =>
+      'Agent may NOT decide medications';
+
+  @override
+  String get reviewValueUlyssesOptin =>
+      'Self-binding (Ulysses): follow my directive even if I object';
+
+  @override
+  String get reviewValueGuardianMayOverride =>
+      'A guardian MAY override this directive';
+
+  @override
+  String get reviewValueGuardianMayNotOverride =>
+      'A guardian may NOT override this directive';
+
+  @override
+  String get smartFillFacilityNotesPreferred => 'Facility notes (preferred)';
+
+  @override
+  String get smartFillFacilityNotesAvoid => 'Facility notes (avoid)';
+
+  @override
+  String get smartFillEctGuidance => 'ECT guidance';
+
+  @override
+  String get smartFillExperimentalGuidance => 'Experimental studies guidance';
+
+  @override
+  String get smartFillDrugTrialsGuidance => 'Drug trials guidance';
+
+  @override
+  String get smartFillAgentGuidance => 'Guidance for your agent';
+
+  @override
   String get reviewLabelDiag => 'Diagnosis';
 
   @override
@@ -2914,6 +2994,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get permissionsOverviewPaMhadRequestsSystemPermissions =>
       'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.';
+
+  @override
+  String get permissionsOverviewWebIntro =>
+      'On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.';
 
   @override
   String get permissionsOverviewWhatThisAppMayAsk =>
@@ -3821,7 +3905,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppCollectsOnlyThe =>
-      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
+      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
 
   @override
   String get privacyPolicyHowDataIsStoredProtected =>
@@ -4746,6 +4830,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get aiNotAdvice => 'AI-generated — not legal or medical advice.';
+
+  @override
   String aiConsistencyCheckFailed(String error) {
     return 'Couldn’t run the consistency check.\n$error';
   }
@@ -4798,6 +4885,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get permissionsOverviewPermissionsAreManagedByYour =>
       'Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
+
+  @override
+  String get permissionsOverviewManagedByBrowser =>
+      'Permissions are managed by your browser, not by this app. Use the site settings next to the address bar to review or turn off the microphone.';
 
   @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
@@ -4976,6 +5067,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crisisSheetCallTextChat => 'Call · text · chat';
+
+  @override
+  String get crisisSheetTrevorProjectName =>
+      'The Trevor Project (LGBTQ+ youth)';
 
   @override
   String get assistantSenderYou => 'You';
@@ -5455,6 +5550,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get nlmNoMedicalAdvice =>
+      'NLM does not provide specific medical advice. Consult with a qualified physician for medical advice.';
+
+  @override
   String aiConsentDialogToAutofillYourDirectiveThe(Object label) {
     return 'To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to $label so it can read it and fill in your fields.';
   }
@@ -5721,6 +5820,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.';
 
   @override
+  String get permissionsOverviewMicWebUsedFor =>
+      'Dictating an answer instead of typing it (the microphone button by a field).';
+
+  @override
+  String get permissionsOverviewMicWebAsksFirst =>
+      'Your browser asks before the microphone is used';
+
+  @override
+  String get permissionsOverviewMicWebSpeechService =>
+      'Your browser’s speech service turns speech into text (Chrome sends the audio to Google, Edge to Microsoft)';
+
+  @override
+  String get permissionsOverviewMicWebNothingKept =>
+      'PA MHAD keeps no audio — you review the text in the field';
+
+  @override
+  String get permissionsOverviewMicWebStatus =>
+      'Used for dictation — your browser asks first';
+
+  @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
       'Audio is processed on-device when possible';
 
@@ -5820,26 +5939,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'No email, no password, no sign-up.';
 
   @override
-  String get webLandingNothingLeavesYourBrowser =>
-      'Nothing leaves your browser';
+  String get webLandingWeNeverSeeYourAnswers => 'We never see your answers';
 
   @override
-  String get webLandingYourAnswersLiveInThis =>
-      'Your answers live in this tab. We never see them.';
+  String get webLandingTheyStayInThisBrowser =>
+      'They stay in this browser. Only what you choose leaves it — a lookup, dictation, or text you copy into an AI.';
 
   @override
   String get webLandingNoCookiesNoTracking => 'No cookies, no tracking';
 
   @override
-  String get webLandingNoAnalyticsNoThirdParty =>
-      'No analytics, no third-party scripts.';
+  String get webLandingNoAnalyticsNoAds => 'No analytics, no ads, no trackers.';
 
   @override
   String get webLandingYouKeepTheFile => 'You keep the file';
 
   @override
   String get webLandingSaveThePdfFromYour =>
-      'Save the PDF from your viewer — that’s the only copy.';
+      'Save the PDF from your viewer — we never keep a copy.';
 
   @override
   String get pinDialogPasscodeTooShort =>
@@ -6230,7 +6347,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideTipQualityDoesnTMatterAny =>
-      'Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
+      'Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
@@ -6239,6 +6356,285 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get audioGuideTipSayMedicationAndDoctorNames =>
       'Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.';
+
+  @override
+  String get audioQTitle => 'Voice questionnaire';
+
+  @override
+  String get audioQIntroApi =>
+      'Read this out loud and answer each prompt in your own words, then upload the recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.';
+
+  @override
+  String get audioQIntroHandoff =>
+      'Read this out loud and answer each prompt in your own words. Then open the Autofill page: it shows you how to attach the recording in your own AI and bring its answer back, and PA MHAD fills in your directive from it — you review every field before anything is added.';
+
+  @override
+  String get audioQIntroTips =>
+      'Speak naturally; you don’t need exact wording. Say “skip” for anything that doesn’t apply. For unusual medication or doctor names, say the name slowly and spell it. Keep each recording under about 2 minutes — record one clip per section.';
+
+  @override
+  String get audioQPrintSubtitle =>
+      'Read aloud to record an audio file that autofills your PA Mental Health Advance Directive.';
+
+  @override
+  String audioQNote(String note) {
+    return 'Note: $note';
+  }
+
+  @override
+  String get audioQ1Title => 'About you';
+
+  @override
+  String get audioQ1Prompt1 => 'Your full legal name.';
+
+  @override
+  String get audioQ1Prompt2 => 'Your date of birth (month, day, year).';
+
+  @override
+  String get audioQ1Prompt3 =>
+      'Your home address: street and number, apartment or unit, city, county, state, and ZIP code.';
+
+  @override
+  String get audioQ1Prompt4 => 'A phone number where you can be reached.';
+
+  @override
+  String get audioQ1Example =>
+      'My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.';
+
+  @override
+  String get audioQ2Title => 'Your doctors';
+
+  @override
+  String get audioQ2Prompt1 =>
+      'Your primary doctor / treating physician: name, specialty (e.g. psychiatry), and phone number.';
+
+  @override
+  String get audioQ2Prompt2 =>
+      'If you want a specific doctor to evaluate your capacity (different from your primary doctor): their name and how to reach them.';
+
+  @override
+  String get audioQ3Title => 'Your mental-health agent';
+
+  @override
+  String get audioQ3AppliesWhen =>
+      'only if you are naming an agent — Combined or Power of Attorney form';
+
+  @override
+  String get audioQ3Prompt1 =>
+      'Your agent’s full name, their relationship to you, their address, and a phone number.';
+
+  @override
+  String get audioQ3Prompt2 =>
+      'If you have a backup / alternate agent, give the same details for them.';
+
+  @override
+  String get audioQ3Example =>
+      'My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.';
+
+  @override
+  String get audioQ4Title => 'Guardian nomination';
+
+  @override
+  String get audioQ4AppliesWhen => 'optional';
+
+  @override
+  String get audioQ4Prompt1 =>
+      'If you want to nominate someone to be your guardian should a court ever appoint one: their name, relationship, address, and phone.';
+
+  @override
+  String get audioQ5Title => 'When this directive takes effect';
+
+  @override
+  String get audioQ5Prompt1 =>
+      'Describe the circumstances that should trigger this directive — for example, “when a psychiatrist and one other professional find that I can’t make my own mental health decisions.” This is the “when it kicks in” language, not your diagnoses.';
+
+  @override
+  String get audioQ6Title => 'Your diagnoses';
+
+  @override
+  String get audioQ6Prompt1 =>
+      'List your mental-health diagnoses / conditions. If you happen to know a diagnosis code (ICD-10) you can say it, but it’s optional.';
+
+  @override
+  String get audioQ6Example =>
+      'I have bipolar disorder type 1 and generalized anxiety disorder.';
+
+  @override
+  String get audioQ7Title => 'Medications';
+
+  @override
+  String get audioQ7Prompt1 =>
+      'Say these in FOUR separate groups (they go to different places on the form). For each, add a short reason if you like:';
+
+  @override
+  String get audioQ7Prompt2 =>
+      '1. Medications I am CURRENTLY taking — what you take now, for reference.';
+
+  @override
+  String get audioQ7Prompt3 =>
+      '2. Medications I PREFER — ones that have worked well.';
+
+  @override
+  String get audioQ7Prompt4 =>
+      '3. Medications I NEVER want / refuse — and why.';
+
+  @override
+  String get audioQ7Prompt5 =>
+      '4. Medications with LIMITATIONS — may be given, but only under conditions you state.';
+
+  @override
+  String get audioQ7Example =>
+      'I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I prefer quetiapine, it has worked well. I never want haloperidol, it caused a severe reaction. Clozapine only with weekly blood monitoring.';
+
+  @override
+  String get audioQ7Note =>
+      'Say the dose if you know it (e.g. “lithium 300 mg twice a day”) — autofill captures the dose for medications you currently take. Always double-check it in the app afterward.';
+
+  @override
+  String get audioQ8Title => 'Allergies';
+
+  @override
+  String get audioQ8Prompt1 =>
+      'List your allergies — drug, food, or material. For each, say the severity (mild, moderate, or severe), the reactions it causes, and any notes.';
+
+  @override
+  String get audioQ8Example =>
+      'I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.';
+
+  @override
+  String get audioQ9Title => 'Treatment facility preferences';
+
+  @override
+  String get audioQ9Prompt1 =>
+      'A hospital or treatment center you PREFER to be treated at.';
+
+  @override
+  String get audioQ9Prompt2 => 'A facility you want to AVOID, if any.';
+
+  @override
+  String get audioQ10Title => 'Room and environment preferences';
+
+  @override
+  String get audioQ10Prompt1 =>
+      'Any room or environment preferences — for example a private room, a quiet floor, a window, or a same-gender roommate.';
+
+  @override
+  String get audioQ11Title => 'ECT, experimental studies, and drug trials';
+
+  @override
+  String get audioQ11Prompt1 =>
+      'For EACH of these three, say clearly which you want: “I consent,” “I do not consent,” or “I want my agent to decide.”';
+
+  @override
+  String get audioQ11Prompt2 => 'Electroconvulsive therapy (ECT).';
+
+  @override
+  String get audioQ11Prompt3 => 'Experimental studies / research.';
+
+  @override
+  String get audioQ11Prompt4 => 'Drug trials.';
+
+  @override
+  String get audioQ11Example =>
+      'For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.';
+
+  @override
+  String get audioQ11Note =>
+      'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.';
+
+  @override
+  String get audioQ12Title => 'Limits on your agent’s authority';
+
+  @override
+  String get audioQ12AppliesWhen => 'only if naming an agent';
+
+  @override
+  String get audioQ12Prompt1 =>
+      'Any limits or conditions on what your agent may or may not do — e.g. “my agent must consult my sister first,” or “my agent may not consent to ECT.”';
+
+  @override
+  String get audioQ13Title => 'Additional instructions';
+
+  @override
+  String get audioQ13Prompt1 =>
+      'Cover any of these that apply (say “skip” for the rest):';
+
+  @override
+  String get audioQ13Prompt2 => 'Activities that help or worsen your symptoms.';
+
+  @override
+  String get audioQ13Prompt3 =>
+      'What helps you during a crisis — preferred interventions, what calms you, what to avoid.';
+
+  @override
+  String get audioQ13Prompt4 =>
+      'Health history — past hospitalizations, what has or hasn’t worked.';
+
+  @override
+  String get audioQ13Prompt5 => 'Dietary needs or restrictions.';
+
+  @override
+  String get audioQ13Prompt6 =>
+      'Religious or cultural preferences relevant to your care.';
+
+  @override
+  String get audioQ13Prompt7 =>
+      'Children / custody arrangements to be aware of.';
+
+  @override
+  String get audioQ13Prompt8 => 'Who to notify, and who NOT to notify.';
+
+  @override
+  String get audioQ13Prompt9 =>
+      'Records disclosure — who may see your records.';
+
+  @override
+  String get audioQ13Prompt10 =>
+      'Pet care — who cares for your pets if you’re hospitalized.';
+
+  @override
+  String get audioQ13Prompt11 =>
+      'Anything else you want your care team and agent to know.';
+
+  @override
+  String get audioQCantDoSignatures =>
+      'Your signature and your witnesses’ signatures.';
+
+  @override
+  String get audioQCantDoInitials =>
+      'Your initials on the printed form for letting your agent decide ECT, experimental studies, or drug trials (the official form asks for them — see section 11).';
+
+  @override
+  String get audioQCantDoSideEffects =>
+      'The side-effects checklist is built in the app — autofill doesn’t complete it. Open and fill in (or review) that section yourself.';
+
+  @override
+  String get audioQCapturedMedAuthority =>
+      'Whether your agent may decide your medications (say it explicitly).';
+
+  @override
+  String get audioQCapturedUlysses =>
+      'A self-binding (“Ulysses”) instruction — that your directive should be followed even if you object during a future crisis.';
+
+  @override
+  String get audioQCapturedDosages =>
+      'Dosages for the medications you currently take.';
+
+  @override
+  String get audioQCapturedRoom =>
+      'Room preferences: a private room, a window, a quiet floor, or a same-gender roommate.';
+
+  @override
+  String get audioQCapturedCrisisPlan =>
+      'Your crisis plan: early warning signs, triggers, what helps, things to say to you, and what not to do.';
+
+  @override
+  String get audioQFormTypeNote =>
+      'You don’t pick your form type while recording. Autofill fills in the form your directive already uses (Combined, unless you chose another), and you can switch form types later.';
+
+  @override
+  String get audioQClosing =>
+      'Always review every autofilled field before you add it — correct any misheard medications, conditions, names, or numbers.';
 
   @override
   String get stepSubtitleAboutYou =>
@@ -6547,7 +6943,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeDark => 'Dark';
 
   @override
-  String get settingsStatusWebInMemory => '● WEB APP · IN-MEMORY ONLY';
+  String get settingsStatusWebTab => '● WEB APP · KEPT IN THIS TAB';
+
+  @override
+  String get settingsStatusWebLocked =>
+      '● WEB APP · LOCKED COPY ON THIS DEVICE';
 
   @override
   String settingsStatusNative(String mode, String auth) {

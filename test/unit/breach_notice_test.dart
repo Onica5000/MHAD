@@ -29,8 +29,24 @@ void main() {
         'contactMethods': ['email: a@b.c', ' ', 'web: x.org'],
       })!;
       expect(n.id, '2026-10-01-test');
-      expect(n.thirdParties, 'TP');
-      expect(n.contactMethods, ['email: a@b.c', 'web: x.org']);
+      expect(n.thirdParties.en, 'TP');
+      expect(n.contactMethods.map((c) => c.en), ['email: a@b.c', 'web: x.org']);
+    });
+
+    test('each text may come in English and Spanish', () {
+      final n = BreachNotice.fromJson(const {
+        'id': 'bilingual',
+        'title': {'en': 'Security incident', 'es': 'Incidente de seguridad'},
+        'whatHappened': 'Only English',
+        'contactMethods': [
+          {'en': 'Web: x.org', 'es': 'Sitio web: x.org'},
+        ],
+      })!;
+      expect(n.title.forLanguage('es'), 'Incidente de seguridad');
+      expect(n.title.forLanguage('en'), 'Security incident');
+      expect(n.whatHappened.forLanguage('es'), 'Only English',
+          reason: 'falls back to English, never blank');
+      expect(n.contactMethods.single.forLanguage('es'), 'Sitio web: x.org');
     });
 
     test('AppData wires the block through', () {
@@ -54,9 +70,9 @@ void main() {
   group('BreachNoticeGate', () {
     const notice = BreachNotice(
       id: 'n1',
-      title: 'Security incident',
-      whatHappened: 'Something happened.',
-      contactMethods: ['Email: privacy@example.org'],
+      title: LocalizedText('Security incident'),
+      whatHappened: LocalizedText('Something happened.'),
+      contactMethods: [LocalizedText('Email: privacy@example.org')],
     );
 
     Widget host({BreachNotice? n, bool acked = false}) => MaterialApp(

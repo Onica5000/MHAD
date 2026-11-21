@@ -140,7 +140,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   /// badge text never gets saved into the facility name.
   String _facilityValue(String key) {
     var v = (_reviewEdited[key] ?? '').trim();
-    for (final badge in const [facilityVerifiedBadge, facilityUnverifiedBadge]) {
+    for (final badge in allReviewBadges) {
       if (v.endsWith(badge)) {
         v = v.substring(0, v.length - badge.length).trim();
         break;
@@ -184,7 +184,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       bool isCurrent = false,
     }) {
       var v = (_reviewEdited[key] ?? '').trim();
-      for (final badge in const [' [RxNorm verified]', ' [unverified]']) {
+      for (final badge in allReviewBadges) {
         if (v.endsWith(badge)) {
           v = v.substring(0, v.length - badge.length).trimRight();
           break;

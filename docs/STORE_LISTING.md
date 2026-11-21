@@ -90,7 +90,7 @@ Utilities
 - Shared: No
 - Purpose: App functionality
 - Storage: Local device only
-- User can request deletion: Yes (via "Delete All Data" in app menu)
+- User can request deletion: Yes (via "Start over" in the More menu)
 
 **User content** (text sent to AI assistant)
 - Collected: Yes (only when AI assistant is used)
@@ -111,7 +111,7 @@ Utilities
 ### Security
 - Data encrypted in transit (HTTPS for AI API calls)
 - Optional biometric authentication for app access
-- Data can be deleted via "Delete All Data" in app menu
+- Data can be deleted via "Start over" in the More menu
 - No account or login required
 
 ---

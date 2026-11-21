@@ -180,10 +180,13 @@
   <!--
     pdf.js for the Export page's PDF preview (printing package), served with
     the app instead of from unpkg.com, so no code from another site runs in
-    the app. Pinned to the version printing 5.14.3 expects: pdfjs-dist
-    3.2.146 (Apache-2.0, web/pdfjs/LICENSE). Bump both together.
+    the app. Pinned to the version printing 5.15.1 expects: pdfjs-dist
+    6.2.108 (ES modules pdf.min.mjs + pdf.worker.min.mjs; Apache-2.0,
+    web/pdfjs/LICENSE). Bump both together (test/unit/pdfjs_bundle_test.dart).
+    A full URL, not 'pdfjs/': printing loads pdf.js with import(), which
+    rejects a bare 'pdfjs/…' path ("Failed to resolve module specifier").
   -->
-  <script>window.dartPdfJsBaseUrl = 'pdfjs/';</script>
+  <script>window.dartPdfJsBaseUrl = new URL('pdfjs/', document.baseURI).href;</script>
   <script src="flutter_bootstrap.js" async></script>
   <!-- Accessible privacy/legal links before app loads (GDPR/CCPA compliance) -->
   <noscript>

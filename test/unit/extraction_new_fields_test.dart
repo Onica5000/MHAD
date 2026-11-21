@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 
 /// Locks the audit-added extraction fields (docs/AI_AUDIT_2026-07-08.md C1-C4):
@@ -54,7 +56,13 @@ void main() {
       ['earlyWarning', 'triggers', 'helps', 'sayToMe', 'dontDo'],
       reason: 'must match the crisis-plan screen json keys exactly',
     );
-    expect(cp.display(), contains('What helps: dim lights; let me pace'));
+    final en = lookupAppLocalizations(const Locale('en'));
+    expect(cp.display(en),
+        contains('${en.crisisPlanThingsThatGenuinelyHelp}: dim lights; let me pace'));
+    final es = lookupAppLocalizations(const Locale('es'));
+    expect(cp.display(es),
+        contains(es.crisisPlanThingsThatGenuinelyHelp),
+        reason: 'the review row follows the app language');
   });
 
   test('multi-page merge: first non-null wins for scalars; lists union', () {

@@ -151,7 +151,7 @@ class WebSidebar extends ConsumerWidget {
     );
 
     // Actions below the divider: the progress file and the locked copy (web),
-    // then Reset.
+    // Revoke, then Reset.
     final hasWork =
         (ref.watch(allDirectivesProvider).value ?? const []).isNotEmpty;
     final locked = ref.watch(
@@ -173,6 +173,14 @@ class WebSidebar extends ConsumerWidget {
           danger: true,
           onTap: () => confirmDeleteSavedProgress(ref),
         ),
+      // Same entry as the More sheet (phones): this session's directive, or
+      // the Learn guide to revoking one signed earlier. Always shown.
+      _SidebarItem(
+        icon: Icons.cancel_outlined,
+        label: context.l10n.moreSheetRevokeADirective,
+        isActive: activeRoute.startsWith('/revoke/'),
+        onTap: () => openRevokeOrGuide(ref),
+      ),
       reset,
     ];
 

@@ -551,7 +551,7 @@ Return plain-text suggestions (short bullets are fine). No preamble.''';
         ),
         const SizedBox(height: 6),
         Text(
-          context.l10n.aiConsistencyNotAdviceOptional(aiNotAdvice),
+          context.l10n.aiConsistencyNotAdviceOptional(context.l10n.aiNotAdvice),
           style: TextStyle(
             fontSize: 12,
             fontStyle: FontStyle.italic,

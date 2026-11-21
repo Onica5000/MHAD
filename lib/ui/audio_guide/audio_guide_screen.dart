@@ -23,7 +23,7 @@ class AudioGuideScreen extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
     try {
-      final bytes = await buildAudioQuestionnairePdf();
+      final bytes = await buildAudioQuestionnairePdf(l10n);
       await Printing.layoutPdf(
         onLayout: (_) async => bytes,
         name: mhadFileName([kFileNamePrefix, 'voice-questionnaire']),
@@ -40,6 +40,7 @@ class AudioGuideScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
+    final q = AudioQuestionnaire(context.l10n);
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
       body: Column(
@@ -96,7 +97,7 @@ class AudioGuideScreen extends StatelessWidget {
           // ── The questionnaire ──
           Row(
             children: [
-              Expanded(child: SectionLabel(audioQTitle)),
+              Expanded(child: SectionLabel(q.title)),
               TextButton.icon(
                 onPressed: () => _printQuestionnaire(context),
                 icon: const Icon(Icons.print_outlined, size: 16),
@@ -111,14 +112,14 @@ class AudioGuideScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            audioQIntro,
+            q.intro,
             style: TextStyle(
               fontSize: 14, height: MhadType.leadingParagraph,
               color: p.textMuted,
             ),
           ),
           const SizedBox(height: 12),
-          for (final s in audioQSections) _section(context, p, s),
+          for (final s in q.sections) _section(context, p, s),
 
           const SizedBox(height: 16),
           SectionLabel(context.l10n.audioGuideWhatTheRecordingCanT),
@@ -131,7 +132,7 @@ class AudioGuideScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          for (final item in audioQCantDo) _bullet(p, item, muted: true),
+          for (final item in q.cantDo) _bullet(p, item, muted: true),
           const SizedBox(height: 16),
           Text(
             context.l10n.audioGuideWorthSayingOutLoudAutofill,
@@ -141,12 +142,12 @@ class AudioGuideScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          for (final item in audioQNowCaptured) _bullet(p, item, muted: true),
+          for (final item in q.nowCaptured) _bullet(p, item, muted: true),
           const SizedBox(height: 6),
-          _bullet(p, audioQFormTypeNote, muted: true),
+          _bullet(p, q.formTypeNote, muted: true),
           const SizedBox(height: 16),
           Text(
-            audioQClosing,
+            q.closing,
             style: TextStyle(
               fontSize: 14,
               fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,

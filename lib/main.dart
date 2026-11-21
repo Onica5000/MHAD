@@ -157,14 +157,20 @@ Future<void> _bootstrap() async {
 
 /// Fallback UI when a required startup load throws — explains the failure
 /// and offers a retry, instead of the blank frame the user got before.
-/// Deliberately self-contained (no router/theme/l10n: those may be exactly
-/// what failed to load).
+/// Deliberately self-contained (no router/theme: those may be exactly what
+/// failed to load). Its words come from the compiled localizations in the
+/// device's language — the app's own language setting may not have loaded.
 class _BootErrorApp extends StatelessWidget {
   final Object error;
   const _BootErrorApp(this.error);
 
   @override
   Widget build(BuildContext context) {
+    final device = WidgetsBinding.instance.platformDispatcher.locale;
+    final l = lookupAppLocalizations(AppLocalizations.supportedLocales.any(
+            (s) => s.languageCode == device.languageCode)
+        ? Locale(device.languageCode)
+        : const Locale('en'));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -178,19 +184,18 @@ class _BootErrorApp extends StatelessWidget {
                 children: [
                   const Icon(Icons.error_outline, size: 48),
                   const SizedBox(height: 16),
-                  const Text(
-                    "The app couldn't start",
+                  Text(
+                    l.bootErrorTitle,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Something needed at startup failed to load. '
-                    'Your saved data has not been changed.\n\n$error',
+                    l.bootErrorBody(error),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
-                  FilledButton(onPressed: main, child: const Text('Try again')),
+                  FilledButton(onPressed: main, child: Text(l.pickTryAgain)),
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
-﻿import 'package:mhad/utils/json_utils.dart';
+﻿import 'package:mhad/l10n/app_localizations.dart';
+import 'package:mhad/utils/json_utils.dart';
 
 /// Structured data extracted from a user-provided document (photo, PDF, text)
 /// by the AI. Each field is nullable — only fields the AI could confidently
@@ -509,18 +510,19 @@ class ExtractedCrisisPlan {
         'dontDo': dontDo,
       };
 
-  /// Compact human-readable rendering for the review row.
-  String display() {
+  /// Compact rendering for the review row, under the crisis plan's own
+  /// headings in the person's language.
+  String display(AppLocalizations l) {
     final parts = <String>[];
     void add(String label, List<String> items) {
       if (items.isNotEmpty) parts.add('$label: ${items.join('; ')}');
     }
 
-    add('Early warning', earlyWarning);
-    add('Triggers', triggers);
-    add('What helps', helps);
-    add('Say to me', sayToMe);
-    add("Don't", dontDo);
+    add(l.crisisPlanEarlyWarningSigns, earlyWarning);
+    add(l.crisisPlanTriggersToWatchFor, triggers);
+    add(l.crisisPlanThingsThatGenuinelyHelp, helps);
+    add(l.crisisPlanThingsToSayToMe, sayToMe);
+    add(l.crisisPlanDonTDoThese, dontDo);
     return parts.join('\n');
   }
 }
