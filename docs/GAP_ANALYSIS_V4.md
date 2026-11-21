@@ -47,7 +47,9 @@ were superseded by regulations that changed *after* they were written.
 - **Status:** `[x]` **DONE for the web** — the policy is hosted at
   <https://onica5000.github.io/MHAD/privacy.html>, generated from the in-app screen by
   `tool/gen_privacy_html.py`; CI ("Hosted privacy policy is in sync") fails if it drifts.
-  v1.3 (2026-11-18) describes the copy-and-paste AI. The Play-submission parts stay
+  v1.3 (2026-11-18) described the copy-and-paste AI; v1.4 (2026-11-19, PR #23) names every
+  outside service the web app contacts and the passphrase-locked progress copy. The
+  Play-submission parts stay
   `[deferred — native]`. (The in-app "View this policy online" link stays removed —
   2026-06 product decision.)
 
@@ -84,6 +86,9 @@ were superseded by regulations that changed *after* they were written.
   drift check), which is the second contact method and the 90-day posting location.
   **Owner input still needed:** the developer contact block in `BREACH_PLAN.md` (name /
   email) — not something to invent.
+  **2026-11-19 (policy v1.4, PR #23):** the policy's breach section now says how notice
+  is given when the app holds no contact details: an in-app notice plus a 90-day
+  substitute posting on the hosted policy page.
 
 ### V4-H4: Consumer-health-data laws beyond Washington (CT, NV, NY) not addressed
 - **Files:** `lib/ui/settings/privacy_policy_screen.dart` (V3-M11 added WA MHMDA only)
@@ -101,6 +106,10 @@ were superseded by regulations that changed *after* they were written.
   `/MHAD/privacy.html`. The stale `PRIVACY_POLICY.md` copy (Gemini-only, "mobile app") was
   replaced by a pointer to the single source. The Contact section no longer claims an
   app-store listing that doesn't exist on the web-only build.
+  **Correction 2026-11-19 (policy v1.4, PR #23):** New York's Health Information Privacy
+  Act was **vetoed** (2025-12-19), so NY is out; California's CCPA has no "consumer health
+  data" category (health data is "sensitive personal information"). The section is now
+  "US state health-privacy laws (CA, WA, CT, NV)".
 
 ### V4-H5: Apple Nov 2025 guideline — explicit disclosure + permission before third-party AI
 - **Files:** `lib/ui/widgets/ai_consent_dialog.dart`, `ios/Runner/PrivacyInfo.xcprivacy`,
@@ -208,6 +217,10 @@ were superseded by regulations that changed *after* they were written.
   protected *data file* for re-upload. The **printable PDF** is still plaintext by
   necessity (it has to be printed and wet-signed); keep the at-export "handle securely"
   guidance. See the `custom-encryption-todo` note for the two-output spec.
+  **2026-11-19 (PR #23):** `ExportEncryptionService` (no callers) was removed. The data
+  file is now always locked with the person's own passphrase (AES-256-GCM, key from
+  PBKDF2-SHA-256 × 600,000 — `lib/services/locked_progress/`); older `.mhad` files still
+  open.
 
 ### V4-M9: WCAG 2.2 deltas not evaluated (signature dragging, focus-not-obscured)
 - **Evidence:** WCAG 2.2 added **2.5.7 Dragging Movements** (AA) and **2.4.11 Focus Not
@@ -387,6 +400,16 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Low | 0 live | L12 facilitation / guided sessions → DONE 2026-09-30. |
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
+
+**Update 2026-11-20:** two more PRs shipped. **#22 (language audit):** every legal
+statement checked against 20 Pa.C.S. Ch. 58 and the official booklet; three options the
+official forms don't have were removed; signing date left blank for the person to write;
+the calendar is the web reminder; a source-available license (all rights reserved — not
+open source). **#23 (saved progress):** an optional passphrase-locked copy in the browser
+that erases itself 30 minutes after the page was last open (see M8), and privacy policy
+v1.4 (see C1, H3, H4). Still open outside this backlog: the Spanish review below, and
+whether GDPR applies at all (the policy says it "may give you rights" — a question for a
+privacy lawyer).
 
 **Update 2026-11-18:** the UI/UX overhaul shipped (PR #17 refresh, PR #18 overhaul): the
 AI moved to a copy-and-paste handoff (H5 note above), the hosted policy is live (C1), and

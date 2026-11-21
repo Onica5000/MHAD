@@ -147,27 +147,38 @@ users (e.g., people who voluntarily contacted us, or via Google for the Gemini p
 
 ## Risk Reduction (Already Implemented)
 
-The MHAD app includes the following security measures that reduce breach risk:
+The MHAD web app (the only surface that ships) includes these measures:
 
-- **Local-only data storage**: No cloud sync, no server-side database
-- **Per-session AI consent**: User must explicitly authorize each AI session
-- **PII stripping**: Personal identifiers are stripped before AI API calls
-- **Biometric authentication option**: Fingerprint/face lock for app access
-- **Portrait-only mode**: Reduces shoulder surfing risk
-- **"Delete All Data" feature**: Users can wipe all local data at any time
-- **HTTPS encryption**: All AI API traffic encrypted in transit
-- **No analytics or crash reporting**: No telemetry data leaves the device
+- **No server, no accounts**: the directive lives in the browser tab's memory; the
+  developer never receives it. Nothing is kept after the tab closes unless the person
+  chooses a passphrase-locked copy.
+- **Passphrase-locked progress copy (optional)**: AES-256-GCM, key from PBKDF2-SHA-256
+  × 600,000 in the browser's Web Crypto (non-extractable); erased 30 minutes after the
+  page was last open (at the next start if the tab was closed) or after 10 wrong
+  passphrases. Downloaded progress files are always locked the same way.
+- **"Start over" and "Delete saved progress"**: erase everything in the browser at any time.
+- **Copy-and-paste AI**: the app sends nothing to an AI service; the person copies
+  MHAD's instructions into their own AI. Identifying details are filtered out of what is
+  copied, a privacy notice is shown once per session, and the clipboard is cleared after
+  a paste.
+- **HTTPS everywhere**: the site (GitHub Pages) and every lookup the person starts.
+- **No analytics, tracking or crash reporting**. The outside services contacted are
+  named in the privacy policy, and the CI smoke test fails on any it doesn't name.
+- *Native builds only (postponed):* biometric app lock, encrypted on-device database.
 
 ## Third-Party Service Provider Obligations
 
-**AI provider (user-chosen: Google Gemini default, or Anthropic / OpenAI / xAI):**
-- Each provider's data handling is governed by that provider's own API terms.
-- Gemini free-tier usage: Google may use conversations for model improvement;
-  other providers handle data under their own API data policies.
-- The app discloses the active provider and its data practices to users before
-  they use the AI feature (per-session consent names the recipient).
-- If the active provider notifies us of a breach on their end, we will follow
-  this plan for any MHAD user data affected.
+**AI services (the person's own choice: ChatGPT, Claude, Gemini or Grok):** the person
+pastes text into their own account there, under that service's terms. MHAD has no data
+flow to or from these services and holds nothing they could leak about the person. (The
+hidden API path, if ever re-enabled, would call the provider directly with the person's
+own key.)
+
+**Services the app contacts** (named in the privacy policy): Google's servers on every
+load (display engine and fonts; they see the IP address only), and, when the person
+starts a lookup, NIH/NLM, MedlinePlus/RxNav, openFDA, Zippopotam.us and the FCC (they
+receive only the search term). If any of them notifies us of a breach affecting MHAD
+users, we follow this plan.
 
 ## Contact
 
@@ -207,3 +218,4 @@ This plan should be reviewed:
 | 1.2     | 2026-06-28 | Generalized the third-party AI references from Gemini-only to the user-chosen provider (Gemini default; Anthropic/OpenAI/xAI optional) after the multi-provider AI change. (Gap-audit H2.) |
 | 1.3     | 2026-09-30 | In-app notice channel implemented (`breachNotice` in `app_data.json` → `BreachNoticeGate`); privacy policy now hosted at `/MHAD/privacy.html`, resolving the hosted-URL TODO. (V4-H3.) |
 | 1.4     | 2026-09-30 | Contact section completed: in-app notice + hosted policy page + GitHub Issues (no personal email/phone, per the owner). Toll-free number only if substitute notice is triggered. |
+| 1.5     | 2026-11-20 | Risk reduction and third parties brought up to the web app as shipped: copy-and-paste AI (no AI API traffic), passphrase-locked progress copy, "Start over" / "Delete saved progress", the outside services named in privacy policy v1.4; native-only measures marked as such. |
