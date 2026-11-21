@@ -293,17 +293,21 @@ class FacilityResult {
 
 /// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.
 ///
-/// PA's Generic Equivalent Drug Law (35 P.S. § 960.1 et seq.) has special
-/// substitution rules for NTI drugs (check the current DOH list). These drugs
-/// require careful titration and monitoring — small changes in blood
-/// levels can cause toxicity or treatment failure.
-///
-/// Source: PA Dept. of Health NTI Drug List + FDA NTI classifications.
+/// PA's Generic Equivalent Drug Law (35 P.S. § 960.1 et seq.): a drug
+/// determined to be NTI "is not substitutable in Pennsylvania" (the app's
+/// badge says so). Pennsylvania publishes no official NTI list; the
+/// Department of Health's guidance points to the FDA's 1988 sample list —
+/// "Pennsylvania Generic Substitution Law",
+/// https://apps.health.pa.gov/pdf/ddc/newNTI2015.pdf (checked 2026-11-20).
+/// Only drugs on that sample list belong here (test/unit/nti_drugs_test.dart);
+/// clonazepam, phenobarbital, ethosuximide and cyclosporine were removed
+/// 2026-11-20 because they are not on it.
 class NtiDrugReference {
   NtiDrugReference._();
 
   /// Lowercase generic names of NTI psychiatric medications relevant to
-  /// mental health advance directives.
+  /// mental health advance directives. (Divalproex is a valproate; the sample
+  /// list names valproic acid and valproate sodium.)
   static const ntiDrugs = <String, String>{
     'lithium': 'Bipolar disorder — blood level monitoring required',
     'carbamazepine': 'Bipolar/seizures — blood level monitoring required',
@@ -311,14 +315,10 @@ class NtiDrugReference {
     'divalproex': 'Bipolar/seizures — blood level monitoring required',
     'divalproex sodium': 'Bipolar/seizures — blood level monitoring required',
     'phenytoin': 'Seizures — blood level monitoring required',
-    'clonazepam': 'Anxiety/seizures — narrow therapeutic window',
-    'phenobarbital': 'Seizures/anxiety — narrow therapeutic window',
-    'ethosuximide': 'Absence seizures — blood level monitoring required',
     'primidone': 'Seizures — blood level monitoring required',
     'warfarin': 'Blood thinner — commonly co-prescribed, strict monitoring',
     'theophylline': 'Respiratory — commonly co-prescribed, strict monitoring',
     'levothyroxine': 'Thyroid — commonly co-prescribed with lithium',
-    'cyclosporine': 'Immunosuppressant — strict monitoring required',
   };
 
   /// Returns true if the medication name matches a known NTI drug.
