@@ -268,6 +268,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
         'men' => ' (${l.facilityRoommateMen.toLowerCase()})',
         'sameAsIdentity' =>
           ' (${l.facilityRoommateSameAsIdentity.toLowerCase()})',
+        final String s when s.startsWith(kRoommateSpecifyPrefix) =>
+          ' (${s.substring(kRoommateSpecifyPrefix.length).trim()})',
         _ => '',
       };
       _reviewChecked['roommate_same_gender'] = true;
@@ -276,10 +278,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
     }
     // Room-preference chips beyond the same-gender one — a single
     // confirmable row; apply reads the ids from the validated result.
+    // Every chip but same-gender (it has its own row above).
     final chipLabels = {
       'singleRoom': l.facilityRoomSingle,
       'windowIfPossible': l.facilityRoomWindow,
       'quietFloor': l.facilityRoomQuietFloor,
+      'noRoommate': l.facilityRoomNoRoommate,
+      'transAffirmingStaff': l.facilityRoomTransAffirming,
+      'lowStimulationUnit': l.facilityRoomLowStimulation,
     };
     final extraChips = v.roomPreferenceChips
         .where(chipLabels.containsKey)

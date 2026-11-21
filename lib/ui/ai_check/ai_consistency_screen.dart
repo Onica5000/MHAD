@@ -266,8 +266,16 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
           formType = FormType.values.byName(d.formType);
         } catch (_) {/* unknown stored value → assume combined */}
         b.writeln('Form type: ${d.formType}');
-        b.writeln('When it takes effect: '
-            '${d.effectiveCondition.trim().isEmpty ? "(not specified)" : d.effectiveCondition.trim()}');
+        final triggers = [
+          if (d.triggerTwoProfessionals)
+            'a psychiatrist and one other professional find the person incapable',
+          if (d.triggerCourtOrder) 'a court determines the person lacks capacity',
+          if (d.triggerInvoluntaryCommitment) 'the person is involuntarily committed',
+        ];
+        b.writeln('Takes effect when (checked conditions): '
+            '${triggers.isEmpty ? "(none checked)" : triggers.join("; ")}');
+        b.writeln('When it takes effect (own words): '
+            '${d.effectiveCondition.trim().isEmpty ? "(not written)" : d.effectiveCondition.trim()}');
         b.writeln('Primary doctor on file: '
             '${d.primaryDoctorName.trim().isNotEmpty ? "yes" : "no"}');
         b.writeln('Preferred treating doctor on file: '

@@ -193,7 +193,7 @@ void main() {
       (FormType.declaration, 'no'),
       (FormType.combined, 'no'),
       (FormType.combined, 'conditional: oral medications only'),
-      (FormType.combined, 'agent'),
+      (FormType.combined, 'agentDecides'),
     ]) {
       testWidgets('medication consent "$stored" on ${form.name} is kept', (
         tester,

@@ -1,6 +1,6 @@
 {
   "_doc": "Copy-and-paste AI handoff (user decision 2026-11-17): the text MHAD wraps around each task's instructions before the person pastes them into their own AI chat. Versioned; change the wording here, not in code. The task instructions themselves are shared with the API path (lib/ai). Service capabilities change over time — re-verify (sources in the plan file, 2026-11-17). {placeholders} are filled in by lib/ai/handoff/handoff_prompt.dart.",
-  "version": 1,
+  "version": 2,
   "services": {
     "chatgpt": {
       "label": "ChatGPT",
@@ -60,7 +60,7 @@
     },
     "es": {
       "intro": "Estás ayudando a una persona de Pensilvania con su Directiva Anticipada de Salud Mental, con la aplicación web gratuita PA MHAD. La persona copió estas instrucciones en este chat por su cuenta.",
-      "replyLanguage": "Responde en español sencillo. Escribe en español los valores de texto, salvo nombres o citas tomados de un documento.",
+      "replyLanguage": "Responde en español sencillo. Escribe en español los valores de texto, salvo los nombres de medicamentos, alergias y diagnósticos (van en inglés, como pide la tarea) y los nombres o citas tomados de un documento.",
       "jsonOnly": "Responde con UN solo bloque de código JSON y nada más, sin introducción ni explicación. Empieza con \"mhad_task\": \"{task}\" y \"mhad_ref\": \"{ref}\", y luego los campos descritos arriba. Nunca adivines ni inventes nada: usa null (o una lista vacía) para lo que no encuentres.",
       "attachmentGuard": "Antes de enviar, la persona debe adjuntar su {attachment} a este mensaje. Si no hay nada adjunto, responde SOLO con este JSON: {\"mhad_task\": \"{task}\", \"mhad_ref\": \"{ref}\", \"error\": \"no_attachment\"}",
       "askLead": "Responde la pregunta de la persona, abajo, con un lenguaje sencillo y amable. Sé breve y práctico.",

@@ -12,6 +12,23 @@ const consentNo = 'no';
 const consentAgentDecides = 'agentDecides';
 const consentConditionalPrefix = 'conditional:';
 
+/// Every room-preference chip id the Where-I-want-care step offers, stored
+/// comma-separated in DirectivePrefs.roomPreferences. Apply, the autofill
+/// review and the autofill prompt all use this list (room_chips_test).
+const kRoomPreferenceChipIds = [
+  'singleRoom',
+  'windowIfPossible',
+  'quietFloor',
+  'sameGenderRoommate',
+  'noRoommate',
+  'transAffirmingStaff',
+  'lowStimulationUnit',
+];
+
+/// Prefix of a described roommate match (`specify:<their words>`) in
+/// DirectivePrefs.roommateGenderMatch.
+const kRoommateSpecifyPrefix = 'specify:';
+
 /// Canonical human label for a stored consent value, or null when the value is
 /// unset or unrecognized. Use where an unset field should be omitted entirely
 /// (e.g. the AI chat context). For an always-present label, use [consentLabel].

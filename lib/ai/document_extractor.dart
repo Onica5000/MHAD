@@ -378,6 +378,13 @@ If the document is clearly NOT a health/care/directive document AND not an ident
   • and return EVERY OTHER FIELD null/empty — do NOT extract a name, address, date of birth, or anything else from an unrelated document, even though those details appear in it.
 Only if the document IS health/care/directive-related: set "document_relevant" to true and continue with the steps below.
 
+═══ LANGUAGE (the document or recording may be in English, Spanish or another language) ═══
+• Medication names (every medications_* list), allergy substances, and diagnosis names: write the standard ENGLISH name — the generic drug name (e.g. "litio" → "lithium", "quetiapina" → "quetiapine", "Seroquil" → "quetiapine" when the intended drug is clear) and the English clinical name of a diagnosis (e.g. "trastorno bipolar" → "bipolar disorder"). The app checks these against U.S. registries (RxNorm, ICD-10-CM), which are in English.
+• If a name does not clearly match a real medication or diagnosis, copy it EXACTLY as written — do not guess — so the app can flag it for the person to check.
+• Keep ICD codes exactly as written.
+• Everything else — reasons, notes, instructions, preferences, the effect condition, quotes — stays in the person's own words and language. Do not translate it.
+• People's names, places and facility names: exactly as written.
+
 ═══ STEP 1: EXTRACT PERSONAL INFORMATION FIRST ═══
 Before reading anything else, locate and extract all personal details into "personal_info":
 
@@ -497,7 +504,10 @@ room_preference_chips
   → The app's standard room-preference options, returned ONLY for explicit requests:
     • "singleRoom" — a private/single room
     • "windowIfPossible" — a room with a window
-    • "quietFloor" — a quiet floor / low-stimulation unit
+    • "quietFloor" — a quiet floor
+    • "lowStimulationUnit" — a low-stimulation unit
+    • "noRoommate" — no roommate
+    • "transAffirmingStaff" — trans-affirming / gender-affirming staff
     • "sameGenderRoommate" — a same-gender roommate (see below)
   → Return the matching subset (e.g. ["singleRoom", "quietFloor"]). Use ONLY these exact ids; anything else stays in room_preferences_note. Leave null when none are requested.
 
@@ -505,7 +515,7 @@ same_gender_roommate
   → true ONLY if the person explicitly asks to share a room only with someone of the same gender / their own gender identity (e.g. "I want a female roommate", "same-gender roommate only"). Otherwise leave null. Do NOT infer from anything else. (Also include "sameGenderRoommate" in room_preference_chips when true.)
 
 roommate_gender_match
-  → ONLY when same_gender_roommate is true: which match the person asked for — "women" | "men" | "sameAsIdentity" (they said "same as my gender/identity" without naming one). Leave null when not stated or not applicable.
+  → ONLY when same_gender_roommate is true: which match the person asked for — "women" | "men" | "sameAsIdentity" (they said "same as my gender/identity" without naming one) | "specify: <their own words>" when they describe something else (e.g. "specify: a nonbinary roommate"). Leave null when not stated or not applicable.
 
 guardian_can_revoke (+ guardian_can_revoke_note)
   → Guardianship condition, set ONLY on an explicit statement about a court-appointed guardian: true/false if the person explicitly states whether a guardian MAY override/revoke this directive.

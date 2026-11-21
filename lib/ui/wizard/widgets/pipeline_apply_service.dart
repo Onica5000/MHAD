@@ -739,12 +739,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // Room-preference chips: union of the confirmed extracted chips, the
     // same-gender chip, and whatever the user already selected in the wizard
     // (never clobber existing chips with a replacement csv).
-    const validRoomChips = {
-      'singleRoom',
-      'windowIfPossible',
-      'quietFloor',
-      'sameGenderRoommate',
-    };
+    final validRoomChips = kRoomPreferenceChipIds.toSet();
     final confirmedChips = _reviewChecked['room_pref_chips'] == true
         ? (validated?.roomPreferenceChips ?? const <String>[])
             .where(validRoomChips.contains)
@@ -766,10 +761,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       }.join(',');
     }
     // The extracted match detail wins over the default same-as-identity.
+    final extractedMatch = validated?.roommateGenderMatch?.trim() ?? '';
     final genderMatch = applyRoommate
-        ? (const {'women', 'men', 'sameAsIdentity'}
-                .contains(validated?.roommateGenderMatch)
-            ? validated!.roommateGenderMatch!
+        ? (const {'women', 'men', 'sameAsIdentity'}.contains(extractedMatch) ||
+                (extractedMatch.startsWith(kRoommateSpecifyPrefix) &&
+                    extractedMatch.length > kRoommateSpecifyPrefix.length)
+            ? extractedMatch
             : 'sameAsIdentity')
         : null;
     if (ectVal != null ||
