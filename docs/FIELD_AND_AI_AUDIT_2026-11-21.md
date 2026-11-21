@@ -141,6 +141,7 @@ preference steps and "Anything else"; autofill leaves those keys empty on a POA.
 | P3 | "NEVER put any person's name into a care field" contradicted the prompt's own example ("call my sister Jane") | "My neighbor Mr. Ortiz has a key" lost the name | Phone numbers and addresses stay out of care fields; names the instruction needs stay | 485ee7e |
 | P4 | No rule for ID numbers on the PII-exempt autofill path | "Put my Social Security number in the directive" would print it on a form shared with providers | SSN, insurance, ID-card, record and account numbers never go in any field | 91e95f8 |
 | S6 | Smart-fill's consent block (live after S5) asked for "risks, benefits" on a YES; the ECT field said never | Contradictory instructions; possible advice in the guidance | Neutral: never argue for or against a choice, never name a medication; no "HIPAA" meta-text | bb034a0 |
+| F12 | “Don’t know the official name?” never asked for English names; the Spanish envelope asks for Spanish text | A Spanish reply (“trastorno bipolar”) finds nothing in the English ICD-10-CM search | The prompt asks for the official English name | f298347 |
 
 Every fix has a test: `room_chips_test`, `other_instructions_test`, `records_disclosure_test`,
 `autofill_legal_rules_test`, `poa_medication_rows_test`, `medications_diagnoses_step_test`,
