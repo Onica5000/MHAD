@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/ai/document_extractor.dart';
+import 'package:mhad/ai/gemini_api_assistant.dart';
 
 /// The autofill prompt's rules for things PA law never allows, and for text
 /// that isn't a directive instruction. Without them a document that
@@ -38,5 +39,11 @@ void main() {
           contains('Never copy a Social Security number'),
           reason: form);
     }
+  });
+
+  test('condition names come back in English (the registry search is English)', () {
+    // A Spanish reply ("trastorno bipolar") finds nothing in ICD-10-CM.
+    expect(LlmAssistant.conditionTermsPrompt('oigo voces'),
+        contains('Write each name in ENGLISH'));
   });
 }

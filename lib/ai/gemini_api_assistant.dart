@@ -571,6 +571,9 @@ class LlmAssistant implements AiAssistant {
       ..writeln('Rules:')
       ..writeln('- Suggest only well-recognized condition names (ones that have '
           'an ICD-10 code). Best match first.')
+      ..writeln('- Write each name in ENGLISH, as the official U.S. name — the app '
+          'searches the English ICD-10-CM registry — even when the description '
+          'is in another language.')
       ..writeln('- These are POSSIBILITIES for the user to confirm — do NOT '
           'state or imply the person HAS any condition, and do NOT diagnose.')
       ..writeln('- If the description is too vague or not health-related, return '
