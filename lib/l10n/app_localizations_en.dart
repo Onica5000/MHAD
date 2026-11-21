@@ -2458,6 +2458,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewLabelCond => 'Condition';
 
   @override
+  String get reviewBadgeRxNormVerified => 'RxNorm verified';
+
+  @override
+  String get reviewBadgeUnverified => 'unverified';
+
+  @override
+  String get reviewBadgeNoIcdMatch => 'no ICD match';
+
+  @override
+  String get reviewBadgeNpiVerified => 'NPI verified';
+
+  @override
+  String get reviewValueAgentMayDecideMeds => 'Agent MAY decide medications';
+
+  @override
+  String get reviewValueAgentMayNotDecideMeds =>
+      'Agent may NOT decide medications';
+
+  @override
+  String get reviewValueUlyssesOptin =>
+      'Self-binding (Ulysses): follow my directive even if I object';
+
+  @override
+  String get reviewValueGuardianMayOverride =>
+      'A guardian MAY override this directive';
+
+  @override
+  String get reviewValueGuardianMayNotOverride =>
+      'A guardian may NOT override this directive';
+
+  @override
+  String get smartFillFacilityNotesPreferred => 'Facility notes (preferred)';
+
+  @override
+  String get smartFillFacilityNotesAvoid => 'Facility notes (avoid)';
+
+  @override
+  String get smartFillEctGuidance => 'ECT guidance';
+
+  @override
+  String get smartFillExperimentalGuidance => 'Experimental studies guidance';
+
+  @override
+  String get smartFillDrugTrialsGuidance => 'Drug trials guidance';
+
+  @override
+  String get smartFillAgentGuidance => 'Guidance for your agent';
+
+  @override
   String get reviewLabelDiag => 'Diagnosis';
 
   @override

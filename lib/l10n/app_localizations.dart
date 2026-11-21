@@ -4244,6 +4244,96 @@ abstract class AppLocalizations {
   /// **'Condition'**
   String get reviewLabelCond;
 
+  /// Autofill review: badge after a medication the RxNorm registry recognized, shown as " [RxNorm verified]". Display only — removed before saving.
+  ///
+  /// In en, this message translates to:
+  /// **'RxNorm verified'**
+  String get reviewBadgeRxNormVerified;
+
+  /// Autofill review badge: the name did not match a registry (worth a second look).
+  ///
+  /// In en, this message translates to:
+  /// **'unverified'**
+  String get reviewBadgeUnverified;
+
+  /// Autofill review badge after a condition with no ICD-10-CM code.
+  ///
+  /// In en, this message translates to:
+  /// **'no ICD match'**
+  String get reviewBadgeNoIcdMatch;
+
+  /// Autofill review badge after a facility found in the NPI organization registry.
+  ///
+  /// In en, this message translates to:
+  /// **'NPI verified'**
+  String get reviewBadgeNpiVerified;
+
+  /// No description provided for @reviewValueAgentMayDecideMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent MAY decide medications'**
+  String get reviewValueAgentMayDecideMeds;
+
+  /// No description provided for @reviewValueAgentMayNotDecideMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent may NOT decide medications'**
+  String get reviewValueAgentMayNotDecideMeds;
+
+  /// No description provided for @reviewValueUlyssesOptin.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-binding (Ulysses): follow my directive even if I object'**
+  String get reviewValueUlyssesOptin;
+
+  /// No description provided for @reviewValueGuardianMayOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'A guardian MAY override this directive'**
+  String get reviewValueGuardianMayOverride;
+
+  /// No description provided for @reviewValueGuardianMayNotOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'A guardian may NOT override this directive'**
+  String get reviewValueGuardianMayNotOverride;
+
+  /// Title of a smart-fill suggestion row (autofill results).
+  ///
+  /// In en, this message translates to:
+  /// **'Facility notes (preferred)'**
+  String get smartFillFacilityNotesPreferred;
+
+  /// No description provided for @smartFillFacilityNotesAvoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Facility notes (avoid)'**
+  String get smartFillFacilityNotesAvoid;
+
+  /// No description provided for @smartFillEctGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'ECT guidance'**
+  String get smartFillEctGuidance;
+
+  /// No description provided for @smartFillExperimentalGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental studies guidance'**
+  String get smartFillExperimentalGuidance;
+
+  /// No description provided for @smartFillDrugTrialsGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug trials guidance'**
+  String get smartFillDrugTrialsGuidance;
+
+  /// No description provided for @smartFillAgentGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Guidance for your agent'**
+  String get smartFillAgentGuidance;
+
   /// No description provided for @reviewLabelDiag.
   ///
   /// In en, this message translates to:

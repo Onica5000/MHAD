@@ -1018,6 +1018,36 @@
   "reviewLabelMedCurrent": "Currently taking",
   "reviewLabelMedLimit": "Restricted-use medication",
   "reviewLabelCond": "Condition",
+  "reviewBadgeRxNormVerified": "RxNorm verified",
+  "@reviewBadgeRxNormVerified": {
+    "description": "Autofill review: badge after a medication the RxNorm registry recognized, shown as \" [RxNorm verified]\". Display only — removed before saving."
+  },
+  "reviewBadgeUnverified": "unverified",
+  "@reviewBadgeUnverified": {
+    "description": "Autofill review badge: the name did not match a registry (worth a second look)."
+  },
+  "reviewBadgeNoIcdMatch": "no ICD match",
+  "@reviewBadgeNoIcdMatch": {
+    "description": "Autofill review badge after a condition with no ICD-10-CM code."
+  },
+  "reviewBadgeNpiVerified": "NPI verified",
+  "@reviewBadgeNpiVerified": {
+    "description": "Autofill review badge after a facility found in the NPI organization registry."
+  },
+  "reviewValueAgentMayDecideMeds": "Agent MAY decide medications",
+  "reviewValueAgentMayNotDecideMeds": "Agent may NOT decide medications",
+  "reviewValueUlyssesOptin": "Self-binding (Ulysses): follow my directive even if I object",
+  "reviewValueGuardianMayOverride": "A guardian MAY override this directive",
+  "reviewValueGuardianMayNotOverride": "A guardian may NOT override this directive",
+  "smartFillFacilityNotesPreferred": "Facility notes (preferred)",
+  "@smartFillFacilityNotesPreferred": {
+    "description": "Title of a smart-fill suggestion row (autofill results)."
+  },
+  "smartFillFacilityNotesAvoid": "Facility notes (avoid)",
+  "smartFillEctGuidance": "ECT guidance",
+  "smartFillExperimentalGuidance": "Experimental studies guidance",
+  "smartFillDrugTrialsGuidance": "Drug trials guidance",
+  "smartFillAgentGuidance": "Guidance for your agent",
   "reviewLabelDiag": "Diagnosis",
   "reviewLabelAllergy": "Allergy",
   "reviewLabelHh": "Health history",

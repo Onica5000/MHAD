@@ -2505,6 +2505,59 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reviewLabelCond => 'Condición';
 
   @override
+  String get reviewBadgeRxNormVerified => 'verificado en RxNorm';
+
+  @override
+  String get reviewBadgeUnverified => 'sin verificar';
+
+  @override
+  String get reviewBadgeNoIcdMatch => 'sin coincidencia en ICD';
+
+  @override
+  String get reviewBadgeNpiVerified => 'verificado en NPI';
+
+  @override
+  String get reviewValueAgentMayDecideMeds =>
+      'El agente PUEDE decidir sobre los medicamentos';
+
+  @override
+  String get reviewValueAgentMayNotDecideMeds =>
+      'El agente NO puede decidir sobre los medicamentos';
+
+  @override
+  String get reviewValueUlyssesOptin =>
+      'Autovinculación (Ulises): seguir mi directiva aunque yo me oponga';
+
+  @override
+  String get reviewValueGuardianMayOverride =>
+      'Un tutor PUEDE anular esta directiva';
+
+  @override
+  String get reviewValueGuardianMayNotOverride =>
+      'Un tutor NO puede anular esta directiva';
+
+  @override
+  String get smartFillFacilityNotesPreferred =>
+      'Notas sobre el centro (preferido)';
+
+  @override
+  String get smartFillFacilityNotesAvoid => 'Notas sobre el centro (a evitar)';
+
+  @override
+  String get smartFillEctGuidance => 'Orientación sobre la TEC';
+
+  @override
+  String get smartFillExperimentalGuidance =>
+      'Orientación sobre estudios experimentales';
+
+  @override
+  String get smartFillDrugTrialsGuidance =>
+      'Orientación sobre ensayos de medicamentos';
+
+  @override
+  String get smartFillAgentGuidance => 'Orientación para su agente';
+
+  @override
   String get reviewLabelDiag => 'Diagnóstico';
 
   @override
