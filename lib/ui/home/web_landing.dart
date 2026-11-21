@@ -233,13 +233,13 @@ class _PrivacyPromiseCard extends StatelessWidget {
       ),
       (
         Icons.shield_outlined,
-        context.l10n.webLandingNothingLeavesYourBrowser,
-        context.l10n.webLandingYourAnswersLiveInThis,
+        context.l10n.webLandingWeNeverSeeYourAnswers,
+        context.l10n.webLandingTheyStayInThisBrowser,
       ),
       (
         Icons.block,
         context.l10n.webLandingNoCookiesNoTracking,
-        context.l10n.webLandingNoAnalyticsNoThirdParty,
+        context.l10n.webLandingNoAnalyticsNoAds,
       ),
       (
         Icons.download_outlined,

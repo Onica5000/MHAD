@@ -2973,6 +2973,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'PA MHAD solicita permisos del sistema solo para las funciones que usted usa activamente. No se recopila nada en segundo plano. Cada sección de abajo explica exactamente qué permite cada permiso, qué hace la aplicación con el resultado y qué nunca hace.';
 
   @override
+  String get permissionsOverviewWebIntro =>
+      'En la web, PA MHAD le pide a su navegador un solo permiso: el micrófono, y solo cuando usted toca el micrófono para dictar. No se recopila nada en segundo plano.';
+
+  @override
   String get permissionsOverviewWhatThisAppMayAsk =>
       'Qué puede solicitar esta aplicación';
 
@@ -3897,7 +3901,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppCollectsOnlyThe =>
-      'Esta aplicación solo recopila la información que usted ingresa en los formularios de su Directiva Anticipada de Salud Mental, que incluye:\n  - Información personal (nombre, dirección, teléfono, fecha de nacimiento)\n  - Información del agente y de los testigos\n  - Preferencias de tratamiento y listas de medicamentos\n  - Firmas digitales\n  - Instrucciones adicionales\n\nNo recopilamos datos de análisis, informes de fallos, identificadores del dispositivo ni datos de ubicación.';
+      'Esta aplicación solo recopila la información que usted ingresa en los formularios de su Directiva Anticipada de Salud Mental, que incluye:\n  - Información personal (nombre, dirección, teléfono, fecha de nacimiento)\n  - Información del agente y de los testigos\n  - Preferencias de tratamiento y listas de medicamentos\n  - Instrucciones adicionales\n\nNo recopilamos datos de análisis, informes de fallos, identificadores del dispositivo ni datos de ubicación.';
 
   @override
   String get privacyPolicyHowDataIsStoredProtected =>
@@ -4893,6 +4897,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los permisos los administra su dispositivo, no esta aplicación. Abra Configuración de su dispositivo → PA MHAD para conceder, revocar o revisar cualquiera de los anteriores en cualquier momento.';
 
   @override
+  String get permissionsOverviewManagedByBrowser =>
+      'Los permisos los administra su navegador, no esta aplicación. Use la configuración del sitio junto a la barra de direcciones para revisar o desactivar el micrófono.';
+
+  @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
       'Sin analíticas. Sin píxeles de rastreo. Sin cookies. Sin SDK de terceros para publicidad o medición. Las únicas conexiones externas son las consultas que usted inicia (términos médicos a bases de datos del gobierno de EE. UU. y un código postal para completar su dirección) y la carga del motor de pantalla y las fuentes de la aplicación desde los servidores de Google; la política de privacidad las enumera todas.';
 
@@ -5825,6 +5833,26 @@ class AppLocalizationsEs extends AppLocalizations {
       'Dictar respuestas largas (por ejemplo, “algo más”) en lugar de escribirlas. Disponible en una versión futura.';
 
   @override
+  String get permissionsOverviewMicWebUsedFor =>
+      'Dictar una respuesta en lugar de escribirla (el botón del micrófono junto a un campo).';
+
+  @override
+  String get permissionsOverviewMicWebAsksFirst =>
+      'Su navegador le pregunta antes de usar el micrófono';
+
+  @override
+  String get permissionsOverviewMicWebSpeechService =>
+      'El servicio de voz de su navegador convierte la voz en texto (Chrome envía el audio a Google; Edge, a Microsoft)';
+
+  @override
+  String get permissionsOverviewMicWebNothingKept =>
+      'PA MHAD no guarda el audio; usted revisa el texto en el campo';
+
+  @override
+  String get permissionsOverviewMicWebStatus =>
+      'Se usa para dictar; su navegador pregunta antes';
+
+  @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
       'El audio se procesa en el dispositivo cuando es posible';
 
@@ -5926,25 +5954,25 @@ class AppLocalizationsEs extends AppLocalizations {
       'Sin correo, sin contraseña, sin registro.';
 
   @override
-  String get webLandingNothingLeavesYourBrowser => 'Nada sale de su navegador';
+  String get webLandingWeNeverSeeYourAnswers => 'Nunca vemos sus respuestas';
 
   @override
-  String get webLandingYourAnswersLiveInThis =>
-      'Sus respuestas viven en esta pestaña. Nunca las vemos.';
+  String get webLandingTheyStayInThisBrowser =>
+      'Se quedan en este navegador. Solo sale lo que usted elige: una búsqueda, un dictado o el texto que copie en una IA.';
 
   @override
   String get webLandingNoCookiesNoTracking => 'Sin cookies, sin rastreo';
 
   @override
-  String get webLandingNoAnalyticsNoThirdParty =>
-      'Sin analíticas ni scripts de terceros.';
+  String get webLandingNoAnalyticsNoAds =>
+      'Sin analíticas, sin anuncios, sin rastreadores.';
 
   @override
   String get webLandingYouKeepTheFile => 'Usted conserva el archivo';
 
   @override
   String get webLandingSaveThePdfFromYour =>
-      'Guarde el PDF desde su visor: es la única copia.';
+      'Guarde el PDF desde su visor: nosotros nunca guardamos una copia.';
 
   @override
   String get pinDialogPasscodeTooShort =>
@@ -6341,7 +6369,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get audioGuideTipQualityDoesnTMatterAny =>
-      'La calidad no importa. Cualquier nota de voz del teléfono sirve: la IA reduce la calidad del audio de todos modos, así que un archivo pequeño de baja calidad se transcribe igual de bien que uno grande.';
+      'La calidad no importa mucho. Cualquier nota de voz del teléfono sirve: un lugar tranquilo y una voz clara ayudan más que un archivo de alta calidad.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
@@ -6661,7 +6689,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsThemeDark => 'Oscuro';
 
   @override
-  String get settingsStatusWebInMemory => '● APLICACIÓN WEB · SOLO EN MEMORIA';
+  String get settingsStatusWebTab =>
+      '● APLICACIÓN WEB · SE CONSERVA EN ESTA PESTAÑA';
+
+  @override
+  String get settingsStatusWebLocked =>
+      '● APLICACIÓN WEB · COPIA BLOQUEADA EN ESTE DISPOSITIVO';
 
   @override
   String settingsStatusNative(String mode, String auth) {

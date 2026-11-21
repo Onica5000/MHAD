@@ -1199,6 +1199,10 @@
   "crisisPlanDonTDoThese": "Don’t do these",
   "crisisPlanTypeAShortNote": "Type a short note",
   "permissionsOverviewPaMhadRequestsSystemPermissions": "PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.",
+  "permissionsOverviewWebIntro": "On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.",
+  "@permissionsOverviewWebIntro": {
+    "description": "Permissions screen intro on the web (replaces the native intro)."
+  },
   "permissionsOverviewWhatThisAppMayAsk": "What this app may ask for",
   "permissionsOverviewBiometricsPasscode": "Biometrics / passcode",
   "permissionsOverviewNotifications": "Notifications",
@@ -1462,7 +1466,7 @@
   "privacyPolicyPaMhadAppPrivacyPolicy": "PA MHAD privacy policy",
   "privacyPolicyReviewLegalDisclaimer": "Review legal disclaimer",
   "privacyPolicyDataWeCollect": "Data we collect",
-  "privacyPolicyThisAppCollectsOnlyThe": "This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.",
+  "privacyPolicyThisAppCollectsOnlyThe": "This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.",
   "privacyPolicyHowDataIsStoredProtected": "How data is stored & protected",
   "privacyPolicyAiFeaturesThirdPartyData": "AI features & third-party data sharing",
   "privacyPolicyIfYouChooseToUse": "If you choose to use the optional AI features (AI Assistant chat or AI Suggest), text you submit is sent to the AI provider you select — Google Gemini by default, or Anthropic Claude, OpenAI, or xAI Grok if you choose one and add your own key — for processing.\n\nOn Google’s Gemini free tier, Google may:\n  - Use your input/output data to improve their products\n  - Allow human reviewers to read your inputs and outputs\n  - Retain data indefinitely (no automatic expiration)\nOther providers handle your data under their own API data policies — review the policy of whichever provider you use.\n\nThe app strips common personally identifiable information (SSNs, phone numbers, emails, dates of birth, addresses, names, and facility names) before sending your text to any provider, but this is a best-effort filter and cannot guarantee complete removal.\n\nAI features are entirely optional. The app is fully functional without them.",
@@ -1786,6 +1790,10 @@
   "crisisPlanHeadsUpThisSectionIs": "Heads up: this section is yours alone — it isn’t required by PA Act 194, but in practice it’s the part agents and ER staff read first.",
   "permissionsOverviewOnlyWhatWeNeed": "Only what we need.",
   "permissionsOverviewPermissionsAreManagedByYour": "Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.",
+  "permissionsOverviewManagedByBrowser": "Permissions are managed by your browser, not by this app. Use the site settings next to the address bar to review or turn off the microphone.",
+  "@permissionsOverviewManagedByBrowser": {
+    "description": "Permissions screen footer on the web."
+  },
   "permissionsOverviewNoAnalyticsNoTrackingPixels": "No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outside connections are the lookups you start (medical terms to U.S. government databases, a ZIP code to fill in your address) and loading the app’s display engine and fonts from Google’s servers; the privacy policy lists them all.",
   "makeItFindableMakeItFindableInA": "Make it findable in a crisis.",
   "makeItFindablePennsylvaniaHasNoStatewideDirective": "Pennsylvania has no statewide directive registry, so the people in your life are the registry: make sure your agent, a trusted person, and your providers all know you have a directive and where to find it.",
@@ -2389,6 +2397,14 @@
   "permissionsOverviewYouReviewEveryFieldBefore": "You review every field before it’s used",
   "permissionsOverviewNotYetWiredFeatureIn": "Not yet wired — feature in a future release",
   "permissionsOverviewSpeakingLongFormAnswersE": "Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.",
+  "permissionsOverviewMicWebUsedFor": "Dictating an answer instead of typing it (the microphone button by a field).",
+  "@permissionsOverviewMicWebUsedFor": {
+    "description": "Microphone card 'used for' on the web."
+  },
+  "permissionsOverviewMicWebAsksFirst": "Your browser asks before the microphone is used",
+  "permissionsOverviewMicWebSpeechService": "Your browser’s speech service turns speech into text (Chrome sends the audio to Google, Edge to Microsoft)",
+  "permissionsOverviewMicWebNothingKept": "PA MHAD keeps no audio — you review the text in the field",
+  "permissionsOverviewMicWebStatus": "Used for dictation — your browser asks first",
   "permissionsOverviewAudioIsProcessedOnDevice": "Audio is processed on-device when possible",
   "permissionsOverviewIfSentToAiFor": "If sent to AI for transcription, it isn’t stored",
   "permissionsOverviewTranscriptStaysInYourSession": "Transcript stays in your session — never uploaded",
@@ -2416,12 +2432,21 @@
   "webLandingPreferPaperOpenAnyOf": "Prefer paper? Open any of the three empty official forms to print and fill in by hand — no account or wizard needed.",
   "webLandingNoAccountRequired": "No account required",
   "webLandingNoEmailNoPasswordNo": "No email, no password, no sign-up.",
-  "webLandingNothingLeavesYourBrowser": "Nothing leaves your browser",
-  "webLandingYourAnswersLiveInThis": "Your answers live in this tab. We never see them.",
+  "webLandingWeNeverSeeYourAnswers": "We never see your answers",
+  "@webLandingWeNeverSeeYourAnswers": {
+    "description": "Home privacy promise row title (web)."
+  },
+  "webLandingTheyStayInThisBrowser": "They stay in this browser. Only what you choose leaves it — a lookup, dictation, or text you copy into an AI.",
+  "@webLandingTheyStayInThisBrowser": {
+    "description": "Body under webLandingWeNeverSeeYourAnswers. Must name what can leave the browser (privacy facts in CLAUDE.md)."
+  },
   "webLandingNoCookiesNoTracking": "No cookies, no tracking",
-  "webLandingNoAnalyticsNoThirdParty": "No analytics, no third-party scripts.",
+  "webLandingNoAnalyticsNoAds": "No analytics, no ads, no trackers.",
+  "@webLandingNoAnalyticsNoAds": {
+    "description": "Body under webLandingNoCookiesNoTracking. Not 'no third-party scripts': the display engine is loaded from Google's servers."
+  },
   "webLandingYouKeepTheFile": "You keep the file",
-  "webLandingSaveThePdfFromYour": "Save the PDF from your viewer — that’s the only copy.",
+  "webLandingSaveThePdfFromYour": "Save the PDF from your viewer — we never keep a copy.",
   "pinDialogPasscodeTooShort": "Passcode must be at least 4 characters.",
   "pinDialogPasscodesDontMatch": "Passcodes do not match.",
   "pinDialogUnlockPrivateMode": "Unlock private mode",
@@ -2573,7 +2598,7 @@
   "sideEffectsNoneFound": "We couldn’t find common side effects to list right now. You can add anything you’re experiencing in the Anything-else step, and always raise side-effect concerns with your doctor.",
   "sideEffectsGenerateError": "Something went wrong generating the list. Please try again, or note side effects yourself.",
   "inputZipInvalid": "Enter a 5-digit or 5+4-digit ZIP",
-  "audioGuideTipQualityDoesnTMatterAny": "Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.",
+  "audioGuideTipQualityDoesnTMatterAny": "Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.",
   "audioGuideTipKeepEachClipShortUnder": "Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.",
   "audioGuideTipSayMedicationAndDoctorNames": "Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.",
   "stepSubtitleAboutYou": "Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.",
@@ -2758,7 +2783,14 @@
   "settingsThemeAuto": "Auto",
   "settingsThemeLight": "Light",
   "settingsThemeDark": "Dark",
-  "settingsStatusWebInMemory": "● WEB APP · IN-MEMORY ONLY",
+  "settingsStatusWebTab": "● WEB APP · KEPT IN THIS TAB",
+  "@settingsStatusWebTab": {
+    "description": "Settings header status on the web when no locked copy is kept."
+  },
+  "settingsStatusWebLocked": "● WEB APP · LOCKED COPY ON THIS DEVICE",
+  "@settingsStatusWebLocked": {
+    "description": "Settings header status on the web when the person keeps a passphrase-locked progress copy."
+  },
   "settingsStatusNative": "● {mode} MODE · {auth}",
   "@settingsStatusNative": {
     "placeholders": {

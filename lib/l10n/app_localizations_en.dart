@@ -2916,6 +2916,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.';
 
   @override
+  String get permissionsOverviewWebIntro =>
+      'On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.';
+
+  @override
   String get permissionsOverviewWhatThisAppMayAsk =>
       'What this app may ask for';
 
@@ -3821,7 +3825,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyThisAppCollectsOnlyThe =>
-      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
+      'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.';
 
   @override
   String get privacyPolicyHowDataIsStoredProtected =>
@@ -4800,6 +4804,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.';
 
   @override
+  String get permissionsOverviewManagedByBrowser =>
+      'Permissions are managed by your browser, not by this app. Use the site settings next to the address bar to review or turn off the microphone.';
+
+  @override
   String get permissionsOverviewNoAnalyticsNoTrackingPixels =>
       'No analytics. No tracking pixels. No cookies. No third-party SDKs for advertising or measurement. The only outside connections are the lookups you start (medical terms to U.S. government databases, a ZIP code to fill in your address) and loading the app’s display engine and fonts from Google’s servers; the privacy policy lists them all.';
 
@@ -5721,6 +5729,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.';
 
   @override
+  String get permissionsOverviewMicWebUsedFor =>
+      'Dictating an answer instead of typing it (the microphone button by a field).';
+
+  @override
+  String get permissionsOverviewMicWebAsksFirst =>
+      'Your browser asks before the microphone is used';
+
+  @override
+  String get permissionsOverviewMicWebSpeechService =>
+      'Your browser’s speech service turns speech into text (Chrome sends the audio to Google, Edge to Microsoft)';
+
+  @override
+  String get permissionsOverviewMicWebNothingKept =>
+      'PA MHAD keeps no audio — you review the text in the field';
+
+  @override
+  String get permissionsOverviewMicWebStatus =>
+      'Used for dictation — your browser asks first';
+
+  @override
   String get permissionsOverviewAudioIsProcessedOnDevice =>
       'Audio is processed on-device when possible';
 
@@ -5820,26 +5848,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'No email, no password, no sign-up.';
 
   @override
-  String get webLandingNothingLeavesYourBrowser =>
-      'Nothing leaves your browser';
+  String get webLandingWeNeverSeeYourAnswers => 'We never see your answers';
 
   @override
-  String get webLandingYourAnswersLiveInThis =>
-      'Your answers live in this tab. We never see them.';
+  String get webLandingTheyStayInThisBrowser =>
+      'They stay in this browser. Only what you choose leaves it — a lookup, dictation, or text you copy into an AI.';
 
   @override
   String get webLandingNoCookiesNoTracking => 'No cookies, no tracking';
 
   @override
-  String get webLandingNoAnalyticsNoThirdParty =>
-      'No analytics, no third-party scripts.';
+  String get webLandingNoAnalyticsNoAds => 'No analytics, no ads, no trackers.';
 
   @override
   String get webLandingYouKeepTheFile => 'You keep the file';
 
   @override
   String get webLandingSaveThePdfFromYour =>
-      'Save the PDF from your viewer — that’s the only copy.';
+      'Save the PDF from your viewer — we never keep a copy.';
 
   @override
   String get pinDialogPasscodeTooShort =>
@@ -6230,7 +6256,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideTipQualityDoesnTMatterAny =>
-      'Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.';
+      'Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
@@ -6547,7 +6573,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeDark => 'Dark';
 
   @override
-  String get settingsStatusWebInMemory => '● WEB APP · IN-MEMORY ONLY';
+  String get settingsStatusWebTab => '● WEB APP · KEPT IN THIS TAB';
+
+  @override
+  String get settingsStatusWebLocked =>
+      '● WEB APP · LOCKED COPY ON THIS DEVICE';
 
   @override
   String settingsStatusNative(String mode, String auth) {

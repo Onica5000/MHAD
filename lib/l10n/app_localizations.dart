@@ -5084,6 +5084,12 @@ abstract class AppLocalizations {
   /// **'PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.'**
   String get permissionsOverviewPaMhadRequestsSystemPermissions;
 
+  /// Permissions screen intro on the web (replaces the native intro).
+  ///
+  /// In en, this message translates to:
+  /// **'On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.'**
+  String get permissionsOverviewWebIntro;
+
   /// No description provided for @permissionsOverviewWhatThisAppMayAsk.
   ///
   /// In en, this message translates to:
@@ -6665,7 +6671,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyThisAppCollectsOnlyThe.
   ///
   /// In en, this message translates to:
-  /// **'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Digital signatures\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.'**
+  /// **'This app collects only the information you enter into your Mental Health Advance Directive forms, including:\n  - Personal information (name, address, phone, date of birth)\n  - Agent and witness information\n  - Treatment preferences and medication lists\n  - Additional instructions\n\nWe do not collect analytics, crash reports, device identifiers, or location data.'**
   String get privacyPolicyThisAppCollectsOnlyThe;
 
   /// No description provided for @privacyPolicyHowDataIsStoredProtected.
@@ -8300,6 +8306,12 @@ abstract class AppLocalizations {
   /// **'Permissions are managed by your device, not by this app. Open your device’s Settings → PA MHAD to grant, revoke, or review any of the above at any time.'**
   String get permissionsOverviewPermissionsAreManagedByYour;
 
+  /// Permissions screen footer on the web.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions are managed by your browser, not by this app. Use the site settings next to the address bar to review or turn off the microphone.'**
+  String get permissionsOverviewManagedByBrowser;
+
   /// No description provided for @permissionsOverviewNoAnalyticsNoTrackingPixels.
   ///
   /// In en, this message translates to:
@@ -9661,6 +9673,36 @@ abstract class AppLocalizations {
   /// **'Speaking long-form answers (e.g. “anything else”) instead of typing. Coming in a later release.'**
   String get permissionsOverviewSpeakingLongFormAnswersE;
 
+  /// Microphone card 'used for' on the web.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictating an answer instead of typing it (the microphone button by a field).'**
+  String get permissionsOverviewMicWebUsedFor;
+
+  /// No description provided for @permissionsOverviewMicWebAsksFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Your browser asks before the microphone is used'**
+  String get permissionsOverviewMicWebAsksFirst;
+
+  /// No description provided for @permissionsOverviewMicWebSpeechService.
+  ///
+  /// In en, this message translates to:
+  /// **'Your browser’s speech service turns speech into text (Chrome sends the audio to Google, Edge to Microsoft)'**
+  String get permissionsOverviewMicWebSpeechService;
+
+  /// No description provided for @permissionsOverviewMicWebNothingKept.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD keeps no audio — you review the text in the field'**
+  String get permissionsOverviewMicWebNothingKept;
+
+  /// No description provided for @permissionsOverviewMicWebStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Used for dictation — your browser asks first'**
+  String get permissionsOverviewMicWebStatus;
+
   /// No description provided for @permissionsOverviewAudioIsProcessedOnDevice.
   ///
   /// In en, this message translates to:
@@ -9823,17 +9865,17 @@ abstract class AppLocalizations {
   /// **'No email, no password, no sign-up.'**
   String get webLandingNoEmailNoPasswordNo;
 
-  /// No description provided for @webLandingNothingLeavesYourBrowser.
+  /// Home privacy promise row title (web).
   ///
   /// In en, this message translates to:
-  /// **'Nothing leaves your browser'**
-  String get webLandingNothingLeavesYourBrowser;
+  /// **'We never see your answers'**
+  String get webLandingWeNeverSeeYourAnswers;
 
-  /// No description provided for @webLandingYourAnswersLiveInThis.
+  /// Body under webLandingWeNeverSeeYourAnswers. Must name what can leave the browser (privacy facts in CLAUDE.md).
   ///
   /// In en, this message translates to:
-  /// **'Your answers live in this tab. We never see them.'**
-  String get webLandingYourAnswersLiveInThis;
+  /// **'They stay in this browser. Only what you choose leaves it — a lookup, dictation, or text you copy into an AI.'**
+  String get webLandingTheyStayInThisBrowser;
 
   /// No description provided for @webLandingNoCookiesNoTracking.
   ///
@@ -9841,11 +9883,11 @@ abstract class AppLocalizations {
   /// **'No cookies, no tracking'**
   String get webLandingNoCookiesNoTracking;
 
-  /// No description provided for @webLandingNoAnalyticsNoThirdParty.
+  /// Body under webLandingNoCookiesNoTracking. Not 'no third-party scripts': the display engine is loaded from Google's servers.
   ///
   /// In en, this message translates to:
-  /// **'No analytics, no third-party scripts.'**
-  String get webLandingNoAnalyticsNoThirdParty;
+  /// **'No analytics, no ads, no trackers.'**
+  String get webLandingNoAnalyticsNoAds;
 
   /// No description provided for @webLandingYouKeepTheFile.
   ///
@@ -9856,7 +9898,7 @@ abstract class AppLocalizations {
   /// No description provided for @webLandingSaveThePdfFromYour.
   ///
   /// In en, this message translates to:
-  /// **'Save the PDF from your viewer — that’s the only copy.'**
+  /// **'Save the PDF from your viewer — we never keep a copy.'**
   String get webLandingSaveThePdfFromYour;
 
   /// No description provided for @pinDialogPasscodeTooShort.
@@ -10468,7 +10510,7 @@ abstract class AppLocalizations {
   /// No description provided for @audioGuideTipQualityDoesnTMatterAny.
   ///
   /// In en, this message translates to:
-  /// **'Quality doesn’t matter. Any phone voice memo works — the AI downsamples audio anyway, so a small low-quality file transcribes just as well as a large one.'**
+  /// **'Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.'**
   String get audioGuideTipQualityDoesnTMatterAny;
 
   /// No description provided for @audioGuideTipKeepEachClipShortUnder.
@@ -10987,11 +11029,17 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get settingsThemeDark;
 
-  /// No description provided for @settingsStatusWebInMemory.
+  /// Settings header status on the web when no locked copy is kept.
   ///
   /// In en, this message translates to:
-  /// **'● WEB APP · IN-MEMORY ONLY'**
-  String get settingsStatusWebInMemory;
+  /// **'● WEB APP · KEPT IN THIS TAB'**
+  String get settingsStatusWebTab;
+
+  /// Settings header status on the web when the person keeps a passphrase-locked progress copy.
+  ///
+  /// In en, this message translates to:
+  /// **'● WEB APP · LOCKED COPY ON THIS DEVICE'**
+  String get settingsStatusWebLocked;
 
   /// No description provided for @settingsStatusNative.
   ///
