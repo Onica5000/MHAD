@@ -23,6 +23,18 @@
   "no": "No",
   "ok": "OK",
   "retry": "Retry",
+  "bootErrorTitle": "The app couldn’t start",
+  "@bootErrorTitle": {
+    "description": "Startup failure screen title (shown in the device language; the app's settings may not have loaded)."
+  },
+  "bootErrorBody": "Something needed at startup failed to load. Your saved data has not been changed.\n\n{error}",
+  "@bootErrorBody": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
   "required": "Required",
   "personalInfo": "Personal information",
   "fullName": "Full name",
@@ -438,6 +450,15 @@
       "note": {"type": "String"}
     }
   },
+  "medNtiNoteBipolar": "Bipolar disorder — blood level monitoring required",
+  "@medNtiNoteBipolar": {
+    "description": "NTI note for lithium (fills {note} in medsStepNtiNote)."
+  },
+  "medNtiNoteBipolarSeizures": "Bipolar/seizures — blood level monitoring required",
+  "medNtiNoteSeizures": "Seizures — blood level monitoring required",
+  "medNtiNoteBloodThinner": "Blood thinner — commonly co-prescribed, strict monitoring",
+  "medNtiNoteRespiratory": "Respiratory — commonly co-prescribed, strict monitoring",
+  "medNtiNoteThyroid": "Thyroid — commonly co-prescribed with lithium",
   "medsStepDosageLabel": "Dosage (e.g. 20 mg twice daily)",
   "medsStepReasonLabel": "Reason / notes (optional)",
   "medsStepLearnAbout": "Learn about {name}",
@@ -1762,6 +1783,10 @@
       "notAdvice": {"type": "String"}
     }
   },
+  "aiNotAdvice": "AI-generated — not legal or medical advice.",
+  "@aiNotAdvice": {
+    "description": "The short caveat shown wherever AI generates content (AI check, chat replies). One wording everywhere (legal-wording canon)."
+  },
   "aiConsistencyCheckFailed": "Couldn’t run the consistency check.\n{error}",
   "@aiConsistencyCheckFailed": {
     "placeholders": {
@@ -1844,6 +1869,10 @@
   "crisisSheetYouAreNotAlone": "You are not alone.",
   "crisisSheetCall988Press1": "Call 988, press 1",
   "crisisSheetCallTextChat": "Call · text · chat",
+  "crisisSheetTrevorProjectName": "The Trevor Project (LGBTQ+ youth)",
+  "@crisisSheetTrevorProjectName": {
+    "description": "Crisis sheet row title. The organization's name stays in English (docs/SPANISH_STYLE.md); the description is translated."
+  },
   "assistantSenderYou": "You",
   "aiSetupApiKeySetForThis": "API key set for this session",
   "aiSetupApiKeySaved": "API key saved",
@@ -2261,6 +2290,10 @@
     "placeholders": {
       "medicalDisclaimer": {"type": "Object"}
     }
+  },
+  "nlmNoMedicalAdvice": "NLM does not provide specific medical advice. Consult with a qualified physician for medical advice.",
+  "@nlmNoMedicalAdvice": {
+    "description": "Fills {medicalDisclaimer} in nlmAttributionSourceUSNationalLibrary (NLM terms of service)."
   },
   "aiConsentDialogToAutofillYourDirectiveThe": "To autofill your directive, the whole document — including any personal details on it (names, dates of birth, addresses, phone numbers) — is sent to {label} so it can read it and fill in your fields.",
   "@aiConsentDialogToAutofillYourDirectiveThe": {

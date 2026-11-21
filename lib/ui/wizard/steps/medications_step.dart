@@ -513,7 +513,8 @@ class _MedTable extends StatelessWidget {
                                     const SizedBox(width: 6),
                                     Expanded(
                                       child: Text(
-                                        context.l10n.medsStepNtiNote(note),
+                                        context.l10n.medsStepNtiNote(
+                                            _ntiNoteText(context.l10n, note)),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
@@ -609,3 +610,12 @@ class _MedTable extends StatelessWidget {
   }
 }
 
+/// The localized words for an NTI medication note.
+String _ntiNoteText(AppLocalizations l, NtiNote note) => switch (note) {
+      NtiNote.bipolar => l.medNtiNoteBipolar,
+      NtiNote.bipolarSeizures => l.medNtiNoteBipolarSeizures,
+      NtiNote.seizures => l.medNtiNoteSeizures,
+      NtiNote.bloodThinner => l.medNtiNoteBloodThinner,
+      NtiNote.respiratory => l.medNtiNoteRespiratory,
+      NtiNote.thyroid => l.medNtiNoteThyroid,
+    };

@@ -291,6 +291,10 @@ class FacilityResult {
   const FacilityResult({required this.name, this.address = ''});
 }
 
+/// Why an NTI drug needs care — the note under a medication entry. The words
+/// are ARB keys (`medNtiNoteBipolar` …), so they follow the app's language.
+enum NtiNote { bipolar, bipolarSeizures, seizures, bloodThinner, respiratory, thyroid }
+
 /// Pennsylvania Narrow Therapeutic Index (NTI) psychiatric medications.
 ///
 /// PA's Generic Equivalent Drug Law (35 P.S. § 960.1 et seq.): a drug
@@ -306,19 +310,20 @@ class NtiDrugReference {
   NtiDrugReference._();
 
   /// Lowercase generic names of NTI psychiatric medications relevant to
-  /// mental health advance directives. (Divalproex is a valproate; the sample
-  /// list names valproic acid and valproate sodium.)
-  static const ntiDrugs = <String, String>{
-    'lithium': 'Bipolar disorder — blood level monitoring required',
-    'carbamazepine': 'Bipolar/seizures — blood level monitoring required',
-    'valproic acid': 'Bipolar/seizures — blood level monitoring required',
-    'divalproex': 'Bipolar/seizures — blood level monitoring required',
-    'divalproex sodium': 'Bipolar/seizures — blood level monitoring required',
-    'phenytoin': 'Seizures — blood level monitoring required',
-    'primidone': 'Seizures — blood level monitoring required',
-    'warfarin': 'Blood thinner — commonly co-prescribed, strict monitoring',
-    'theophylline': 'Respiratory — commonly co-prescribed, strict monitoring',
-    'levothyroxine': 'Thyroid — commonly co-prescribed with lithium',
+  /// mental health advance directives, with the note shown under the entry
+  /// (wording: the ARB keys `medNtiNote*`, English + Spanish). (Divalproex is
+  /// a valproate; the sample list names valproic acid and valproate sodium.)
+  static const ntiDrugs = <String, NtiNote>{
+    'lithium': NtiNote.bipolar,
+    'carbamazepine': NtiNote.bipolarSeizures,
+    'valproic acid': NtiNote.bipolarSeizures,
+    'divalproex': NtiNote.bipolarSeizures,
+    'divalproex sodium': NtiNote.bipolarSeizures,
+    'phenytoin': NtiNote.seizures,
+    'primidone': NtiNote.seizures,
+    'warfarin': NtiNote.bloodThinner,
+    'theophylline': NtiNote.respiratory,
+    'levothyroxine': NtiNote.thyroid,
   };
 
   /// Returns true if the medication name matches a known NTI drug.
@@ -329,7 +334,7 @@ class NtiDrugReference {
   }
 
   /// Returns the NTI note for a medication, or null if not NTI.
-  static String? ntiNote(String medicationName) {
+  static NtiNote? ntiNote(String medicationName) {
     final lower = medicationName.toLowerCase().trim();
     for (final entry in ntiDrugs.entries) {
       if (lower == entry.key || lower.startsWith('${entry.key} ')) {

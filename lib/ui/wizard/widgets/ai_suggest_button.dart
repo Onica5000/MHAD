@@ -11,7 +11,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mhad/ai/ai_clinical_policy.dart';
 import 'package:mhad/ai/ai_context_builder.dart';
 import 'package:mhad/ai/pii_stripper.dart';
-import 'package:mhad/constants.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/services/gemini_rate_tracker.dart';
@@ -258,7 +257,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  ctx.l10n.aiSuggestReviewCarefully(aiNotAdvice),
+                  ctx.l10n.aiSuggestReviewCarefully(ctx.l10n.aiNotAdvice),
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                       fontStyle: FontStyle.italic),

@@ -236,6 +236,18 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
+  /// Startup failure screen title (shown in the device language; the app's settings may not have loaded).
+  ///
+  /// In en, this message translates to:
+  /// **'The app couldn’t start'**
+  String get bootErrorTitle;
+
+  /// No description provided for @bootErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Something needed at startup failed to load. Your saved data has not been changed.\n\n{error}'**
+  String bootErrorBody(Object error);
+
   /// No description provided for @required.
   ///
   /// In en, this message translates to:
@@ -1933,6 +1945,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Narrow therapeutic index drug — {note}. Pennsylvania law bars generic substitution for these; note any monitoring needs below. (Informational, not medical advice.)'**
   String medsStepNtiNote(String note);
+
+  /// NTI note for lithium (fills {note} in medsStepNtiNote).
+  ///
+  /// In en, this message translates to:
+  /// **'Bipolar disorder — blood level monitoring required'**
+  String get medNtiNoteBipolar;
+
+  /// No description provided for @medNtiNoteBipolarSeizures.
+  ///
+  /// In en, this message translates to:
+  /// **'Bipolar/seizures — blood level monitoring required'**
+  String get medNtiNoteBipolarSeizures;
+
+  /// No description provided for @medNtiNoteSeizures.
+  ///
+  /// In en, this message translates to:
+  /// **'Seizures — blood level monitoring required'**
+  String get medNtiNoteSeizures;
+
+  /// No description provided for @medNtiNoteBloodThinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood thinner — commonly co-prescribed, strict monitoring'**
+  String get medNtiNoteBloodThinner;
+
+  /// No description provided for @medNtiNoteRespiratory.
+  ///
+  /// In en, this message translates to:
+  /// **'Respiratory — commonly co-prescribed, strict monitoring'**
+  String get medNtiNoteRespiratory;
+
+  /// No description provided for @medNtiNoteThyroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Thyroid — commonly co-prescribed with lithium'**
+  String get medNtiNoteThyroid;
 
   /// No description provided for @medsStepDosageLabel.
   ///
@@ -8234,6 +8282,12 @@ abstract class AppLocalizations {
   /// **'{notAdvice} Optional suggestions based only on what you entered.'**
   String aiConsistencyNotAdviceOptional(String notAdvice);
 
+  /// The short caveat shown wherever AI generates content (AI check, chat replies). One wording everywhere (legal-wording canon).
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated — not legal or medical advice.'**
+  String get aiNotAdvice;
+
   /// No description provided for @aiConsistencyCheckFailed.
   ///
   /// In en, this message translates to:
@@ -8611,6 +8665,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Call · text · chat'**
   String get crisisSheetCallTextChat;
+
+  /// Crisis sheet row title. The organization's name stays in English (docs/SPANISH_STYLE.md); the description is translated.
+  ///
+  /// In en, this message translates to:
+  /// **'The Trevor Project (LGBTQ+ youth)'**
+  String get crisisSheetTrevorProjectName;
 
   /// No description provided for @assistantSenderYou.
   ///
@@ -9278,6 +9338,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Source: U.S. National Library of Medicine. {medicalDisclaimer}'**
   String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer);
+
+  /// Fills {medicalDisclaimer} in nlmAttributionSourceUSNationalLibrary (NLM terms of service).
+  ///
+  /// In en, this message translates to:
+  /// **'NLM does not provide specific medical advice. Consult with a qualified physician for medical advice.'**
+  String get nlmNoMedicalAdvice;
 
   /// No description provided for @aiConsentDialogToAutofillYourDirectiveThe.
   ///

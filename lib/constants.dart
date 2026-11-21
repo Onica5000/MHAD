@@ -51,10 +51,8 @@ bool isLikelyGeminiKey(String key) {
 /// Read from the dynamic `config` block (`config.sessionCacheMinutes`).
 Duration get sessionCacheTtl => appData.config.sessionCacheTtl;
 
-/// Canonical short caveat shown wherever AI generates content (chat replies,
-/// field suggestions). Keep this exact wording so the app's voice stays
-/// consistent — see the legal-wording canon.
-const aiNotAdvice = 'AI-generated — not legal or medical advice.';
+// The short "AI-generated — not legal or medical advice." caveat is the ARB
+// key `aiNotAdvice` (English + Spanish) — one wording everywhere.
 
 // privacyPolicyUrl moved to assets/data/app_data.json (`appData.privacyPolicyUrl`).
 // Google Play (Jan 2026 health-app rules) requires it to be a publicly

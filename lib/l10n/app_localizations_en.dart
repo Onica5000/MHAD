@@ -78,6 +78,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
+  String get bootErrorTitle => 'The app couldn’t start';
+
+  @override
+  String bootErrorBody(Object error) {
+    return 'Something needed at startup failed to load. Your saved data has not been changed.\n\n$error';
+  }
+
+  @override
   String get required => 'Required';
 
   @override
@@ -1061,6 +1069,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String medsStepNtiNote(String note) {
     return 'Narrow therapeutic index drug — $note. Pennsylvania law bars generic substitution for these; note any monitoring needs below. (Informational, not medical advice.)';
   }
+
+  @override
+  String get medNtiNoteBipolar =>
+      'Bipolar disorder — blood level monitoring required';
+
+  @override
+  String get medNtiNoteBipolarSeizures =>
+      'Bipolar/seizures — blood level monitoring required';
+
+  @override
+  String get medNtiNoteSeizures => 'Seizures — blood level monitoring required';
+
+  @override
+  String get medNtiNoteBloodThinner =>
+      'Blood thinner — commonly co-prescribed, strict monitoring';
+
+  @override
+  String get medNtiNoteRespiratory =>
+      'Respiratory — commonly co-prescribed, strict monitoring';
+
+  @override
+  String get medNtiNoteThyroid =>
+      'Thyroid — commonly co-prescribed with lithium';
 
   @override
   String get medsStepDosageLabel => 'Dosage (e.g. 20 mg twice daily)';
@@ -4750,6 +4781,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get aiNotAdvice => 'AI-generated — not legal or medical advice.';
+
+  @override
   String aiConsistencyCheckFailed(String error) {
     return 'Couldn’t run the consistency check.\n$error';
   }
@@ -4984,6 +5018,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crisisSheetCallTextChat => 'Call · text · chat';
+
+  @override
+  String get crisisSheetTrevorProjectName =>
+      'The Trevor Project (LGBTQ+ youth)';
 
   @override
   String get assistantSenderYou => 'You';
@@ -5461,6 +5499,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer) {
     return 'Source: U.S. National Library of Medicine. $medicalDisclaimer';
   }
+
+  @override
+  String get nlmNoMedicalAdvice =>
+      'NLM does not provide specific medical advice. Consult with a qualified physician for medical advice.';
 
   @override
   String aiConsentDialogToAutofillYourDirectiveThe(Object label) {

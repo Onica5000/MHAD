@@ -14,17 +14,14 @@ class NlmAttribution extends StatelessWidget {
       'the product and does not endorse or recommend this or any other '
       'product.';
 
-  static const medicalDisclaimer =
-      'NLM does not provide specific medical advice. Consult with a '
-      'qualified physician for medical advice.';
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
-        context.l10n.nlmAttributionSourceUSNationalLibrary(medicalDisclaimer),
+        context.l10n.nlmAttributionSourceUSNationalLibrary(
+            context.l10n.nlmNoMedicalAdvice),
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: cs.onSurfaceVariant,
               fontSize: 12,

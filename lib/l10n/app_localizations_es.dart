@@ -78,6 +78,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get retry => 'Reintentar';
 
   @override
+  String get bootErrorTitle => 'La aplicación no pudo iniciarse';
+
+  @override
+  String bootErrorBody(Object error) {
+    return 'No se pudo cargar algo necesario para iniciar. Sus datos guardados no han cambiado.\n\n$error';
+  }
+
+  @override
   String get required => 'Obligatorio';
 
   @override
@@ -1078,6 +1086,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String medsStepNtiNote(String note) {
     return 'Medicamento de índice terapéutico estrecho: $note. La ley de Pensilvania prohíbe sustituirlo por un genérico; indique abajo cualquier necesidad de control. (Informativo, no es consejo médico).';
   }
+
+  @override
+  String get medNtiNoteBipolar =>
+      'Trastorno bipolar: requiere control de los niveles en sangre';
+
+  @override
+  String get medNtiNoteBipolarSeizures =>
+      'Trastorno bipolar o convulsiones: requiere control de los niveles en sangre';
+
+  @override
+  String get medNtiNoteSeizures =>
+      'Convulsiones: requiere control de los niveles en sangre';
+
+  @override
+  String get medNtiNoteBloodThinner =>
+      'Anticoagulante: se receta a menudo junto con otros; requiere control estricto';
+
+  @override
+  String get medNtiNoteRespiratory =>
+      'Respiratorio: se receta a menudo junto con otros; requiere control estricto';
+
+  @override
+  String get medNtiNoteThyroid =>
+      'Tiroides: se receta a menudo junto con el litio';
 
   @override
   String get medsStepDosageLabel => 'Dosis (p. ej., 20 mg dos veces al día)';
@@ -4844,6 +4876,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get aiNotAdvice =>
+      'Generado por IA: no es asesoramiento legal ni médico.';
+
+  @override
   String aiConsistencyCheckFailed(String error) {
     return 'No se pudo ejecutar la verificación de coherencia.\n$error';
   }
@@ -5080,6 +5116,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crisisSheetCallTextChat => 'Llamada · texto · chat';
+
+  @override
+  String get crisisSheetTrevorProjectName =>
+      'The Trevor Project (jóvenes LGBTQ+)';
 
   @override
   String get assistantSenderYou => 'Usted';
@@ -5564,6 +5604,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String nlmAttributionSourceUSNationalLibrary(Object medicalDisclaimer) {
     return 'Fuente: Biblioteca Nacional de Medicina de EE. UU. $medicalDisclaimer';
   }
+
+  @override
+  String get nlmNoMedicalAdvice =>
+      'La NLM no da consejos médicos específicos. Consulte a un médico calificado para obtener consejo médico.';
 
   @override
   String aiConsentDialogToAutofillYourDirectiveThe(Object label) {
