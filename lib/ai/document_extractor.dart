@@ -494,6 +494,12 @@ drug_trial_consent
     delegates drug-trial decisions to the agent. Broad/general authority does
     NOT count — leave null when drug trials aren't specifically addressed.
 
+NEVER AUTHORIZED (20 Pa.C.S. § 5836(b))
+  → Psychosurgery and the termination of parental rights can never be authorized in a mental health advance directive — not by the person and not through the agent. If the document consents to either, or lets the agent consent to either, do NOT put that permission in ANY field (not agent_authority_limitations, not other, not anywhere). A refusal of them may stay, in the person's words, in other.
+
+WITNESSES
+  → Witnesses are chosen at signing. Never put witness names or witness plans into any field.
+
 medication_consent
   → The person's OWN general consent to psychiatric medications (values as above).
   → This is their consent — NOT the agent's authority over medications (that is agent_can_consent_medication).
