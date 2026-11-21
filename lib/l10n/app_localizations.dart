@@ -1880,6 +1880,48 @@ abstract class AppLocalizations {
   /// **'I have designated an agent to make decisions about my medications'**
   String get medsStepAgentDecides;
 
+  /// Medications step: the official form's medication-consent choice (one of the options below).
+  ///
+  /// In en, this message translates to:
+  /// **'Consent to medications'**
+  String get medsConsentTitle;
+
+  /// Official form wording (Declaration / Combined).
+  ///
+  /// In en, this message translates to:
+  /// **'I consent to the medications that my treating physician recommends.'**
+  String get medsConsentYes;
+
+  /// No description provided for @medsConsentYesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Any exceptions, limits and preferences you list below go with it.'**
+  String get medsConsentYesDescription;
+
+  /// No description provided for @medsConsentAgentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent makes medication decisions for you.'**
+  String get medsConsentAgentDescription;
+
+  /// Official form wording (Declaration / Combined).
+  ///
+  /// In en, this message translates to:
+  /// **'I do not consent to the use of any medications.'**
+  String get medsConsentNo;
+
+  /// No description provided for @medsConsentNoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your directive says no to all medications.'**
+  String get medsConsentNoDescription;
+
+  /// Shown only when autofill brought a conditional consent; its text is the description. Not an official-form option, so it is never offered otherwise.
+  ///
+  /// In en, this message translates to:
+  /// **'I consent under these conditions'**
+  String get medsConsentConditional;
+
   /// No description provided for @medsStepCurrentTitle.
   ///
   /// In en, this message translates to:

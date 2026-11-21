@@ -434,6 +434,25 @@
   "medsStepHeadsUpBold": "specific dosage instructions are not binding",
   "medsStepHeadsUpTail": " on the physician — they choose the dose.",
   "medsStepAgentDecides": "I have designated an agent to make decisions about my medications",
+  "medsConsentTitle": "Consent to medications",
+  "@medsConsentTitle": {
+    "description": "Medications step: the official form's medication-consent choice (one of the options below)."
+  },
+  "medsConsentYes": "I consent to the medications that my treating physician recommends.",
+  "@medsConsentYes": {
+    "description": "Official form wording (Declaration / Combined)."
+  },
+  "medsConsentYesDescription": "Any exceptions, limits and preferences you list below go with it.",
+  "medsConsentAgentDescription": "Your agent makes medication decisions for you.",
+  "medsConsentNo": "I do not consent to the use of any medications.",
+  "@medsConsentNo": {
+    "description": "Official form wording (Declaration / Combined)."
+  },
+  "medsConsentNoDescription": "Your directive says no to all medications.",
+  "medsConsentConditional": "I consent under these conditions",
+  "@medsConsentConditional": {
+    "description": "Shown only when autofill brought a conditional consent; its text is the description. Not an official-form option, so it is never offered otherwise."
+  },
   "medsStepCurrentTitle": "Medications I am currently taking",
   "medsStepCurrentSubtitle": "For your care team’s reference — not a preference",
   "medsStepNeverTitle": "Medications I NEVER want",

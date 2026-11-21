@@ -1047,6 +1047,33 @@ class AppLocalizationsEs extends AppLocalizations {
       'He designado a un agente para que tome decisiones sobre mis medicamentos';
 
   @override
+  String get medsConsentTitle => 'Consentimiento para medicamentos';
+
+  @override
+  String get medsConsentYes =>
+      'Doy mi consentimiento para los medicamentos que recomiende mi médico tratante.';
+
+  @override
+  String get medsConsentYesDescription =>
+      'Las excepciones, los límites y las preferencias que indique abajo van con esta opción.';
+
+  @override
+  String get medsConsentAgentDescription =>
+      'Su agente toma las decisiones sobre sus medicamentos.';
+
+  @override
+  String get medsConsentNo =>
+      'No doy mi consentimiento para el uso de ningún medicamento.';
+
+  @override
+  String get medsConsentNoDescription =>
+      'Su directiva dice que no a todos los medicamentos.';
+
+  @override
+  String get medsConsentConditional =>
+      'Doy mi consentimiento con estas condiciones';
+
+  @override
   String get medsStepCurrentTitle => 'Medicamentos que tomo actualmente';
 
   @override

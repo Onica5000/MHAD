@@ -14,6 +14,8 @@ import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/ui/widgets/fda_label_dialog.dart';
 import 'package:mhad/ui/widgets/medline_plus_dialog.dart';
+import 'package:mhad/ui/wizard/widgets/consent_option_tile.dart';
+import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/wizard/widgets/medication_autocomplete_field.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
@@ -39,7 +41,10 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
   final List<_MedRow> _preferred = [];
 
   // Only shown for Combined/POA
-  bool _agentDecidesMeds = false;
+  /// The stored medication-consent value, kept exactly as loaded unless the
+  /// person picks another option — never coerced on save (an autofilled
+  /// 'no' or 'conditional:…' used to come back as 'yes').
+  String _medConsent = consentYes;
 
   bool _hasAgentSections = false;
 
@@ -89,9 +94,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             _preferred.add(row);
         }
       }
-      if (prefs != null && _hasAgentSections) {
-        _agentDecidesMeds = prefs.medicationConsent == consentAgentDecides;
-      }
+      if (prefs != null) _medConsent = prefs.medicationConsent;
     });
   }
 
@@ -162,14 +165,12 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
 
     await repo.replaceMedications(widget.directiveId, entries);
 
-    // Save medication consent option (idempotent upsert, no transaction needed)
-    if (_hasAgentSections) {
-      await repo.upsertPreferences(DirectivePrefsCompanion(
-        directiveId: Value(widget.directiveId),
-        medicationConsent:
-            Value(_agentDecidesMeds ? consentAgentDecides : consentYes),
-      ));
-    }
+    // Save the medication-consent choice exactly as selected (idempotent
+    // upsert, no transaction needed).
+    await repo.upsertPreferences(DirectivePrefsCompanion(
+      directiveId: Value(widget.directiveId),
+      medicationConsent: Value(_medConsent),
+    ));
 
     return true;
   }
@@ -256,17 +257,44 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
             ),
           ),
           const SizedBox(height: 8),
-          if (_hasAgentSections) ...[
-            CheckboxListTile(
-              value: _agentDecidesMeds,
-              onChanged: (v) =>
-                  setState(() => _agentDecidesMeds = v ?? false),
-              title: Text(l10n.medsStepAgentDecides),
-              controlAffinity: ListTileControlAffinity.leading,
-              contentPadding: EdgeInsets.zero,
+          // The official form's medication-consent options. "My agent
+          // decides" exists only on forms with an agent; a conditional
+          // consent (only autofill can bring one) is shown so it isn't
+          // hidden, but never offered otherwise.
+          SectionLabel(l10n.medsConsentTitle),
+          const SizedBox(height: 8),
+          ConsentOptionTile(
+            icon: Icons.check_circle_outline,
+            title: l10n.medsConsentYes,
+            description: l10n.medsConsentYesDescription,
+            selected: _medConsent == consentYes,
+            onTap: () => setState(() => _medConsent = consentYes),
+          ),
+          if (_hasAgentSections)
+            ConsentOptionTile(
+              icon: Icons.person_outline,
+              title: l10n.medsStepAgentDecides,
+              description: l10n.medsConsentAgentDescription,
+              selected: _medConsent == consentAgentDecides,
+              onTap: () => setState(() => _medConsent = consentAgentDecides),
             ),
-            const Divider(),
-          ],
+          ConsentOptionTile(
+            icon: Icons.block,
+            title: l10n.medsConsentNo,
+            description: l10n.medsConsentNoDescription,
+            selected: _medConsent == consentNo,
+            onTap: () => setState(() => _medConsent = consentNo),
+          ),
+          if (_medConsent.startsWith(consentConditionalPrefix))
+            ConsentOptionTile(
+              icon: Icons.rule,
+              title: l10n.medsConsentConditional,
+              description:
+                  _medConsent.substring(consentConditionalPrefix.length).trim(),
+              selected: true,
+              onTap: () {},
+            ),
+          const Divider(),
           _MedTable(
             title: l10n.medsStepCurrentTitle,
             icon: Icons.medication_outlined,
