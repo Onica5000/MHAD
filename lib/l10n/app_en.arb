@@ -391,6 +391,14 @@
   "allergiesHowSerious": "How serious is it?",
   "allergiesWhatHappens": "What happens",
   "allergiesReactionsHint": "e.g. Hives, Swelling, Throat closing",
+  "allergiesNotesLabel": "Other notes (optional)",
+  "@allergiesNotesLabel": {
+    "description": "Allergies step: label of the optional notes box for one allergy (stored in DirectiveAllergies.notes; autofill can fill it; printed on the PDF)."
+  },
+  "allergiesNotesHint": "e.g. I carry an epinephrine pen",
+  "@allergiesNotesHint": {
+    "description": "Allergies step: example inside the optional notes box."
+  },
   "allergiesAddButton": "Add allergy",
   "allergiesAddedOne": "Added · {count} allergy",
   "@allergiesAddedOne": {

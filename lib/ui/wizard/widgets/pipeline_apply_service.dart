@@ -731,9 +731,28 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         gPhone != null ||
         gCanRevoke != null) {
       final cur = await repo.getGuardianNomination(id);
+      // A nominee from the document must show: the step and the PDF read
+      // the nominee fields only when the relation is 'different' (an
+      // earlier "no preference" choice used to hide the autofilled name).
+      String? relation;
+      if (gName != null) {
+        final agentsNow = await repo.getAgents(id);
+        String nameOf(String type) => agentsNow
+            .where((a) => a.agentType == type)
+            .map((a) => a.fullName.trim().toLowerCase())
+            .firstWhere((_) => true, orElse: () => '');
+        final n = gName.trim().toLowerCase();
+        relation = n == nameOf('primary')
+            ? 'sameAsPrimary'
+            : n == nameOf('alternate')
+                ? 'sameAsAlternate'
+                : 'different';
+      }
       await repo.upsertGuardianNomination(GuardianNominationsCompanion(
         id: cur != null ? Value(cur.id) : const Value.absent(),
         directiveId: Value(id),
+        guardianRelation:
+            relation != null ? Value(relation) : const Value.absent(),
         nomineeFullName: Value(gName ?? cur?.nomineeFullName ?? ''),
         nomineeRelationship: Value(gRel ?? cur?.nomineeRelationship ?? ''),
         nomineeAddress: Value(gAddr1 ?? cur?.nomineeAddress ?? ''),

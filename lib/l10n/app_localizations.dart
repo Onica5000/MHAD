@@ -1772,6 +1772,18 @@ abstract class AppLocalizations {
   /// **'e.g. Hives, Swelling, Throat closing'**
   String get allergiesReactionsHint;
 
+  /// Allergies step: label of the optional notes box for one allergy (stored in DirectiveAllergies.notes; autofill can fill it; printed on the PDF).
+  ///
+  /// In en, this message translates to:
+  /// **'Other notes (optional)'**
+  String get allergiesNotesLabel;
+
+  /// Allergies step: example inside the optional notes box.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. I carry an epinephrine pen'**
+  String get allergiesNotesHint;
+
   /// No description provided for @allergiesAddButton.
   ///
   /// In en, this message translates to:

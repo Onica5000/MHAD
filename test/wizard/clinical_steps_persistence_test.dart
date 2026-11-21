@@ -241,6 +241,11 @@ void main() {
       await tester.enterText(
           find.widgetWithText(TextField, 'e.g. Hives, Swelling, Throat closing'),
           'Throat closing');
+      // Notes print on the PDF and autofill fills them: the step shows and
+      // saves them too (field audit F3).
+      await tester.enterText(
+          find.widgetWithText(TextField, 'e.g. I carry an epinephrine pen'),
+          'Carries an EpiPen');
       await tester.tap(find.text('Add allergy'));
       await settle(tester);
 
@@ -250,6 +255,8 @@ void main() {
       expect(list.single.kind, 'food');
       expect(list.single.severity, AllergySeverity.severe.name);
       expect(list.single.reactions, 'Throat closing');
+      expect(list.single.notes, 'Carries an EpiPen');
+      expect(find.text('Throat closing · Carries an EpiPen'), findsOneWidget);
 
       // The step saves on add; validateAndSave is a no-op that must not block.
       expect(await save(key), isTrue);

@@ -279,6 +279,8 @@
   "allergiesHowSerious": "¿Qué tan grave es?",
   "allergiesWhatHappens": "Qué ocurre",
   "allergiesReactionsHint": "p. ej., urticaria, hinchazón, cierre de garganta",
+  "allergiesNotesLabel": "Otras notas (opcional)",
+  "allergiesNotesHint": "p. ej., llevo un autoinyector de epinefrina",
   "allergiesAddButton": "Añadir alergia",
   "allergiesAddedOne": "Añadida · {count} alergia",
   "allergiesAddedMany": "Añadidas · {count} alergias",

@@ -977,6 +977,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'p. ej., urticaria, hinchazón, cierre de garganta';
 
   @override
+  String get allergiesNotesLabel => 'Otras notas (opcional)';
+
+  @override
+  String get allergiesNotesHint =>
+      'p. ej., llevo un autoinyector de epinefrina';
+
+  @override
   String get allergiesAddButton => 'Añadir alergia';
 
   @override

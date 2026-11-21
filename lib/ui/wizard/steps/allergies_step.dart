@@ -85,6 +85,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
     with WizardStepMixin {
   final _substanceCtrl = TextEditingController();
   final _reactionsCtrl = TextEditingController();
+  final _notesCtrl = TextEditingController();
   _AllergyKind _kind = _AllergyKind.drug;
   AllergySeverity _severity = AllergySeverity.moderate;
 
@@ -107,6 +108,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
     _debouncer.dispose();
     _substanceCtrl.dispose();
     _reactionsCtrl.dispose();
+    _notesCtrl.dispose();
     super.dispose();
   }
 
@@ -178,11 +180,13 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             substance: Value(name),
             severity: Value(_severity.name),
             reactions: Value(_reactionsCtrl.text.trim()),
+            notes: Value(_notesCtrl.text.trim()),
             sortOrder: Value(_entries.length),
           ),
         );
     _substanceCtrl.clear();
     _reactionsCtrl.clear();
+    _notesCtrl.clear();
     setState(() {
       _severity = AllergySeverity.moderate;
       _suggestions = [];
@@ -217,6 +221,13 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
   Future<bool> validateAndSave() async => true; // Saved on each add/remove
 
   // ── Tone mapping ─────────────────────────────────────────────────────────
+
+  /// Reactions and notes under the allergy's name, or null when neither.
+  String? _subFor(DirectiveAllergy a) {
+    final parts = [a.reactions.trim(), a.notes.trim()]
+      ..removeWhere((t) => t.isEmpty);
+    return parts.isEmpty ? null : parts.join(' · ');
+  }
 
   HealthChipTone _toneFor(String severity) => switch (severity) {
         'severe' => HealthChipTone.crisis,
@@ -345,6 +356,22 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
                 ),
               ),
               const SizedBox(height: 12),
+              // Notes print on the PDF and autofill can fill them, so they
+              // need a place on screen too.
+              _MonoLabel(l10n.allergiesNotesLabel),
+              const SizedBox(height: 6),
+              TextField(
+                controller: _notesCtrl,
+                minLines: 1,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: l10n.allergiesNotesHint,
+                  hintStyle: TextStyle(color: p.textMuted, fontSize: 14),
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
               Align(
                 alignment: Alignment.centerRight,
                 child: FilledButton.icon(
@@ -368,7 +395,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
             HealthChip(
               code: _codeFor(l10n, a.severity),
               label: a.substance,
-              sub: a.reactions.isNotEmpty ? a.reactions : null,
+              sub: _subFor(a),
               sourceTag: a.kind == _AllergyKind.drug.id ? 'RxTerms' : 'ICD-10',
               tone: _toneFor(a.severity),
               onRemove: () => _removeAllergy(a.id),

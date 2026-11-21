@@ -964,6 +964,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allergiesReactionsHint => 'e.g. Hives, Swelling, Throat closing';
 
   @override
+  String get allergiesNotesLabel => 'Other notes (optional)';
+
+  @override
+  String get allergiesNotesHint => 'e.g. I carry an epinephrine pen';
+
+  @override
   String get allergiesAddButton => 'Add allergy';
 
   @override
