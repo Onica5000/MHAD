@@ -492,15 +492,13 @@ class SmartFillService {
     buf.writeln('EXISTING DATA (user-entered — do NOT contradict, duplicate, or override).');
     buf.writeln('CRITICAL CONSENT RULES:');
     buf.writeln('- This is a CONSENT document. Every consent decision below is BINDING.');
-    buf.writeln('- "NO" means HARD REFUSAL. Your guidance must RESPECT the refusal. '
-        'Explain why someone with these conditions might refuse, do NOT suggest reconsideration.');
-    buf.writeln('- "YES" means the user consents. Your guidance should note relevant '
-        'considerations for informed consent (risks, benefits, what to expect).');
+    buf.writeln('- "NO" means HARD REFUSAL. Respect it: never suggest reconsidering it.');
+    buf.writeln('- "YES" means the user consents. Do not argue for or against it.');
     buf.writeln('- "CONDITIONAL" means consent with specific restrictions. Honor those restrictions exactly.');
-    buf.writeln('- "AGENT DECIDES" means delegated. Your guidance should help the agent make informed decisions.');
-    buf.writeln('- Medication suggestions MUST respect medication consent. If consent is NO, '
-        'do not suggest additional medications.');
-    buf.writeln('- ECT/experimental/drug trial guidance MUST align with the user\'s consent choice.');
+    buf.writeln('- "AGENT DECIDES" means delegated. Never make the decision for the agent.');
+    buf.writeln('- Never suggest, name or recommend a medication.');
+    buf.writeln('- ECT/experimental/drug trial guidance stays NEUTRAL and must match the '
+        'user\'s consent choice — no risks, benefits or advice (see the field rules below).');
     for (final line in existing) {
       buf.writeln('- $line');
     }
@@ -631,8 +629,9 @@ class SmartFillService {
         'not real names',
         input.existingFamilyNotification)}",');
     buf.writeln('  "records_disclosure": "${fieldDesc(
-        'Preferences about sharing medical records — who may access them, '
-        'what information to share or restrict, HIPAA considerations',
+        'Limits on sharing the person\'s records — what information to share '
+        'or restrict, and when. Not who may or may not see them (the person '
+        'names those). No legal explanations',
         input.existingRecordsDisclosure)}",');
     buf.writeln('  "pet_custody": "${fieldDesc(
         'Arrangements for pets during treatment — who should care for them, '
