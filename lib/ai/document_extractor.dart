@@ -422,7 +422,7 @@ ADDRESS FORMAT FOR ALL PERSONS — always split into components:
      address_line1: "456 Oak Ave"  address_line2: "Apt 2, c/o Jane Doe"  city: "Pittsburgh" …
   ✗ Do NOT leave the apartment/suite/unit/#/floor/c/o on address_line1.
 
-RULE: NEVER put any person's name, phone, or address into any care/medical field (health_history, activities, crisis_intervention, family_notification, etc.). ALL persons go in personal_info ONLY.
+RULE: Phone numbers and street addresses go in personal_info ONLY — never copy them into a care/medical field (health_history, activities, crisis_intervention, pet_custody, children_custody, family_notification, records_*, other). A care field may name a person only where the person's own instruction needs the name (e.g. "my neighbor Marta takes care of my dog", "notify my daughter Carmen", "do not tell my ex-husband"), written as they wrote it. Never use a care field to store someone's contact details.
 
 ═══ STEP 2: EXTRACT ALL CARE INSTRUCTIONS — ONE FIELD PER FACT, NO DUPLICATION ═══
 Each piece of information goes in EXACTLY ONE field. Once placed, it must NOT appear in any other field.
