@@ -140,7 +140,7 @@ key would need a **relay server** — keys never ship to the browser.
 | Piece | Where | Rule |
 |---|---|---|
 | The choice | `ensureProgressChoice` (`ui/progress/progress_gate.dart`) | Asked at the start (new / upload / import), once per tab: a passphrase-locked copy on this device, or nothing outside the tab (`sessionStorage`, names left out) |
-| Lock | `services/locked_progress/` (`lock_crypto*`, `locked_format`) | AES-256-GCM + PBKDF2-SHA-256 600,000 rounds, random salt/nonce, header sealed as AAD. Web Crypto (non-extractable key) on web, pointycastle elsewhere; one Web Crypto test vector keeps them identical |
+| Lock | `services/locked_progress/` (`lock_crypto*`, `locked_format`) | AES-256-GCM + PBKDF2-SHA-256 600,000 rounds, random salt/nonce, header sealed as AAD. Web Crypto (non-extractable key) on web, pointycastle elsewhere; one Web Crypto test vector keeps them identical. CI's browser smoke test (`tool/web_smoke.py`) locks, independently decrypts, reloads and unlocks a copy in the release build |
 | Life | `LockedProgressStore` | Expires `progressWindowMinutes` (30) after the page was last open. A closed tab can't erase it, so `sweep()` erases it unopened at the next start. 10 wrong passphrases erase it; one tab writes at a time |
 | Saving | `ProgressAutosave` | 2 s after any DB change; quietly when hidden (`WizardStepMixin.saveQuietly` — steps use `showWarnings` / `saveSubStep`, `quiet_save_rule_test`); 60 s heartbeat |
 | Passphrase | `services/passphrase/` | Min 4, no max; lowercase + capital + symbol or space; common-passphrase blocklist (zxcvbn-ts lists, MIT + ODC-BY notice); strength gauge; never stored |
