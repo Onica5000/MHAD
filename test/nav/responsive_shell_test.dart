@@ -141,6 +141,9 @@ void main() {
       await pumpShell(tester, size: desktop, initial: AppRoutes.settings);
       expect(find.bySemanticsLabel(RegExp('^Learn')), findsOneWidget);
       expect(find.bySemanticsLabel(RegExp('988')), findsOneWidget);
+      // Revoke used to be phone-only (More sheet); desktop has no More.
+      expect(find.bySemanticsLabel(RegExp('^Revoke a directive')),
+          findsOneWidget);
       handle.dispose();
     });
 
@@ -171,7 +174,13 @@ void main() {
         (tester) async {
       final handle = tester.ensureSemantics();
       await pumpShell(tester, size: desktop, initial: '/wizard/1');
-      for (final label in ['Home', 'Learn', 'Settings', 'Start over']) {
+      for (final label in [
+        'Home',
+        'Learn',
+        'Settings',
+        'Revoke a directive',
+        'Start over'
+      ]) {
         expect(find.bySemanticsLabel(RegExp('^$label')), findsOneWidget,
             reason: '$label missing from the compact rail');
       }
