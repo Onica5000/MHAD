@@ -8,6 +8,7 @@ library;
 import 'dart:convert';
 
 import 'package:mhad/constants.dart';
+import 'package:mhad/domain/model/other_instructions.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/domain/model/directive.dart';
@@ -195,50 +196,39 @@ class ParsedOtherContent {
   });
 }
 
-/// Parse tagged entries from `other` field.
+/// Parse tagged entries from `other` field — the three sections through
+/// the shared [OtherInstructions] format (every line of a section tagged).
+/// The guidance tags are legacy: nothing writes them any more, but older
+/// saved files may still hold them, so they still print.
 ParsedOtherContent parseOtherField(String raw) {
   if (raw.isEmpty) return const ParsedOtherContent();
-  const deescTag = '[DE-ESCALATION] ';
-  const trigTag = '[TRIGGERS] ';
-  const reproTag = '[REPRODUCTIVE] ';
   const ectTag = '[ECT GUIDANCE] ';
   const expTag = '[EXPERIMENTAL GUIDANCE] ';
   const drugTag = '[DRUG TRIAL GUIDANCE] ';
 
-  String deesc = '';
-  String trig = '';
-  String repro = '';
-  String ectGuidance = '';
-  String expGuidance = '';
-  String drugGuidance = '';
-  final otherLines = <String>[];
-
+  final ect = <String>[], exp = <String>[], drug = <String>[];
+  final rest = <String>[];
   for (final line in raw.split('\n')) {
-    if (line.startsWith(deescTag)) {
-      deesc = line.substring(deescTag.length);
-    } else if (line.startsWith(trigTag)) {
-      trig = line.substring(trigTag.length);
-    } else if (line.startsWith(reproTag)) {
-      repro = line.substring(reproTag.length);
-    } else if (line.startsWith(ectTag)) {
-      ectGuidance = line.substring(ectTag.length);
+    if (line.startsWith(ectTag)) {
+      ect.add(line.substring(ectTag.length));
     } else if (line.startsWith(expTag)) {
-      expGuidance = line.substring(expTag.length);
+      exp.add(line.substring(expTag.length));
     } else if (line.startsWith(drugTag)) {
-      drugGuidance = line.substring(drugTag.length);
+      drug.add(line.substring(drugTag.length));
     } else {
-      otherLines.add(line);
+      rest.add(line);
     }
   }
+  final o = OtherInstructions.parse(rest.join('\n'));
 
   return ParsedOtherContent(
-    deEscalation: deesc.trim(),
-    triggers: trig.trim(),
-    reproductiveHealth: repro.trim(),
-    ectGuidance: ectGuidance.trim(),
-    experimentalGuidance: expGuidance.trim(),
-    drugTrialGuidance: drugGuidance.trim(),
-    otherText: otherLines.join('\n').trim(),
+    deEscalation: o.deescalation,
+    triggers: o.triggers,
+    reproductiveHealth: o.reproductive,
+    ectGuidance: ect.join('\n').trim(),
+    experimentalGuidance: exp.join('\n').trim(),
+    drugTrialGuidance: drug.join('\n').trim(),
+    otherText: o.other,
   );
 }
 

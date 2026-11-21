@@ -50,6 +50,8 @@ class SmartFillInput {
   final String existingRecordsDisclosure;
   final String existingPetCustody;
   final String existingOther;
+  final String existingDeescalation;
+  final String existingTriggers;
   // ── Medications already in form ──
   final List<String> existingPreferredMeds;
   final List<String> existingLimitationMeds;
@@ -80,6 +82,8 @@ class SmartFillInput {
     this.existingRecordsDisclosure = '',
     this.existingPetCustody = '',
     this.existingOther = '',
+    this.existingDeescalation = '',
+    this.existingTriggers = '',
     this.existingPreferredMeds = const [],
     this.existingLimitationMeds = const [],
     this.existingAvoidMeds = const [],
@@ -121,6 +125,8 @@ class SmartFillInput {
       existingRecordsDisclosure: _truncate(existingRecordsDisclosure),
       existingPetCustody: _truncate(existingPetCustody),
       existingOther: _truncate(existingOther),
+      existingDeescalation: _truncate(existingDeescalation),
+      existingTriggers: _truncate(existingTriggers),
       existingPreferredMeds:
           existingPreferredMeds.take(maxMedsPerCategory).toList(),
       existingLimitationMeds:
@@ -462,6 +468,12 @@ class SmartFillService {
     if (input.existingPetCustody.isNotEmpty) {
       existing.add('Pet custody: ${s(input.existingPetCustody)}');
     }
+    if (input.existingDeescalation.isNotEmpty) {
+      existing.add('De-escalation techniques: ${s(input.existingDeescalation)}');
+    }
+    if (input.existingTriggers.isNotEmpty) {
+      existing.add('Crisis triggers: ${s(input.existingTriggers)}');
+    }
     if (input.existingOther.isNotEmpty) {
       existing.add('Other instructions: ${s(input.existingOther)}');
     }
@@ -558,8 +570,9 @@ class SmartFillService {
         'circumstances under which this directive should take effect',
         input.existingEffectiveCondition)}",');
     buf.writeln('  "health_history": "${fieldDesc(
-        'Relevant health history based on diagnoses and medications — '
-        'include condition timeline, past treatments, hospitalizations',
+        'A clear summary of the health history the user has given — their '
+        'diagnoses, medications and own notes. Use ONLY facts the user gave: '
+        'never invent dates, past treatments or hospitalizations',
         input.existingHealthHistory)}",');
     buf.writeln('  "preferred_facility_note": "${fieldDesc(
         'Type of facility that would be appropriate and why, '
@@ -587,10 +600,12 @@ class SmartFillService {
     buf.writeln('  "deescalation": "${fieldDesc(
         'Specific de-escalation techniques (e.g., music, quiet room, '
         'grounding exercises, breathing techniques, sensory tools)',
-        '')}",');
+        input.existingDeescalation)}",');
     buf.writeln('  "triggers": "${fieldDesc(
-        'Known and common crisis triggers to avoid for these conditions',
-        '')}",');
+        'Situations people with these conditions often find upsetting, as a '
+        'short list the person can keep, edit or delete — suggestions, never '
+        'stated as facts about this person',
+        input.existingTriggers)}",');
     buf.writeln('  "activities": "${fieldDesc(
         'Therapeutic activities helpful for these conditions — '
         'include both structured and informal activities',

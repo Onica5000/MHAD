@@ -163,6 +163,7 @@ class ClinicalDataValidator {
       agentCanConsentMedication: raw.agentCanConsentMedication,
       selfBindingUlysses: raw.selfBindingUlysses,
       petCustody: raw.petCustody,
+      reproductiveHealth: raw.reproductiveHealth,
       childrenCustody: raw.childrenCustody,
       familyNotification: raw.familyNotification,
       recordsDisclosure: raw.recordsDisclosure,
@@ -254,6 +255,7 @@ class ValidatedExtractionResult {
   final bool? agentCanConsentMedication;
   final bool? selfBindingUlysses;
   final String? petCustody;
+  final String? reproductiveHealth;
   final String? childrenCustody;
   final String? familyNotification;
   final String? recordsDisclosure;
@@ -297,6 +299,7 @@ class ValidatedExtractionResult {
     this.agentCanConsentMedication,
     this.selfBindingUlysses,
     this.petCustody,
+    this.reproductiveHealth,
     this.childrenCustody,
     this.familyNotification,
     this.recordsDisclosure,

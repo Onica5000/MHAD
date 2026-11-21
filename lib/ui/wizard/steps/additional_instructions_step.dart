@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/domain/model/other_instructions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:drift/drift.dart' show Value;
@@ -114,40 +115,24 @@ class _AdditionalInstructionsStepState
     }
   }
 
-  // The database has one "other" column. We store de-escalation, triggers,
-  // and reproductive health in it with tagged sections, and parse them back.
-  static const _deescTag = '[DE-ESCALATION] ';
-  static const _trigTag = '[TRIGGERS] ';
-  static const _reproTag = '[REPRODUCTIVE] ';
-
+  // The database has one "other" column holding de-escalation, triggers,
+  // reproductive health and the person's own other instructions —
+  // OtherInstructions is the one format (shared with the PDF and autofill).
   void _parseOtherField(String raw) {
-    final lines = raw.split('\n');
-    final otherLines = <String>[];
-    for (final line in lines) {
-      if (line.startsWith(_deescTag)) {
-        _deescalationCtrl.text = line.substring(_deescTag.length);
-      } else if (line.startsWith(_trigTag)) {
-        _triggersCtrl.text = line.substring(_trigTag.length);
-      } else if (line.startsWith(_reproTag)) {
-        _reproductiveCtrl.text = line.substring(_reproTag.length);
-      } else {
-        otherLines.add(line);
-      }
-    }
-    _otherCtrl.text = otherLines.join('\n').trim();
+    final o = OtherInstructions.parse(raw);
+    _deescalationCtrl.text = o.deescalation;
+    _triggersCtrl.text = o.triggers;
+    _reproductiveCtrl.text = o.reproductive;
+    _otherCtrl.text = o.other;
   }
 
   String _buildOtherField() {
-    final parts = <String>[];
-    final deesc = _deescalationCtrl.text.trim();
-    final trig = _triggersCtrl.text.trim();
-    final repro = _reproductiveCtrl.text.trim();
-    final other = _otherCtrl.text.trim();
-    if (deesc.isNotEmpty) parts.add('$_deescTag$deesc');
-    if (trig.isNotEmpty) parts.add('$_trigTag$trig');
-    if (repro.isNotEmpty) parts.add('$_reproTag$repro');
-    if (other.isNotEmpty) parts.add(other);
-    return parts.join('\n');
+    return OtherInstructions(
+      deescalation: _deescalationCtrl.text,
+      triggers: _triggersCtrl.text,
+      reproductive: _reproductiveCtrl.text,
+      other: _otherCtrl.text,
+    ).serialize();
   }
 
   // Records disclosure round-trips through the single `recordsDisclosure`

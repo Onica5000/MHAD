@@ -11,6 +11,57 @@ part of 'document_pipeline_flow.dart';
 extension _PipelineApplyLogic on _PipelineScreenState {
   // ── Smart Fill generation ───────────────────────────────────────────
 
+  /// Smart-fill input: the document's conditions and medications plus what
+  /// the person already entered, so suggestions build on it and never
+  /// contradict it. (Nothing passed the person's entries before 2026-11-21:
+  /// the prompt "built on" empty fields and read the default consent values
+  /// as the person's choices.)
+  Future<SmartFillInput> _smartFillInput() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final id = widget.directiveId;
+    final d = await repo.getDirectiveById(id);
+    final p = await repo.getPreferences(id);
+    final instr = await repo.getAdditionalInstructions(id);
+    final meds = await repo.getMedications(id);
+    final other = OtherInstructions.parse(instr?.other ?? '');
+    List<String> medsOf(MedicationEntryType type) => [
+          for (final m in meds)
+            if (m.entryType == type.name && m.medicationName.trim().isNotEmpty)
+              m.medicationName.trim(),
+        ];
+    return SmartFillInput(
+      conditions: _validated!.icdConditions,
+      currentMedications: _validated!.validatedPreferredMedNames,
+      medicationsToAvoid: _validated!.validatedAvoidMedNames,
+      formType: widget.formType,
+      existingEffectiveCondition: d?.effectiveCondition ?? '',
+      existingFacilityPref: p?.treatmentFacilityPref ?? 'noPreference',
+      existingPreferredFacility: p?.preferredFacilityName ?? '',
+      existingAvoidFacility: p?.avoidFacilityName ?? '',
+      existingMedicationConsent: p?.medicationConsent ?? consentYes,
+      existingEctConsent: p?.ectConsent ?? consentNo,
+      existingExperimentalConsent: p?.experimentalConsent ?? consentNo,
+      existingDrugTrialConsent: p?.drugTrialConsent ?? consentNo,
+      existingAgentCanConsentMedication: p?.agentCanConsentMedication ?? true,
+      existingAgentAuthorityLimitations: p?.agentAuthorityLimitations ?? '',
+      existingHealthHistory: instr?.healthHistory ?? '',
+      existingCrisisIntervention: instr?.crisisIntervention ?? '',
+      existingActivities: instr?.activities ?? '',
+      existingDietary: instr?.dietary ?? '',
+      existingReligious: instr?.religious ?? '',
+      existingChildrenCustody: instr?.childrenCustody ?? '',
+      existingFamilyNotification: instr?.familyNotification ?? '',
+      existingRecordsDisclosure: instr?.recordsDisclosure ?? '',
+      existingPetCustody: instr?.petCustody ?? '',
+      existingOther: other.other,
+      existingDeescalation: other.deescalation,
+      existingTriggers: other.triggers,
+      existingPreferredMeds: medsOf(MedicationEntryType.preferred),
+      existingLimitationMeds: medsOf(MedicationEntryType.limitation),
+      existingAvoidMeds: medsOf(MedicationEntryType.exception),
+    );
+  }
+
   Future<void> _runSmartFill() async {
     if (!appData.ai.apiModeVisible) {
       await _runSmartFillHandoff();
@@ -31,12 +82,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         provider: aiCfg.provider,
         model: aiCfg.model,
       );
-      final response = await service.generate(SmartFillInput(
-        conditions: _validated!.icdConditions,
-        currentMedications: _validated!.validatedPreferredMedNames,
-        medicationsToAvoid: _validated!.validatedAvoidMedNames,
-        formType: widget.formType,
-      ));
+      final response = await service.generate(await _smartFillInput());
 
       final result = response.result;
       ref.read(geminiRateTrackerProvider).recordRequest(
@@ -79,12 +125,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   /// where every suggestion is reviewed before it is added.
   Future<void> _runSmartFillHandoff() async {
     if (_validated == null) return;
-    final prompt = SmartFillService.buildPrompt(SmartFillInput(
-      conditions: _validated!.icdConditions,
-      currentMedications: _validated!.validatedPreferredMedNames,
-      medicationsToAvoid: _validated!.validatedAvoidMedNames,
-      formType: widget.formType,
-    ).sanitized());
+    final prompt =
+        SmartFillService.buildPrompt((await _smartFillInput()).sanitized());
+    if (!mounted) return;
     await showDialog<void>(
       context: context,
       builder: (dctx) => AlertDialog(
@@ -314,6 +357,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
     // Additional instruction text fields
     final instrMap = <String, String>{};
+    // Sections stored as tagged lines in `other` (OtherInstructions).
+    var otherSections = OtherInstructions(
+      reproductive: _reviewChecked['reproductive_health'] == true
+          ? (_reviewEdited['reproductive_health'] ?? '')
+          : '',
+    );
     void addInstr(String reviewKey, String instrField) {
       if (_reviewChecked[reviewKey] == true &&
           _reviewEdited[reviewKey] != null) {
@@ -374,11 +423,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       addSmart('Family Notification', 'familyNotification');
       addSmart('Records Disclosure', 'recordsDisclosure');
       addSmart('Pet Care', 'petCustody');
-      // Crisis-adjacent guidance joins the crisis-intervention narrative.
-      addSmart('De-escalation Techniques', 'crisisIntervention',
-          label: 'De-escalation');
-      addSmart('Crisis Triggers', 'crisisIntervention',
-          label: 'Known triggers');
+      // De-escalation and triggers have their own sections on the
+      // Anything-else step (tagged lines in `other`).
+      otherSections = otherSections.append(
+        deescalation: smartVal('De-escalation Techniques'),
+        triggers: smartVal('Crisis Triggers'),
+      );
       // Facility NOTES describe the kind of setting (not a facility name),
       // so they can't go into the name columns — keep them, labeled, in
       // "Other instructions".
@@ -395,8 +445,23 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     }
 
     // Write all accumulated instruction fields
-    if (instrMap.isNotEmpty) {
+    final hasSections = otherSections.serialize().isNotEmpty;
+    if (instrMap.isNotEmpty || hasSections) {
       final existing = await repo.getAdditionalInstructions(id);
+      // Untagged text joins "Other instructions"; sections join their own.
+      String? otherValue;
+      if (instrMap.containsKey('other') || hasSections) {
+        final old = OtherInstructions.parse(existing?.other ?? '');
+        final s = otherSections;
+        otherValue = old
+            .append(
+              deescalation: s.deescalation,
+              triggers: s.triggers,
+              reproductive: s.reproductive,
+              other: instrMap['other'],
+            )
+            .serialize();
+      }
       String merge(String? old, String? add) {
         if (add == null) return old ?? '';
         if (old == null || old.trim().isEmpty) return add;
@@ -436,9 +501,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
               ? Value(merge(
                   existing?.recordsDisclosure, instrMap['recordsDisclosure']))
               : const Value.absent(),
-          other: instrMap.containsKey('other')
-              ? Value(merge(existing?.other, instrMap['other']))
-              : const Value.absent(),
+          other: otherValue != null ? Value(otherValue) : const Value.absent(),
         ),
       );
     }

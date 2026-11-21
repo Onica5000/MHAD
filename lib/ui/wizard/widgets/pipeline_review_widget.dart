@@ -153,6 +153,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewChecked['records_disclosure'] = true;
       _reviewEdited['records_disclosure'] = v.recordsDisclosure!;
     }
+    if (v.reproductiveHealth != null) {
+      _reviewChecked['reproductive_health'] = true;
+      _reviewEdited['reproductive_health'] = v.reproductiveHealth!;
+    }
     if (v.other != null) {
       _reviewChecked['other'] = true;
       _reviewEdited['other'] = v.other!;
@@ -452,6 +456,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         agents.where((a) => a.agentType == 'alternate').toList();
     final altAgent = altAgents.isEmpty ? null : altAgents.first;
     final guardian = await repo.getGuardianNomination(id);
+    final otherSections = OtherInstructions.parse(instr?.other ?? '');
     final existing = <String, String>{
       'facility_prefer': prefs?.preferredFacilityName ?? '',
       'facility_avoid': prefs?.avoidFacilityName ?? '',
@@ -464,7 +469,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'children_custody': instr?.childrenCustody ?? '',
       'family_notification': instr?.familyNotification ?? '',
       'records_disclosure': instr?.recordsDisclosure ?? '',
-      'other': instr?.other ?? '',
+      'reproductive_health': otherSections.reproductive,
+      'other': otherSections.other,
       'hh_note': instr?.healthHistory ?? '',
       // Declarant — split address fields
       'person_name': directive?.fullName ?? '',
@@ -560,6 +566,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'children_custody') return l.reviewLabelChildrenCustody;
     if (key == 'family_notification') return l.reviewLabelFamilyNotification;
     if (key == 'records_disclosure') return l.reviewStepRecordsDisclosure;
+    if (key == 'reproductive_health') return l.addlInstrReproTitle;
     if (key == 'other') return l.reviewStepOther;
     // Personal info (PII) — declarant
     if (key == 'person_name') return l.reviewLabelPersonName;

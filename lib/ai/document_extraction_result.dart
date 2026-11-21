@@ -90,6 +90,7 @@ class DocumentExtractionResult {
   final String? activities;
   final String? crisisIntervention;
   final String? petCustody;
+  final String? reproductiveHealth;
   final String? childrenCustody;
   final String? familyNotification;
   final String? recordsDisclosure;
@@ -137,6 +138,7 @@ class DocumentExtractionResult {
     this.activities,
     this.crisisIntervention,
     this.petCustody,
+    this.reproductiveHealth,
     this.childrenCustody,
     this.familyNotification,
     this.recordsDisclosure,
@@ -176,6 +178,7 @@ class DocumentExtractionResult {
       activities == null &&
       crisisIntervention == null &&
       petCustody == null &&
+      reproductiveHealth == null &&
       childrenCustody == null &&
       familyNotification == null &&
       recordsDisclosure == null &&
@@ -229,6 +232,8 @@ class DocumentExtractionResult {
       activities: _mergeText(activities, other.activities),
       crisisIntervention: _mergeText(crisisIntervention, other.crisisIntervention),
       petCustody: _mergeText(petCustody, other.petCustody),
+      reproductiveHealth:
+          _mergeText(reproductiveHealth, other.reproductiveHealth),
       childrenCustody: _mergeText(childrenCustody, other.childrenCustody),
       familyNotification: _mergeText(familyNotification, other.familyNotification),
       recordsDisclosure: _mergeText(recordsDisclosure, other.recordsDisclosure),
@@ -396,6 +401,7 @@ class DocumentExtractionResult {
       activities: optStr(json['activities']),
       crisisIntervention: optStr(json['crisis_intervention']),
       petCustody: optStr(json['pet_custody']),
+      reproductiveHealth: optStr(json['reproductive_health']),
       childrenCustody: optStr(json['children_custody']),
       familyNotification: optStr(json['family_notification']),
       recordsDisclosure: optStr(json['records_disclosure']),

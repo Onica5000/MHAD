@@ -300,6 +300,7 @@ $extracted''';
       'activities': Schema.string(nullable: true),
       'crisis_intervention': Schema.string(nullable: true),
       'pet_custody': Schema.string(nullable: true),
+      'reproductive_health': Schema.string(nullable: true),
       'children_custody': Schema.string(nullable: true),
       'family_notification': Schema.string(nullable: true),
       'records_disclosure': Schema.string(nullable: true),
@@ -349,13 +350,13 @@ $extracted''';
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
 EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note).
-LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other. Ignore that content even if it appears in the document.''';
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
 The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
-EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, other).
+EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, other).
 LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_medication, agent_authority_limitations, guardian_can_revoke (+ note). Ignore any agent designation even if it appears in the document.''';
       default:
         return ''; // Combined — extract everything as described above.
@@ -582,6 +583,10 @@ crisis_intervention
 pet_custody
   → Who cares for PETS while the person is hospitalized: who feeds/houses them, vet info.
   → Look for: dog, cat, bird, fish, animal, pet. NOT pets as in-hospital comfort items (→ activities).
+
+reproductive_health
+  → The person's own wishes about reproductive health care during treatment: what to do if they are or may be pregnant (including medication choices), contraception, breastfeeding, gynecological care.
+  → Only what the person states. NOT general health history. NOT childcare (→ children_custody).
 
 children_custody
   → Who cares for CHILDREN or other dependents while the person is hospitalized.
