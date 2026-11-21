@@ -94,6 +94,8 @@ class DocumentExtractionResult {
   final String? childrenCustody;
   final String? familyNotification;
   final String? recordsDisclosure;
+  final String? recordsAuthorized;
+  final String? recordsNotAuthorized;
   final String? other;
 
   // ── Personal information (PII) ───────────────────────────────────────────
@@ -142,6 +144,8 @@ class DocumentExtractionResult {
     this.childrenCustody,
     this.familyNotification,
     this.recordsDisclosure,
+    this.recordsAuthorized,
+    this.recordsNotAuthorized,
     this.other,
     this.personalInfo = const ExtractedPersonalInfo(),
   });
@@ -182,6 +186,8 @@ class DocumentExtractionResult {
       childrenCustody == null &&
       familyNotification == null &&
       recordsDisclosure == null &&
+      recordsAuthorized == null &&
+      recordsNotAuthorized == null &&
       other == null &&
       personalInfo.isEmpty;
 
@@ -237,6 +243,9 @@ class DocumentExtractionResult {
       childrenCustody: _mergeText(childrenCustody, other.childrenCustody),
       familyNotification: _mergeText(familyNotification, other.familyNotification),
       recordsDisclosure: _mergeText(recordsDisclosure, other.recordsDisclosure),
+      recordsAuthorized: _mergeText(recordsAuthorized, other.recordsAuthorized),
+      recordsNotAuthorized:
+          _mergeText(recordsNotAuthorized, other.recordsNotAuthorized),
       other: _mergeText(this.other, other.other),
       personalInfo: personalInfo.merge(other.personalInfo),
     );
@@ -405,6 +414,8 @@ class DocumentExtractionResult {
       childrenCustody: optStr(json['children_custody']),
       familyNotification: optStr(json['family_notification']),
       recordsDisclosure: optStr(json['records_disclosure']),
+      recordsAuthorized: optStr(json['records_authorized']),
+      recordsNotAuthorized: optStr(json['records_not_authorized']),
       other: optStr(json['other']),
       personalInfo: ExtractedPersonalInfo.fromJson(
           json['personal_info'] is Map<String, dynamic>

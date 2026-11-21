@@ -57,7 +57,7 @@ void main() {
     expect(DocumentExtractor.promptFor('combined'),
         contains('reproductive_health\n'));
     expect(DocumentExtractor.promptFor('poa'),
-        contains('children_custody, reproductive_health, other. Ignore'));
+        contains('reproductive_health, records_authorized, records_not_authorized, other. Ignore'));
   });
 
   test('smart-fill sees the person\'s own de-escalation and triggers', () {

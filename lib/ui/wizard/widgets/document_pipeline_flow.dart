@@ -22,6 +22,7 @@ import 'package:mhad/ai/smart_fill_service.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/domain/model/other_instructions.dart';
+import 'package:mhad/domain/model/records_disclosure.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/providers/kept_documents_provider.dart';

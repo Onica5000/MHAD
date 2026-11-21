@@ -301,6 +301,8 @@ $extracted''';
       'crisis_intervention': Schema.string(nullable: true),
       'pet_custody': Schema.string(nullable: true),
       'reproductive_health': Schema.string(nullable: true),
+      'records_authorized': Schema.string(nullable: true),
+      'records_not_authorized': Schema.string(nullable: true),
       'children_custody': Schema.string(nullable: true),
       'family_notification': Schema.string(nullable: true),
       'records_disclosure': Schema.string(nullable: true),
@@ -350,13 +352,13 @@ $extracted''';
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
 EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note).
-LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, other. Ignore that content even if it appears in the document.''';
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, records_authorized, records_not_authorized, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
 
 ═══ FORM SCOPE: DECLARATION (treatment preferences only — NO agent) ═══
 The user is filling a DECLARATION form. It records treatment preferences but does NOT name an agent.
-EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, other).
+EXTRACT the DECLARANT's personal_info, effective_condition, the trigger_* fields, and all treatment-preference fields (medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect/experimental/drug_trial/medication consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, records_authorized, records_not_authorized, other).
 LEAVE NULL / DO NOT EXTRACT: personal_info.agent, personal_info.alternate_agent, personal_info.guardian, agent_can_consent_medication, agent_authority_limitations, guardian_can_revoke (+ note). Ignore any agent designation even if it appears in the document.''';
       default:
         return ''; // Combined — extract everything as described above.
@@ -596,8 +598,14 @@ family_notification
   → Explicit preferences about who SHOULD or SHOULD NOT be contacted if hospitalized (e.g., "call my sister Jane", "do not contact my estranged father").
   → Stated as a PREFERENCE, NOT as contact-info storage for personal_info people.
 
+records_authorized
+  → Who the person says MAY receive their mental-health records, as they state it (e.g. "my agent", "my sister", "my therapist's office").
+
+records_not_authorized
+  → Who the person says must NOT receive their records (e.g. "my employer", "my ex-husband").
+
 records_disclosure
-  → Preferences about sharing, releasing, or withholding medical records — to whom and under what conditions.
+  → Any OTHER limits on sharing their records — what, when or how (e.g. "only the last two years", "nothing about my substance-use treatment"). Not the who-may / who-must-not lists above.
 
 other
   → ANYTHING important that does NOT fit a field above: financial matters, home/plant care, mail, work coverage, specific named-person instructions. NEVER drop an instruction — put it here rather than omitting it.

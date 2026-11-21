@@ -380,7 +380,15 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     addInstr('pet_custody', 'petCustody');
     addInstr('children_custody', 'childrenCustody');
     addInstr('family_notification', 'familyNotification');
-    addInstr('records_disclosure', 'recordsDisclosure');
+    // Records: three blocks in one column (RecordsDisclosure).
+    String? reviewed(String key) => _reviewChecked[key] == true
+        ? _reviewEdited[key]?.trim()
+        : null;
+    var recordsAdd = RecordsDisclosure(
+      authorized: reviewed('records_authorized') ?? '',
+      notAuthorized: reviewed('records_not_authorized') ?? '',
+      otherLimits: reviewed('records_disclosure') ?? '',
+    );
     addInstr('other', 'other');
 
     // ── Apply Smart Fill results ─────────────────────────────────────
@@ -421,7 +429,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       addSmart('Religious/Spiritual', 'religious');
       addSmart('Children/Dependent Care', 'childrenCustody');
       addSmart('Family Notification', 'familyNotification');
-      addSmart('Records Disclosure', 'recordsDisclosure');
+      recordsAdd =
+          recordsAdd.append(otherLimits: smartVal('Records Disclosure'));
       addSmart('Pet Care', 'petCustody');
       // De-escalation and triggers have their own sections on the
       // Anything-else step (tagged lines in `other`).
@@ -446,8 +455,18 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
     // Write all accumulated instruction fields
     final hasSections = otherSections.serialize().isNotEmpty;
-    if (instrMap.isNotEmpty || hasSections) {
+    final hasRecords = recordsAdd.serialize().isNotEmpty;
+    if (instrMap.isNotEmpty || hasSections || hasRecords) {
       final existing = await repo.getAdditionalInstructions(id);
+      final recordsValue = hasRecords
+          ? RecordsDisclosure.parse(existing?.recordsDisclosure ?? '')
+              .append(
+                authorized: recordsAdd.authorized,
+                notAuthorized: recordsAdd.notAuthorized,
+                otherLimits: recordsAdd.otherLimits,
+              )
+              .serialize()
+          : null;
       // Untagged text joins "Other instructions"; sections join their own.
       String? otherValue;
       if (instrMap.containsKey('other') || hasSections) {
@@ -497,9 +516,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
               ? Value(merge(
                   existing?.familyNotification, instrMap['familyNotification']))
               : const Value.absent(),
-          recordsDisclosure: instrMap.containsKey('recordsDisclosure')
-              ? Value(merge(
-                  existing?.recordsDisclosure, instrMap['recordsDisclosure']))
+          recordsDisclosure: recordsValue != null
+              ? Value(recordsValue)
               : const Value.absent(),
           other: otherValue != null ? Value(otherValue) : const Value.absent(),
         ),

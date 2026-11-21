@@ -149,6 +149,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewChecked['family_notification'] = true;
       _reviewEdited['family_notification'] = v.familyNotification!;
     }
+    if (v.recordsAuthorized != null) {
+      _reviewChecked['records_authorized'] = true;
+      _reviewEdited['records_authorized'] = v.recordsAuthorized!;
+    }
+    if (v.recordsNotAuthorized != null) {
+      _reviewChecked['records_not_authorized'] = true;
+      _reviewEdited['records_not_authorized'] = v.recordsNotAuthorized!;
+    }
     if (v.recordsDisclosure != null) {
       _reviewChecked['records_disclosure'] = true;
       _reviewEdited['records_disclosure'] = v.recordsDisclosure!;
@@ -457,6 +465,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
     final altAgent = altAgents.isEmpty ? null : altAgents.first;
     final guardian = await repo.getGuardianNomination(id);
     final otherSections = OtherInstructions.parse(instr?.other ?? '');
+    final records = RecordsDisclosure.parse(instr?.recordsDisclosure ?? '');
     final existing = <String, String>{
       'facility_prefer': prefs?.preferredFacilityName ?? '',
       'facility_avoid': prefs?.avoidFacilityName ?? '',
@@ -468,7 +477,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'pet_custody': instr?.petCustody ?? '',
       'children_custody': instr?.childrenCustody ?? '',
       'family_notification': instr?.familyNotification ?? '',
-      'records_disclosure': instr?.recordsDisclosure ?? '',
+      'records_authorized': records.authorized,
+      'records_not_authorized': records.notAuthorized,
+      'records_disclosure': records.otherLimits,
       'reproductive_health': otherSections.reproductive,
       'other': otherSections.other,
       'hh_note': instr?.healthHistory ?? '',
@@ -565,7 +576,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'pet_custody') return l.reviewStepPetCare;
     if (key == 'children_custody') return l.reviewLabelChildrenCustody;
     if (key == 'family_notification') return l.reviewLabelFamilyNotification;
-    if (key == 'records_disclosure') return l.reviewStepRecordsDisclosure;
+    if (key == 'records_authorized') return l.addlInstrRecordsReleaseLabel;
+    if (key == 'records_not_authorized') return l.addlInstrRecordsWithholdLabel;
+    if (key == 'records_disclosure') return l.addlInstrRecordsOtherLabel;
     if (key == 'reproductive_health') return l.addlInstrReproTitle;
     if (key == 'other') return l.reviewStepOther;
     // Personal info (PII) — declarant
