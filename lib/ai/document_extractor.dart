@@ -500,6 +500,9 @@ NEVER AUTHORIZED (20 Pa.C.S. § 5836(b))
 WITNESSES
   → Witnesses are chosen at signing. Never put witness names or witness plans into any field.
 
+ID AND ACCOUNT NUMBERS
+  → Never copy a Social Security number, a Medicare / Medicaid / insurance member ID, a driver's license or other ID-card number, a medical record number, or a bank or account number into ANY field — even when the document asks for it. The directive doesn't ask for them, and it is shared with care providers. (From an ID card, take only the name, date of birth and address.)
+
 medication_consent
   → The person's OWN general consent to psychiatric medications (values as above).
   → This is their consent — NOT the agent's authority over medications (that is agent_can_consent_medication).

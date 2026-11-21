@@ -31,4 +31,12 @@ void main() {
     expect(p, contains('Phone numbers and street addresses go in personal_info ONLY'));
     expect(p, contains('may name a person only where the person'));
   });
+
+  test('ID and account numbers never go into any field', () {
+    for (final form in ['combined', 'declaration', 'poa']) {
+      expect(DocumentExtractor.promptFor(form),
+          contains('Never copy a Social Security number'),
+          reason: form);
+    }
+  });
 }
