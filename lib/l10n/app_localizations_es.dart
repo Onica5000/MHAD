@@ -6477,6 +6477,287 @@ class AppLocalizationsEs extends AppLocalizations {
       'Diga los nombres de medicamentos y médicos despacio y deletréelos. La IA no adivinará un medicamento o afección que no haya oído con claridad.';
 
   @override
+  String get audioQTitle => 'Cuestionario de voz';
+
+  @override
+  String get audioQIntroApi =>
+      'Lea esto en voz alta y responda cada pregunta con sus propias palabras; luego suba la grabación en la página Autocompletar. La IA convierte lo que usted dice en su directiva, y usted revisa cada campo antes de que se agregue algo.';
+
+  @override
+  String get audioQIntroHandoff =>
+      'Lea esto en voz alta y responda cada pregunta con sus propias palabras. Luego abra la página Autocompletar: allí verá cómo adjuntar la grabación en su propia IA y traer su respuesta, y PA MHAD llena su directiva con ella; usted revisa cada campo antes de que se agregue algo.';
+
+  @override
+  String get audioQIntroTips =>
+      'Hable con naturalidad; no necesita usar palabras exactas. Diga “omitir” para lo que no aplique. Si un medicamento o un médico tiene un nombre poco común, dígalo despacio y deletréelo. Haga cada grabación de menos de unos 2 minutos: grabe un clip por sección.';
+
+  @override
+  String get audioQPrintSubtitle =>
+      'Léalo en voz alta para grabar un audio que llene automáticamente su Directiva Anticipada de Salud Mental de PA.';
+
+  @override
+  String audioQNote(String note) {
+    return 'Nota: $note';
+  }
+
+  @override
+  String get audioQ1Title => 'Sobre usted';
+
+  @override
+  String get audioQ1Prompt1 => 'Su nombre legal completo.';
+
+  @override
+  String get audioQ1Prompt2 => 'Su fecha de nacimiento (día, mes y año).';
+
+  @override
+  String get audioQ1Prompt3 =>
+      'Su domicilio: calle y número, apartamento o unidad, ciudad, condado, estado y código postal (ZIP).';
+
+  @override
+  String get audioQ1Prompt4 =>
+      'Un número de teléfono donde se le pueda localizar.';
+
+  @override
+  String get audioQ1Example =>
+      'Me llamo Juana Q. Pública. Nací el 15 de marzo de 1975. Vivo en 123 Main Street, apartamento 4B, Filadelfia, condado de Filadelfia, Pensilvania, 19103. Mi teléfono es (215) 555-1234.';
+
+  @override
+  String get audioQ2Title => 'Sus médicos';
+
+  @override
+  String get audioQ2Prompt1 =>
+      'Su médico de cabecera o médico tratante: nombre, especialidad (p. ej., psiquiatría) y teléfono.';
+
+  @override
+  String get audioQ2Prompt2 =>
+      'Si quiere que un médico en particular evalúe su capacidad (distinto de su médico de cabecera): su nombre y cómo comunicarse con él.';
+
+  @override
+  String get audioQ3Title => 'Su agente de salud mental';
+
+  @override
+  String get audioQ3AppliesWhen =>
+      'solo si nombra a un agente: formulario Combinado o Poder de Salud Mental';
+
+  @override
+  String get audioQ3Prompt1 =>
+      'El nombre completo de su agente, su relación con usted, su dirección y un número de teléfono.';
+
+  @override
+  String get audioQ3Prompt2 =>
+      'Si tiene un agente alternativo, dé los mismos datos de esa persona.';
+
+  @override
+  String get audioQ3Example =>
+      'Mi agente es Juan Público, mi esposo, en la misma dirección, celular (215) 555-5678. Mi agente alternativa es María Pública, mi hermana, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.';
+
+  @override
+  String get audioQ4Title => 'Nominación de un tutor';
+
+  @override
+  String get audioQ4AppliesWhen => 'opcional';
+
+  @override
+  String get audioQ4Prompt1 =>
+      'Si quiere nominar a alguien como su tutor en caso de que un tribunal llegue a nombrar uno: su nombre, su relación con usted, su dirección y su teléfono.';
+
+  @override
+  String get audioQ5Title => 'Cuándo entra en vigor esta directiva';
+
+  @override
+  String get audioQ5Prompt1 =>
+      'Describa las circunstancias en que debe activarse esta directiva; por ejemplo, “cuando un psiquiatra y otro profesional determinen que no puedo tomar mis propias decisiones de salud mental”. Esto es el texto de “cuándo entra en vigor”, no sus diagnósticos.';
+
+  @override
+  String get audioQ6Title => 'Sus diagnósticos';
+
+  @override
+  String get audioQ6Prompt1 =>
+      'Diga sus diagnósticos o condiciones de salud mental. Si conoce el código de diagnóstico (ICD-10), puede decirlo, pero es opcional.';
+
+  @override
+  String get audioQ6Example =>
+      'Tengo trastorno bipolar tipo 1 y trastorno de ansiedad generalizada.';
+
+  @override
+  String get audioQ7Title => 'Medicamentos';
+
+  @override
+  String get audioQ7Prompt1 =>
+      'Dígalos en CUATRO grupos separados (van en lugares distintos del formulario). Para cada uno, agregue una razón breve si quiere:';
+
+  @override
+  String get audioQ7Prompt2 =>
+      '1. Medicamentos que tomo ACTUALMENTE: lo que toma ahora, como referencia.';
+
+  @override
+  String get audioQ7Prompt3 =>
+      '2. Medicamentos que PREFIERO: los que me han funcionado bien.';
+
+  @override
+  String get audioQ7Prompt4 =>
+      '3. Medicamentos que NUNCA quiero o que rechazo, y por qué.';
+
+  @override
+  String get audioQ7Prompt5 =>
+      '4. Medicamentos con LIMITACIONES: se pueden dar, pero solo en las condiciones que usted indique.';
+
+  @override
+  String get audioQ7Example =>
+      'Actualmente tomo litio y lamotrigina, L-A-M-O-T-R-I-G-I-N-A. Prefiero la quetiapina, me ha funcionado bien. Nunca quiero haloperidol, me causó una reacción grave. Clozapina solo con análisis de sangre semanales.';
+
+  @override
+  String get audioQ7Note =>
+      'Diga la dosis si la sabe (p. ej., “litio 300 mg dos veces al día”): el autocompletado toma la dosis de los medicamentos que toma actualmente. Revísela siempre después en la aplicación.';
+
+  @override
+  String get audioQ8Title => 'Alergias';
+
+  @override
+  String get audioQ8Prompt1 =>
+      'Diga sus alergias: a medicamentos, alimentos o materiales. Para cada una, diga la gravedad (leve, moderada o grave), las reacciones que le causa y cualquier nota.';
+
+  @override
+  String get audioQ8Example =>
+      'Tengo alergia a la penicilina: grave, causa anafilaxia. Al látex: moderada, causa urticaria.';
+
+  @override
+  String get audioQ9Title => 'Preferencias de centro de tratamiento';
+
+  @override
+  String get audioQ9Prompt1 =>
+      'Un hospital o centro de tratamiento donde PREFIERE recibir tratamiento.';
+
+  @override
+  String get audioQ9Prompt2 => 'Un centro que quiere EVITAR, si lo hay.';
+
+  @override
+  String get audioQ10Title => 'Preferencias de habitación y entorno';
+
+  @override
+  String get audioQ10Prompt1 =>
+      'Cualquier preferencia de habitación o entorno: por ejemplo, una habitación privada, un piso tranquilo, una ventana o un compañero de habitación del mismo género.';
+
+  @override
+  String get audioQ11Title =>
+      'TEC, estudios experimentales y ensayos de medicamentos';
+
+  @override
+  String get audioQ11Prompt1 =>
+      'Para CADA uno de estos tres, diga claramente qué quiere: “doy mi consentimiento”, “no doy mi consentimiento” o “quiero que decida mi agente”.';
+
+  @override
+  String get audioQ11Prompt2 => 'Terapia electroconvulsiva (TEC).';
+
+  @override
+  String get audioQ11Prompt3 => 'Estudios experimentales o de investigación.';
+
+  @override
+  String get audioQ11Prompt4 => 'Ensayos de medicamentos.';
+
+  @override
+  String get audioQ11Example =>
+      'Para la TEC, no doy mi consentimiento. Para los estudios experimentales, quiero que decida mi agente. Para los ensayos de medicamentos, no doy mi consentimiento.';
+
+  @override
+  String get audioQ11Note =>
+      'Si elige “que decida mi agente” para cualquiera de estos tres, el formulario oficial le pide poner sus iniciales junto a esa opción en el formulario IMPRESO (la ley de Pensilvania, § 5836(c), solo permite que su agente decida sobre esto si usted lo indica expresamente). La grabación registra su elección, pero no puede poner las iniciales por usted.';
+
+  @override
+  String get audioQ12Title => 'Límites a la autoridad de su agente';
+
+  @override
+  String get audioQ12AppliesWhen => 'solo si nombra a un agente';
+
+  @override
+  String get audioQ12Prompt1 =>
+      'Cualquier límite o condición sobre lo que su agente puede o no puede hacer; p. ej., “mi agente debe consultar primero a mi hermana” o “mi agente no puede dar su consentimiento para la TEC”.';
+
+  @override
+  String get audioQ13Title => 'Instrucciones adicionales';
+
+  @override
+  String get audioQ13Prompt1 =>
+      'Hable de los que apliquen (diga “omitir” para los demás):';
+
+  @override
+  String get audioQ13Prompt2 =>
+      'Actividades que ayudan o empeoran sus síntomas.';
+
+  @override
+  String get audioQ13Prompt3 =>
+      'Lo que le ayuda durante una crisis: intervenciones que prefiere, lo que le calma y lo que se debe evitar.';
+
+  @override
+  String get audioQ13Prompt4 =>
+      'Historial de salud: hospitalizaciones anteriores, lo que ha funcionado y lo que no.';
+
+  @override
+  String get audioQ13Prompt5 => 'Necesidades o restricciones de alimentación.';
+
+  @override
+  String get audioQ13Prompt6 =>
+      'Preferencias religiosas o culturales que importan para su atención.';
+
+  @override
+  String get audioQ13Prompt7 =>
+      'Arreglos sobre sus hijos o su custodia que se deben tener en cuenta.';
+
+  @override
+  String get audioQ13Prompt8 => 'A quién avisar y a quién NO avisar.';
+
+  @override
+  String get audioQ13Prompt9 =>
+      'Divulgación de expedientes: quién puede ver sus expedientes.';
+
+  @override
+  String get audioQ13Prompt10 =>
+      'Cuidado de mascotas: quién cuida a sus mascotas si usted está hospitalizado.';
+
+  @override
+  String get audioQ13Prompt11 =>
+      'Cualquier otra cosa que quiera que sepan su equipo de atención y su agente.';
+
+  @override
+  String get audioQCantDoSignatures => 'Su firma y las firmas de sus testigos.';
+
+  @override
+  String get audioQCantDoInitials =>
+      'Sus iniciales en el formulario impreso para que su agente decida sobre la TEC, los estudios experimentales o los ensayos de medicamentos (el formulario oficial las pide; vea la sección 11).';
+
+  @override
+  String get audioQCantDoSideEffects =>
+      'La lista de efectos secundarios se arma en la aplicación: el autocompletado no la llena. Abra esa sección y llénela (o revísela) usted mismo.';
+
+  @override
+  String get audioQCapturedMedAuthority =>
+      'Si su agente puede decidir sobre sus medicamentos (dígalo de forma explícita).';
+
+  @override
+  String get audioQCapturedUlysses =>
+      'Una instrucción de autovinculación (“Ulises”): que se siga su directiva aunque usted se oponga durante una crisis futura.';
+
+  @override
+  String get audioQCapturedDosages =>
+      'Las dosis de los medicamentos que toma actualmente.';
+
+  @override
+  String get audioQCapturedRoom =>
+      'Preferencias de habitación: una habitación privada, una ventana, un piso tranquilo o un compañero de habitación del mismo género.';
+
+  @override
+  String get audioQCapturedCrisisPlan =>
+      'Su plan de crisis: señales de alerta temprana, desencadenantes, lo que ayuda, cosas que decirle y lo que no se debe hacer.';
+
+  @override
+  String get audioQFormTypeNote =>
+      'No elige el tipo de formulario mientras graba. El autocompletado llena el formulario que ya usa su directiva (el Combinado, salvo que haya elegido otro), y puede cambiar el tipo de formulario más adelante.';
+
+  @override
+  String get audioQClosing =>
+      'Revise siempre cada campo autocompletado antes de agregarlo: corrija medicamentos, condiciones, nombres o números mal entendidos.';
+
+  @override
   String get stepSubtitleAboutYou =>
       'Solo lo básico para que este documento sea exclusivamente suyo. ¿Tiene a mano su identificación? Autocompletar puede llenar estos datos con una foto.';
 

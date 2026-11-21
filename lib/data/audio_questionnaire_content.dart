@@ -2,10 +2,16 @@
 /// to record an audio file for AI autofill. Single source of truth shared by
 /// the in-app audio-guide screen and the printable questionnaire PDF.
 ///
+/// The words are ARB keys (`audioQ*`, English + Spanish), so the script and
+/// its printout follow the app language; this file only fixes the structure.
+///
 /// Every prompt maps to a field the autofill extractor can capture (see
 /// `document_extractor.dart`'s response schema). Things audio CAN'T fill are in
-/// [audioQCantDo].
+/// [AudioQuestionnaire.cantDo].
 library;
+
+import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/l10n/app_localizations.dart';
 
 class AudioQSection {
   final String number;
@@ -34,215 +40,148 @@ class AudioQSection {
   });
 }
 
-const String audioQTitle = 'Voice questionnaire';
+/// The questionnaire in the language of [l].
+class AudioQuestionnaire {
+  const AudioQuestionnaire(this.l);
 
-const String audioQIntro =
-    'Read this out loud and answer each prompt in your own words, then upload '
-    'the recording on the Snap-to-fill screen. The AI turns what you say into '
-    'your directive — and you review every field before anything is saved.\n\n'
-    'Speak naturally; you don\'t need exact wording. Say "skip" for anything '
-    'that doesn\'t apply. For unusual medication or doctor names, say the name '
-    'slowly and spell it. Keep each recording under about 2 minutes — record '
-    'one clip per section and upload them together.';
+  final AppLocalizations l;
 
-const List<AudioQSection> audioQSections = [
-  AudioQSection(
-    number: '1',
-    title: 'About you',
-    prompts: [
-      'Your full legal name.',
-      'Your date of birth (month, day, year).',
-      'Your home address: street and number, apartment or unit, city, county, '
-          'state, and ZIP code.',
-      'A phone number where you can be reached.',
-    ],
-    example:
-        'My name is Jane Quincy Public. I was born March 15th, 1975. I live at '
-        '123 Main Street, apartment 4B, Philadelphia, Philadelphia County, '
-        'Pennsylvania, 19103. My phone is (215) 555-1234.',
-  ),
-  AudioQSection(
-    number: '2',
-    title: 'Your doctors',
-    prompts: [
-      'Your primary doctor / treating physician: name, specialty (e.g. '
-          'psychiatry), and phone number.',
-      'If you want a specific doctor to evaluate your capacity (different from '
-          'your primary doctor): their name and how to reach them.',
-    ],
-  ),
-  AudioQSection(
-    number: '3',
-    title: 'Your mental-health agent',
-    appliesWhen: 'only if you are naming an agent — Combined or Power of '
-        'Attorney form',
-    prompts: [
-      'Your agent\'s full name, their relationship to you, their address, and '
-          'a phone number.',
-      'If you have a backup / alternate agent, give the same details for them.',
-    ],
-    example:
-        'My agent is John Public, my husband, at the same address, cell (215) '
-        '555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, '
-        'Pittsburgh, PA 15201, (412) 555-0000.',
-  ),
-  AudioQSection(
-    number: '4',
-    title: 'Guardian nomination',
-    appliesWhen: 'optional',
-    prompts: [
-      'If you want to nominate someone to be your guardian should a court ever '
-          'appoint one: their name, relationship, address, and phone.',
-    ],
-  ),
-  AudioQSection(
-    number: '5',
-    title: 'When this directive takes effect',
-    prompts: [
-      'Describe the circumstances that should trigger this directive — for '
-          'example, "when two professionals certify that I can\'t make my own '
-          'mental health decisions." This is the "when it kicks in" language, '
-          'not your diagnoses.',
-    ],
-  ),
-  AudioQSection(
-    number: '6',
-    title: 'Your diagnoses',
-    prompts: [
-      'List your mental-health diagnoses / conditions. If you happen to know a '
-          'diagnosis code (ICD-10) you can say it, but it\'s optional.',
-    ],
-    example: 'I have bipolar disorder type 1 and generalized anxiety disorder.',
-  ),
-  AudioQSection(
-    number: '7',
-    title: 'Medications',
-    prompts: [
-      'Say these in FOUR separate groups (they go to different places on the '
-          'form). For each, add a short reason if you like:',
-      '1. Medications I am CURRENTLY taking — what you take now, for reference.',
-      '2. Medications I PREFER — ones that have worked well.',
-      '3. Medications I NEVER want / refuse — and why.',
-      '4. Medications with LIMITATIONS — may be given, but only under '
-          'conditions you state.',
-    ],
-    example:
-        'I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I '
-        'prefer quetiapine, it has worked well. I never want haloperidol, it '
-        'caused a severe reaction. Clozapine only with weekly blood monitoring.',
-    note: 'Say the dose if you know it (e.g. "lithium 300 mg twice a day") — '
-        'autofill captures the dose for medications you currently take. Always '
-        'double-check it in the app afterward.',
-  ),
-  AudioQSection(
-    number: '8',
-    title: 'Allergies',
-    prompts: [
-      'List your allergies — drug, food, or material. For each, say the '
-          'severity (mild, moderate, or severe), the reactions it causes, and '
-          'any notes.',
-    ],
-    example:
-        'I\'m allergic to penicillin — severe, causes anaphylaxis. Latex — '
-        'moderate, causes hives.',
-  ),
-  AudioQSection(
-    number: '9',
-    title: 'Treatment facility preferences',
-    prompts: [
-      'A hospital or treatment center you PREFER to be treated at.',
-      'A facility you want to AVOID, if any.',
-    ],
-  ),
-  AudioQSection(
-    number: '10',
-    title: 'Room and environment preferences',
-    prompts: [
-      'Any room or environment preferences — for example a private room, a '
-          'quiet floor, a window, or a same-gender roommate.',
-    ],
-  ),
-  AudioQSection(
-    number: '11',
-    title: 'ECT, experimental studies, and drug trials',
-    prompts: [
-      'For EACH of these three, say clearly which you want: "I consent," "I do '
-          'not consent," or "I want my agent to decide."',
-      'Electroconvulsive therapy (ECT).',
-      'Experimental studies / research.',
-      'Drug trials.',
-    ],
-    example:
-        'For ECT, I do not consent. For experimental studies, I want my agent '
-        'to decide. For drug trials, I do not consent.',
-    note: 'If you choose "my agent decides" for any of these three, the '
-        'official form asks you to initial that choice on the PRINTED form '
-        '(Pennsylvania law, §5836(c), lets your agent decide these only if you '
-        'specifically say so) — the recording captures your choice, but it '
-        'can\'t initial for you.',
-  ),
-  AudioQSection(
-    number: '12',
-    title: 'Limits on your agent\'s authority',
-    appliesWhen: 'only if naming an agent',
-    prompts: [
-      'Any limits or conditions on what your agent may or may not do — e.g. '
-          '"my agent must consult my sister first," or "my agent may not '
-          'consent to ECT."',
-    ],
-  ),
-  AudioQSection(
-    number: '13',
-    title: 'Additional instructions',
-    prompts: [
-      'Cover any of these that apply (say "skip" for the rest):',
-      'Activities that help or worsen your symptoms.',
-      'What helps you during a crisis — preferred interventions, what calms '
-          'you, what to avoid.',
-      'Health history — past hospitalizations, what has or hasn\'t worked.',
-      'Dietary needs or restrictions.',
-      'Religious or cultural preferences relevant to your care.',
-      'Children / custody arrangements to be aware of.',
-      'Who to notify, and who NOT to notify.',
-      'Records disclosure — who may see your records.',
-      'Pet care — who cares for your pets if you\'re hospitalized.',
-      'Anything else you want your care team and agent to know.',
-    ],
-  ),
-];
+  String get title => l.audioQTitle;
 
-/// Things the recording can NOT fill — the user must do these in the app.
-const List<String> audioQCantDo = [
-  'Your signature and your witnesses\' signatures.',
-  'Your initials on the printed form for letting your agent decide ECT, '
-      'experimental studies, or drug trials (the official form asks for them '
-      '— see section 11).',
-  'The specific room-preference checkboxes (e.g. private room) — though your '
-      'spoken room notes ARE captured, and a same-gender-roommate request is '
-      'now auto-filled.',
-  'The structured crisis plan and the side-effects checklist are built in the '
-      'app — autofill does NOT complete them. Please open and fill in (or '
-      'review) those two sections yourself. (Your general crisis and activity '
-      'notes ARE captured.)',
-];
+  /// How to record, for the AI path in view (copy-and-paste unless the API
+  /// path is shown), then the speaking tips.
+  String get intro =>
+      '${appData.ai.apiModeVisible ? l.audioQIntroApi : l.audioQIntroHandoff}'
+      '\n\n${l.audioQIntroTips}';
 
-/// Things the recording now CAN fill if you say them clearly — called out so
-/// users know they're worth speaking aloud.
-const List<String> audioQNowCaptured = [
-  'Whether your agent may decide your medications (say it explicitly).',
-  'A self-binding ("Ulysses") instruction — that your directive should be '
-      'followed even if you object during a future crisis.',
-  'Dosages for the medications you currently take.',
-];
+  List<AudioQSection> get sections => [
+        AudioQSection(
+          number: '1',
+          title: l.audioQ1Title,
+          prompts: [
+            l.audioQ1Prompt1,
+            l.audioQ1Prompt2,
+            l.audioQ1Prompt3,
+            l.audioQ1Prompt4,
+          ],
+          example: l.audioQ1Example,
+        ),
+        AudioQSection(
+          number: '2',
+          title: l.audioQ2Title,
+          prompts: [l.audioQ2Prompt1, l.audioQ2Prompt2],
+        ),
+        AudioQSection(
+          number: '3',
+          title: l.audioQ3Title,
+          appliesWhen: l.audioQ3AppliesWhen,
+          prompts: [l.audioQ3Prompt1, l.audioQ3Prompt2],
+          example: l.audioQ3Example,
+        ),
+        AudioQSection(
+          number: '4',
+          title: l.audioQ4Title,
+          appliesWhen: l.audioQ4AppliesWhen,
+          prompts: [l.audioQ4Prompt1],
+        ),
+        AudioQSection(
+          number: '5',
+          title: l.audioQ5Title,
+          prompts: [l.audioQ5Prompt1],
+        ),
+        AudioQSection(
+          number: '6',
+          title: l.audioQ6Title,
+          prompts: [l.audioQ6Prompt1],
+          example: l.audioQ6Example,
+        ),
+        AudioQSection(
+          number: '7',
+          title: l.audioQ7Title,
+          prompts: [
+            l.audioQ7Prompt1,
+            l.audioQ7Prompt2,
+            l.audioQ7Prompt3,
+            l.audioQ7Prompt4,
+            l.audioQ7Prompt5,
+          ],
+          example: l.audioQ7Example,
+          note: l.audioQ7Note,
+        ),
+        AudioQSection(
+          number: '8',
+          title: l.audioQ8Title,
+          prompts: [l.audioQ8Prompt1],
+          example: l.audioQ8Example,
+        ),
+        AudioQSection(
+          number: '9',
+          title: l.audioQ9Title,
+          prompts: [l.audioQ9Prompt1, l.audioQ9Prompt2],
+        ),
+        AudioQSection(
+          number: '10',
+          title: l.audioQ10Title,
+          prompts: [l.audioQ10Prompt1],
+        ),
+        AudioQSection(
+          number: '11',
+          title: l.audioQ11Title,
+          prompts: [
+            l.audioQ11Prompt1,
+            l.audioQ11Prompt2,
+            l.audioQ11Prompt3,
+            l.audioQ11Prompt4,
+          ],
+          example: l.audioQ11Example,
+          note: l.audioQ11Note,
+        ),
+        AudioQSection(
+          number: '12',
+          title: l.audioQ12Title,
+          appliesWhen: l.audioQ12AppliesWhen,
+          prompts: [l.audioQ12Prompt1],
+        ),
+        AudioQSection(
+          number: '13',
+          title: l.audioQ13Title,
+          prompts: [
+            l.audioQ13Prompt1,
+            l.audioQ13Prompt2,
+            l.audioQ13Prompt3,
+            l.audioQ13Prompt4,
+            l.audioQ13Prompt5,
+            l.audioQ13Prompt6,
+            l.audioQ13Prompt7,
+            l.audioQ13Prompt8,
+            l.audioQ13Prompt9,
+            l.audioQ13Prompt10,
+            l.audioQ13Prompt11,
+          ],
+        ),
+      ];
 
-/// After autofill the app recommends a form type (Combined / Declaration /
-/// Power of Attorney) from what it found; you confirm or change it.
-const String audioQFormTypeNote =
-    'You don\'t pick your form type while recording — after autofill the app '
-    'recommends one (Combined, Declaration, or Power of Attorney) based on what '
-    'it heard, and you confirm or change it.';
+  /// Things the recording can NOT fill — the user must do these in the app.
+  List<String> get cantDo => [
+        l.audioQCantDoSignatures,
+        l.audioQCantDoInitials,
+        l.audioQCantDoSideEffects,
+      ];
 
-/// Closing reminder shown after the questionnaire.
-const String audioQClosing =
-    'Always review every autofilled field before saving — correct any mis-heard '
-    'medications, conditions, names, or numbers.';
+  /// Things the recording CAN fill if said clearly — called out so people
+  /// know they're worth speaking aloud.
+  List<String> get nowCaptured => [
+        l.audioQCapturedMedAuthority,
+        l.audioQCapturedUlysses,
+        l.audioQCapturedDosages,
+        l.audioQCapturedRoom,
+        l.audioQCapturedCrisisPlan,
+      ];
+
+  /// Autofill fills the form the directive already uses; the person can
+  /// switch form types later.
+  String get formTypeNote => l.audioQFormTypeNote;
+
+  /// Closing reminder shown after the questionnaire.
+  String get closing => l.audioQClosing;
+}

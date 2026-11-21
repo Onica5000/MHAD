@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:mhad/data/audio_questionnaire_content.dart';
+import 'package:mhad/l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -12,12 +13,17 @@ import 'pdf_helpers.dart';
 String _safe(String s) => s
     .replaceAll('—', '-') // em dash
     .replaceAll('–', '-') // en dash
-    .replaceAll('•', '-'); // bullet
+    .replaceAll('•', '-') // bullet
+    .replaceAll(RegExp('[‘’]'), "'") // curly single quotes (the ARB style)
+    .replaceAll(RegExp('[“”]'), '"') // curly double quotes
+    .replaceAll('…', '...'); // ellipsis
 
 /// Builds a printable PDF of the spoken questionnaire — the read-aloud script
 /// for recording an audio file that autofills the directive. Printed via the
-/// `printing` package (browser print sheet on web).
-Future<Uint8List> buildAudioQuestionnairePdf() async {
+/// `printing` package (browser print sheet on web). In the language of [l]
+/// (Spanish accents are in the base font; [_safe] handles the rest).
+Future<Uint8List> buildAudioQuestionnairePdf(AppLocalizations l) async {
+  final q = AudioQuestionnaire(l);
   final doc = pw.Document();
 
   // A drawn bullet dot (avoids the • glyph the base font can't render).
@@ -44,7 +50,8 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
 
   List<pw.Widget> section(AudioQSection s) => [
         pw.SizedBox(height: 11),
-        pw.Text('${s.number}.  ${s.title}', style: boldStyle(fontSize: 12.5)),
+        pw.Text('${s.number}.  ${_safe(s.title)}',
+            style: boldStyle(fontSize: 12.5)),
         if (s.appliesWhen != null)
           pw.Text(
             '(${_safe(s.appliesWhen!)})',
@@ -66,7 +73,7 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
               borderRadius: pw.BorderRadius.circular(4),
             ),
             child: pw.Text(
-              'Example: ${_safe(s.example!)}',
+              _safe(l.audioGuideExample(s.example!)),
               style: pw.TextStyle(
                 fontSize: 10,
                 fontStyle: pw.FontStyle.italic,
@@ -77,7 +84,7 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
         ],
         if (s.note != null) ...[
           pw.SizedBox(height: 3),
-          pw.Text('Note: ${_safe(s.note!)}', style: smallBodyStyle()),
+          pw.Text(_safe(l.audioQNote(s.note!)), style: smallBodyStyle()),
         ],
       ];
 
@@ -86,35 +93,28 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
       pageFormat: kPageFormat,
       margin: const pw.EdgeInsets.fromLTRB(54, 48, 54, 44),
       build: (context) => [
-        pw.Text(audioQTitle,
+        pw.Text(_safe(q.title),
             style: sectionHeaderStyle().copyWith(fontSize: 20)),
-        pw.Text(
-          'Read aloud to record an audio file that autofills your PA Mental '
-          'Health Advance Directive.',
-          style: smallBodyStyle(),
-        ),
+        pw.Text(_safe(l.audioQPrintSubtitle), style: smallBodyStyle()),
         pw.SizedBox(height: 8),
-        pw.Text(_safe(audioQIntro), style: bodyStyle()),
-        for (final s in audioQSections) ...section(s),
+        pw.Text(_safe(q.intro), style: bodyStyle()),
+        for (final s in q.sections) ...section(s),
         pw.SizedBox(height: 14),
-        pw.Text(
-          'What the recording can NOT fill - do these in the app',
-          style: boldStyle(fontSize: 12.5),
-        ),
+        pw.Text(_safe(l.audioGuideWhatTheRecordingCanT),
+            style: boldStyle(fontSize: 12.5)),
+        pw.Text(_safe(l.audioGuideSetTheseInTheApp), style: smallBodyStyle()),
         pw.SizedBox(height: 4),
-        for (final item in audioQCantDo) bullet(_safe(item), fontSize: 10),
+        for (final item in q.cantDo) bullet(_safe(item), fontSize: 10),
+        pw.SizedBox(height: 10),
+        pw.Text(_safe(l.audioGuideWorthSayingOutLoudAutofill),
+            style: boldStyle(fontSize: 12.5)),
+        pw.SizedBox(height: 4),
+        for (final item in q.nowCaptured) bullet(_safe(item), fontSize: 10),
+        pw.SizedBox(height: 4),
+        bullet(_safe(q.formTypeNote), fontSize: 10),
         pw.SizedBox(height: 10),
         pw.Text(
-          'Worth saying out loud - autofill now captures these',
-          style: boldStyle(fontSize: 12.5),
-        ),
-        pw.SizedBox(height: 4),
-        for (final item in audioQNowCaptured) bullet(_safe(item), fontSize: 10),
-        pw.SizedBox(height: 4),
-        bullet(_safe(audioQFormTypeNote), fontSize: 10),
-        pw.SizedBox(height: 10),
-        pw.Text(
-          _safe(audioQClosing),
+          _safe(q.closing),
           style: pw.TextStyle(
             fontSize: 10.5,
             fontStyle: pw.FontStyle.italic,
@@ -125,7 +125,7 @@ Future<Uint8List> buildAudioQuestionnairePdf() async {
       footer: (context) => pw.Align(
         alignment: pw.Alignment.centerRight,
         child: pw.Text(
-          'Page ${context.pageNumber} of ${context.pagesCount}',
+          l.pdfPreviewPageOf(context.pageNumber, context.pagesCount),
           style: pw.TextStyle(fontSize: 8, color: kDarkGrey),
         ),
       ),

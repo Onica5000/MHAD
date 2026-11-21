@@ -10681,6 +10681,462 @@ abstract class AppLocalizations {
   /// **'Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.'**
   String get audioGuideTipSayMedicationAndDoctorNames;
 
+  /// Voice questionnaire (Audio guide screen + its printout): a script the person reads aloud; lib/data/audio_questionnaire_content.dart builds it from these keys.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice questionnaire'**
+  String get audioQTitle;
+
+  /// Intro when the API path is shown (appData.ai.apiModeVisible).
+  ///
+  /// In en, this message translates to:
+  /// **'Read this out loud and answer each prompt in your own words, then upload the recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.'**
+  String get audioQIntroApi;
+
+  /// Intro with the copy-and-paste AI (what the web shows).
+  ///
+  /// In en, this message translates to:
+  /// **'Read this out loud and answer each prompt in your own words. Then open the Autofill page: it shows you how to attach the recording in your own AI and bring its answer back, and PA MHAD fills in your directive from it — you review every field before anything is added.'**
+  String get audioQIntroHandoff;
+
+  /// No description provided for @audioQIntroTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak naturally; you don’t need exact wording. Say “skip” for anything that doesn’t apply. For unusual medication or doctor names, say the name slowly and spell it. Keep each recording under about 2 minutes — record one clip per section.'**
+  String get audioQIntroTips;
+
+  /// Printout only, under the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Read aloud to record an audio file that autofills your PA Mental Health Advance Directive.'**
+  String get audioQPrintSubtitle;
+
+  /// Printout: a section's caveat.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: {note}'**
+  String audioQNote(String note);
+
+  /// No description provided for @audioQ1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get audioQ1Title;
+
+  /// No description provided for @audioQ1Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your full legal name.'**
+  String get audioQ1Prompt1;
+
+  /// No description provided for @audioQ1Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Your date of birth (month, day, year).'**
+  String get audioQ1Prompt2;
+
+  /// No description provided for @audioQ1Prompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'Your home address: street and number, apartment or unit, city, county, state, and ZIP code.'**
+  String get audioQ1Prompt3;
+
+  /// No description provided for @audioQ1Prompt4.
+  ///
+  /// In en, this message translates to:
+  /// **'A phone number where you can be reached.'**
+  String get audioQ1Prompt4;
+
+  /// A made-up example; the names and numbers are fictional.
+  ///
+  /// In en, this message translates to:
+  /// **'My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.'**
+  String get audioQ1Example;
+
+  /// No description provided for @audioQ2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your doctors'**
+  String get audioQ2Title;
+
+  /// No description provided for @audioQ2Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your primary doctor / treating physician: name, specialty (e.g. psychiatry), and phone number.'**
+  String get audioQ2Prompt1;
+
+  /// No description provided for @audioQ2Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'If you want a specific doctor to evaluate your capacity (different from your primary doctor): their name and how to reach them.'**
+  String get audioQ2Prompt2;
+
+  /// No description provided for @audioQ3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your mental-health agent'**
+  String get audioQ3Title;
+
+  /// No description provided for @audioQ3AppliesWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'only if you are naming an agent — Combined or Power of Attorney form'**
+  String get audioQ3AppliesWhen;
+
+  /// No description provided for @audioQ3Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent’s full name, their relationship to you, their address, and a phone number.'**
+  String get audioQ3Prompt1;
+
+  /// No description provided for @audioQ3Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have a backup / alternate agent, give the same details for them.'**
+  String get audioQ3Prompt2;
+
+  /// No description provided for @audioQ3Example.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.'**
+  String get audioQ3Example;
+
+  /// No description provided for @audioQ4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian nomination'**
+  String get audioQ4Title;
+
+  /// No description provided for @audioQ4AppliesWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'optional'**
+  String get audioQ4AppliesWhen;
+
+  /// No description provided for @audioQ4Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'If you want to nominate someone to be your guardian should a court ever appoint one: their name, relationship, address, and phone.'**
+  String get audioQ4Prompt1;
+
+  /// No description provided for @audioQ5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'When this directive takes effect'**
+  String get audioQ5Title;
+
+  /// The example follows 20 Pa.C.S. § 5807(a)(1): a psychiatrist plus one other professional.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the circumstances that should trigger this directive — for example, “when a psychiatrist and one other professional find that I can’t make my own mental health decisions.” This is the “when it kicks in” language, not your diagnoses.'**
+  String get audioQ5Prompt1;
+
+  /// No description provided for @audioQ6Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your diagnoses'**
+  String get audioQ6Title;
+
+  /// No description provided for @audioQ6Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'List your mental-health diagnoses / conditions. If you happen to know a diagnosis code (ICD-10) you can say it, but it’s optional.'**
+  String get audioQ6Prompt1;
+
+  /// No description provided for @audioQ6Example.
+  ///
+  /// In en, this message translates to:
+  /// **'I have bipolar disorder type 1 and generalized anxiety disorder.'**
+  String get audioQ6Example;
+
+  /// No description provided for @audioQ7Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Medications'**
+  String get audioQ7Title;
+
+  /// No description provided for @audioQ7Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Say these in FOUR separate groups (they go to different places on the form). For each, add a short reason if you like:'**
+  String get audioQ7Prompt1;
+
+  /// No description provided for @audioQ7Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Medications I am CURRENTLY taking — what you take now, for reference.'**
+  String get audioQ7Prompt2;
+
+  /// No description provided for @audioQ7Prompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Medications I PREFER — ones that have worked well.'**
+  String get audioQ7Prompt3;
+
+  /// No description provided for @audioQ7Prompt4.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Medications I NEVER want / refuse — and why.'**
+  String get audioQ7Prompt4;
+
+  /// No description provided for @audioQ7Prompt5.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Medications with LIMITATIONS — may be given, but only under conditions you state.'**
+  String get audioQ7Prompt5;
+
+  /// No description provided for @audioQ7Example.
+  ///
+  /// In en, this message translates to:
+  /// **'I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I prefer quetiapine, it has worked well. I never want haloperidol, it caused a severe reaction. Clozapine only with weekly blood monitoring.'**
+  String get audioQ7Example;
+
+  /// No description provided for @audioQ7Note.
+  ///
+  /// In en, this message translates to:
+  /// **'Say the dose if you know it (e.g. “lithium 300 mg twice a day”) — autofill captures the dose for medications you currently take. Always double-check it in the app afterward.'**
+  String get audioQ7Note;
+
+  /// No description provided for @audioQ8Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Allergies'**
+  String get audioQ8Title;
+
+  /// No description provided for @audioQ8Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'List your allergies — drug, food, or material. For each, say the severity (mild, moderate, or severe), the reactions it causes, and any notes.'**
+  String get audioQ8Prompt1;
+
+  /// No description provided for @audioQ8Example.
+  ///
+  /// In en, this message translates to:
+  /// **'I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.'**
+  String get audioQ8Example;
+
+  /// No description provided for @audioQ9Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment facility preferences'**
+  String get audioQ9Title;
+
+  /// No description provided for @audioQ9Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'A hospital or treatment center you PREFER to be treated at.'**
+  String get audioQ9Prompt1;
+
+  /// No description provided for @audioQ9Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'A facility you want to AVOID, if any.'**
+  String get audioQ9Prompt2;
+
+  /// No description provided for @audioQ10Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Room and environment preferences'**
+  String get audioQ10Title;
+
+  /// No description provided for @audioQ10Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Any room or environment preferences — for example a private room, a quiet floor, a window, or a same-gender roommate.'**
+  String get audioQ10Prompt1;
+
+  /// No description provided for @audioQ11Title.
+  ///
+  /// In en, this message translates to:
+  /// **'ECT, experimental studies, and drug trials'**
+  String get audioQ11Title;
+
+  /// No description provided for @audioQ11Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'For EACH of these three, say clearly which you want: “I consent,” “I do not consent,” or “I want my agent to decide.”'**
+  String get audioQ11Prompt1;
+
+  /// No description provided for @audioQ11Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Electroconvulsive therapy (ECT).'**
+  String get audioQ11Prompt2;
+
+  /// No description provided for @audioQ11Prompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental studies / research.'**
+  String get audioQ11Prompt3;
+
+  /// No description provided for @audioQ11Prompt4.
+  ///
+  /// In en, this message translates to:
+  /// **'Drug trials.'**
+  String get audioQ11Prompt4;
+
+  /// No description provided for @audioQ11Example.
+  ///
+  /// In en, this message translates to:
+  /// **'For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.'**
+  String get audioQ11Example;
+
+  /// No description provided for @audioQ11Note.
+  ///
+  /// In en, this message translates to:
+  /// **'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.'**
+  String get audioQ11Note;
+
+  /// No description provided for @audioQ12Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Limits on your agent’s authority'**
+  String get audioQ12Title;
+
+  /// No description provided for @audioQ12AppliesWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'only if naming an agent'**
+  String get audioQ12AppliesWhen;
+
+  /// No description provided for @audioQ12Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Any limits or conditions on what your agent may or may not do — e.g. “my agent must consult my sister first,” or “my agent may not consent to ECT.”'**
+  String get audioQ12Prompt1;
+
+  /// No description provided for @audioQ13Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional instructions'**
+  String get audioQ13Title;
+
+  /// No description provided for @audioQ13Prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover any of these that apply (say “skip” for the rest):'**
+  String get audioQ13Prompt1;
+
+  /// No description provided for @audioQ13Prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities that help or worsen your symptoms.'**
+  String get audioQ13Prompt2;
+
+  /// No description provided for @audioQ13Prompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'What helps you during a crisis — preferred interventions, what calms you, what to avoid.'**
+  String get audioQ13Prompt3;
+
+  /// No description provided for @audioQ13Prompt4.
+  ///
+  /// In en, this message translates to:
+  /// **'Health history — past hospitalizations, what has or hasn’t worked.'**
+  String get audioQ13Prompt4;
+
+  /// No description provided for @audioQ13Prompt5.
+  ///
+  /// In en, this message translates to:
+  /// **'Dietary needs or restrictions.'**
+  String get audioQ13Prompt5;
+
+  /// No description provided for @audioQ13Prompt6.
+  ///
+  /// In en, this message translates to:
+  /// **'Religious or cultural preferences relevant to your care.'**
+  String get audioQ13Prompt6;
+
+  /// No description provided for @audioQ13Prompt7.
+  ///
+  /// In en, this message translates to:
+  /// **'Children / custody arrangements to be aware of.'**
+  String get audioQ13Prompt7;
+
+  /// No description provided for @audioQ13Prompt8.
+  ///
+  /// In en, this message translates to:
+  /// **'Who to notify, and who NOT to notify.'**
+  String get audioQ13Prompt8;
+
+  /// No description provided for @audioQ13Prompt9.
+  ///
+  /// In en, this message translates to:
+  /// **'Records disclosure — who may see your records.'**
+  String get audioQ13Prompt9;
+
+  /// No description provided for @audioQ13Prompt10.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet care — who cares for your pets if you’re hospitalized.'**
+  String get audioQ13Prompt10;
+
+  /// No description provided for @audioQ13Prompt11.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else you want your care team and agent to know.'**
+  String get audioQ13Prompt11;
+
+  /// Under “What the recording can’t fill”.
+  ///
+  /// In en, this message translates to:
+  /// **'Your signature and your witnesses’ signatures.'**
+  String get audioQCantDoSignatures;
+
+  /// No description provided for @audioQCantDoInitials.
+  ///
+  /// In en, this message translates to:
+  /// **'Your initials on the printed form for letting your agent decide ECT, experimental studies, or drug trials (the official form asks for them — see section 11).'**
+  String get audioQCantDoInitials;
+
+  /// No description provided for @audioQCantDoSideEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'The side-effects checklist is built in the app — autofill doesn’t complete it. Open and fill in (or review) that section yourself.'**
+  String get audioQCantDoSideEffects;
+
+  /// Under “Worth saying out loud — autofill now captures these”.
+  ///
+  /// In en, this message translates to:
+  /// **'Whether your agent may decide your medications (say it explicitly).'**
+  String get audioQCapturedMedAuthority;
+
+  /// No description provided for @audioQCapturedUlysses.
+  ///
+  /// In en, this message translates to:
+  /// **'A self-binding (“Ulysses”) instruction — that your directive should be followed even if you object during a future crisis.'**
+  String get audioQCapturedUlysses;
+
+  /// No description provided for @audioQCapturedDosages.
+  ///
+  /// In en, this message translates to:
+  /// **'Dosages for the medications you currently take.'**
+  String get audioQCapturedDosages;
+
+  /// No description provided for @audioQCapturedRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Room preferences: a private room, a window, a quiet floor, or a same-gender roommate.'**
+  String get audioQCapturedRoom;
+
+  /// No description provided for @audioQCapturedCrisisPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Your crisis plan: early warning signs, triggers, what helps, things to say to you, and what not to do.'**
+  String get audioQCapturedCrisisPlan;
+
+  /// No description provided for @audioQFormTypeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You don’t pick your form type while recording. Autofill fills in the form your directive already uses (Combined, unless you chose another), and you can switch form types later.'**
+  String get audioQFormTypeNote;
+
+  /// No description provided for @audioQClosing.
+  ///
+  /// In en, this message translates to:
+  /// **'Always review every autofilled field before you add it — correct any misheard medications, conditions, names, or numbers.'**
+  String get audioQClosing;
+
   /// No description provided for @stepSubtitleAboutYou.
   ///
   /// In en, this message translates to:
