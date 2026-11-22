@@ -511,13 +511,19 @@ class _KindSegment extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                kind.label(context.l10n),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: active ? p.text : p.textMuted,
+              // One word in a quarter-width tile: shrink a little rather
+              // than break mid-word (the bottom nav's pattern).
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  kind.label(context.l10n),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: active ? p.text : p.textMuted,
+                  ),
                 ),
               ),
               const SizedBox(height: 1),
@@ -929,14 +935,20 @@ class _SeverityOption extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  height: MhadType.leadingUi,
-                  color: active ? tone : p.text,
+              // One word in a third-width tile: shrink a little rather than
+              // break mid-word (es "Moderada" broke as "Moderad|a" on phones).
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    height: MhadType.leadingUi,
+                    color: active ? tone : p.text,
+                  ),
                 ),
               ),
               const SizedBox(height: 2),
