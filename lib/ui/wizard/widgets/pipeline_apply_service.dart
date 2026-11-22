@@ -82,15 +82,17 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         provider: aiCfg.provider,
         model: aiCfg.model,
       );
-      final response = await service.generate(await _smartFillInput());
+      final input = await _smartFillInput();
+      final response = await service.generate(input);
 
       final result = response.result;
       ref.read(geminiRateTrackerProvider).recordRequest(
           estimatedTokens: response.totalTokens);
 
       if (!mounted) return;
+      final display = result.cleanedDisplayMap(input);
 
-      if (result.isEmpty) {
+      if (display.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(context.l10n.pipelineNoAdditionalSuggestions)),
         );
@@ -99,7 +101,6 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         return;
       }
 
-      final display = result.toDisplayMap();
       _smartResult = result;
       _smartChecked = {for (final k in display.keys) k: true};
       _smartEdited = Map<String, String>.from(display);
@@ -125,8 +126,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   /// where every suggestion is reviewed before it is added.
   Future<void> _runSmartFillHandoff() async {
     if (_validated == null) return;
-    final prompt =
-        SmartFillService.buildPrompt((await _smartFillInput()).sanitized());
+    final input = await _smartFillInput();
+    final prompt = SmartFillService.buildPrompt(input.sanitized());
     if (!mounted) return;
     await showDialog<void>(
       context: context,
@@ -150,14 +151,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
                 final result = SmartFillResult.fromJson(json);
                 if (dctx.mounted) Navigator.pop(dctx);
                 if (!mounted) return true;
-                if (result.isEmpty) {
+                final display = result.cleanedDisplayMap(input);
+                if (display.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
                           Text(context.l10n.pipelineNoAdditionalSuggestions)));
                   await _applyAll();
                   return true;
                 }
-                final display = result.toDisplayMap();
                 _smartResult = result;
                 _smartChecked = {for (final k in display.keys) k: true};
                 _smartEdited = Map<String, String>.from(display);
@@ -816,7 +817,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       }
       switch (extracted) {
         case 'yes': return ConsentOption.yes.name;
-        case 'agent': return ConsentOption.agentDecides.name;
+        // No agent on this form (a Declaration): "my agent decides" can't
+        // be stored — it would leave the step with no visible choice (P-10).
+        case 'agent':
+          return (formTypeFromName(_activeFormType)?.hasAgentSections ?? true)
+              ? ConsentOption.agentDecides.name
+              : null;
         case 'no': return ConsentOption.no.name;
         default: return null;
       }

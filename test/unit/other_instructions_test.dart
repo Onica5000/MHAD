@@ -71,8 +71,8 @@ void main() {
     ).sanitized());
     expect(prompt, contains('De-escalation techniques: Dim the lights.'));
     expect(prompt, contains('Crisis triggers: Being touched without warning.'));
-    expect(prompt, contains('never invent dates'),
-        reason: 'health history uses only facts the person gave');
+    expect(prompt, contains('THEIR OWN INFORMATION ONLY'),
+        reason: 'every field draws only on what the person entered');
   });
 
   test('smart-fill stays neutral on consent choices it can now see', () {
@@ -87,7 +87,7 @@ void main() {
     // ECT field said "do NOT explain risks/benefits" — live once the
     // person's real choices reached the prompt.
     expect(prompt, isNot(contains('considerations for informed consent')));
-    expect(prompt, contains('Never suggest, name or recommend a medication.'));
+    expect(prompt, contains('Never name, suggest or rank a medication.'));
     expect(prompt, isNot(contains('HIPAA considerations')));
   });
 }
