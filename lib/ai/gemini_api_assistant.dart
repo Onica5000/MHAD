@@ -738,7 +738,7 @@ class LlmAssistant implements AiAssistant {
         'The number of steps depends on the form type:\n'
         '  • Combined (Declaration + POA): 11 steps\n'
         '  • Declaration only: 10 steps (no People I Trust step; the Guardian step is included)\n'
-        '  • POA only: 5 steps (only About You, When It Kicks In, People I Trust, Guardian, Review)\n'
+        '  • POA only: 6 steps (About You, When It Kicks In, People I Trust, Guardian, Procedures & Research, Review)\n'
         'Use these step names verbatim — they match what the user sees:\n');
 
     buf.writeln('1. ABOUT YOU');
@@ -797,7 +797,8 @@ class LlmAssistant implements AiAssistant {
     buf.writeln('   • Restricted-use — accepted only under specific conditions.');
     buf.writeln('   • Medications PREFERRED — explicitly requested, name + reason.\n');
 
-    buf.writeln('9. PROCEDURES & RESEARCH (Combined and Declaration forms only)');
+    buf.writeln('9. PROCEDURES & RESEARCH (all forms; on the POA only "my agent is '
+        'authorized" / "my agent is not authorized" for each, as on the official form)');
     buf.writeln('   Three consent tiles on one screen (each is yes / no / '
         'agent-decides / conditional):');
     buf.writeln('   • ECT (electroconvulsive therapy).');

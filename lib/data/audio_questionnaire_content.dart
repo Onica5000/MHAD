@@ -251,10 +251,12 @@ class AudioQuestionnaire {
           step: WizardStep.proceduresResearch,
           title: WizardStep.proceduresResearch.title(l),
           part: AudioQPart.care,
-          forms: _preferenceForms,
+          forms: _allForms,
           prompts: [
             AudioQPrompt(
-                _agent
+                form == FormType.poa
+                    ? l.audioQProcEachPoa
+                    : _agent
                     ? l.audioQProcEach(
                         l.consentChoiceConsentTitle,
                         l.consentChoiceNoConsentTitle,
@@ -264,8 +266,16 @@ class AudioQuestionnaire {
                         l.consentChoiceNoConsentTitle, l.consentChoiceConditionalTitle),
                 const ['ect_consent', 'experimental_consent', 'drug_trial_consent']),
           ],
-          example: _agent ? l.audioQProcExample : l.audioQProcExampleNoAgent,
-          note: _agent ? l.audioQProcNote : null,
+          example: form == FormType.poa
+              ? l.audioQProcExamplePoa
+              : _agent
+                  ? l.audioQProcExample
+                  : l.audioQProcExampleNoAgent,
+          note: form == FormType.poa
+              ? l.audioQProcNotePoa
+              : _agent
+                  ? l.audioQProcNote
+                  : null,
         ),
         AudioQSection(
           step: WizardStep.anythingElse,

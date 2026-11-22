@@ -806,8 +806,11 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // ── Apply ECT / experimental / drug trial / medication consent ────
     // Map extracted "yes"/"agent"/"no"/"conditional: <text>" → the canonical
     // stored values (ConsentOption.name, or the 'conditional:' prefix form).
+    final isPoa = formTypeFromName(_activeFormType) == FormType.poa;
     String? toConsentValue(String? extracted) {
       if (extracted == null) return null;
+      // The POA offers only "agent authorized" / "not authorized".
+      if (isPoa && extracted != 'agent' && extracted != 'no') return null;
       if (extracted.startsWith('conditional:')) {
         final restriction =
             extracted.substring('conditional:'.length).trim();

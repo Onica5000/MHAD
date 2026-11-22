@@ -388,7 +388,8 @@ ${_skeleton(_extractionSchema)}''';
 ═══ FORM SCOPE: POWER OF ATTORNEY (agent only) ═══
 The user is filling a POWER OF ATTORNEY form. It names a decision-maker but does NOT record treatment preferences.
 EXTRACT ONLY: personal_info for the DECLARANT and for the agent / alternate_agent / guardian; agent_can_consent_medication; agent_authority_limitations; effective_condition; trigger_two_professionals; trigger_court_order; trigger_involuntary_commitment; guardian_can_revoke (+ note).
-LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, ect_consent, experimental_consent, drug_trial_consent, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, records_authorized, records_not_authorized, other. Ignore that content even if it appears in the document.''';
+ALSO EXTRACT ect_consent, experimental_consent and drug_trial_consent — on this form each is ONLY "agent" (the person authorizes their agent to consent to it) or "no" (the agent is not authorized); never "yes" or "conditional". Leave one null when the document doesn't address it.
+LEAVE NULL / DO NOT EXTRACT everything else — medications_*, diagnoses, allergies, preferred_facility, avoid_facility, room_preferences_note, room_preference_chips, same_gender_roommate, roommate_gender_match, medication_consent, self_binding_ulysses, health_history, dietary, religious, activities, crisis_plan, crisis_intervention, records_disclosure, family_notification, pet_custody, children_custody, reproductive_health, records_authorized, records_not_authorized, other. Ignore that content even if it appears in the document.''';
       case FormType.declaration:
         return '''
 

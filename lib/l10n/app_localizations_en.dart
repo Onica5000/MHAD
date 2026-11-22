@@ -1623,6 +1623,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentChoiceConsentTitle => 'I consent';
 
   @override
+  String get consentChoiceEctPoaAuthorized =>
+      'My agent is authorized to consent to the administration of electroconvulsive therapy.';
+
+  @override
+  String get consentChoiceEctPoaNotAuthorized =>
+      'My agent is not authorized to consent to the administration of electroconvulsive therapy.';
+
+  @override
+  String get consentChoiceExperimentalPoaAuthorized =>
+      'My agent is authorized to consent to my participation in experimental studies if, after consultation with my treating physician and any other individuals my agent deems appropriate, my agent believes that the potential benefits to me outweigh the possible risks to me.';
+
+  @override
+  String get consentChoiceExperimentalPoaNotAuthorized =>
+      'My agent is not authorized to consent to my participation in experimental studies.';
+
+  @override
+  String get consentChoiceDrugTrialsPoaAuthorized =>
+      'My agent is authorized to consent to my participation in drug trials if, after consultation with my treating physician and any other individuals my agent deems appropriate, my agent believes that the potential benefits to me outweigh the possible risks to me.';
+
+  @override
+  String get consentChoiceDrugTrialsPoaNotAuthorized =>
+      'My agent is not authorized to consent to my participation in drug trials.';
+
+  @override
+  String get consentChoicePoaAuthorizedNote =>
+      'The official form asks you to initial this choice on the printed form — your agent may consent only if you do.';
+
+  @override
+  String get consentChoicePoaNotAuthorizedNote =>
+      'Your agent can’t consent to this for you.';
+
+  @override
   String get consentChoiceAgentDecidesTitle => 'My agent will decide';
 
   @override
@@ -6639,8 +6671,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get audioQProcEachPoa =>
+      'For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say whether your agent is authorized to consent to it, or is not authorized.';
+
+  @override
   String get audioQProcNote =>
       'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.';
+
+  @override
+  String get audioQProcNotePoa =>
+      'If you authorize your agent for any of these three, the official form asks you to initial that choice on the PRINTED form — the recording captures your choice, but it can’t initial for you.';
 
   @override
   String get audioQProcExample =>
@@ -6649,6 +6689,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get audioQProcExampleNoAgent =>
       'For ECT, I do not consent. For experimental studies, I do not consent. For drug trials, I consent only if my doctor agrees.';
+
+  @override
+  String get audioQProcExamplePoa =>
+      'For ECT, my agent is not authorized. For experimental studies, my agent is authorized. For drug trials, my agent is not authorized.';
 
   @override
   String get audioQElseLead =>

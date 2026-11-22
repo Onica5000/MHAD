@@ -50,8 +50,11 @@ void main() {
       expect(text, isNot(contains(l.guardianNomSameAsPrimary)));
     });
 
-    test('${locale.languageCode}: a POA needs only part 1', () {
-      expect(AudioQuestionnaire(l, form: FormType.poa).parts, [AudioQPart.you]);
+    test('${locale.languageCode}: a POA asks only the official agent-authorization choices', () {
+      final q = AudioQuestionnaire(l, form: FormType.poa);
+      expect(q.parts, [AudioQPart.you, AudioQPart.care]);
+      final proc = q.sections.singleWhere((s) => s.step == WizardStep.proceduresResearch);
+      expect(proc.prompts.single.text, l.audioQProcEachPoa);
     });
   }
 

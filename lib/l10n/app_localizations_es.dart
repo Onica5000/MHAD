@@ -1657,6 +1657,38 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentChoiceConsentTitle => 'Consiento';
 
   @override
+  String get consentChoiceEctPoaAuthorized =>
+      'Mi agente está autorizado a dar su consentimiento para la administración de terapia electroconvulsiva.';
+
+  @override
+  String get consentChoiceEctPoaNotAuthorized =>
+      'Mi agente no está autorizado a dar su consentimiento para la administración de terapia electroconvulsiva.';
+
+  @override
+  String get consentChoiceExperimentalPoaAuthorized =>
+      'Mi agente está autorizado a dar su consentimiento para mi participación en estudios experimentales si, después de consultar con mi médico tratante y con cualquier otra persona que considere apropiada, cree que los posibles beneficios para mí superan los posibles riesgos.';
+
+  @override
+  String get consentChoiceExperimentalPoaNotAuthorized =>
+      'Mi agente no está autorizado a dar su consentimiento para mi participación en estudios experimentales.';
+
+  @override
+  String get consentChoiceDrugTrialsPoaAuthorized =>
+      'Mi agente está autorizado a dar su consentimiento para mi participación en ensayos de medicamentos si, después de consultar con mi médico tratante y con cualquier otra persona que considere apropiada, cree que los posibles beneficios para mí superan los posibles riesgos.';
+
+  @override
+  String get consentChoiceDrugTrialsPoaNotAuthorized =>
+      'Mi agente no está autorizado a dar su consentimiento para mi participación en ensayos de medicamentos.';
+
+  @override
+  String get consentChoicePoaAuthorizedNote =>
+      'El formulario oficial le pide poner sus iniciales junto a esta opción en el formulario impreso; su agente solo puede dar su consentimiento si usted lo hace.';
+
+  @override
+  String get consentChoicePoaNotAuthorizedNote =>
+      'Su agente no puede dar su consentimiento para esto en su nombre.';
+
+  @override
   String get consentChoiceAgentDecidesTitle => 'Mi agente decidirá';
 
   @override
@@ -6763,8 +6795,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get audioQProcEachPoa =>
+      'Para cada una (terapia electroconvulsiva [TEC], estudios experimentales y ensayos de medicamentos), diga si su agente está autorizado a dar su consentimiento o si no lo está.';
+
+  @override
   String get audioQProcNote =>
       'Si elige “que decida mi agente” para cualquiera de estos tres, el formulario oficial le pide poner sus iniciales junto a esa opción en el formulario IMPRESO (la ley de Pensilvania, § 5836(c), solo permite que su agente decida sobre esto si usted lo indica expresamente). La grabación registra su elección, pero no puede poner las iniciales por usted.';
+
+  @override
+  String get audioQProcNotePoa =>
+      'Si autoriza a su agente para cualquiera de estos tres, el formulario oficial le pide poner sus iniciales junto a esa opción en el formulario IMPRESO. La grabación registra su elección, pero no puede poner las iniciales por usted.';
 
   @override
   String get audioQProcExample =>
@@ -6773,6 +6813,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get audioQProcExampleNoAgent =>
       'Para la TEC, no doy mi consentimiento. Para los estudios experimentales, no doy mi consentimiento. Para los ensayos de medicamentos, doy mi consentimiento solo si mi médico está de acuerdo.';
+
+  @override
+  String get audioQProcExamplePoa =>
+      'Para la TEC, mi agente no está autorizado. Para los estudios experimentales, mi agente está autorizado. Para los ensayos de medicamentos, mi agente no está autorizado.';
 
   @override
   String get audioQElseLead =>

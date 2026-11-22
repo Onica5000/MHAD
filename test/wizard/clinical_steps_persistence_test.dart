@@ -197,6 +197,41 @@ void main() {
       expect(p.drugTrialConsent, ConsentOption.yes.name);
     });
 
+    testWidgets('POA offers only the official form\'s two choices per treatment',
+        (tester) async {
+      final id = await repo.createDirective(FormType.poa);
+      await repo.upsertPreferences(DirectivePrefsCompanion(
+        directiveId: Value(id),
+        ectConsent: const Value('conditional:only after two opinions'),
+      ));
+      final key = GlobalKey<State<ProceduresResearchStep>>();
+      await pump(tester, ProceduresResearchStep(key: key, directiveId: id));
+
+      // Word for word from the official POA form (part D.3-5).
+      expect(
+          find.text('My agent is authorized to consent to the administration of '
+              'electroconvulsive therapy.'),
+          findsOneWidget);
+      expect(
+          find.text('My agent is not authorized to consent to my participation '
+              'in drug trials.'),
+          findsOneWidget);
+      // Nothing that isn't on the official POA form.
+      expect(find.text('I consent to ECT'), findsNothing);
+      expect(find.text('I consent under specific conditions'), findsNothing);
+      expect(find.widgetWithText(TextFormField, 'Conditions'), findsNothing);
+
+      await tester.tap(find.text('My agent is authorized to consent to the '
+          'administration of electroconvulsive therapy.'));
+      await tester.pump();
+      expect(await save(key), isTrue);
+      final p = await prefs(id);
+      expect(p.ectConsent, ConsentOption.agentDecides.name);
+      // Untouched treatments stay "not authorized".
+      expect(p.experimentalConsent, ConsentOption.no.name);
+      expect(p.drugTrialConsent, ConsentOption.no.name);
+    });
+
     testWidgets('declaration (no agent) hides every "agent will decide" option',
         (tester) async {
       final id = await repo.createDirective(FormType.declaration);

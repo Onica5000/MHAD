@@ -2870,6 +2870,54 @@ abstract class AppLocalizations {
   /// **'I consent'**
   String get consentChoiceConsentTitle;
 
+  /// POA, Procedures & research: the official form's ECT authorization (POA part D.3 / Combined III.C.2), word for word.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is authorized to consent to the administration of electroconvulsive therapy.'**
+  String get consentChoiceEctPoaAuthorized;
+
+  /// POA, Procedures & research: the official form's other ECT choice, word for word.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is not authorized to consent to the administration of electroconvulsive therapy.'**
+  String get consentChoiceEctPoaNotAuthorized;
+
+  /// POA, Procedures & research: the official form's experimental-studies authorization, word for word.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is authorized to consent to my participation in experimental studies if, after consultation with my treating physician and any other individuals my agent deems appropriate, my agent believes that the potential benefits to me outweigh the possible risks to me.'**
+  String get consentChoiceExperimentalPoaAuthorized;
+
+  /// POA, Procedures & research: the official form's other experimental-studies choice.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is not authorized to consent to my participation in experimental studies.'**
+  String get consentChoiceExperimentalPoaNotAuthorized;
+
+  /// POA, Procedures & research: the official form's drug-trials authorization, word for word.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is authorized to consent to my participation in drug trials if, after consultation with my treating physician and any other individuals my agent deems appropriate, my agent believes that the potential benefits to me outweigh the possible risks to me.'**
+  String get consentChoiceDrugTrialsPoaAuthorized;
+
+  /// POA, Procedures & research: the official form's other drug-trials choice.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is not authorized to consent to my participation in drug trials.'**
+  String get consentChoiceDrugTrialsPoaNotAuthorized;
+
+  /// POA, under each 'agent is authorized' choice (the official form's NOTE: the agent may not consent unless you initial this authorization).
+  ///
+  /// In en, this message translates to:
+  /// **'The official form asks you to initial this choice on the printed form — your agent may consent only if you do.'**
+  String get consentChoicePoaAuthorizedNote;
+
+  /// POA, under each 'agent is not authorized' choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent can’t consent to this for you.'**
+  String get consentChoicePoaNotAuthorizedNote;
+
   /// No description provided for @consentChoiceAgentDecidesTitle.
   ///
   /// In en, this message translates to:
@@ -11071,11 +11119,23 @@ abstract class AppLocalizations {
   /// **'For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say: “{yes}”, “{no}”, or “{conditional}” and the conditions.'**
   String audioQProcEachNoAgent(String yes, String no, String conditional);
 
+  /// Voice questionnaire prompt, Power of Attorney form (its only two official choices).
+  ///
+  /// In en, this message translates to:
+  /// **'For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say whether your agent is authorized to consent to it, or is not authorized.'**
+  String get audioQProcEachPoa;
+
   /// Voice questionnaire note (canon: the official form asks for initials; § 5836(c) needs specific authorization).
   ///
   /// In en, this message translates to:
   /// **'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.'**
   String get audioQProcNote;
+
+  /// Voice questionnaire note, Power of Attorney form.
+  ///
+  /// In en, this message translates to:
+  /// **'If you authorize your agent for any of these three, the official form asks you to initial that choice on the PRINTED form — the recording captures your choice, but it can’t initial for you.'**
+  String get audioQProcNotePoa;
 
   /// Voice questionnaire example (forms with an agent).
   ///
@@ -11088,6 +11148,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For ECT, I do not consent. For experimental studies, I do not consent. For drug trials, I consent only if my doctor agrees.'**
   String get audioQProcExampleNoAgent;
+
+  /// Voice questionnaire example, Power of Attorney form.
+  ///
+  /// In en, this message translates to:
+  /// **'For ECT, my agent is not authorized. For experimental studies, my agent is authorized. For drug trials, my agent is not authorized.'**
+  String get audioQProcExamplePoa;
 
   /// Voice questionnaire: lead-in for the Anything-else boxes.
   ///
