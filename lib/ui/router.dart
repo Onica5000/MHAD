@@ -48,6 +48,9 @@ abstract class AppRoutes {
   static const export = '/export/:directiveId';
   static const aiSetup = '/ai-setup';
   static const audioGuide = '/audio-guide';
+
+  /// The voice questionnaire for one form (its steps, numbered as in the app).
+  static String audioGuideFor(String formType) => '$audioGuide?form=$formType';
   // Post-wizard sign-on-paper screen — prototype ScrSign (mobile.jsx
   // L884-981). Sits between the wizard's Review step and the Done
   // celebration. Lands stamp executionDate so the directive flips from
@@ -261,7 +264,10 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
         ),
         GoRoute(
           path: AppRoutes.audioGuide,
-          builder: (_, _) => const AudioGuideScreen(),
+          // `?form=` (from a directive's Autofill page) shows only that
+          // form's steps, numbered as in the app.
+          builder: (_, state) => AudioGuideScreen(
+              form: formTypeFromName(state.uri.queryParameters['form'] ?? '')),
         ),
         GoRoute(
           path: AppRoutes.privacyPolicy,

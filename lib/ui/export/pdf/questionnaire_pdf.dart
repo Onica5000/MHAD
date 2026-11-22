@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:mhad/data/audio_questionnaire_content.dart';
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/app_localizations.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -18,12 +19,13 @@ String _safe(String s) => s
     .replaceAll(RegExp('[“”]'), '"') // curly double quotes
     .replaceAll('…', '...'); // ellipsis
 
-/// Builds a printable PDF of the spoken questionnaire — the read-aloud script
-/// for recording an audio file that autofills the directive. Printed via the
-/// `printing` package (browser print sheet on web). In the language of [l]
-/// (Spanish accents are in the base font; [_safe] handles the rest).
-Future<Uint8List> buildAudioQuestionnairePdf(AppLocalizations l) async {
-  final q = AudioQuestionnaire(l);
+/// The printable voice questionnaire — the same script as the page, grouped
+/// into the three recordings, for [form] (every section when null), in the
+/// language of [l]. Printed via the `printing` package (the browser's print
+/// sheet on the web).
+Future<Uint8List> buildAudioQuestionnairePdf(AppLocalizations l,
+    {FormType? form}) async {
+  final q = AudioQuestionnaire(l, form: form);
   final doc = pw.Document();
 
   // A drawn bullet dot (avoids the • glyph the base font can't render).
@@ -48,78 +50,77 @@ Future<Uint8List> buildAudioQuestionnairePdf(AppLocalizations l) async {
         ),
       );
 
-  List<pw.Widget> section(AudioQSection s) => [
-        pw.SizedBox(height: 11),
-        pw.Text('${s.number}.  ${_safe(s.title)}',
-            style: boldStyle(fontSize: 12.5)),
-        if (s.appliesWhen != null)
-          pw.Text(
-            '(${_safe(s.appliesWhen!)})',
+  List<pw.Widget> section(AudioQSection s) {
+    final step = q.stepLabel(s);
+    final forms = q.formsLabel(s);
+    return [
+      pw.SizedBox(height: 9),
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Expanded(child: pw.Text(_safe(s.title), style: boldStyle(fontSize: 12.5))),
+          if (step != null)
+            pw.Text(_safe(step), style: pw.TextStyle(fontSize: 9, color: kDarkGrey)),
+        ],
+      ),
+      if (forms != null)
+        pw.Text('(${_safe(forms)})',
             style: pw.TextStyle(
-              fontSize: 9.5,
-              color: kDarkGrey,
-              fontStyle: pw.FontStyle.italic,
-            ),
-          ),
+                fontSize: 9.5, color: kDarkGrey, fontStyle: pw.FontStyle.italic)),
+      pw.SizedBox(height: 3),
+      for (final p in s.prompts) bullet(p.text),
+      if (s.example != null) ...[
         pw.SizedBox(height: 3),
-        for (final p in s.prompts) bullet(p),
-        if (s.example != null) ...[
-          pw.SizedBox(height: 3),
-          pw.Container(
-            width: double.infinity,
-            padding: const pw.EdgeInsets.all(6),
-            decoration: pw.BoxDecoration(
-              color: PdfColors.grey100,
-              borderRadius: pw.BorderRadius.circular(4),
-            ),
-            child: pw.Text(
-              _safe(l.audioGuideExample(s.example!)),
-              style: pw.TextStyle(
-                fontSize: 10,
-                fontStyle: pw.FontStyle.italic,
-                color: kDarkGrey,
-              ),
-            ),
+        pw.Container(
+          width: double.infinity,
+          padding: const pw.EdgeInsets.all(6),
+          decoration: pw.BoxDecoration(
+            color: PdfColors.grey100,
+            borderRadius: pw.BorderRadius.circular(4),
           ),
-        ],
-        if (s.note != null) ...[
-          pw.SizedBox(height: 3),
-          pw.Text(_safe(l.audioQNote(s.note!)), style: smallBodyStyle()),
-        ],
-      ];
+          child: pw.Text(
+            _safe(l.audioGuideExample(s.example!)),
+            style: pw.TextStyle(
+                fontSize: 10, fontStyle: pw.FontStyle.italic, color: kDarkGrey),
+          ),
+        ),
+      ],
+      if (s.note != null) ...[
+        pw.SizedBox(height: 3),
+        pw.Text(_safe(l.audioQNote(s.note!)), style: smallBodyStyle()),
+      ],
+    ];
+  }
 
   doc.addPage(
     pw.MultiPage(
       pageFormat: kPageFormat,
       margin: const pw.EdgeInsets.fromLTRB(54, 48, 54, 44),
       build: (context) => [
-        pw.Text(_safe(q.title),
-            style: sectionHeaderStyle().copyWith(fontSize: 20)),
+        pw.Text(_safe(q.title), style: sectionHeaderStyle().copyWith(fontSize: 20)),
         pw.Text(_safe(l.audioQPrintSubtitle), style: smallBodyStyle()),
         pw.SizedBox(height: 8),
         pw.Text(_safe(q.intro), style: bodyStyle()),
-        for (final s in q.sections) ...section(s),
+        pw.SizedBox(height: 4),
+        pw.Text(_safe(q.formNote),
+            style: pw.TextStyle(fontSize: 10.5, fontStyle: pw.FontStyle.italic)),
+        for (final part in q.parts) ...[
+          pw.SizedBox(height: 14),
+          pw.Text(_safe(q.partTitle(part)),
+              style: sectionHeaderStyle().copyWith(fontSize: 14)),
+          pw.Text(_safe(q.partHow(part)), style: smallBodyStyle()),
+          for (final s in q.sectionsIn(part)) ...section(s),
+        ],
         pw.SizedBox(height: 14),
-        pw.Text(_safe(l.audioGuideWhatTheRecordingCanT),
-            style: boldStyle(fontSize: 12.5)),
+        pw.Text(_safe(l.audioGuideWhatTheRecordingCanT), style: boldStyle(fontSize: 12.5)),
         pw.Text(_safe(l.audioGuideSetTheseInTheApp), style: smallBodyStyle()),
         pw.SizedBox(height: 4),
-        for (final item in q.cantDo) bullet(_safe(item), fontSize: 10),
-        pw.SizedBox(height: 10),
-        pw.Text(_safe(l.audioGuideWorthSayingOutLoudAutofill),
-            style: boldStyle(fontSize: 12.5)),
-        pw.SizedBox(height: 4),
-        for (final item in q.nowCaptured) bullet(_safe(item), fontSize: 10),
-        pw.SizedBox(height: 4),
-        bullet(_safe(q.formTypeNote), fontSize: 10),
+        for (final item in q.cantDo) bullet(item, fontSize: 10),
         pw.SizedBox(height: 10),
         pw.Text(
           _safe(q.closing),
           style: pw.TextStyle(
-            fontSize: 10.5,
-            fontStyle: pw.FontStyle.italic,
-            color: kBlack,
-          ),
+              fontSize: 10.5, fontStyle: pw.FontStyle.italic, color: kBlack),
         ),
       ],
       footer: (context) => pw.Align(

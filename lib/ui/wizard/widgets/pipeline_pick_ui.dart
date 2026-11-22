@@ -65,7 +65,8 @@ extension _PipelinePickUi on _PipelineScreenState {
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton.icon(
-                  onPressed: () => appRouter.push(AppRoutes.audioGuide),
+                  onPressed: () =>
+                      appRouter.push(AppRoutes.audioGuideFor(_activeFormType)),
                   icon: const Icon(Icons.mic_none, size: 16),
                   label: Text(context.l10n.pickVoiceGuideLink),
                   style: TextButton.styleFrom(

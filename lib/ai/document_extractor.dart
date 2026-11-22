@@ -184,6 +184,17 @@ TYPES: every text field is ONE JSON string — several items in one field go on 
 Use EXACTLY these keys (leave out, or set null, what you have nothing for; add no other keys):
 ${_skeleton(_extractionSchema)}''';
 
+  /// Every key an autofill answer can fill — top-level keys, and personal
+  /// details as `personal_info.<key>` — from [_extractionSchema]. The voice
+  /// questionnaire must ask for each (`audio_questionnaire_test`).
+  static List<String> get answerKeys => [
+        for (final e in _extractionSchema.properties!.entries)
+          if (e.key == 'personal_info')
+            for (final k in e.value.properties!.keys) 'personal_info.$k'
+          else
+            e.key,
+      ];
+
   static String _skeleton(Schema s) => switch (s.type) {
         SchemaType.object => '{${(s.properties ?? const <String, Schema>{}).entries.map((e) => '"${e.key}": ${_skeleton(e.value)}').join(', ')}}',
         SchemaType.array => s.items?.type == SchemaType.object

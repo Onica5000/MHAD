@@ -1620,6 +1620,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentChoiceNoConsentTitle => 'I do not consent';
 
   @override
+  String get consentChoiceConsentTitle => 'I consent';
+
+  @override
   String get consentChoiceAgentDecidesTitle => 'My agent will decide';
 
   @override
@@ -3555,10 +3558,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get audioGuideSetTheseInTheApp => 'Set these in the app:';
 
   @override
-  String get audioGuideWorthSayingOutLoudAutofill =>
-      'Worth saying out loud — autofill now captures these:';
-
-  @override
   String get audioGuideHowToRecord => 'How to record';
 
   @override
@@ -5430,7 +5429,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String audioGuideExample(Object example) {
-    return 'Example: $example';
+    return 'Example (don’t read this aloud): $example';
   }
 
   @override
@@ -6415,7 +6414,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideTipKeepEachClipShortUnder =>
-      'Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.';
+      'Record one part at a time — each under about 8 minutes — and upload each on the Autofill page; the app adds each one to your directive.';
 
   @override
   String get audioGuideTipSayMedicationAndDoctorNames =>
@@ -6425,16 +6424,272 @@ class AppLocalizationsEn extends AppLocalizations {
   String get audioQTitle => 'Voice questionnaire';
 
   @override
+  String get audioQPart1Title => 'Part 1 — You and the people you trust';
+
+  @override
+  String get audioQPart2Title => 'Part 2 — Your care';
+
+  @override
+  String get audioQPart3Title => 'Part 3 — Anything else and your crisis plan';
+
+  @override
+  String audioQPartHow(int part) {
+    return 'One recording. Start it by saying “Part $part”.';
+  }
+
+  @override
+  String get audioQFormsAgent =>
+      'Only if you name an agent: Combined or Power of Attorney form';
+
+  @override
+  String get audioQFormsPreferences => 'Combined or Declaration form only';
+
+  @override
+  String get audioQAllForms =>
+      'This shows every section. Open it from your directive’s Autofill page to see only your form’s steps, numbered as in the app.';
+
+  @override
+  String audioQForForm(String form) {
+    return 'Matched to your form: $form. The step numbers are the app’s.';
+  }
+
+  @override
+  String audioQLabeled(String label, String hint) {
+    return '“$label” — $hint';
+  }
+
+  @override
+  String get audioQAboutName => 'Your full legal name.';
+
+  @override
+  String get audioQAboutDob =>
+      'Your date of birth: say the month as a word, then the day and the year.';
+
+  @override
+  String get audioQAboutAddress =>
+      'Your home address: street and number, apartment or unit, city, county, state and ZIP code.';
+
+  @override
+  String get audioQAboutPhone => 'A phone number where you can be reached.';
+
+  @override
+  String get audioQAboutExample =>
+      'My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.';
+
+  @override
+  String audioQWhenTriggers(String two, String court, String commit) {
+    return 'Which of these should make your directive take effect? Say each one you want: “$two”, “$court”, “$commit”.';
+  }
+
+  @override
+  String get audioQWhenOwnWords =>
+      'If you like, say in your own words when it should take effect.';
+
+  @override
+  String get audioQWhenDoctor =>
+      'The doctor you’d prefer to evaluate your capacity, if any: their name, and their address or phone number.';
+
+  @override
+  String get audioQWhenNote =>
+      'This is about when your directive takes effect — your diagnoses come in Part 2.';
+
+  @override
+  String get audioQAgent =>
+      'Your agent: full name, how they’re related to you, address — street, apartment or unit, city, state and ZIP — and phone number.';
+
+  @override
+  String get audioQAlternate =>
+      'Your alternate agent, if you have one: the same details.';
+
+  @override
+  String audioQAgentMeds(String label) {
+    return '“$label” — everyday psychiatric medications, not ECT: say yes or no.';
+  }
+
+  @override
+  String get audioQAgentLimits => 'Any limits or instructions for your agent.';
+
+  @override
+  String get audioQAgentExample =>
+      'My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0100.';
+
+  @override
+  String get audioQAgentNote =>
+      'Ask them first: your agent and alternate should agree to serve.';
+
+  @override
+  String audioQGuardianWho(String primary, String alternate, String none) {
+    return 'Who you’d want as your guardian if a court ever appoints one: “$primary”, “$alternate”, someone else (their name, relationship, address and phone), or “$none”.';
+  }
+
+  @override
+  String audioQGuardianWhoNoAgent(String none) {
+    return 'Who you’d want as your guardian if a court ever appoints one — their name, relationship, address and phone — or “$none”.';
+  }
+
+  @override
+  String audioQGuardianOverride(String label) {
+    return '“$label”: say yes or no, and any limit.';
+  }
+
+  @override
+  String audioQCarePrefer(String label) {
+    return '“$label”: hospitals or treatment centers you prefer, and where they are.';
+  }
+
+  @override
+  String audioQCareAvoid(String label) {
+    return '“$label”: any you want to avoid.';
+  }
+
+  @override
+  String audioQCareRoom(String chips) {
+    return 'Room preferences — say any you want: $chips.';
+  }
+
+  @override
+  String audioQCareRoommateMatch(String women, String men, String same) {
+    return 'If you want a same-gender roommate, say who you’d want to be matched with: “$women”, “$men”, “$same”, or describe it.';
+  }
+
+  @override
+  String audioQCareRoomOther(String label) {
+    return '“$label”: anything else about your room.';
+  }
+
+  @override
+  String get audioQDiagList =>
+      'Your diagnoses or conditions, by name — the app looks up each one’s code. If you know a code, say it too.';
+
+  @override
+  String get audioQDiagDoctor =>
+      'Your primary doctor: name, specialty and phone number.';
+
+  @override
+  String get audioQDiagExample =>
+      'I have bipolar disorder type 1 and generalized anxiety disorder.';
+
+  @override
+  String audioQAllergyEach(
+    String drug,
+    String food,
+    String material,
+    String mild,
+    String moderate,
+    String severe,
+  ) {
+    return 'Each allergy: what it is — “$drug”, “$food”, “$material” or something else — how serious (“$mild”, “$moderate” or “$severe”), what happens, and any other notes.';
+  }
+
+  @override
+  String get audioQAllergyExample =>
+      'I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.';
+
+  @override
+  String audioQMedsCurrent(String label) {
+    return '“$label”: each one’s name, dose and how often, and what it’s for.';
+  }
+
+  @override
+  String audioQMedsPreferred(String label) {
+    return '“$label”: ones that have worked well for you, and why.';
+  }
+
+  @override
+  String audioQMedsNever(String label) {
+    return '“$label”: say each one and why.';
+  }
+
+  @override
+  String audioQMedsLimit(String label) {
+    return '“$label”: say each one and its limits — when or how it may be given.';
+  }
+
+  @override
+  String audioQMedsConsent(String yes, String agent, String no) {
+    return 'Your consent to medications — say one of these: “$yes”, “$agent”, or “$no”';
+  }
+
+  @override
+  String audioQMedsConsentNoAgent(String yes, String no) {
+    return 'Your consent to medications — say one of these: “$yes” or “$no”';
+  }
+
+  @override
+  String get audioQMedsNote =>
+      'Say doses if you know them — they help your care team, but dose instructions aren’t binding on your doctor. Check every dose in the app afterward.';
+
+  @override
+  String get audioQMedsExample =>
+      'I take lithium, 300 milligrams twice a day, for bipolar disorder. I prefer quetiapine — it has worked well. I never want haloperidol: it caused a severe reaction. Clozapine only with weekly blood tests.';
+
+  @override
+  String audioQProcEach(
+    String yes,
+    String no,
+    String agent,
+    String conditional,
+  ) {
+    return 'For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say: “$yes”, “$no”, “$agent”, or “$conditional” and the conditions.';
+  }
+
+  @override
+  String audioQProcEachNoAgent(String yes, String no, String conditional) {
+    return 'For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say: “$yes”, “$no”, or “$conditional” and the conditions.';
+  }
+
+  @override
+  String get audioQProcNote =>
+      'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.';
+
+  @override
+  String get audioQProcExample =>
+      'For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.';
+
+  @override
+  String get audioQProcExampleNoAgent =>
+      'For ECT, I do not consent. For experimental studies, I do not consent. For drug trials, I consent only if my doctor agrees.';
+
+  @override
+  String get audioQElseLead =>
+      'Say any of these that apply, in your own words — say “skip” for the rest.';
+
+  @override
+  String audioQRecords(String title, String who, String whoNot, String other) {
+    return '“$title”: “$who”, “$whoNot” and “$other”.';
+  }
+
+  @override
+  String audioQUlysses(String label) {
+    return '“$label” — only if you want it: say that your directive should be followed even if you object during a future crisis. Read about it in the app first.';
+  }
+
+  @override
+  String audioQCrisisPlan(
+    String early,
+    String triggers,
+    String helps,
+    String say,
+    String dont,
+  ) {
+    return 'Say a few of each: “$early”, “$triggers”, “$helps”, “$say” and “$dont”.';
+  }
+
+  @override
+  String get audioQCrisisPlanNote =>
+      'The crisis plan is its own page in the app; autofill fills it from this part too.';
+
+  @override
   String get audioQIntroApi =>
-      'Read this out loud and answer each prompt in your own words, then upload the recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.';
+      'Use this alongside the app: each section below is a step of the form, in the same order and with the same names. Read the prompts aloud and answer in your own words. Record one part at a time, then upload each recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.';
 
   @override
   String get audioQIntroHandoff =>
-      'Read this out loud and answer each prompt in your own words. Then open the Autofill page: it shows you how to attach the recording in your own AI and bring its answer back, and PA MHAD fills in your directive from it — you review every field before anything is added.';
+      'Use this alongside the app: each section below is a step of the form, in the same order and with the same names. Read the prompts aloud and answer in your own words. Record one part at a time; then, on the Autofill page, attach that recording in your own AI and bring its answer back. PA MHAD fills in your directive, and you review every field before anything is added.';
 
   @override
   String get audioQIntroTips =>
-      'Speak naturally; you don’t need exact wording. Say “skip” for anything that doesn’t apply. For unusual medication or doctor names, say the name slowly and spell it. Keep each recording under about 2 minutes — record one clip per section.';
+      'Speak naturally — exact wording doesn’t matter. Say “skip” for anything that doesn’t apply. Say unusual medication, doctor and place names slowly, then spell them. Don’t read the examples aloud. Keep each part under about 8 minutes.';
 
   @override
   String get audioQPrintSubtitle =>
@@ -6446,255 +6701,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get audioQ1Title => 'About you';
-
-  @override
-  String get audioQ1Prompt1 => 'Your full legal name.';
-
-  @override
-  String get audioQ1Prompt2 => 'Your date of birth (month, day, year).';
-
-  @override
-  String get audioQ1Prompt3 =>
-      'Your home address: street and number, apartment or unit, city, county, state, and ZIP code.';
-
-  @override
-  String get audioQ1Prompt4 => 'A phone number where you can be reached.';
-
-  @override
-  String get audioQ1Example =>
-      'My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.';
-
-  @override
-  String get audioQ2Title => 'Your doctors';
-
-  @override
-  String get audioQ2Prompt1 =>
-      'Your primary doctor / treating physician: name, specialty (e.g. psychiatry), and phone number.';
-
-  @override
-  String get audioQ2Prompt2 =>
-      'If you want a specific doctor to evaluate your capacity (different from your primary doctor): their name and how to reach them.';
-
-  @override
-  String get audioQ3Title => 'Your mental-health agent';
-
-  @override
-  String get audioQ3AppliesWhen =>
-      'only if you are naming an agent — Combined or Power of Attorney form';
-
-  @override
-  String get audioQ3Prompt1 =>
-      'Your agent’s full name, their relationship to you, their address, and a phone number.';
-
-  @override
-  String get audioQ3Prompt2 =>
-      'If you have a backup / alternate agent, give the same details for them.';
-
-  @override
-  String get audioQ3Example =>
-      'My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.';
-
-  @override
-  String get audioQ4Title => 'Guardian nomination';
-
-  @override
-  String get audioQ4AppliesWhen => 'optional';
-
-  @override
-  String get audioQ4Prompt1 =>
-      'If you want to nominate someone to be your guardian should a court ever appoint one: their name, relationship, address, and phone.';
-
-  @override
-  String get audioQ5Title => 'When this directive takes effect';
-
-  @override
-  String get audioQ5Prompt1 =>
-      'Describe the circumstances that should trigger this directive — for example, “when a psychiatrist and one other professional find that I can’t make my own mental health decisions.” This is the “when it kicks in” language, not your diagnoses.';
-
-  @override
-  String get audioQ6Title => 'Your diagnoses';
-
-  @override
-  String get audioQ6Prompt1 =>
-      'List your mental-health diagnoses / conditions. If you happen to know a diagnosis code (ICD-10) you can say it, but it’s optional.';
-
-  @override
-  String get audioQ6Example =>
-      'I have bipolar disorder type 1 and generalized anxiety disorder.';
-
-  @override
-  String get audioQ7Title => 'Medications';
-
-  @override
-  String get audioQ7Prompt1 =>
-      'Say these in FOUR separate groups (they go to different places on the form). For each, add a short reason if you like:';
-
-  @override
-  String get audioQ7Prompt2 =>
-      '1. Medications I am CURRENTLY taking — what you take now, for reference.';
-
-  @override
-  String get audioQ7Prompt3 =>
-      '2. Medications I PREFER — ones that have worked well.';
-
-  @override
-  String get audioQ7Prompt4 =>
-      '3. Medications I NEVER want / refuse — and why.';
-
-  @override
-  String get audioQ7Prompt5 =>
-      '4. Medications with LIMITATIONS — may be given, but only under conditions you state.';
-
-  @override
-  String get audioQ7Example =>
-      'I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I prefer quetiapine, it has worked well. I never want haloperidol, it caused a severe reaction. Clozapine only with weekly blood monitoring.';
-
-  @override
-  String get audioQ7Note =>
-      'Say the dose if you know it (e.g. “lithium 300 mg twice a day”) — autofill captures the dose for medications you currently take. Always double-check it in the app afterward.';
-
-  @override
-  String get audioQ8Title => 'Allergies';
-
-  @override
-  String get audioQ8Prompt1 =>
-      'List your allergies — drug, food, or material. For each, say the severity (mild, moderate, or severe), the reactions it causes, and any notes.';
-
-  @override
-  String get audioQ8Example =>
-      'I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.';
-
-  @override
-  String get audioQ9Title => 'Treatment facility preferences';
-
-  @override
-  String get audioQ9Prompt1 =>
-      'A hospital or treatment center you PREFER to be treated at.';
-
-  @override
-  String get audioQ9Prompt2 => 'A facility you want to AVOID, if any.';
-
-  @override
-  String get audioQ10Title => 'Room and environment preferences';
-
-  @override
-  String get audioQ10Prompt1 =>
-      'Any room or environment preferences — for example a private room, a quiet floor, a window, or a same-gender roommate.';
-
-  @override
-  String get audioQ11Title => 'ECT, experimental studies, and drug trials';
-
-  @override
-  String get audioQ11Prompt1 =>
-      'For EACH of these three, say clearly which you want: “I consent,” “I do not consent,” or “I want my agent to decide.”';
-
-  @override
-  String get audioQ11Prompt2 => 'Electroconvulsive therapy (ECT).';
-
-  @override
-  String get audioQ11Prompt3 => 'Experimental studies / research.';
-
-  @override
-  String get audioQ11Prompt4 => 'Drug trials.';
-
-  @override
-  String get audioQ11Example =>
-      'For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.';
-
-  @override
-  String get audioQ11Note =>
-      'If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.';
-
-  @override
-  String get audioQ12Title => 'Limits on your agent’s authority';
-
-  @override
-  String get audioQ12AppliesWhen => 'only if naming an agent';
-
-  @override
-  String get audioQ12Prompt1 =>
-      'Any limits or conditions on what your agent may or may not do — e.g. “my agent must consult my sister first,” or “my agent may not consent to ECT.”';
-
-  @override
-  String get audioQ13Title => 'Additional instructions';
-
-  @override
-  String get audioQ13Prompt1 =>
-      'Cover any of these that apply (say “skip” for the rest):';
-
-  @override
-  String get audioQ13Prompt2 => 'Activities that help or worsen your symptoms.';
-
-  @override
-  String get audioQ13Prompt3 =>
-      'What helps you during a crisis — preferred interventions, what calms you, what to avoid.';
-
-  @override
-  String get audioQ13Prompt4 =>
-      'Health history — past hospitalizations, what has or hasn’t worked.';
-
-  @override
-  String get audioQ13Prompt5 => 'Dietary needs or restrictions.';
-
-  @override
-  String get audioQ13Prompt6 =>
-      'Religious or cultural preferences relevant to your care.';
-
-  @override
-  String get audioQ13Prompt7 =>
-      'Children / custody arrangements to be aware of.';
-
-  @override
-  String get audioQ13Prompt8 => 'Who to notify, and who NOT to notify.';
-
-  @override
-  String get audioQ13Prompt9 =>
-      'Records disclosure — who may see your records.';
-
-  @override
-  String get audioQ13Prompt10 =>
-      'Pet care — who cares for your pets if you’re hospitalized.';
-
-  @override
-  String get audioQ13Prompt11 =>
-      'Anything else you want your care team and agent to know.';
-
-  @override
   String get audioQCantDoSignatures =>
-      'Your signature and your witnesses’ signatures.';
+      'Your signature, the date and your two witnesses’ signatures — they go on the printed directive.';
 
   @override
   String get audioQCantDoInitials =>
-      'Your initials on the printed form for letting your agent decide ECT, experimental studies, or drug trials (the official form asks for them — see section 11).';
+      'Your initials on the printed form when you let your agent decide ECT, experimental studies or drug trials — the official form asks for them.';
 
   @override
   String get audioQCantDoSideEffects =>
       'The side-effects checklist is built in the app — autofill doesn’t complete it. Open and fill in (or review) that section yourself.';
-
-  @override
-  String get audioQCapturedMedAuthority =>
-      'Whether your agent may decide your medications (say it explicitly).';
-
-  @override
-  String get audioQCapturedUlysses =>
-      'A self-binding (“Ulysses”) instruction — that your directive should be followed even if you object during a future crisis.';
-
-  @override
-  String get audioQCapturedDosages =>
-      'Dosages for the medications you currently take.';
-
-  @override
-  String get audioQCapturedRoom =>
-      'Room preferences: a private room, a window, a quiet floor, or a same-gender roommate.';
-
-  @override
-  String get audioQCapturedCrisisPlan =>
-      'Your crisis plan: early warning signs, triggers, what helps, things to say to you, and what not to do.';
-
-  @override
-  String get audioQFormTypeNote =>
-      'You don’t pick your form type while recording. Autofill fills in the form your directive already uses (Combined, unless you chose another), and you can switch form types later.';
 
   @override
   String get audioQClosing =>
@@ -7735,11 +7751,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get audioGuideToTranscribeYourRecordingIncludingHandoff =>
-      'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.';
+      'To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnderHandoff =>
-      'Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.';
+      'Record one part at a time — each under about 8 minutes — and send each one to your AI as its own autofill: AIs limit how long a recording, and how many files, one message can take.';
 
   @override
   String get navStartOver => 'Start over';

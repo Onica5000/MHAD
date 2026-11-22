@@ -644,6 +644,10 @@
   "consentChoiceConditionalTitle": "I consent under specific conditions",
   "consentChoiceConditionalDescription": "Describe the conditions in the box below.",
   "consentChoiceNoConsentTitle": "I do not consent",
+  "consentChoiceConsentTitle": "I consent",
+  "@consentChoiceConsentTitle": {
+    "description": "Generic consent choice (ECT / experimental studies / drug trials), used where one sentence names all three."
+  },
   "consentChoiceAgentDecidesTitle": "My agent will decide",
   "consentChoiceAgentDecidesDescription": "Authorize your agent to consent or refuse on your behalf.",
   "voiceInputOpenDictation": "Open voice dictation",
@@ -1460,7 +1464,6 @@
   "audioGuidePrintItToReadAloud": "Print it to read aloud while you record, or to fill in by hand first.",
   "audioGuidePrint": "Print",
   "audioGuideSetTheseInTheApp": "Set these in the app:",
-  "audioGuideWorthSayingOutLoudAutofill": "Worth saying out loud — autofill now captures these:",
   "audioGuideHowToRecord": "How to record",
   "audioGuideWhatTheRecordingCanT": "What the recording can’t fill",
   "ulyssesClauseBeforeYouAcknowledge": "Before you acknowledge",
@@ -2194,7 +2197,7 @@
       "paProtectionAdvocacy": {"type": "Object"}
     }
   },
-  "audioGuideExample": "Example: {example}",
+  "audioGuideExample": "Example (don’t read this aloud): {example}",
   "@audioGuideExample": {
     "placeholders": {
       "example": {"type": "Object"}
@@ -2726,21 +2729,447 @@
   "sideEffectsGenerateError": "Something went wrong generating the list. Please try again, or note side effects yourself.",
   "inputZipInvalid": "Enter a 5-digit or 5+4-digit ZIP",
   "audioGuideTipQualityDoesnTMatterAny": "Quality doesn’t matter much. Any phone voice memo works — a quiet room and clear speech help more than a high-quality file.",
-  "audioGuideTipKeepEachClipShortUnder": "Keep each clip short — under about 2 minutes. Record one clip per section below and upload them together; the app merges them. Long clips can time out.",
+  "audioGuideTipKeepEachClipShortUnder": "Record one part at a time — each under about 8 minutes — and upload each on the Autofill page; the app adds each one to your directive.",
   "audioGuideTipSayMedicationAndDoctorNames": "Say medication and doctor names slowly and spell them. The AI won’t guess a drug or condition it didn’t clearly hear.",
   "audioQTitle": "Voice questionnaire",
   "@audioQTitle": {
     "description": "Voice questionnaire (Audio guide screen + its printout): a script the person reads aloud; lib/data/audio_questionnaire_content.dart builds it from these keys."
   },
-  "audioQIntroApi": "Read this out loud and answer each prompt in your own words, then upload the recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.",
+  "audioQPart1Title": "Part 1 — You and the people you trust",
+  "@audioQPart1Title": {
+    "description": "Voice questionnaire: first recording (about you, when it takes effect, agents, guardian)."
+  },
+  "audioQPart2Title": "Part 2 — Your care",
+  "@audioQPart2Title": {
+    "description": "Voice questionnaire: second recording (facilities, diagnoses, allergies, medications, procedures)."
+  },
+  "audioQPart3Title": "Part 3 — Anything else and your crisis plan",
+  "@audioQPart3Title": {
+    "description": "Voice questionnaire: third recording."
+  },
+  "audioQPartHow": "One recording. Start it by saying “Part {part}”.",
+  "@audioQPartHow": {
+    "description": "Voice questionnaire: under each part's title.",
+    "placeholders": {
+      "part": {
+        "type": "int"
+      }
+    }
+  },
+  "audioQFormsAgent": "Only if you name an agent: Combined or Power of Attorney form",
+  "@audioQFormsAgent": {
+    "description": "Voice questionnaire: which forms a section is on (shown when the form isn't known)."
+  },
+  "audioQFormsPreferences": "Combined or Declaration form only",
+  "@audioQFormsPreferences": {
+    "description": "Voice questionnaire: which forms a section is on (shown when the form isn't known)."
+  },
+  "audioQAllForms": "This shows every section. Open it from your directive’s Autofill page to see only your form’s steps, numbered as in the app.",
+  "@audioQAllForms": {
+    "description": "Voice questionnaire: shown when opened without a directive."
+  },
+  "audioQForForm": "Matched to your form: {form}. The step numbers are the app’s.",
+  "@audioQForForm": {
+    "description": "Voice questionnaire: shown when opened for a directive; {form} is its form name.",
+    "placeholders": {
+      "form": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQLabeled": "“{label}” — {hint}",
+  "@audioQLabeled": {
+    "description": "Voice questionnaire: a prompt built from a box's own title and hint on the Anything-else step.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQAboutName": "Your full legal name.",
+  "@audioQAboutName": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAboutDob": "Your date of birth: say the month as a word, then the day and the year.",
+  "@audioQAboutDob": {
+    "description": "Voice questionnaire prompt (a spoken month name avoids day/month mix-ups)."
+  },
+  "audioQAboutAddress": "Your home address: street and number, apartment or unit, city, county, state and ZIP code.",
+  "@audioQAboutAddress": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAboutPhone": "A phone number where you can be reached.",
+  "@audioQAboutPhone": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAboutExample": "My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.",
+  "@audioQAboutExample": {
+    "description": "Voice questionnaire example (fictional)."
+  },
+  "audioQWhenTriggers": "Which of these should make your directive take effect? Say each one you want: “{two}”, “{court}”, “{commit}”.",
+  "@audioQWhenTriggers": {
+    "description": "Voice questionnaire prompt; the three are the When-this-kicks-in step's own checkbox titles.",
+    "placeholders": {
+      "two": {
+        "type": "String"
+      },
+      "court": {
+        "type": "String"
+      },
+      "commit": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQWhenOwnWords": "If you like, say in your own words when it should take effect.",
+  "@audioQWhenOwnWords": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQWhenDoctor": "The doctor you’d prefer to evaluate your capacity, if any: their name, and their address or phone number.",
+  "@audioQWhenDoctor": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQWhenNote": "This is about when your directive takes effect — your diagnoses come in Part 2.",
+  "@audioQWhenNote": {
+    "description": "Voice questionnaire note."
+  },
+  "audioQAgent": "Your agent: full name, how they’re related to you, address — street, apartment or unit, city, state and ZIP — and phone number.",
+  "@audioQAgent": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAlternate": "Your alternate agent, if you have one: the same details.",
+  "@audioQAlternate": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAgentMeds": "“{label}” — everyday psychiatric medications, not ECT: say yes or no.",
+  "@audioQAgentMeds": {
+    "description": "Voice questionnaire prompt; {label} is the step's own checkbox title.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQAgentLimits": "Any limits or instructions for your agent.",
+  "@audioQAgentLimits": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQAgentExample": "My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0100.",
+  "@audioQAgentExample": {
+    "description": "Voice questionnaire example (fictional)."
+  },
+  "audioQAgentNote": "Ask them first: your agent and alternate should agree to serve.",
+  "@audioQAgentNote": {
+    "description": "Voice questionnaire note."
+  },
+  "audioQGuardianWho": "Who you’d want as your guardian if a court ever appoints one: “{primary}”, “{alternate}”, someone else (their name, relationship, address and phone), or “{none}”.",
+  "@audioQGuardianWho": {
+    "description": "Voice questionnaire prompt; the quoted options are the guardian step's own choices.",
+    "placeholders": {
+      "primary": {
+        "type": "String"
+      },
+      "alternate": {
+        "type": "String"
+      },
+      "none": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQGuardianWhoNoAgent": "Who you’d want as your guardian if a court ever appoints one — their name, relationship, address and phone — or “{none}”.",
+  "@audioQGuardianWhoNoAgent": {
+    "description": "Voice questionnaire prompt (form without an agent).",
+    "placeholders": {
+      "none": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQGuardianOverride": "“{label}”: say yes or no, and any limit.",
+  "@audioQGuardianOverride": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCarePrefer": "“{label}”: hospitals or treatment centers you prefer, and where they are.",
+  "@audioQCarePrefer": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCareAvoid": "“{label}”: any you want to avoid.",
+  "@audioQCareAvoid": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCareRoom": "Room preferences — say any you want: {chips}.",
+  "@audioQCareRoom": {
+    "description": "Voice questionnaire prompt; {chips} lists the step's own room choices, each in quotes.",
+    "placeholders": {
+      "chips": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCareRoommateMatch": "If you want a same-gender roommate, say who you’d want to be matched with: “{women}”, “{men}”, “{same}”, or describe it.",
+  "@audioQCareRoommateMatch": {
+    "description": "Voice questionnaire prompt; the quoted options are the Where-I-want-care step's own roommate choices.",
+    "placeholders": {
+      "women": {
+        "type": "String"
+      },
+      "men": {
+        "type": "String"
+      },
+      "same": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCareRoomOther": "“{label}”: anything else about your room.",
+  "@audioQCareRoomOther": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQDiagList": "Your diagnoses or conditions, by name — the app looks up each one’s code. If you know a code, say it too.",
+  "@audioQDiagList": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQDiagDoctor": "Your primary doctor: name, specialty and phone number.",
+  "@audioQDiagDoctor": {
+    "description": "Voice questionnaire prompt."
+  },
+  "audioQDiagExample": "I have bipolar disorder type 1 and generalized anxiety disorder.",
+  "@audioQDiagExample": {
+    "description": "Voice questionnaire example."
+  },
+  "audioQAllergyEach": "Each allergy: what it is — “{drug}”, “{food}”, “{material}” or something else — how serious (“{mild}”, “{moderate}” or “{severe}”), what happens, and any other notes.",
+  "@audioQAllergyEach": {
+    "description": "Voice questionnaire prompt; the quoted words are the Allergies step's own choices.",
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      },
+      "food": {
+        "type": "String"
+      },
+      "material": {
+        "type": "String"
+      },
+      "mild": {
+        "type": "String"
+      },
+      "moderate": {
+        "type": "String"
+      },
+      "severe": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQAllergyExample": "I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.",
+  "@audioQAllergyExample": {
+    "description": "Voice questionnaire example."
+  },
+  "audioQMedsCurrent": "“{label}”: each one’s name, dose and how often, and what it’s for.",
+  "@audioQMedsCurrent": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsPreferred": "“{label}”: ones that have worked well for you, and why.",
+  "@audioQMedsPreferred": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsNever": "“{label}”: say each one and why.",
+  "@audioQMedsNever": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsLimit": "“{label}”: say each one and its limits — when or how it may be given.",
+  "@audioQMedsLimit": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsConsent": "Your consent to medications — say one of these: “{yes}”, “{agent}”, or “{no}”",
+  "@audioQMedsConsent": {
+    "description": "Voice questionnaire prompt; the options are the Medications step's own choices.",
+    "placeholders": {
+      "yes": {
+        "type": "String"
+      },
+      "agent": {
+        "type": "String"
+      },
+      "no": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsConsentNoAgent": "Your consent to medications — say one of these: “{yes}” or “{no}”",
+  "@audioQMedsConsentNoAgent": {
+    "description": "Voice questionnaire prompt (form without an agent).",
+    "placeholders": {
+      "yes": {
+        "type": "String"
+      },
+      "no": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQMedsNote": "Say doses if you know them — they help your care team, but dose instructions aren’t binding on your doctor. Check every dose in the app afterward.",
+  "@audioQMedsNote": {
+    "description": "Voice questionnaire note (dosage instructions are not binding on the physician)."
+  },
+  "audioQMedsExample": "I take lithium, 300 milligrams twice a day, for bipolar disorder. I prefer quetiapine — it has worked well. I never want haloperidol: it caused a severe reaction. Clozapine only with weekly blood tests.",
+  "@audioQMedsExample": {
+    "description": "Voice questionnaire example."
+  },
+  "audioQProcEach": "For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say: “{yes}”, “{no}”, “{agent}”, or “{conditional}” and the conditions.",
+  "@audioQProcEach": {
+    "description": "Voice questionnaire prompt; the options are the Procedures step's own choices.",
+    "placeholders": {
+      "yes": {
+        "type": "String"
+      },
+      "no": {
+        "type": "String"
+      },
+      "agent": {
+        "type": "String"
+      },
+      "conditional": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQProcEachNoAgent": "For each one — electroconvulsive therapy (ECT), experimental studies and drug trials — say: “{yes}”, “{no}”, or “{conditional}” and the conditions.",
+  "@audioQProcEachNoAgent": {
+    "description": "Voice questionnaire prompt (form without an agent).",
+    "placeholders": {
+      "yes": {
+        "type": "String"
+      },
+      "no": {
+        "type": "String"
+      },
+      "conditional": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQProcNote": "If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.",
+  "@audioQProcNote": {
+    "description": "Voice questionnaire note (canon: the official form asks for initials; § 5836(c) needs specific authorization)."
+  },
+  "audioQProcExample": "For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.",
+  "@audioQProcExample": {
+    "description": "Voice questionnaire example (forms with an agent)."
+  },
+  "audioQProcExampleNoAgent": "For ECT, I do not consent. For experimental studies, I do not consent. For drug trials, I consent only if my doctor agrees.",
+  "@audioQProcExampleNoAgent": {
+    "description": "Voice questionnaire example (form without an agent)."
+  },
+  "audioQElseLead": "Say any of these that apply, in your own words — say “skip” for the rest.",
+  "@audioQElseLead": {
+    "description": "Voice questionnaire: lead-in for the Anything-else boxes."
+  },
+  "audioQRecords": "“{title}”: “{who}”, “{whoNot}” and “{other}”.",
+  "@audioQRecords": {
+    "description": "Voice questionnaire prompt; the step's own records box titles.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "who": {
+        "type": "String"
+      },
+      "whoNot": {
+        "type": "String"
+      },
+      "other": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQUlysses": "“{label}” — only if you want it: say that your directive should be followed even if you object during a future crisis. Read about it in the app first.",
+  "@audioQUlysses": {
+    "description": "Voice questionnaire prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCrisisPlan": "Say a few of each: “{early}”, “{triggers}”, “{helps}”, “{say}” and “{dont}”.",
+  "@audioQCrisisPlan": {
+    "description": "Voice questionnaire prompt; the crisis plan page's own list titles.",
+    "placeholders": {
+      "early": {
+        "type": "String"
+      },
+      "triggers": {
+        "type": "String"
+      },
+      "helps": {
+        "type": "String"
+      },
+      "say": {
+        "type": "String"
+      },
+      "dont": {
+        "type": "String"
+      }
+    }
+  },
+  "audioQCrisisPlanNote": "The crisis plan is its own page in the app; autofill fills it from this part too.",
+  "@audioQCrisisPlanNote": {
+    "description": "Voice questionnaire note."
+  },
+  "audioQIntroApi": "Use this alongside the app: each section below is a step of the form, in the same order and with the same names. Read the prompts aloud and answer in your own words. Record one part at a time, then upload each recording on the Autofill page. The AI turns what you say into your directive — and you review every field before anything is added.",
   "@audioQIntroApi": {
     "description": "Intro when the API path is shown (appData.ai.apiModeVisible)."
   },
-  "audioQIntroHandoff": "Read this out loud and answer each prompt in your own words. Then open the Autofill page: it shows you how to attach the recording in your own AI and bring its answer back, and PA MHAD fills in your directive from it — you review every field before anything is added.",
+  "audioQIntroHandoff": "Use this alongside the app: each section below is a step of the form, in the same order and with the same names. Read the prompts aloud and answer in your own words. Record one part at a time; then, on the Autofill page, attach that recording in your own AI and bring its answer back. PA MHAD fills in your directive, and you review every field before anything is added.",
   "@audioQIntroHandoff": {
     "description": "Intro with the copy-and-paste AI (what the web shows)."
   },
-  "audioQIntroTips": "Speak naturally; you don’t need exact wording. Say “skip” for anything that doesn’t apply. For unusual medication or doctor names, say the name slowly and spell it. Keep each recording under about 2 minutes — record one clip per section.",
+  "audioQIntroTips": "Speak naturally — exact wording doesn’t matter. Say “skip” for anything that doesn’t apply. Say unusual medication, doctor and place names slowly, then spell them. Don’t read the examples aloud. Keep each part under about 8 minutes.",
   "audioQPrintSubtitle": "Read aloud to record an audio file that autofills your PA Mental Health Advance Directive.",
   "@audioQPrintSubtitle": {
     "description": "Printout only, under the title."
@@ -2754,87 +3183,12 @@
       }
     }
   },
-  "audioQ1Title": "About you",
-  "audioQ1Prompt1": "Your full legal name.",
-  "audioQ1Prompt2": "Your date of birth (month, day, year).",
-  "audioQ1Prompt3": "Your home address: street and number, apartment or unit, city, county, state, and ZIP code.",
-  "audioQ1Prompt4": "A phone number where you can be reached.",
-  "audioQ1Example": "My name is Jane Quincy Public. I was born March 15th, 1975. I live at 123 Main Street, apartment 4B, Philadelphia, Philadelphia County, Pennsylvania, 19103. My phone is (215) 555-1234.",
-  "@audioQ1Example": {
-    "description": "A made-up example; the names and numbers are fictional."
-  },
-  "audioQ2Title": "Your doctors",
-  "audioQ2Prompt1": "Your primary doctor / treating physician: name, specialty (e.g. psychiatry), and phone number.",
-  "audioQ2Prompt2": "If you want a specific doctor to evaluate your capacity (different from your primary doctor): their name and how to reach them.",
-  "audioQ3Title": "Your mental-health agent",
-  "audioQ3AppliesWhen": "only if you are naming an agent — Combined or Power of Attorney form",
-  "audioQ3Prompt1": "Your agent’s full name, their relationship to you, their address, and a phone number.",
-  "audioQ3Prompt2": "If you have a backup / alternate agent, give the same details for them.",
-  "audioQ3Example": "My agent is John Public, my husband, at the same address, cell (215) 555-5678. My alternate is Mary Public, my sister, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0000.",
-  "audioQ4Title": "Guardian nomination",
-  "audioQ4AppliesWhen": "optional",
-  "audioQ4Prompt1": "If you want to nominate someone to be your guardian should a court ever appoint one: their name, relationship, address, and phone.",
-  "audioQ5Title": "When this directive takes effect",
-  "audioQ5Prompt1": "Describe the circumstances that should trigger this directive — for example, “when a psychiatrist and one other professional find that I can’t make my own mental health decisions.” This is the “when it kicks in” language, not your diagnoses.",
-  "@audioQ5Prompt1": {
-    "description": "The example follows 20 Pa.C.S. § 5807(a)(1): a psychiatrist plus one other professional."
-  },
-  "audioQ6Title": "Your diagnoses",
-  "audioQ6Prompt1": "List your mental-health diagnoses / conditions. If you happen to know a diagnosis code (ICD-10) you can say it, but it’s optional.",
-  "audioQ6Example": "I have bipolar disorder type 1 and generalized anxiety disorder.",
-  "audioQ7Title": "Medications",
-  "audioQ7Prompt1": "Say these in FOUR separate groups (they go to different places on the form). For each, add a short reason if you like:",
-  "audioQ7Prompt2": "1. Medications I am CURRENTLY taking — what you take now, for reference.",
-  "audioQ7Prompt3": "2. Medications I PREFER — ones that have worked well.",
-  "audioQ7Prompt4": "3. Medications I NEVER want / refuse — and why.",
-  "audioQ7Prompt5": "4. Medications with LIMITATIONS — may be given, but only under conditions you state.",
-  "audioQ7Example": "I currently take lithium and lamotrigine, L-A-M-O-T-R-I-G-I-N-E. I prefer quetiapine, it has worked well. I never want haloperidol, it caused a severe reaction. Clozapine only with weekly blood monitoring.",
-  "audioQ7Note": "Say the dose if you know it (e.g. “lithium 300 mg twice a day”) — autofill captures the dose for medications you currently take. Always double-check it in the app afterward.",
-  "audioQ8Title": "Allergies",
-  "audioQ8Prompt1": "List your allergies — drug, food, or material. For each, say the severity (mild, moderate, or severe), the reactions it causes, and any notes.",
-  "audioQ8Example": "I’m allergic to penicillin — severe, causes anaphylaxis. Latex — moderate, causes hives.",
-  "audioQ9Title": "Treatment facility preferences",
-  "audioQ9Prompt1": "A hospital or treatment center you PREFER to be treated at.",
-  "audioQ9Prompt2": "A facility you want to AVOID, if any.",
-  "audioQ10Title": "Room and environment preferences",
-  "audioQ10Prompt1": "Any room or environment preferences — for example a private room, a quiet floor, a window, or a same-gender roommate.",
-  "audioQ11Title": "ECT, experimental studies, and drug trials",
-  "audioQ11Prompt1": "For EACH of these three, say clearly which you want: “I consent,” “I do not consent,” or “I want my agent to decide.”",
-  "audioQ11Prompt2": "Electroconvulsive therapy (ECT).",
-  "audioQ11Prompt3": "Experimental studies / research.",
-  "audioQ11Prompt4": "Drug trials.",
-  "audioQ11Example": "For ECT, I do not consent. For experimental studies, I want my agent to decide. For drug trials, I do not consent.",
-  "audioQ11Note": "If you choose “my agent decides” for any of these three, the official form asks you to initial that choice on the PRINTED form (Pennsylvania law, § 5836(c), lets your agent decide these only if you specifically say so) — the recording captures your choice, but it can’t initial for you.",
-  "audioQ12Title": "Limits on your agent’s authority",
-  "audioQ12AppliesWhen": "only if naming an agent",
-  "audioQ12Prompt1": "Any limits or conditions on what your agent may or may not do — e.g. “my agent must consult my sister first,” or “my agent may not consent to ECT.”",
-  "audioQ13Title": "Additional instructions",
-  "audioQ13Prompt1": "Cover any of these that apply (say “skip” for the rest):",
-  "audioQ13Prompt2": "Activities that help or worsen your symptoms.",
-  "audioQ13Prompt3": "What helps you during a crisis — preferred interventions, what calms you, what to avoid.",
-  "audioQ13Prompt4": "Health history — past hospitalizations, what has or hasn’t worked.",
-  "audioQ13Prompt5": "Dietary needs or restrictions.",
-  "audioQ13Prompt6": "Religious or cultural preferences relevant to your care.",
-  "audioQ13Prompt7": "Children / custody arrangements to be aware of.",
-  "audioQ13Prompt8": "Who to notify, and who NOT to notify.",
-  "audioQ13Prompt9": "Records disclosure — who may see your records.",
-  "audioQ13Prompt10": "Pet care — who cares for your pets if you’re hospitalized.",
-  "audioQ13Prompt11": "Anything else you want your care team and agent to know.",
-  "audioQCantDoSignatures": "Your signature and your witnesses’ signatures.",
+  "audioQCantDoSignatures": "Your signature, the date and your two witnesses’ signatures — they go on the printed directive.",
   "@audioQCantDoSignatures": {
     "description": "Under “What the recording can’t fill”."
   },
-  "audioQCantDoInitials": "Your initials on the printed form for letting your agent decide ECT, experimental studies, or drug trials (the official form asks for them — see section 11).",
+  "audioQCantDoInitials": "Your initials on the printed form when you let your agent decide ECT, experimental studies or drug trials — the official form asks for them.",
   "audioQCantDoSideEffects": "The side-effects checklist is built in the app — autofill doesn’t complete it. Open and fill in (or review) that section yourself.",
-  "audioQCapturedMedAuthority": "Whether your agent may decide your medications (say it explicitly).",
-  "@audioQCapturedMedAuthority": {
-    "description": "Under “Worth saying out loud — autofill now captures these”."
-  },
-  "audioQCapturedUlysses": "A self-binding (“Ulysses”) instruction — that your directive should be followed even if you object during a future crisis.",
-  "audioQCapturedDosages": "Dosages for the medications you currently take.",
-  "audioQCapturedRoom": "Room preferences: a private room, a window, a quiet floor, or a same-gender roommate.",
-  "audioQCapturedCrisisPlan": "Your crisis plan: early warning signs, triggers, what helps, things to say to you, and what not to do.",
-  "audioQFormTypeNote": "You don’t pick your form type while recording. Autofill fills in the form your directive already uses (Combined, unless you chose another), and you can switch form types later.",
   "audioQClosing": "Always review every autofilled field before you add it — correct any misheard medications, conditions, names, or numbers.",
   "stepSubtitleAboutYou": "Just the basics so this document is uniquely yours. Have your ID handy? Autofill can fill these in from a photo of it.",
   "stepSubtitleWhenItKicksIn": "The conditions under which your directive becomes active. You can pick more than one.",
@@ -3275,8 +3629,8 @@
   "medsStepSideEffectsBodyHandoff": "For the medications you take now, read the official FDA side effects and interactions — no AI needed. With your own AI (copy and paste), you can also get a short checklist to tick, so your care team knows what affects your daily activities. Not medical advice.",
   "moreSheetThisPermanentlyErasesEverythingInHandoff": "This permanently erases your work in this browser — all directives, a locked copy kept on this device, and any AI answer you’re waiting for — and returns you to a blank start. Your settings (such as theme and text size) stay.\n\nExport or print anything you want to keep first. This cannot be undone.",
   "audioGuideDescribeYourWishesOutLoudHandoff": "Describe your wishes out loud, attach the recording in your own AI from the Autofill page, and PA MHAD fills in your directive from its answer — you review every field before anything is added.",
-  "audioGuideToTranscribeYourRecordingIncludingHandoff": "To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan (up to about 10 minutes each) and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.",
-  "audioGuideTipKeepEachClipShortUnderHandoff": "Keep each clip short — under about 2 minutes. Record one clip per section below and attach them together in your AI; some AIs limit how long a recording can be.",
+  "audioGuideToTranscribeYourRecordingIncludingHandoff": "To transcribe it, you attach your recording — including any personal details you speak — in the AI you choose. Gemini takes recordings on its free plan and ChatGPT on paid plans; the Autofill page shows which AIs fit. That service’s own terms apply, and this app can’t recall what you send. Don’t say anything you’re not comfortable sending; you can always type sensitive fields by hand instead.",
+  "audioGuideTipKeepEachClipShortUnderHandoff": "Record one part at a time — each under about 8 minutes — and send each one to your AI as its own autofill: AIs limit how long a recording, and how many files, one message can take.",
   "navStartOver": "Start over",
   "wizardAskAboutStep": "Ask AI about this step",
   "readingTimeMinutes": "{count, plural, =1{1 min read} other{{count} min read}}",
