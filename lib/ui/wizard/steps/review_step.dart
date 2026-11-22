@@ -232,7 +232,9 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
 
         case WizardStep.diagnoses:
           rows.add(row(step, l.reviewStepMedicalDiagnoses, {
-            for (final dx in data.diagnoses) dx.icdCode: dx.name,
+            // Keyed by position: diagnoses with no code (autofill can add
+            // them) were collapsing into one under the empty key.
+            for (final (i, dx) in data.diagnoses.indexed) 'dx$i': dx.name,
           }));
 
         case WizardStep.allergies:

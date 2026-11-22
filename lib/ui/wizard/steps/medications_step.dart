@@ -121,7 +121,8 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
     showMedlinePlusDialog(
       context,
       title: name,
-      future: MedlinePlusService.forMedication(name),
+      future: MedlinePlusService.forMedication(name,
+          languageCode: context.l10n.localeName),
     );
   }
 

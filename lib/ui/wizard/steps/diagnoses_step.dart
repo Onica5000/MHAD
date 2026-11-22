@@ -129,7 +129,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     showMedlinePlusDialog(
       context,
       title: name,
-      future: MedlinePlusService.forIcd10(icdCode),
+      future: MedlinePlusService.forIcd10(icdCode,
+          languageCode: context.l10n.localeName),
     );
   }
 

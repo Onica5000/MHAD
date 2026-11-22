@@ -154,6 +154,8 @@ key would need a **relay server** — keys never ship to the browser.
 | Outside hosts on load | `tool/web_smoke.py` `LOAD_HOSTS` | Google's `www.gstatic.com` (CanvasKit) + `fonts.gstatic.com`; the smoke test fails on any other — name a new host in the privacy policy first |
 | Lookups the person starts | privacy policy "No third-party tracking" | NIH/NLM, MedlinePlus/RxNav, openFDA, Zippopotam.us + FCC (ZIP fill), browser speech service (dictation). Never claim "nothing leaves your browser" without naming them |
 | pdf.js | `web/pdfjs/` (index.html `dartPdfJsBaseUrl`) | Served with the app, not unpkg; pinned to printing's version (`pdfjs_bundle_test`) |
+| ICD lookups | `ClinicalDataService.searchConditions` (NLM, English) | **English only, on purpose** (user, 2026-11-22): no keyless Spanish ICD-10-CM API exists, and a bundled Spanish table (CIE-10-ES) was rejected — bundled data goes stale and needs manual updates. A Spanish search term finds nothing; type the English name |
+| MedlinePlus language | `MedlinePlusService` (`languageCode`) | Asked in the reader's language (`informationRecipient.languageCode.c`) — a live API option, nothing bundled |
 | Deleting | `DirectiveRepository.directiveChildTables` | No FK cascade (no `PRAGMA foreign_keys`): deletes remove child rows themselves (`directive_delete_test`) |
 
 ## Navigation (current model — no hamburger drawer)
