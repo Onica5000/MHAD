@@ -4898,6 +4898,12 @@ abstract class AppLocalizations {
   /// **'The severity wasn’t stated, so it will be saved as “moderate” — change it on the Allergies step if that isn’t right.'**
   String get reviewAllergySeverityNotStated;
 
+  /// Autofill review: note under a diagnosis whose code the ICD-10-CM registry doesn't have.
+  ///
+  /// In en, this message translates to:
+  /// **'This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.'**
+  String get reviewDiagnosisCodeNotFound;
+
   /// No description provided for @reviewAddToDirective.
   ///
   /// In en, this message translates to:

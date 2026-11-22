@@ -584,7 +584,14 @@ class ExtractedDiagnosis {
   final String name;
   final String? icdCode;
 
-  const ExtractedDiagnosis({required this.name, this.icdCode});
+  /// Whether [icdCode] is a real ICD-10-CM code (checked against the NLM
+  /// registry during review). Null = no code, or not checked.
+  final bool? codeFound;
+
+  const ExtractedDiagnosis({required this.name, this.icdCode, this.codeFound});
+
+  ExtractedDiagnosis withCodeFound(bool found) =>
+      ExtractedDiagnosis(name: name, icdCode: icdCode, codeFound: found);
 
   String get display => icdCode != null && icdCode!.isNotEmpty
       ? '$name [$icdCode]'

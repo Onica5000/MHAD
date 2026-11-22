@@ -182,20 +182,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
   /// A facility's review value with the display-only NPI badge removed, so the
   /// badge text never gets saved into the facility name.
-  String _facilityValue(String key) {
-    var v = (_reviewEdited[key] ?? '').trim();
-    for (final badge in allReviewBadges) {
-      if (v.endsWith(badge)) {
-        v = v.substring(0, v.length - badge.length).trim();
-        break;
-      }
-    }
-    return v;
-  }
+  String _facilityValue(String key) =>
+      stripReviewBadge(_reviewEdited[key] ?? '');
 
   Future<void> _applyAll() async {
     final repo = ref.read(directiveRepositoryProvider);
     final id = widget.directiveId;
+    // Read before any await (the context isn't safe to use after one).
+    final l10n = context.l10n;
 
     // ── Apply extracted + validated data ─────────────────────────────
     final existingMeds = await repo.getMedications(id);
@@ -227,13 +221,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       String dosage = '',
       bool isCurrent = false,
     }) {
-      var v = (_reviewEdited[key] ?? '').trim();
-      for (final badge in allReviewBadges) {
-        if (v.endsWith(badge)) {
-          v = v.substring(0, v.length - badge.length).trimRight();
-          break;
-        }
-      }
+      final v = stripReviewBadge(_reviewEdited[key] ?? '');
       // The composite as originally displayed: current meds show
       // 'name (dosage)' (their reason is never displayed, so it is always
       // preserved); the preference categories show 'name — reason'.
@@ -534,11 +522,16 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final d in validated.diagnoses) {
         final key = 'diag_${d.name}';
         if (_reviewChecked[key] != true) continue;
-        if (existingDiagNames.contains(d.name.toLowerCase())) continue;
+        // The row as the person left it (edits were once dropped here).
+        final r = diagnosisFromReview(_reviewEdited[key] ?? '', d);
+        if (r.name.isEmpty ||
+            !existingDiagNames.add(r.name.toLowerCase())) {
+          continue;
+        }
         await repo.insertDiagnosis(DiagnosisEntriesCompanion.insert(
           directiveId: id,
-          name: Value(d.name),
-          icdCode: Value(d.icdCode ?? ''),
+          name: Value(r.name),
+          icdCode: Value(r.code),
           sortOrder: Value(diagOrder++),
         ));
         applied++;
@@ -558,23 +551,25 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final a in validated.allergies) {
         final key = 'allergy_${a.substance}';
         if (_reviewChecked[key] != true) continue;
-        if (existingSubstances.contains(a.substance.toLowerCase())) continue;
-        // Clamp kind and severity to the values the app understands.
+        // The row as the person left it (edits were once dropped here).
+        final r = allergyFromReview(_reviewEdited[key] ?? '', a, l10n);
+        if (r.substance.isEmpty ||
+            !existingSubstances.add(r.substance.toLowerCase())) {
+          continue;
+        }
+        // Clamp kind to the values the app understands (severity already is).
         const validKinds = {'drug', 'food', 'material', 'other'};
-        const validSeverities = {'mild', 'moderate', 'severe'};
         final kind = validKinds.contains(a.kind) ? a.kind : 'other';
-        final severity =
-            validSeverities.contains(a.severity) ? a.severity : 'moderate';
         await repo.addAllergy(DirectiveAllergiesCompanion.insert(
           directiveId: id,
           kind: Value(kind),
-          substance: Value(a.substance),
-          severity: Value(severity),
-          reactions: Value(a.reactions ?? ''),
+          substance: Value(r.substance),
+          severity: Value(r.severity),
+          reactions: Value(r.reactions),
           notes: Value(a.notes ?? ''),
           sortOrder: Value(allergyOrder++),
         ));
-        if (kind == 'drug') appliedDrugAllergens.add(a.substance);
+        if (kind == 'drug') appliedDrugAllergens.add(r.substance);
         applied++;
       }
     }
@@ -1022,6 +1017,8 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     if (result != null && mounted) {
       setState(() {
         _reviewEdited[key] = result;
+        // The person has looked at this row — its note has done its job.
+        _reviewNotes.remove(key);
         final problem = reviewFormatProblem(key, result, context.l10n);
         if (problem == null) {
           _reviewWarnings.remove(key);
@@ -1071,6 +1068,69 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 /// What's wrong with an autofilled date of birth, ZIP or phone, or null — the
 /// SAME checks the wizard runs (input_formatters.dart), so the review flags a
 /// value before it is added (field audit O3).
+/// A diagnosis row read back: unchanged → the AI's name and code; edited →
+/// "name [code]" (a removed code is honored). The badge is ignored.
+({String name, String code}) diagnosisFromReview(
+    String value, ExtractedDiagnosis d) {
+  final v = stripReviewBadge(value);
+  if (v.isEmpty || v == d.display) {
+    return (name: d.name.trim(), code: (d.icdCode ?? '').trim());
+  }
+  final m = RegExp(r'^(.*?)\s*\[([^\[\]]*)\]$').firstMatch(v);
+  if (m != null && m.group(1)!.trim().isNotEmpty) {
+    return (name: m.group(1)!.trim(), code: m.group(2)!.trim().toUpperCase());
+  }
+  return (name: v, code: '');
+}
+
+/// An allergy row read back: unchanged → the AI's values; edited →
+/// "substance (Severity) — reactions", the severity word in any shipped
+/// language (an unknown word stays part of the substance). A removed
+/// reaction is honored.
+({String substance, String severity, String reactions}) allergyFromReview(
+    String value, ExtractedAllergy a, AppLocalizations l) {
+  const valid = {'mild', 'moderate', 'severe'};
+  final severity = valid.contains(a.severity) ? a.severity : 'moderate';
+  final v = stripReviewBadge(value);
+  if (v.isEmpty || v == allergyReviewText(a, l)) {
+    return (
+      substance: a.substance.trim(),
+      severity: severity,
+      reactions: (a.reactions ?? '').trim(),
+    );
+  }
+  final words = <String, String>{
+    for (final s in valid) s: s,
+    for (final locale in AppLocalizations.supportedLocales)
+      ...() {
+        final t = lookupAppLocalizations(locale);
+        return {
+          t.allergiesSeverityMild.toLowerCase(): 'mild',
+          t.allergiesSeverityModerate.toLowerCase(): 'moderate',
+          t.allergiesSeveritySevere.toLowerCase(): 'severe',
+        };
+      }(),
+  };
+  var head = v;
+  var reactions = '';
+  final dash = v.indexOf(' — ');
+  if (dash > 0) {
+    head = v.substring(0, dash).trim();
+    reactions = v.substring(dash + 3).trim();
+  }
+  var sev = severity;
+  final open = head.lastIndexOf(' (');
+  if (open > 0 && head.endsWith(')')) {
+    final word = head.substring(open + 2, head.length - 1).trim().toLowerCase();
+    final known = words[word];
+    if (known != null) {
+      sev = known;
+      head = head.substring(0, open).trim();
+    }
+  }
+  return (substance: head, severity: sev, reactions: reactions);
+}
+
 String? reviewFormatProblem(String key, String value, AppLocalizations l) {
   if (value.trim().isEmpty) return null;
   if (key.endsWith('_dob')) return dateOfBirthValidator(value, l);

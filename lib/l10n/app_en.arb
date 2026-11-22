@@ -1222,6 +1222,10 @@
   "@reviewAllergySeverityNotStated": {
     "description": "Autofill review: note under an allergy whose severity the AI did not state (the app stores 'moderate' unless the person changes it)."
   },
+  "reviewDiagnosisCodeNotFound": "This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.",
+  "@reviewDiagnosisCodeNotFound": {
+    "description": "Autofill review: note under a diagnosis whose code the ICD-10-CM registry doesn't have."
+  },
   "reviewAddToDirective": "Add to your directive",
   "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
   "reviewPhotoHandoff": "PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.",

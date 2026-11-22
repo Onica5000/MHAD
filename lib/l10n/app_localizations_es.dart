@@ -2576,7 +2576,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reviewBadgeUnverified => 'sin verificar';
 
   @override
-  String get reviewBadgeNoIcdMatch => 'sin coincidencia en ICD';
+  String get reviewBadgeNoIcdMatch => 'sin coincidencia en CIE-10';
 
   @override
   String get reviewBadgeNpiVerified => 'verificado en NPI';
@@ -2883,6 +2883,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get reviewAllergySeverityNotStated =>
       'No se indicó la gravedad, así que se guardará como “moderada”; cámbiela en el paso de alergias si no es correcta.';
+
+  @override
+  String get reviewDiagnosisCodeNotFound =>
+      'Este código no está en la CIE-10-MC. Compárelo con su documento: corríjalo con el lápiz o borre el código y deje el nombre.';
 
   @override
   String get reviewAddToDirective => 'Añadir a su directiva';
@@ -6642,7 +6646,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get grValidChoices =>
-      'Indica sus decisiones sobre el tratamiento de salud mental o, en un poder, nombra a su agente y lo que puede decidir.';
+      'Indica sus decisiones sobre el tratamiento de salud mental o, en un Poder de Salud Mental, nombra a su agente y lo que puede decidir.';
 
   @override
   String get grValidSign =>
@@ -6650,7 +6654,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get grValidWitnesses =>
-      'Dos testigos, cada uno de 18 años o más, están presentes cuando usted firma y también la firman. No hace falta notario.';
+      'Dos testigos, cada uno de 18 años o más, están físicamente presentes cuando usted firma y también la firman. No hace falta notario.';
 
   @override
   String get grValidWitnessWho =>
@@ -6658,7 +6662,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get grValidAgent =>
-      'Su agente es un adulto: no es su médico ni otro proveedor de atención de salud mental ni un empleado suyo, ni el dueño, administrador o empleado de un centro residencial donde recibe atención, salvo que sea su familiar.';
+      'Su agente es un adulto: no es su médico, ni otro proveedor de atención de salud mental, ni empleado de ellos, ni dueño, administrador o empleado de un centro residencial donde usted recibe atención, salvo que sea su familiar.';
 
   @override
   String get grGatherAboutYou =>
@@ -6670,7 +6674,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get grGatherAgent =>
-      'Su agente y un agente alternativo: nombres, qué relación tienen con usted, direcciones y teléfonos. Pregúnteles antes y hablen de sus deseos.';
+      'Su agente y un agente alternativo: nombres, qué relación tienen con usted, direcciones y teléfonos. Pregúnteles antes y hable con ellos sobre sus deseos.';
 
   @override
   String get grGatherAuthority =>
@@ -6829,7 +6833,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String audioQAgentMeds(String label) {
-    return '“$label” (medicamentos psiquiátricos en general, no la TEC): diga sí o no.';
+    return '“$label” (medicamentos psiquiátricos de uso habitual, no la TEC): diga sí o no.';
   }
 
   @override
@@ -6838,7 +6842,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get audioQAgentExample =>
-      'Mi agente es Juan Público, mi esposo, en la misma dirección, celular (215) 555-5678. Mi agente alternativa es María Pública, mi hermana, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0100.';
+      'Mi agente es Juan Público, mi esposo, en la misma dirección, celular (215) 555-5678. Mi agente alternativo es María Pública, mi hermana, 50 Oak Lane, Pittsburgh, PA 15201, (412) 555-0100.';
 
   @override
   String get audioQAgentNote =>
@@ -8103,7 +8107,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get audioGuideToTranscribeYourRecordingIncludingHandoff =>
-      'Para transcribirla, usted adjunta su grabación (incluidos los datos personales que diga) en la IA que elija. Gemini acepta grabaciones en su plan gratuito y ChatGPT en los planes de pago; la página Autocompletar muestra qué IA sirven. Se aplican las condiciones de ese servicio, y esta aplicación no puede recuperar lo que envíe. No diga nada que no quiera enviar; siempre puede escribir a mano los campos delicados.';
+      'Para transcribirla, usted adjunta su grabación (incluidos los datos personales que diga) en la IA que elija. Gemini acepta grabaciones en su plan gratuito y ChatGPT en los planes de pago; la página Autocompletar muestra qué IA sirven. Se aplican las condiciones de ese servicio, y esta aplicación no puede recuperar lo que envíe. No diga nada que no quiera enviar; siempre puede escribir a mano los campos sensibles.';
 
   @override
   String get audioGuideTipKeepEachClipShortUnderHandoff =>

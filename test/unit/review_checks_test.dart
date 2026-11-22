@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mhad/ai/document_extraction_result.dart';
 import 'package:mhad/ai/document_extractor.dart';
 import 'package:mhad/l10n/app_localizations.dart';
+import 'package:mhad/services/clinical_data_service.dart';
+import 'package:mhad/services/clinical_data_validator.dart';
 import 'package:mhad/ui/wizard/widgets/document_pipeline_flow.dart';
 import 'package:mhad/utils/input_formatters.dart';
 
@@ -98,5 +100,64 @@ void main() {
     final p = DocumentExtractor.promptFor('combined');
     expect(p, contains('check_notes is a list of short notes'));
     expect(p, contains('never repeat a date of birth, an ID or phone number, or an address'));
+  });
+
+  // From the mock simulation (2026-11-22): review edits to diagnoses and
+  // allergies were silently dropped, and a made-up ICD code went unflagged.
+  group('review rows read back (edits are kept)', () {
+    const d = ExtractedDiagnosis(name: 'nerve attacks', icdCode: 'F45.99');
+    test('an unchanged diagnosis keeps the AI values, badge ignored', () {
+      final shown = '${d.display} [${l.reviewBadgeNoIcdMatch}]';
+      expect(diagnosisFromReview(shown, d), (name: 'nerve attacks', code: 'F45.99'));
+    });
+    test('an edited code is saved', () {
+      expect(diagnosisFromReview('panic attacks [f41.0] [${l.reviewBadgeNoIcdMatch}]', d),
+          (name: 'panic attacks', code: 'F41.0'));
+    });
+    test('a deleted code is honored', () {
+      expect(diagnosisFromReview('nerve attacks', d), (name: 'nerve attacks', code: ''));
+    });
+
+    const a = ExtractedAllergy(
+        substance: 'penicillin', kind: 'drug', severity: 'moderate', reactions: 'hives');
+    test("allergy rows speak the reader's language", () {
+      final es = lookupAppLocalizations(const Locale('es'));
+      expect(allergyReviewText(a, l), 'penicillin (Moderate) — hives');
+      expect(allergyReviewText(a, es), 'penicillin (Moderada) — hives');
+    });
+    test('an unchanged allergy keeps the AI values', () {
+      expect(allergyFromReview('${allergyReviewText(a, l)} [${l.reviewBadgeRxNormVerified}]', a, l),
+          (substance: 'penicillin', severity: 'moderate', reactions: 'hives'));
+    });
+    test('edited severity (any language), substance and reaction are saved', () {
+      expect(allergyFromReview('amoxicillin (Severe) — swelling', a, l),
+          (substance: 'amoxicillin', severity: 'severe', reactions: 'swelling'));
+      expect(allergyFromReview('penicilina (Grave) — urticaria', a, l),
+          (substance: 'penicilina', severity: 'severe', reactions: 'urticaria'));
+    });
+    test('a removed reaction is honored; an unknown word stays in the name', () {
+      expect(allergyFromReview('penicillin (Moderate)', a, l),
+          (substance: 'penicillin', severity: 'moderate', reactions: ''));
+      expect(allergyFromReview('sulfa (sulfonamide) — rash', a, l),
+          (substance: 'sulfa (sulfonamide)', severity: 'moderate', reactions: 'rash'));
+    });
+    test('every badge, in every language, is stripped before saving', () {
+      final es = lookupAppLocalizations(const Locale('es'));
+      expect(stripReviewBadge('F45.99 thing [${es.reviewBadgeNoIcdMatch}]'), 'F45.99 thing');
+      expect(stripReviewBadge('x [${l.reviewBadgeUnverified}] '), 'x');
+    });
+  });
+
+  group('ICD code check (exact match only)', () {
+    const m = [IcdCondition(code: 'F31.81', name: 'Bipolar II disorder')];
+    test('an exact code is found; case and dot ignored', () {
+      expect(ClinicalDataValidator.icdCodeFound('F31.81', m), isTrue);
+      expect(ClinicalDataValidator.icdCodeFound('f3181', m), isTrue);
+    });
+    test('a prefix or a made-up code is not', () {
+      expect(ClinicalDataValidator.icdCodeFound('F31.8', m), isFalse);
+      expect(ClinicalDataValidator.icdCodeFound('F45.99', const []), isFalse);
+      expect(ClinicalDataValidator.icdCodeFound('', m), isFalse);
+    });
   });
 }

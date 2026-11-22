@@ -10,9 +10,33 @@ part of 'document_pipeline_flow.dart';
 
 // Display-only badges appended to review values: whether a medication or
 // drug allergy matched RxNorm, a condition an ICD-10-CM code, a facility the
-// NPI organization registry. Removed again before anything is saved (see
-// `_facilityValue` and `medFromReview` in pipeline_apply_service.dart).
+// NPI organization registry. Removed again before anything is saved
+// ([stripReviewBadge]).
 String _reviewBadge(String word) => ' [$word]';
+
+/// [value] without the display-only badge it may end with — the one place
+/// apply removes badges, so badge text never lands in the directive.
+String stripReviewBadge(String value) {
+  final v = value.trim();
+  for (final badge in allReviewBadges) {
+    if (v.endsWith(badge)) {
+      return v.substring(0, v.length - badge.length).trimRight();
+    }
+  }
+  return v;
+}
+
+/// An allergy's review row in the reader's language:
+/// "substance (Severity) — reactions". Read back by [allergyFromReview].
+String allergyReviewText(ExtractedAllergy a, AppLocalizations l) {
+  final sev = switch (a.severity) {
+    'mild' => l.allergiesSeverityMild,
+    'severe' => l.allergiesSeveritySevere,
+    _ => l.allergiesSeverityModerate,
+  };
+  final r = a.reactions?.trim() ?? '';
+  return r.isEmpty ? '${a.substance} ($sev)' : '${a.substance} ($sev) — $r';
+}
 
 /// Every badge in every supported language, so apply removes whichever one
 /// the person saw — badge text never lands in the directive.
@@ -26,6 +50,7 @@ List<String> _badgeWords(AppLocalizations l) => [
       l.reviewBadgeRxNormVerified,
       l.reviewBadgeNpiVerified,
       l.reviewBadgeUnverified,
+      l.reviewBadgeNoIcdMatch,
     ];
 
 /// The title of a smart-fill suggestion row. The keys stay English
@@ -170,11 +195,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewEdited['other'] = v.other!;
     }
 
-    // ── Diagnoses — one review key per diagnosis
+    // ── Diagnoses — one review key per diagnosis. A code ICD-10-CM doesn't
+    // have is flagged (a note under the row says how to fix it).
     for (final d in v.diagnoses) {
       final key = 'diag_${d.name}';
       _reviewChecked[key] = true;
-      _reviewEdited[key] = d.display;
+      final badge =
+          d.codeFound == false ? _reviewBadge(l.reviewBadgeNoIcdMatch) : '';
+      _reviewEdited[key] = '${d.display}$badge';
     }
 
     // ── Allergies — one review key per allergy. Drug allergies carry an
@@ -188,7 +216,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               ? l.reviewBadgeRxNormVerified
               : l.reviewBadgeUnverified)
           : '';
-      _reviewEdited[key] = '${a.display}$badge';
+      _reviewEdited[key] = '${allergyReviewText(a, l)}$badge';
     }
 
     // ── Currently-taking medications (reference list) — the one category that
@@ -1212,6 +1240,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
       final key = 'allergy_${a.substance}';
       if (!a.severityStated && _reviewEdited.containsKey(key)) {
         _reviewNotes[key] = l.reviewAllergySeverityNotStated;
+      }
+    }
+    for (final d in _validated?.diagnoses ?? const <ExtractedDiagnosis>[]) {
+      final key = 'diag_${d.name}';
+      if (d.codeFound == false && _reviewEdited.containsKey(key)) {
+        _reviewNotes[key] = l.reviewDiagnosisCodeNotFound;
       }
     }
   }

@@ -2824,6 +2824,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The severity wasn’t stated, so it will be saved as “moderate” — change it on the Allergies step if that isn’t right.';
 
   @override
+  String get reviewDiagnosisCodeNotFound =>
+      'This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.';
+
+  @override
   String get reviewAddToDirective => 'Add to your directive';
 
   @override
