@@ -98,6 +98,7 @@ key would need a **relay server** — keys never ship to the browser.
 | Answers | `parseHandoffReply` | Forgiving about format; strict about `mhad_task` + `mhad_ref` (`directiveHandoffRef` = the one `d<id>` format) |
 | The wait | `PendingHandoff` (`progressWindowMinutes`, extendable; tab storage) | A locked progress copy lasts at least until its deadline; a reload restores the work (after the passphrase) and returns to the paste page; "Back to paste your AI answer" banner elsewhere |
 | After a paste | panel | Clipboard cleared; a failed paste says a fresh copy may be needed |
+| Fields ↔ AI keys | `docs/FIELD_AND_AI_AUDIT_2026-11-21.md` (all 81 fields) | A new field needs its autofill key, apply, review row and a test. Packed columns: `OtherInstructions` / `RecordsDisclosure` (`domain/model`) — never hand-parse their tags; room chips: `kRoomPreferenceChipIds` |
 | API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
 
 ## AI API path (hidden backup — multi-provider, see lib/ai/)
