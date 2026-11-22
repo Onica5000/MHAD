@@ -1013,6 +1013,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     if (result != null && mounted) {
       setState(() {
         _reviewEdited[key] = result;
+        final problem = reviewFormatProblem(key, result, context.l10n);
+        if (problem == null) {
+          _reviewWarnings.remove(key);
+        } else {
+          _reviewWarnings[key] = problem;
+        }
         if (result.trim().isNotEmpty) _reviewChecked[key] = true;
       });
     }
@@ -1051,6 +1057,17 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       });
     }
   }
+}
+
+/// What's wrong with an autofilled date of birth, ZIP or phone, or null — the
+/// SAME checks the wizard runs (input_formatters.dart), so the review flags a
+/// value before it is added (field audit O3).
+String? reviewFormatProblem(String key, String value, AppLocalizations l) {
+  if (value.trim().isEmpty) return null;
+  if (key.endsWith('_dob')) return dateOfBirthValidator(value, l);
+  if (key.endsWith('_zip')) return optionalZipValidator(value, l);
+  if (key.endsWith('_phone')) return optionalPhoneValidator(value, l);
+  return null;
 }
 
 /// The keyboard for an Autofill-review field that takes only a number, or

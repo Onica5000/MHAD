@@ -242,7 +242,6 @@
   "personalInfoStepZipHint": "12345 or 12345-6789",
   "personalInfoStepZipHelper": "Tap the icon to fill city, county & state",
   "personalInfoStepZipTooltip": "Fill city, county & state from ZIP",
-  "personalInfoStepZipInvalid": "Enter 5-digit or 5+4-digit ZIP",
   "personalInfoStepPhoneInvalid": "Enter a valid 10-digit phone number",
   "peopleTrustPrimaryAgent": "PRIMARY AGENT",
   "peopleTrustAlternateAgent": "ALTERNATE AGENT",
@@ -1157,8 +1156,42 @@
       "items": {"type": "String"}
     }
   },
+  "reviewPleaseCheckTitle": "Please check",
+  "@reviewPleaseCheckTitle": {
+    "description": "Autofill review: title of the card at the top listing what to double-check (the AI's notes and values that fail the app's checks)."
+  },
+  "reviewPleaseCheckFromAi": "Your AI flagged these. They come from the AI, not from PA MHAD — compare each one with your document.",
+  "@reviewPleaseCheckFromAi": {
+    "description": "Autofill review, Please-check card: lead-in above the AI's own notes (untrusted AI text, shown as-is)."
+  },
+  "reviewPleaseCheckFormat": "{count, plural, =1{1 value below doesn’t look right, so it starts unchecked. Fix it with the pencil, or leave it out.} other{{count} values below don’t look right, so they start unchecked. Fix them with the pencil, or leave them out.}}",
+  "@reviewPleaseCheckFormat": {
+    "description": "Autofill review, Please-check card: how many dates of birth / ZIP codes / phone numbers failed the same checks the wizard runs.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewCheckThis": "Check this: {problem}",
+  "@reviewCheckThis": {
+    "description": "Autofill review: shown under a date of birth / ZIP / phone that fails the wizard's check; {problem} is that check's own message (e.g. \"Invalid date\").",
+    "placeholders": {
+      "problem": {
+        "type": "String"
+      }
+    }
+  },
   "reviewAddToDirective": "Add to your directive",
   "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
+  "reviewPhotoHandoff": "PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.",
+  "@reviewPhotoHandoff": {
+    "description": "Autofill review (copy-and-paste AI): privacy line under the fields. The app never sees the document in this flow."
+  },
+  "pipelineAiNotes": "Your AI noted:",
+  "@pipelineAiNotes": {
+    "description": "Autofill: heading before the AI's own notes when nothing could be filled in (shown with the error)."
+  },
   "reviewFieldsReady": "{checked} of {total} fields ready to add",
   "@reviewFieldsReady": {
     "placeholders": {

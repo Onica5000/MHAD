@@ -169,6 +169,7 @@ class ClinicalDataValidator {
       recordsDisclosure: raw.recordsDisclosure,
       recordsAuthorized: raw.recordsAuthorized,
       recordsNotAuthorized: raw.recordsNotAuthorized,
+      checkNotes: raw.checkNotes,
       other: raw.other,
       // Personal info (PII) passes straight through — no NIH validation needed.
       personalInfo: raw.personalInfo,
@@ -264,6 +265,7 @@ class ValidatedExtractionResult {
   final String? recordsAuthorized;
   final String? recordsNotAuthorized;
   final String? other;
+  final List<String> checkNotes;
   // Personal info (PII) extracted for autofill — pass-through, no validation.
   final ExtractedPersonalInfo personalInfo;
 
@@ -310,6 +312,7 @@ class ValidatedExtractionResult {
     this.recordsAuthorized,
     this.recordsNotAuthorized,
     this.other,
+    this.checkNotes = const [],
     this.personalInfo = const ExtractedPersonalInfo(),
   });
 

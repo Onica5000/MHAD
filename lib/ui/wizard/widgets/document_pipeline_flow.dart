@@ -32,6 +32,7 @@ import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/a11y_announce.dart';
+import 'package:mhad/utils/input_formatters.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
@@ -151,6 +152,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _validated = null;
     _reviewChecked = {};
     _reviewEdited = {};
+    _reviewWarnings = {};
     _smartResult = null;
     _smartChecked = {};
     _smartEdited = {};
@@ -356,6 +358,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   ValidatedExtractionResult? _validated;
   Map<String, bool> _reviewChecked = {};
   Map<String, String> _reviewEdited = {};
+
+  /// Review key → what's wrong with its date of birth / ZIP / phone (the
+  /// wizard's own checks, field audit O3). Such a row starts unchecked.
+  Map<String, String> _reviewWarnings = {};
 
   /// Reconciliation items (priority + conflict) for the review step, built from
   /// the extracted values vs the directive's current values.
@@ -585,10 +591,16 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     if (merged == null || merged.isEmpty) {
+      // Nothing to fill — but the AI may have said why (unreadable, cut off).
+      final notes = merged?.checkNotes ?? const <String>[];
       setState(() {
-        _error = fileCount == 1
+        final base = fileCount == 1
             ? context.l10n.pipelineNoMedicalInfoSingle
             : context.l10n.pipelineNoMedicalInfoMulti(fileCount);
+        _error = notes.isEmpty
+            ? base
+            : '$base\n\n${context.l10n.pipelineAiNotes}\n'
+                '${notes.map((n) => '• $n').join('\n')}';
         _step = _PipelineStep.pick;
       });
       return;
@@ -613,6 +625,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (cancelled()) return;
     await _buildReconciliation();
     if (cancelled()) return;
+    _applyFormatChecks();
 
     setState(() => _step = _PipelineStep.review);
   }

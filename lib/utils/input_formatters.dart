@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mhad/l10n/l10n.dart';
+import 'package:mhad/utils/date_format.dart' show isAdult;
 
 /// English fallback when a caller passes no [AppLocalizations].
 final _en = lookupAppLocalizations(const Locale('en'));
@@ -83,6 +84,34 @@ String? optionalPhoneValidator(String? value, [AppLocalizations? l10n]) {
   if (value == null || value.trim().isEmpty) return null;
   final digits = value.replaceAll(RegExp(r'\D'), '');
   if (digits.length != 10) return (l10n ?? _en).personalInfoStepPhoneInvalid;
+  return null;
+}
+
+/// Date of birth (MM/DD/YYYY): required, a real calendar date with a 4-digit
+/// year, not in the future, and 18 or older. ONE definition — the About-you
+/// step and the autofill review both use it (field audit O3).
+String? dateOfBirthValidator(String? value,
+    [AppLocalizations? l10n, DateTime? asOf]) {
+  final l = l10n ?? _en;
+  if (value == null || value.trim().isEmpty) return l.required;
+  final parts = value.trim().split('/');
+  if (parts.length != 3 || parts[2].length != 4) {
+    return l.personalInfoStepDateFormat;
+  }
+  final month = int.tryParse(parts[0]);
+  final day = int.tryParse(parts[1]);
+  final year = int.tryParse(parts[2]);
+  if (month == null || day == null || year == null) {
+    return l.personalInfoStepInvalidDate;
+  }
+  final dob = DateTime(year, month, day);
+  // DateTime normalizes overflow (02/30 → Mar 1): a real date round-trips.
+  if (dob.year != year || dob.month != month || dob.day != day) {
+    return l.personalInfoStepInvalidDate;
+  }
+  final now = asOf ?? DateTime.now();
+  if (dob.isAfter(now)) return l.personalInfoStepDobFuture;
+  if (!isAdult(dob, asOf: now)) return l.personalInfoStepMustBeAdult;
   return null;
 }
 

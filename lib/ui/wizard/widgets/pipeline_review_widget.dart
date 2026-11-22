@@ -815,6 +815,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (_reviewWarnings.isNotEmpty ||
+            (_validated?.checkNotes.isNotEmpty ?? false)) ...[
+          _pleaseCheckCard(p, _validated?.checkNotes ?? const []),
+          const SizedBox(height: 16),
+        ],
         if (_piiStripped.isNotEmpty) ...[
           Container(
             padding: const EdgeInsets.all(12),
@@ -868,7 +873,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  context.l10n.reviewPhotoDiscarded,
+                  appData.ai.apiModeVisible
+                      ? context.l10n.reviewPhotoDiscarded
+                      : context.l10n.reviewPhotoHandoff,
                   style: TextStyle(
                     fontSize: 12,
                     color: p.textMuted, height: MhadType.leadingParagraph,
@@ -928,6 +935,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             onEdit: () => _editField(key),
           ),
           _agentInitialsNote(key, p),
+          _formatWarning(key, p),
         ],
       );
     }
@@ -978,6 +986,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           onEdit: () => _editField(it.key),
         ),
         _agentInitialsNote(it.key, p),
+        _formatWarning(it.key, p),
       ],
     );
   }
@@ -1110,6 +1119,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             ),
           ],
           _agentInitialsNote(it.key, p),
+          _formatWarning(it.key, p),
         ],
       ),
     );
@@ -1174,6 +1184,103 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// experimental studies, or drug trials to the agent, the directive must
   /// grant that specifically (the official form asks for the declarant's
   /// initials). Surfaced here so the user confirms the AI's assumption deliberately.
+  /// Flags autofilled dates of birth, ZIPs and phones the wizard would
+  /// reject and starts them unchecked, so the person decides (field audit O3).
+  void _applyFormatChecks() {
+    final l = context.l10n;
+    _reviewWarnings = {};
+    for (final e in _reviewEdited.entries) {
+      final problem = reviewFormatProblem(e.key, e.value, l);
+      if (problem != null) {
+        _reviewWarnings[e.key] = problem;
+        _reviewChecked[e.key] = false;
+      }
+    }
+  }
+
+  /// "Check this: …" under a row whose value fails the wizard's check.
+  Widget _formatWarning(String key, MhadPalette p) {
+    final problem = _reviewWarnings[key];
+    if (problem == null) return const SizedBox.shrink();
+    final warn = Theme.of(context).brightness == Brightness.dark
+        ? SemanticColors.warningTextDark
+        : SemanticColors.warningTextLight;
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.error_outline, size: 14, color: warn),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              context.l10n.reviewCheckThis(problem),
+              style: TextStyle(
+                fontSize: 12, height: MhadType.leadingParagraph,
+                fontWeight: FontWeight.w600, color: warn,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The card at the top of the review: the AI's own "please check" notes
+  /// (field audit O2) and how many values failed the wizard's checks (O3).
+  Widget _pleaseCheckCard(MhadPalette p, List<String> notes) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final ink = dark ? SemanticColors.warningTextDark : SemanticColors.warningTextLight;
+    final bg = dark ? SemanticColors.warningBgDark : SemanticColors.warningBgLight;
+    final l = context.l10n;
+    final body = TextStyle(fontSize: 14, height: MhadType.leadingParagraph, color: p.text);
+    return Semantics(
+      container: true,
+      label: l.reviewPleaseCheckTitle,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bg,
+          border: Border.all(color: ink.withValues(alpha: 0.35)),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Icon(Icons.fact_check_outlined, size: 18, color: ink),
+              const SizedBox(width: 8),
+              Text(l.reviewPleaseCheckTitle,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink)),
+            ]),
+            if (_reviewWarnings.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(l.reviewPleaseCheckFormat(_reviewWarnings.length), style: body),
+            ],
+            if (notes.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(l.reviewPleaseCheckFromAi,
+                  style: body.copyWith(fontSize: 12, color: p.textMuted)),
+              const SizedBox(height: 4),
+              for (final n in notes)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('•  ', style: body),
+                      Expanded(child: Text(n, style: body)),
+                    ],
+                  ),
+                ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _agentInitialsNote(String key, MhadPalette p) {
     const procedureKeys = {
       'ect_consent',

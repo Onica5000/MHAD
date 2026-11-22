@@ -578,9 +578,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalInfoStepZipTooltip => 'Fill city, county & state from ZIP';
 
   @override
-  String get personalInfoStepZipInvalid => 'Enter 5-digit or 5+4-digit ZIP';
-
-  @override
   String get personalInfoStepPhoneInvalid =>
       'Enter a valid 10-digit phone number';
 
@@ -2763,11 +2760,43 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reviewPleaseCheckTitle => 'Please check';
+
+  @override
+  String get reviewPleaseCheckFromAi =>
+      'Your AI flagged these. They come from the AI, not from PA MHAD — compare each one with your document.';
+
+  @override
+  String reviewPleaseCheckFormat(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count values below don’t look right, so they start unchecked. Fix them with the pencil, or leave them out.',
+      one:
+          '1 value below doesn’t look right, so it starts unchecked. Fix it with the pencil, or leave it out.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reviewCheckThis(String problem) {
+    return 'Check this: $problem';
+  }
+
+  @override
   String get reviewAddToDirective => 'Add to your directive';
 
   @override
   String get reviewPhotoDiscarded =>
       'Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.';
+
+  @override
+  String get reviewPhotoHandoff =>
+      'PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.';
+
+  @override
+  String get pipelineAiNotes => 'Your AI noted:';
 
   @override
   String reviewFieldsReady(int checked, int total) {

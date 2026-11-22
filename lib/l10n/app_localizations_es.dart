@@ -585,10 +585,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Completar ciudad, condado y estado a partir del código postal';
 
   @override
-  String get personalInfoStepZipInvalid =>
-      'Ingrese un código postal de 5 o de 5+4 dígitos';
-
-  @override
   String get personalInfoStepPhoneInvalid =>
       'Ingrese un número de teléfono válido de 10 dígitos';
 
@@ -2825,11 +2821,43 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get reviewPleaseCheckTitle => 'Revise';
+
+  @override
+  String get reviewPleaseCheckFromAi =>
+      'Su IA señaló lo siguiente. Viene de la IA, no de PA MHAD: compare cada punto con su documento.';
+
+  @override
+  String reviewPleaseCheckFormat(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count datos de abajo no parecen correctos, así que empiezan sin marcar. Corríjalos con el lápiz o déjelos fuera.',
+      one:
+          '1 dato de abajo no parece correcto, así que empieza sin marcar. Corríjalo con el lápiz o déjelo fuera.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reviewCheckThis(String problem) {
+    return 'Revise esto: $problem';
+  }
+
+  @override
   String get reviewAddToDirective => 'Añadir a su directiva';
 
   @override
   String get reviewPhotoDiscarded =>
       'Su foto se envió a la IA para leerla y luego se descartó. No se guarda nada después de confirmar o descartar.';
+
+  @override
+  String get reviewPhotoHandoff =>
+      'PA MHAD nunca recibió su archivo: usted lo adjuntó en su propia IA, y se aplican las condiciones de ese servicio. Aquí solo se usa la respuesta que pegó.';
+
+  @override
+  String get pipelineAiNotes => 'Su IA indicó:';
 
   @override
   String reviewFieldsReady(int checked, int total) {

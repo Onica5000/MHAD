@@ -1118,12 +1118,6 @@ abstract class AppLocalizations {
   /// **'Fill city, county & state from ZIP'**
   String get personalInfoStepZipTooltip;
 
-  /// No description provided for @personalInfoStepZipInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter 5-digit or 5+4-digit ZIP'**
-  String get personalInfoStepZipInvalid;
-
   /// No description provided for @personalInfoStepPhoneInvalid.
   ///
   /// In en, this message translates to:
@@ -4820,6 +4814,30 @@ abstract class AppLocalizations {
   /// **'PII was detected and removed before analysis: {items}'**
   String reviewPiiRemoved(String items);
 
+  /// Autofill review: title of the card at the top listing what to double-check (the AI's notes and values that fail the app's checks).
+  ///
+  /// In en, this message translates to:
+  /// **'Please check'**
+  String get reviewPleaseCheckTitle;
+
+  /// Autofill review, Please-check card: lead-in above the AI's own notes (untrusted AI text, shown as-is).
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI flagged these. They come from the AI, not from PA MHAD — compare each one with your document.'**
+  String get reviewPleaseCheckFromAi;
+
+  /// Autofill review, Please-check card: how many dates of birth / ZIP codes / phone numbers failed the same checks the wizard runs.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 value below doesn’t look right, so it starts unchecked. Fix it with the pencil, or leave it out.} other{{count} values below don’t look right, so they start unchecked. Fix them with the pencil, or leave them out.}}'**
+  String reviewPleaseCheckFormat(int count);
+
+  /// Autofill review: shown under a date of birth / ZIP / phone that fails the wizard's check; {problem} is that check's own message (e.g. "Invalid date").
+  ///
+  /// In en, this message translates to:
+  /// **'Check this: {problem}'**
+  String reviewCheckThis(String problem);
+
   /// No description provided for @reviewAddToDirective.
   ///
   /// In en, this message translates to:
@@ -4831,6 +4849,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.'**
   String get reviewPhotoDiscarded;
+
+  /// Autofill review (copy-and-paste AI): privacy line under the fields. The app never sees the document in this flow.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.'**
+  String get reviewPhotoHandoff;
+
+  /// Autofill: heading before the AI's own notes when nothing could be filled in (shown with the error).
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI noted:'**
+  String get pipelineAiNotes;
 
   /// No description provided for @reviewFieldsReady.
   ///

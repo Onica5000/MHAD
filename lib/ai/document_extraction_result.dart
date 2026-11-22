@@ -98,6 +98,10 @@ class DocumentExtractionResult {
   final String? recordsNotAuthorized;
   final String? other;
 
+  /// The AI's "please check" notes — shown at the top of the review, never
+  /// applied (field audit O2). Filtered by [parseCheckNotes].
+  final List<String> checkNotes;
+
   // ── Personal information (PII) ───────────────────────────────────────────
   // Autofill is the ONE place the AI is allowed to read/return PII, so the
   // declarant and the people they designate can be filled from an uploaded
@@ -147,6 +151,7 @@ class DocumentExtractionResult {
     this.recordsAuthorized,
     this.recordsNotAuthorized,
     this.other,
+    this.checkNotes = const [],
     this.personalInfo = const ExtractedPersonalInfo(),
   });
 
@@ -246,6 +251,11 @@ class DocumentExtractionResult {
       recordsAuthorized: _mergeText(recordsAuthorized, other.recordsAuthorized),
       recordsNotAuthorized:
           _mergeText(recordsNotAuthorized, other.recordsNotAuthorized),
+      checkNotes: [
+        ...checkNotes,
+        for (final n in other.checkNotes)
+          if (!checkNotes.contains(n)) n,
+      ].take(kMaxMergedCheckNotes).toList(),
       other: _mergeText(this.other, other.other),
       personalInfo: personalInfo.merge(other.personalInfo),
     );
@@ -416,6 +426,7 @@ class DocumentExtractionResult {
       recordsDisclosure: optStr(json['records_disclosure']),
       recordsAuthorized: optStr(json['records_authorized']),
       recordsNotAuthorized: optStr(json['records_not_authorized']),
+      checkNotes: parseCheckNotes(json['check_notes']),
       other: optStr(json['other']),
       personalInfo: ExtractedPersonalInfo.fromJson(
           json['personal_info'] is Map<String, dynamic>
@@ -813,4 +824,41 @@ class ExtractedPersonalInfo {
       guardian: ExtractedPerson.maybe(j['guardian']),
     );
   }
+}
+
+/// At most this many "please check" notes from one AI answer, and after
+/// merging the answers for several documents.
+const kMaxCheckNotes = 8;
+const kMaxMergedCheckNotes = 12;
+const _kMaxCheckNoteChars = 280;
+
+final _linkLike = RegExp(r'https?://|www\.|[\w.+-]+@[\w-]+\.[a-z]{2,}',
+    caseSensitive: false);
+final _digitRun = RegExp(r'\d[\d\s().\-/]*\d');
+final _dateLike = RegExp(r'^\d{1,2}[/.\-]\d{1,2}[/.\-]\d{2,4}$');
+
+/// The AI's "please check" notes (field audit O2), made safe to show. The AI
+/// read an untrusted document, so a note with a link or an email address is
+/// dropped, and a long run of digits (a phone, ID or account number) is
+/// masked — a note must never hand the person a number to call or echo an ID
+/// number. Dates stay: a note may say which date looks wrong.
+List<String> parseCheckNotes(Object? raw) {
+  if (raw is! List) return const [];
+  final out = <String>[];
+  for (final item in raw) {
+    if (item is! String) continue;
+    var note = item.replaceAll(RegExp(r'\s+'), ' ').trim();
+    if (note.isEmpty || _linkLike.hasMatch(note)) continue;
+    note = note.replaceAllMapped(_digitRun, (m) {
+      final s = m[0]!;
+      final digits = s.replaceAll(RegExp(r'\D'), '').length;
+      return digits >= 7 && !_dateLike.hasMatch(s) ? '…' : s;
+    });
+    if (note.length > _kMaxCheckNoteChars) {
+      note = '${note.substring(0, _kMaxCheckNoteChars - 1).trimRight()}…';
+    }
+    if (!out.contains(note)) out.add(note);
+    if (out.length == kMaxCheckNotes) break;
+  }
+  return out;
 }
