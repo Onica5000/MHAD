@@ -1182,6 +1182,10 @@
       }
     }
   },
+  "reviewAllergySeverityNotStated": "The severity wasn’t stated, so it will be saved as “moderate” — change it on the Allergies step if that isn’t right.",
+  "@reviewAllergySeverityNotStated": {
+    "description": "Autofill review: note under an allergy whose severity the AI did not state (the app stores 'moderate' unless the person changes it)."
+  },
   "reviewAddToDirective": "Add to your directive",
   "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
   "reviewPhotoHandoff": "PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.",

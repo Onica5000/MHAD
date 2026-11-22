@@ -936,6 +936,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
           ),
           _agentInitialsNote(key, p),
           _formatWarning(key, p),
+          _rowNote(key, p),
         ],
       );
     }
@@ -987,6 +988,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         ),
         _agentInitialsNote(it.key, p),
         _formatWarning(it.key, p),
+        _rowNote(it.key, p),
       ],
     );
   }
@@ -1189,6 +1191,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
   void _applyFormatChecks() {
     final l = context.l10n;
     _reviewWarnings = {};
+    _reviewNotes = {};
     for (final e in _reviewEdited.entries) {
       final problem = reviewFormatProblem(e.key, e.value, l);
       if (problem != null) {
@@ -1196,6 +1199,40 @@ extension _PipelineReviewUi on _PipelineScreenState {
         _reviewChecked[e.key] = false;
       }
     }
+    // An allergy whose severity the AI didn't state is still worth adding —
+    // it stays checked, but the person is told what will be saved (P-12).
+    for (final a in _validated?.allergies ?? const <ExtractedAllergy>[]) {
+      final key = 'allergy_${a.substance}';
+      if (!a.severityStated && _reviewEdited.containsKey(key)) {
+        _reviewNotes[key] = l.reviewAllergySeverityNotStated;
+      }
+    }
+  }
+
+  /// A plain note under a row (not a problem): e.g. what an allergy with no
+  /// stated severity will be saved as.
+  Widget _rowNote(String key, MhadPalette p) {
+    final note = _reviewNotes[key];
+    if (note == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.info_outline, size: 14, color: p.textMuted),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              note,
+              style: TextStyle(
+                fontSize: 12, height: MhadType.leadingParagraph,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   /// "Check this: …" under a row whose value fails the wizard's check.

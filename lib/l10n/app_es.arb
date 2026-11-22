@@ -790,6 +790,7 @@
   "reviewPleaseCheckFromAi": "Su IA señaló lo siguiente. Viene de la IA, no de PA MHAD: compare cada punto con su documento.",
   "reviewPleaseCheckFormat": "{count, plural, =1{1 dato de abajo no parece correcto, así que empieza sin marcar. Corríjalo con el lápiz o déjelo fuera.} other{{count} datos de abajo no parecen correctos, así que empiezan sin marcar. Corríjalos con el lápiz o déjelos fuera.}}",
   "reviewCheckThis": "Revise esto: {problem}",
+  "reviewAllergySeverityNotStated": "No se indicó la gravedad, así que se guardará como “moderada”; cámbiela en el paso de alergias si no es correcta.",
   "reviewAddToDirective": "Añadir a su directiva",
   "reviewPhotoDiscarded": "Su foto se envió a la IA para leerla y luego se descartó. No se guarda nada después de confirmar o descartar.",
   "reviewPhotoHandoff": "PA MHAD nunca recibió su archivo: usted lo adjuntó en su propia IA, y se aplican las condiciones de ese servicio. Aquí solo se usa la respuesta que pegó.",

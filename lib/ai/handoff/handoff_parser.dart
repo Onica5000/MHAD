@@ -54,18 +54,61 @@ HandoffReply parseHandoffReply(
 }) {
   final text = raw.trim();
   if (text.isEmpty) return const HandoffReply.fail(HandoffProblem.empty);
-  if (text.contains(kHandoffMarker) && !text.contains('"mhad_task"')) {
-    return const HandoffReply.fail(HandoffProblem.promptPastedBack);
+
+  // Every top-level JSON object in the paste, in order. A paste can hold the
+  // instructions too ("Select all" in a chat app copies the whole thread),
+  // and the instructions contain JSON-looking examples — so reading only the
+  // first "{" lost good answers (prompt-hardening review P-9).
+  final unfenced = text.replaceAll(RegExp(r'```[a-zA-Z]*'), '');
+  final objects = <Map<String, dynamic>>[];
+  var truncated = false;
+  var i = unfenced.indexOf('{');
+  while (i >= 0) {
+    final end = _matchingBrace(unfenced, i);
+    if (end < 0) {
+      truncated = true;
+      break;
+    }
+    final decoded = _decode(unfenced.substring(i, end + 1));
+    if (decoded != null) objects.add(decoded);
+    // A non-JSON brace (prose like "{name: …}") is skipped one character on,
+    // so a real object inside it is still found.
+    i = unfenced.indexOf('{', decoded != null ? end + 1 : i + 1);
   }
 
-  final unfenced = text.replaceAll(RegExp(r'```[a-zA-Z]*'), '');
-  final start = unfenced.indexOf('{');
-  if (start < 0) return const HandoffReply.fail(HandoffProblem.notJson);
-  final end = _matchingBrace(unfenced, start);
-  if (end < 0) return const HandoffReply.fail(HandoffProblem.truncated);
-  final candidate = unfenced.substring(start, end + 1);
+  bool refOk(Map<String, dynamic> o) {
+    final r = '${o['mhad_ref']}';
+    return r == ref || alsoAccept.contains(r);
+  }
 
-  Map<String, dynamic>? decoded;
+  final answers = [
+    for (final o in objects)
+      if (o['mhad_task'] == taskTag && o['error'] == null) o,
+  ];
+  if (answers.isNotEmpty) {
+    // The answer comes after the instructions: prefer the last one.
+    for (final o in answers.reversed) {
+      if (refOk(o)) return HandoffReply.ok(o);
+    }
+    return const HandoffReply.fail(HandoffProblem.wrongRef);
+  }
+  // Only the instructions' own examples (like the no-attachment reply they
+  // describe) — the person pasted the message they sent.
+  if (text.contains(kHandoffMarker)) {
+    return const HandoffReply.fail(HandoffProblem.promptPastedBack);
+  }
+  if (objects.any((o) => o['error'] == 'no_attachment')) {
+    return const HandoffReply.fail(HandoffProblem.noAttachment);
+  }
+  if (objects.any((o) => o.containsKey('mhad_task'))) {
+    return const HandoffReply.fail(HandoffProblem.wrongTask);
+  }
+  if (truncated) return const HandoffReply.fail(HandoffProblem.truncated);
+  return const HandoffReply.fail(HandoffProblem.notJson);
+}
+
+/// [candidate] as a JSON object, forgiving trailing commas and curly quotes.
+Map<String, dynamic>? _decode(String candidate) {
   for (final attempt in [
     candidate,
     _dropTrailingCommas(candidate),
@@ -73,25 +116,10 @@ HandoffReply parseHandoffReply(
   ]) {
     try {
       final v = jsonDecode(attempt);
-      if (v is Map<String, dynamic>) {
-        decoded = v;
-        break;
-      }
+      if (v is Map<String, dynamic>) return v;
     } catch (_) {}
   }
-  if (decoded == null) return const HandoffReply.fail(HandoffProblem.notJson);
-
-  if (decoded['error'] == 'no_attachment') {
-    return const HandoffReply.fail(HandoffProblem.noAttachment);
-  }
-  if (decoded['mhad_task'] != taskTag) {
-    return const HandoffReply.fail(HandoffProblem.wrongTask);
-  }
-  final answerRef = '${decoded['mhad_ref']}';
-  if (answerRef != ref && !alsoAccept.contains(answerRef)) {
-    return const HandoffReply.fail(HandoffProblem.wrongRef);
-  }
-  return HandoffReply.ok(decoded);
+  return null;
 }
 
 /// Index of the `}` closing the object that opens at [start], skipping braces

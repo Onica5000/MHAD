@@ -393,12 +393,12 @@ class DocumentExtractionResult {
       experimentalConsent: optStr(json['experimental_consent']),
       drugTrialConsent: optStr(json['drug_trial_consent']),
       medicationConsent: optStr(json['medication_consent']),
-      triggerTwoProfessionals: json['trigger_two_professionals'] as bool?,
-      triggerCourtOrder: json['trigger_court_order'] as bool?,
+      triggerTwoProfessionals: optBool(json['trigger_two_professionals']),
+      triggerCourtOrder: optBool(json['trigger_court_order']),
       triggerInvoluntaryCommitment:
-          json['trigger_involuntary_commitment'] as bool?,
+          optBool(json['trigger_involuntary_commitment']),
       roomPreferencesNote: optStr(json['room_preferences_note']),
-      sameGenderRoommate: json['same_gender_roommate'] as bool?,
+      sameGenderRoommate: optBool(json['same_gender_roommate']),
       roomPreferenceChips: json['room_preference_chips'] is List
           ? (json['room_preference_chips'] as List)
               .map((e) => e.toString())
@@ -406,14 +406,14 @@ class DocumentExtractionResult {
               .toList()
           : const [],
       roommateGenderMatch: optStr(json['roommate_gender_match']),
-      guardianCanRevoke: json['guardian_can_revoke'] as bool?,
+      guardianCanRevoke: optBool(json['guardian_can_revoke']),
       guardianCanRevokeNote: optStr(json['guardian_can_revoke_note']),
       crisisPlan: json['crisis_plan'] is Map<String, dynamic>
           ? ExtractedCrisisPlan.fromJson(
               json['crisis_plan'] as Map<String, dynamic>)
           : null,
-      agentCanConsentMedication: json['agent_can_consent_medication'] as bool?,
-      selfBindingUlysses: json['self_binding_ulysses'] as bool?,
+      agentCanConsentMedication: optBool(json['agent_can_consent_medication']),
+      selfBindingUlysses: optBool(json['self_binding_ulysses']),
       healthHistory: optStr(json['health_history']),
       dietary: optStr(json['dietary']),
       religious: optStr(json['religious']),
@@ -467,9 +467,14 @@ class DocumentExtractionResult {
         .whereType<Map<String, dynamic>>()
         .map((a) => ExtractedAllergy(
               substance: a['substance']?.toString() ?? '',
-              kind: a['kind']?.toString() ?? 'drug',
-              severity: a['severity']?.toString() ?? 'moderate',
-              reactions: optStr(a['reactions']),
+              // Unknown kind is "other", never "drug" (a peanut or latex
+              // allergy is not a drug allergy); an unstated severity stays
+              // "moderate" for storage but is flagged in the review (P-12).
+              kind: optStr(a['kind']) ?? 'other',
+              severity: optStr(a['severity']) ?? 'moderate',
+              severityStated: const {'mild', 'moderate', 'severe'}
+                  .contains(optStr(a['severity'])?.toLowerCase()),
+              reactions: optStr(a['reactions'], listSeparator: ', '),
               notes: optStr(a['notes']),
             ))
         .where((a) => a.substance.isNotEmpty)
@@ -605,16 +610,22 @@ class ExtractedAllergy {
     required this.substance,
     this.kind = 'drug',
     this.severity = 'moderate',
+    this.severityStated = true,
     this.reactions,
     this.notes,
     this.rxNormVerified = false,
   });
+
+  /// False when the AI gave no recognisable severity — the review says it
+  /// will be saved as "moderate" so the person can change it (P-12).
+  final bool severityStated;
 
   /// Copy with an updated [rxNormVerified] flag (other fields unchanged).
   ExtractedAllergy withVerified(bool verified) => ExtractedAllergy(
         substance: substance,
         kind: kind,
         severity: severity,
+        severityStated: severityStated,
         reactions: reactions,
         notes: notes,
         rxNormVerified: verified,
@@ -843,6 +854,7 @@ final _dateLike = RegExp(r'^\d{1,2}[/.\-]\d{1,2}[/.\-]\d{2,4}$');
 /// masked — a note must never hand the person a number to call or echo an ID
 /// number. Dates stay: a note may say which date looks wrong.
 List<String> parseCheckNotes(Object? raw) {
+  if (raw is String) raw = [raw];
   if (raw is! List) return const [];
   final out = <String>[];
   for (final item in raw) {

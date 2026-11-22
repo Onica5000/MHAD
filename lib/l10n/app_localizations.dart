@@ -4838,6 +4838,12 @@ abstract class AppLocalizations {
   /// **'Check this: {problem}'**
   String reviewCheckThis(String problem);
 
+  /// Autofill review: note under an allergy whose severity the AI did not state (the app stores 'moderate' unless the person changes it).
+  ///
+  /// In en, this message translates to:
+  /// **'The severity wasn’t stated, so it will be saved as “moderate” — change it on the Allergies step if that isn’t right.'**
+  String get reviewAllergySeverityNotStated;
+
   /// No description provided for @reviewAddToDirective.
   ///
   /// In en, this message translates to:

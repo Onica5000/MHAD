@@ -2785,6 +2785,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reviewAllergySeverityNotStated =>
+      'The severity wasn’t stated, so it will be saved as “moderate” — change it on the Allergies step if that isn’t right.';
+
+  @override
   String get reviewAddToDirective => 'Add to your directive';
 
   @override

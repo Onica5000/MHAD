@@ -77,8 +77,8 @@ void main() {
           ]),
           ['Medication “Zentravex” could not be matched.']);
     });
-    test('non-lists and non-strings are ignored', () {
-      expect(parseCheckNotes('just a string'), isEmpty);
+    test('one note sent as a plain string counts; other types are ignored', () {
+      expect(parseCheckNotes('just a string'), ['just a string']);
       expect(parseCheckNotes([1, null, true]), isEmpty);
     });
     test('notes come through the reply and merge across documents', () {
@@ -97,6 +97,6 @@ void main() {
   test('the autofill prompt asks for check notes and forbids echoing numbers', () {
     final p = DocumentExtractor.promptFor('combined');
     expect(p, contains('check_notes is a list of short notes'));
-    expect(p, contains('Never repeat an ID number, phone number or street address'));
+    expect(p, contains('never repeat a date of birth, an ID or phone number, or an address'));
   });
 }

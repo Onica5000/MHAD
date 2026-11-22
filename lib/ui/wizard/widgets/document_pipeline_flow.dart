@@ -153,6 +153,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _reviewChecked = {};
     _reviewEdited = {};
     _reviewWarnings = {};
+    _reviewNotes = {};
     _smartResult = null;
     _smartChecked = {};
     _smartEdited = {};
@@ -362,6 +363,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   /// Review key → what's wrong with its date of birth / ZIP / phone (the
   /// wizard's own checks, field audit O3). Such a row starts unchecked.
   Map<String, String> _reviewWarnings = {};
+
+  /// Review key → a plain note shown under the row (not a problem).
+  Map<String, String> _reviewNotes = {};
 
   /// Reconciliation items (priority + conflict) for the review step, built from
   /// the extracted values vs the directive's current values.

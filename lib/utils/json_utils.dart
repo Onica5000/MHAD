@@ -1,8 +1,33 @@
 /// Returns a non-empty trimmed string from a JSON value, or null.
-String? optStr(dynamic v) {
+String? optStr(dynamic v, {String listSeparator = '\n'}) {
   if (v == null) return null;
+  // A chat AI often answers a text field with a list; joined, it never
+  // prints as "[a, b]" (prompt-hardening review P-4).
+  if (v is List) {
+    final parts = [
+      for (final e in v)
+        if (e != null && e.toString().trim().isNotEmpty) e.toString().trim(),
+    ];
+    return parts.isEmpty ? null : parts.join(listSeparator);
+  }
   final s = v.toString().trim();
   return s.isEmpty ? null : s;
+}
+
+/// A yes/no from AI JSON: true/false, or the strings "true"/"false"/"yes"/"no"
+/// (chat models often quote them); anything else is null — never guessed true.
+/// A quoted "true" used to throw and lose the whole autofill answer (P-5).
+bool? optBool(dynamic v) {
+  if (v is bool) return v;
+  if (v is String) {
+    switch (v.trim().toLowerCase()) {
+      case 'true' || 'yes':
+        return true;
+      case 'false' || 'no':
+        return false;
+    }
+  }
+  return null;
 }
 
 /// Strips markdown code fences (``` / ```json, tolerant of \r\n) that LLMs

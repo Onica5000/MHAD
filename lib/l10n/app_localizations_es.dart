@@ -2846,6 +2846,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get reviewAllergySeverityNotStated =>
+      'No se indicó la gravedad, así que se guardará como “moderada”; cámbiela en el paso de alergias si no es correcta.';
+
+  @override
   String get reviewAddToDirective => 'Añadir a su directiva';
 
   @override
