@@ -47,8 +47,12 @@ void main() {
 
       final coerced = SideEffectItem.fromJson(
           {'effect': 'E', 'serious': 'true', 'experiencing': 1});
-      expect(coerced.serious, isFalse, reason: 'string "true" is not bool true');
+      // A chat AI's quoted "true" still flags a dangerous effect — reading it
+      // as "not serious" failed toward silence (prompt-hardening P-19).
+      expect(coerced.serious, isTrue, reason: 'string "true" means serious');
       expect(coerced.experiencing, isFalse, reason: '1 is not bool true');
+      expect(SideEffectItem.fromJson({'effect': 'E', 'serious': 'maybe'}).serious,
+          isFalse);
     });
   });
 

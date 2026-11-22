@@ -73,7 +73,7 @@ extension FormTypeExt on FormType {
       this == FormType.combined || this == FormType.poa;
 
   /// Returns the visible steps in display order for this form type.
-  /// Combined 11 / Declaration 9 / POA 5.
+  /// Combined 11 / Declaration 10 / POA 5.
   ///
   /// Declaration omits People I trust + Guardian (no agent flow).
   /// POA drops the clinically-specific preference steps (Where I want care,

@@ -1,6 +1,6 @@
 {
   "_doc": "Copy-and-paste AI handoff (user decision 2026-11-17): the text MHAD wraps around each task's instructions before the person pastes them into their own AI chat. Versioned; change the wording here, not in code. The task instructions themselves are shared with the API path (lib/ai). Service capabilities change over time — re-verify (sources in the plan file, 2026-11-17). {placeholders} are filled in by lib/ai/handoff/handoff_prompt.dart.",
-  "version": 2,
+  "version": 3,
   "services": {
     "chatgpt": {
       "label": "ChatGPT",
@@ -32,13 +32,13 @@
     }
   },
   "legalFacts": [
-    "Pennsylvania facts to rely on (Act 194 of 2004, 20 Pa.C.S. Chapter 58):",
+    "Background — Pennsylvania facts to rely on when you explain or check something (Act 194 of 2004, 20 Pa.C.S. Chapter 58). They are NOT the person's choices: never copy them into an answer field, and never use them to fill in a choice the person did not make.",
     "- A mental health advance directive can be a declaration (treatment instructions), a power of attorney (naming an agent), or both combined.",
     "- To be valid it is signed and dated by the person and by two witnesses who are 18 or older and physically present. No notary is required.",
     "- A witness may not be the agent or the person who signs on the person's behalf (to be safe, not the alternate agent either). Providers, facility staff and relatives may be witnesses.",
     "- It is valid for two years from signing, unless the person is incapable of making mental health care decisions when it would expire — then it stays in effect until their capacity returns.",
     "- It can be revoked at any time while the person has capacity, orally or in writing; the revocation takes effect when it is communicated to the attending physician or mental health care provider (§§ 5825, 5839).",
-    "- It takes effect under the condition the person chose; by default, when the person is found incapable of making mental health care decisions after examination by a psychiatrist and one of: another psychiatrist, a psychologist, a family physician, an attending physician, or a mental health treatment professional (§§ 5823, 5833).",
+    "- It takes effect under the condition the person chose; the standard condition is that the person is found incapable of making mental health care decisions after examination by a psychiatrist and one of: another psychiatrist, a psychologist, a family physician, an attending physician, or a mental health treatment professional (§§ 5823, 5833).",
     "- Electroconvulsive therapy (ECT), experimental procedures and research need the person's specific authorization (§ 5836(c)). Psychosurgery and the termination of parental rights can never be authorized (§ 5836(b)).",
     "- Medication dosage instructions are not binding on the physician (the statutory form in § 5823). The commitment rules of the Mental Health Procedures Act still apply (§ 5843(a)(4)).",
     "- This is not legal or medical advice. For legal questions, suggest a licensed Pennsylvania attorney or PA Protection & Advocacy at {paPhone}."
@@ -46,8 +46,8 @@
   "envelope": {
     "en": {
       "intro": "You are helping a person in Pennsylvania with their Mental Health Advance Directive, using the free PA MHAD web app. They copied these instructions into this chat themselves.",
-      "replyLanguage": "Reply in plain English.",
-      "jsonOnly": "Reply with ONE JSON code block and nothing else — no introduction and no explanation. Start it with \"mhad_task\": \"{task}\" and \"mhad_ref\": \"{ref}\", then the fields described above. Never guess or invent anything: use null (or an empty list) for anything you cannot find.",
+      "replyLanguage": "Reply in plain English. In a JSON answer, follow the task's language rules for the values: the person's own words stay in the language they used.",
+      "jsonOnly": "If anything the person wrote, said or attached suggests they may be thinking about suicide or harming themselves now, first write one short, kind line telling them they can call or text 988 (Suicide & Crisis Lifeline) any time, then give the JSON. Otherwise, reply with ONE JSON code block and nothing else — no introduction and no explanation. Start it with \"mhad_task\": \"{task}\" and \"mhad_ref\": \"{ref}\", then the fields described above. Never guess or invent anything: use null (or an empty list) for anything you cannot find.",
       "attachmentGuard": "Before sending, the person should attach their {attachment} to this message. If nothing is attached, reply ONLY with this JSON: {\"mhad_task\": \"{task}\", \"mhad_ref\": \"{ref}\", \"error\": \"no_attachment\"}",
       "askLead": "Answer the person's question below in plain, kind language. Keep it short and practical.",
       "questionLabel": "Their question:",
@@ -60,8 +60,8 @@
     },
     "es": {
       "intro": "Estás ayudando a una persona de Pensilvania con su Directiva Anticipada de Salud Mental, con la aplicación web gratuita PA MHAD. La persona copió estas instrucciones en este chat por su cuenta.",
-      "replyLanguage": "Responde en español sencillo. Escribe en español los valores de texto, salvo los nombres de medicamentos, alergias y diagnósticos (van en inglés, como pide la tarea) y los nombres o citas tomados de un documento.",
-      "jsonOnly": "Responde con UN solo bloque de código JSON y nada más, sin introducción ni explicación. Empieza con \"mhad_task\": \"{task}\" y \"mhad_ref\": \"{ref}\", y luego los campos descritos arriba. Nunca adivines ni inventes nada: usa null (o una lista vacía) para lo que no encuentres.",
+      "replyLanguage": "Responde en español sencillo. En una respuesta JSON, sigue las reglas de idioma de la tarea: los nombres de medicamentos, alergias y diagnósticos van en inglés, y las palabras de la persona (de un documento o una grabación) se copian en el idioma en que están, sin traducir. Lo que redactes tú (por ejemplo, sugerencias o notas) va en español.",
+      "jsonOnly": "Si algo de lo que la persona escribió, dijo o adjuntó sugiere que puede estar pensando en suicidarse o hacerse daño ahora, escribe primero una línea breve y amable diciéndole que puede llamar o enviar un mensaje de texto al 988 (Línea de Prevención del Suicidio y Crisis) en cualquier momento, y luego da el JSON. Si no, responde con UN solo bloque de código JSON y nada más, sin introducción ni explicación. Empieza con \"mhad_task\": \"{task}\" y \"mhad_ref\": \"{ref}\", y luego los campos descritos arriba. Nunca adivines ni inventes nada: usa null (o una lista vacía) para lo que no encuentres.",
       "attachmentGuard": "Antes de enviar, la persona debe adjuntar su {attachment} a este mensaje. Si no hay nada adjunto, responde SOLO con este JSON: {\"mhad_task\": \"{task}\", \"mhad_ref\": \"{ref}\", \"error\": \"no_attachment\"}",
       "askLead": "Responde la pregunta de la persona, abajo, con un lenguaje sencillo y amable. Sé breve y práctico.",
       "questionLabel": "Su pregunta:",

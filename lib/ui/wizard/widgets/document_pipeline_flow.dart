@@ -6,6 +6,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/crisis_detector.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/ai/ai_handoff_panel.dart';
 import 'package:mhad/ai/handoff/handoff_task.dart';

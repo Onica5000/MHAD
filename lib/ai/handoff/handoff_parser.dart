@@ -86,11 +86,11 @@ HandoffReply parseHandoffReply(
       if (o['mhad_task'] == taskTag && o['error'] == null) o,
   ];
   if (answers.isNotEmpty) {
-    // The answer comes after the instructions: prefer the last one.
-    for (final o in answers.reversed) {
-      if (refOk(o)) return HandoffReply.ok(o);
-    }
-    return const HandoffReply.fail(HandoffProblem.wrongRef);
+    final mine = answers.where(refOk).toList();
+    if (mine.isEmpty) return const HandoffReply.fail(HandoffProblem.wrongRef);
+    // Merge in order: a later answer wins per key (the answer follows the
+    // instructions), and a task answered in two code blocks keeps both.
+    return HandoffReply.ok({for (final o in mine) ...o});
   }
   // Only the instructions' own examples (like the no-attachment reply they
   // describe) — the person pasted the message they sent.

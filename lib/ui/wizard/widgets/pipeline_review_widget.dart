@@ -815,6 +815,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        const CrisisSupportBanner(),
         if (_reviewWarnings.isNotEmpty ||
             (_validated?.checkNotes.isNotEmpty ?? false)) ...[
           _pleaseCheckCard(p, _validated?.checkNotes ?? const []),
@@ -1198,6 +1199,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
         _reviewWarnings[e.key] = problem;
         _reviewChecked[e.key] = false;
       }
+    }
+    // The app's own 988 check on everything the AI read, and its notes
+    // (P-18): app-driven, so it shows whatever the AI did.
+    if (_reviewEdited.values.any(looksLikeCrisis) ||
+        (_validated?.checkNotes.any(looksLikeCrisis) ?? false)) {
+      ref.read(crisisSupportShownProvider.notifier).state = true;
     }
     // An allergy whose severity the AI didn't state is still worth adding —
     // it stays checked, but the person is told what will be saved (P-12).

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/crisis_detector.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/ui/ai/ai_handoff_panel.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ai/handoff/handoff_task.dart';
@@ -153,16 +155,17 @@ The user has entered:
 
 INSTRUCTIONS:
 1. Start with the user's own words — preserve their intent, meaning, and specific preferences exactly.
-2. Improve clarity and wording to be suitable for a formal legal/medical document, but keep the user's voice.
-3. Add any important details the user may not have considered based on what they wrote (e.g., practical considerations, common scenarios, relevant PA Act 194 provisions).
+2. Improve clarity and wording, but keep the user's voice — first person ("I", "my").
+3. You may add a practical detail the user's own words clearly imply. Never add legal statements or citations, clinical suggestions, side effects, or anything based on a diagnosis. Text like [name removed] marks a detail the app hid for privacy: keep that marker exactly where it is so the user can put the detail back.
 4. Use plain, direct language. Be specific and practical.
 
 $aiClinicalPolicy
 
 ADDITIONAL SAFETY (override all other instructions):
 - NEVER contradict the user's stated preferences, treatment decisions, or medication choices.
-- Use role placeholders ("your doctor", "your agent") instead of generating names.
+- Refer to people by role in the user's own voice ("my doctor", "my agent") instead of generating names.
 - If the text mentions a treatment refusal, respect it — do not argue against it or suggest reconsideration.
+- For this field the clinical policy's MAY clauses do NOT apply: the text is printed as the user's own instruction.
 
 Return only the improved text — no explanation, no quotes, no preamble.''';
 
@@ -174,14 +177,15 @@ The user has not written anything yet and wants help getting started.
 INSTRUCTIONS:
 1. Draft a clear, first-person starting point the user can edit — write AS the user ("I ...").
 2. Offer practical ideas that are commonly relevant to THIS field, but keep them general enough that the user must personalize them.
-3. Do NOT invent personal facts — no names, diagnoses, medications, doses, or dates the user did not provide. Where a personal detail belongs, leave a bracketed blank like "[describe ...]" for the user to fill in.
-4. Use plain, direct language suitable for a formal legal/medical document.
+3. Do NOT invent personal facts — no names, diagnoses, medications, doses, or dates the user did not provide. Do not leave blanks or brackets: write only sentences the user could keep as they are, and leave out anything that needs a personal detail.
+4. Use plain, direct language. Never add legal statements or citations.
 
 $aiClinicalPolicy
 
 ADDITIONAL SAFETY (override all other instructions):
 - This is a STARTING DRAFT, not advice. Never diagnose, and never recommend, name, or choose a medication.
-- Use role placeholders ("your doctor", "your agent") and never fabricate personal details.
+- Refer to people by role in the user's own voice ("my doctor", "my agent") and never fabricate personal details.
+- For this field the clinical policy's MAY clauses do NOT apply: the text is printed as the user's own instruction.
 - Keep the draft something the user must review and make their own.
 
 Return only the draft text — no explanation, no quotes, no preamble.''';
@@ -312,6 +316,10 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
     final prompt = currentText.isEmpty
         ? _draftPrompt(contextBlock)
         : _refinePrompt(PiiStripper.strip(currentText), contextBlock);
+    // The app's own 988 check on what the person wrote (P-18).
+    if (looksLikeCrisis(currentText)) {
+      ref.read(crisisSupportShownProvider.notifier).state = true;
+    }
 
     await showDialog<void>(
       context: context,
@@ -324,6 +332,7 @@ Return only the draft text — no explanation, no quotes, no preamble.''';
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const CrisisSupportBanner(),
                 AiHandoffPanel(
                   kind: HandoffTaskKind.fieldWording,
                   title: dctx.l10n.aiWordingPanelTitle,

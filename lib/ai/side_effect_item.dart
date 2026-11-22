@@ -1,3 +1,5 @@
+import 'package:mhad/utils/json_utils.dart';
+
 /// One row of the "Are you experiencing these side effects?" checklist.
 ///
 /// The AI lists common, well-documented side effects of a medication the user
@@ -43,7 +45,9 @@ class SideEffectItem {
         med: (m['med'] ?? '').toString(),
         effect: (m['effect'] ?? '').toString(),
         adlImpact: (m['adl'] ?? '').toString(),
-        serious: m['serious'] == true,
+        // A quoted "true" must not turn a dangerous effect into an ordinary
+        // one (prompt-hardening review P-19).
+        serious: optBool(m['serious']) ?? false,
         experiencing: m['experiencing'] == true,
       );
 }
