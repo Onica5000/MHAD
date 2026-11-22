@@ -52,6 +52,13 @@ Future<void> showMoreSheet(
   }
 }
 
+/// The form of the person's directive when there is exactly one (the usual
+/// web session) — the checklist and the questionnaire then match it.
+String? _onlyForm(WidgetRef ref) {
+  final all = ref.read(allDirectivesProvider).value ?? const [];
+  return all.length == 1 ? all.single.formType : null;
+}
+
 class _MoreSheet extends StatelessWidget {
   final WidgetRef ref;
   final bool includePrimaryNav;
@@ -128,6 +135,30 @@ class _MoreSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
               ],
+              _MoreRow(
+                icon: Icons.checklist_outlined,
+                title: context.l10n.gettingReadyTitle,
+                detail: context.l10n.moreSheetGettingReadyDetail,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  final form = _onlyForm(ref);
+                  appRouter.push(form == null
+                      ? AppRoutes.gettingReady
+                      : AppRoutes.gettingReadyFor(form));
+                },
+              ),
+              _MoreRow(
+                icon: Icons.mic_none,
+                title: context.l10n.audioQTitle,
+                detail: context.l10n.moreSheetVoiceDetail,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  final form = _onlyForm(ref);
+                  appRouter.push(form == null
+                      ? AppRoutes.audioGuide
+                      : AppRoutes.audioGuideFor(form));
+                },
+              ),
               _MoreRow(
                 icon: Icons.document_scanner_outlined,
                 title: context.l10n.navAutofill,

@@ -10825,6 +10825,270 @@ abstract class AppLocalizations {
   /// **'Voice questionnaire'**
   String get audioQTitle;
 
+  /// Getting-ready checklist: page title, nav label and tab title.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting ready'**
+  String get gettingReadyTitle;
+
+  /// Getting-ready checklist: lead under the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything you need to complete your directive: first what makes it valid, then what to gather step by step, then what to do after you sign.'**
+  String get gettingReadyLead;
+
+  /// Getting-ready checklist: print button.
+  ///
+  /// In en, this message translates to:
+  /// **'Print the checklist'**
+  String get gettingReadyPrintCta;
+
+  /// Getting-ready checklist: print failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the checklist to print. Please try again.'**
+  String get gettingReadyPrintError;
+
+  /// Getting-ready checklist: when opened for a directive; {form} is its form name.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched to your form: {form}.'**
+  String gettingReadyForForm(String form);
+
+  /// Getting-ready checklist: when opened without a directive.
+  ///
+  /// In en, this message translates to:
+  /// **'This covers every form. Items for only some forms say which.'**
+  String get gettingReadyAllForms;
+
+  /// Getting-ready checklist: first (highest-priority) section.
+  ///
+  /// In en, this message translates to:
+  /// **'1. What makes it valid'**
+  String get gettingReadyTierValid;
+
+  /// Getting-ready checklist: lead of the validity section.
+  ///
+  /// In en, this message translates to:
+  /// **'Without these, your directive isn’t valid.'**
+  String get gettingReadyTierValidLead;
+
+  /// Getting-ready checklist: second section.
+  ///
+  /// In en, this message translates to:
+  /// **'2. What to gather'**
+  String get gettingReadyTierGather;
+
+  /// Getting-ready checklist: lead of the gather section.
+  ///
+  /// In en, this message translates to:
+  /// **'In the order the app asks for it. The more you fill in, the more your care team knows.'**
+  String get gettingReadyTierGatherLead;
+
+  /// Getting-ready checklist: third section.
+  ///
+  /// In en, this message translates to:
+  /// **'3. After you sign'**
+  String get gettingReadyTierAfter;
+
+  /// Getting-ready checklist: lead of the after-signing section.
+  ///
+  /// In en, this message translates to:
+  /// **'So your directive can be found and followed.'**
+  String get gettingReadyTierAfterLead;
+
+  /// Getting-ready checklist: which wizard step an item belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'In the app: {step}'**
+  String gettingReadyStepTag(String step);
+
+  /// Getting-ready checklist: item only for forms that name an agent.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined or Power of Attorney form'**
+  String get gettingReadyFormsAgent;
+
+  /// Getting-ready checklist: item only for forms with treatment preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined or Declaration form'**
+  String get gettingReadyFormsPreferences;
+
+  /// Getting-ready, validity (booklet: What makes it valid, 1).
+  ///
+  /// In en, this message translates to:
+  /// **'You are 18 or older, or an emancipated minor.'**
+  String get grValidAge;
+
+  /// Getting-ready, validity (booklet: What makes it valid, 2).
+  ///
+  /// In en, this message translates to:
+  /// **'When you make it, you are not under a guardianship a court appointed after finding you incapacitated, and not under an involuntary commitment.'**
+  String get grValidStatus;
+
+  /// Getting-ready, validity (booklet: What makes it valid, 4-5).
+  ///
+  /// In en, this message translates to:
+  /// **'It states your choices about mental health treatment — or, on a power of attorney, names your agent and what they may decide.'**
+  String get grValidChoices;
+
+  /// Getting-ready, validity (statute + official form).
+  ///
+  /// In en, this message translates to:
+  /// **'You sign and date it. If you can’t sign, someone may sign for you at your direction — that person can’t be a witness.'**
+  String get grValidSign;
+
+  /// Getting-ready, validity (statute; legal canon).
+  ///
+  /// In en, this message translates to:
+  /// **'Two witnesses, each 18 or older, are physically present when you sign, and sign it too. No notary is needed.'**
+  String get grValidWitnesses;
+
+  /// Getting-ready, validity (official form + legal canon).
+  ///
+  /// In en, this message translates to:
+  /// **'Neither witness is your agent or the person signing for you — to be safe, not your alternate agent either. Your doctor, other providers and relatives may be witnesses.'**
+  String get grValidWitnessWho;
+
+  /// Getting-ready, validity, agent forms (20 Pa.C.S. § 5835).
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent is an adult — not your doctor or other mental health care provider or their employee, and not an owner, operator or employee of a residential facility where you receive care, unless they are your relative.'**
+  String get grValidAgent;
+
+  /// Getting-ready, gather: About you.
+  ///
+  /// In en, this message translates to:
+  /// **'Your full legal name, date of birth, home address with county, and phone. Have your ID handy — autofill can read it.'**
+  String get grGatherAboutYou;
+
+  /// Getting-ready, gather: When this kicks in.
+  ///
+  /// In en, this message translates to:
+  /// **'When it should take effect — usually when a psychiatrist and one other professional find you can’t make your mental health decisions — and, if you want, a doctor you’d prefer to evaluate your capacity.'**
+  String get grGatherWhen;
+
+  /// Getting-ready, gather: People I trust.
+  ///
+  /// In en, this message translates to:
+  /// **'Your agent and an alternate: names, how they’re related to you, addresses and phones. Ask them first and talk through your wishes.'**
+  String get grGatherAgent;
+
+  /// Getting-ready, gather: agent authority.
+  ///
+  /// In en, this message translates to:
+  /// **'What your agent may decide: whether they may consent to medication, and any limits.'**
+  String get grGatherAuthority;
+
+  /// Getting-ready, gather: guardian.
+  ///
+  /// In en, this message translates to:
+  /// **'Whether to nominate a guardian in case a court ever appoints one, and whether a guardian could override your directive.'**
+  String get grGatherGuardian;
+
+  /// Getting-ready, gather: Where I want care.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospitals or treatment centers you prefer or want to avoid (names and towns), and room preferences.'**
+  String get grGatherCare;
+
+  /// Getting-ready, gather: Diagnoses.
+  ///
+  /// In en, this message translates to:
+  /// **'Your diagnoses, and your primary doctor’s name, specialty and phone.'**
+  String get grGatherDiagnoses;
+
+  /// Getting-ready, gather: Allergies.
+  ///
+  /// In en, this message translates to:
+  /// **'Each allergy, how serious it is, and what happens.'**
+  String get grGatherAllergies;
+
+  /// Getting-ready, gather: Medications.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current medications and doses (pill bottles or a pharmacy list help), ones that worked, ones you never want and why, and any limits.'**
+  String get grGatherMeds;
+
+  /// Getting-ready, gather: Procedures & research (Combined, Declaration).
+  ///
+  /// In en, this message translates to:
+  /// **'Your choice about electroconvulsive therapy (ECT), experimental studies and drug trials.'**
+  String get grGatherProcedures;
+
+  /// Getting-ready, gather: Procedures & research (Power of Attorney).
+  ///
+  /// In en, this message translates to:
+  /// **'Whether your agent is authorized to consent to electroconvulsive therapy (ECT), experimental studies and drug trials.'**
+  String get grGatherProceduresPoa;
+
+  /// Getting-ready, gather: Anything else.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else: what helps in a crisis and what makes it worse, who to notify, who may see your records, care of children and pets, food and faith.'**
+  String get grGatherElse;
+
+  /// Getting-ready, gather (booklet: Do I need to include proof of my capacity?).
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: a letter from your treating doctor, from the time you sign, saying you had capacity — so it is harder to challenge later.'**
+  String get grGatherCapacityLetter;
+
+  /// Getting-ready, gather: link to the voice questionnaire.
+  ///
+  /// In en, this message translates to:
+  /// **'Rather talk than type? Record your answers with the voice questionnaire.'**
+  String get grGatherVoice;
+
+  /// Getting-ready: button to the voice questionnaire.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the voice questionnaire'**
+  String get grGatherVoiceCta;
+
+  /// Getting-ready, after signing (booklet: Execution).
+  ///
+  /// In en, this message translates to:
+  /// **'Give copies to your agent and alternate, your doctors, your mental health care provider, and anyone who should be told if you can’t make decisions.'**
+  String get grAfterCopies;
+
+  /// Getting-ready, after signing (booklet: Execution).
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the original in a safe place and tell someone you trust where it is, so it can reach your doctor in a crisis. Carry a wallet card saying you have a directive and who to call.'**
+  String get grAfterKeep;
+
+  /// Getting-ready, after signing (legal canon: validity).
+  ///
+  /// In en, this message translates to:
+  /// **'It is valid for two years from the date you sign it, unless you can’t make mental health decisions when it would expire — then it stays in effect until you can.'**
+  String get grAfterExpiry;
+
+  /// Getting-ready, after signing (legal canon: revocation).
+  ///
+  /// In en, this message translates to:
+  /// **'You can revoke it at any time, out loud or in writing — unless you have been found unable to make these decisions or are involuntarily committed. It ends once your doctor or mental health care provider is told. If you change or cancel it, tell everyone who has a copy.'**
+  String get grAfterRevoke;
+
+  /// Home: banner above the form choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you start: see what you’ll need, and what makes your directive valid.'**
+  String get homeGettingReadyLead;
+
+  /// More sheet: detail under Getting ready.
+  ///
+  /// In en, this message translates to:
+  /// **'What you’ll need, and what makes it valid'**
+  String get moreSheetGettingReadyDetail;
+
+  /// More sheet: detail under Voice questionnaire.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer out loud, then autofill from the recording'**
+  String get moreSheetVoiceDetail;
+
   /// Voice questionnaire: first recording (about you, when it takes effect, agents, guardian).
   ///
   /// In en, this message translates to:
@@ -12126,12 +12390,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy'**
   String get tabPagePrivacyPolicy;
-
-  /// No description provided for @tabPageAudioGuide.
-  ///
-  /// In en, this message translates to:
-  /// **'Audio guide'**
-  String get tabPageAudioGuide;
 
   /// No description provided for @tabPageAdmin.
   ///

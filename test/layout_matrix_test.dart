@@ -40,6 +40,8 @@ void main() {
     AppRoutes.education,
     AppRoutes.settings,
     AppRoutes.assistant, // Ask AI (copy-and-paste handoff)
+    AppRoutes.gettingReady, // checklist (every form)
+    AppRoutes.audioGuide, // voice questionnaire (every form)
   ];
 
   for (final lang in const ['en', 'es']) {

@@ -12,6 +12,7 @@ import 'package:mhad/ui/admin/admin_update_screen.dart';
 import 'package:mhad/ui/ai_check/ai_consistency_screen.dart';
 import 'package:mhad/ui/assistant/assistant_screen.dart';
 import 'package:mhad/ui/audio_guide/audio_guide_screen.dart';
+import 'package:mhad/ui/getting_ready/getting_ready_screen.dart';
 import 'package:mhad/ui/crisis_findability/make_it_findable_screen.dart';
 import 'package:mhad/ui/crisis_plan/crisis_plan_screen.dart';
 import 'package:mhad/ui/side_effects/side_effects_screen.dart';
@@ -51,6 +52,11 @@ abstract class AppRoutes {
 
   /// The voice questionnaire for one form (its steps, numbered as in the app).
   static String audioGuideFor(String formType) => '$audioGuide?form=$formType';
+
+  /// "Getting ready": what makes the directive valid, what to gather, what
+  /// to do after signing (`?form=` narrows it to one form).
+  static const gettingReady = '/getting-ready';
+  static String gettingReadyFor(String formType) => '$gettingReady?form=$formType';
   // Post-wizard sign-on-paper screen — prototype ScrSign (mobile.jsx
   // L884-981). Sits between the wizard's Review step and the Done
   // celebration. Lands stamp executionDate so the directive flips from
@@ -267,6 +273,11 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           // `?form=` (from a directive's Autofill page) shows only that
           // form's steps, numbered as in the app.
           builder: (_, state) => AudioGuideScreen(
+              form: formTypeFromName(state.uri.queryParameters['form'] ?? '')),
+        ),
+        GoRoute(
+          path: AppRoutes.gettingReady,
+          builder: (_, state) => GettingReadyScreen(
               form: formTypeFromName(state.uri.queryParameters['form'] ?? '')),
         ),
         GoRoute(

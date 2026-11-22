@@ -6577,6 +6577,177 @@ class AppLocalizationsEs extends AppLocalizations {
   String get audioQTitle => 'Cuestionario de voz';
 
   @override
+  String get gettingReadyTitle => 'Prepárese';
+
+  @override
+  String get gettingReadyLead =>
+      'Todo lo que necesita para completar su directiva: primero, lo que la hace válida; luego, lo que debe reunir paso a paso; y, por último, qué hacer después de firmar.';
+
+  @override
+  String get gettingReadyPrintCta => 'Imprimir la lista';
+
+  @override
+  String get gettingReadyPrintError =>
+      'No se pudo abrir la lista para imprimir. Inténtelo de nuevo.';
+
+  @override
+  String gettingReadyForForm(String form) {
+    return 'Adaptada a su formulario: $form.';
+  }
+
+  @override
+  String get gettingReadyAllForms =>
+      'Esta lista cubre todos los formularios. Los puntos que solo son para algunos lo indican.';
+
+  @override
+  String get gettingReadyTierValid => '1. Lo que la hace válida';
+
+  @override
+  String get gettingReadyTierValidLead =>
+      'Sin esto, su directiva no es válida.';
+
+  @override
+  String get gettingReadyTierGather => '2. Qué reunir';
+
+  @override
+  String get gettingReadyTierGatherLead =>
+      'En el orden en que la app lo pide. Cuanto más complete, más sabrá su equipo de atención.';
+
+  @override
+  String get gettingReadyTierAfter => '3. Después de firmar';
+
+  @override
+  String get gettingReadyTierAfterLead =>
+      'Para que su directiva se pueda encontrar y seguir.';
+
+  @override
+  String gettingReadyStepTag(String step) {
+    return 'En la app: $step';
+  }
+
+  @override
+  String get gettingReadyFormsAgent =>
+      'Formulario Combinado o Poder de Salud Mental';
+
+  @override
+  String get gettingReadyFormsPreferences =>
+      'Formulario Combinado o Declaración';
+
+  @override
+  String get grValidAge => 'Tiene 18 años o más, o es un menor emancipado.';
+
+  @override
+  String get grValidStatus =>
+      'Cuando la hace, no está bajo una tutela que un tribunal nombró tras declararle incapacitado, ni bajo un internamiento involuntario.';
+
+  @override
+  String get grValidChoices =>
+      'Indica sus decisiones sobre el tratamiento de salud mental o, en un poder, nombra a su agente y lo que puede decidir.';
+
+  @override
+  String get grValidSign =>
+      'Usted la firma y le pone la fecha. Si no puede firmar, otra persona puede firmar por usted siguiendo sus indicaciones; esa persona no puede ser testigo.';
+
+  @override
+  String get grValidWitnesses =>
+      'Dos testigos, cada uno de 18 años o más, están presentes cuando usted firma y también la firman. No hace falta notario.';
+
+  @override
+  String get grValidWitnessWho =>
+      'Ningún testigo es su agente ni la persona que firma por usted; para mayor seguridad, tampoco su agente alternativo. Su médico, otros proveedores y sus familiares pueden ser testigos.';
+
+  @override
+  String get grValidAgent =>
+      'Su agente es un adulto: no es su médico ni otro proveedor de atención de salud mental ni un empleado suyo, ni el dueño, administrador o empleado de un centro residencial donde recibe atención, salvo que sea su familiar.';
+
+  @override
+  String get grGatherAboutYou =>
+      'Su nombre legal completo, su fecha de nacimiento, su domicilio con el condado y su teléfono. Tenga a mano su identificación: el autocompletado puede leerla.';
+
+  @override
+  String get grGatherWhen =>
+      'Cuándo debe entrar en vigor (normalmente, cuando un psiquiatra y otro profesional determinan que usted no puede tomar sus decisiones de salud mental) y, si quiere, un médico preferido para evaluar su capacidad.';
+
+  @override
+  String get grGatherAgent =>
+      'Su agente y un agente alternativo: nombres, qué relación tienen con usted, direcciones y teléfonos. Pregúnteles antes y hablen de sus deseos.';
+
+  @override
+  String get grGatherAuthority =>
+      'Qué puede decidir su agente: si puede dar su consentimiento para medicamentos y cualquier límite.';
+
+  @override
+  String get grGatherGuardian =>
+      'Si nombrar a un tutor por si un tribunal llegara a designar uno, y si un tutor podría anular su directiva.';
+
+  @override
+  String get grGatherCare =>
+      'Hospitales o centros de tratamiento que prefiere o quiere evitar (nombres y ciudades) y sus preferencias de habitación.';
+
+  @override
+  String get grGatherDiagnoses =>
+      'Sus diagnósticos y el nombre, la especialidad y el teléfono de su médico principal.';
+
+  @override
+  String get grGatherAllergies =>
+      'Cada alergia, qué tan grave es y qué le pasa.';
+
+  @override
+  String get grGatherMeds =>
+      'Sus medicamentos actuales y sus dosis (los frascos o una lista de la farmacia ayudan), los que le funcionaron, los que nunca quiere y por qué, y cualquier límite.';
+
+  @override
+  String get grGatherProcedures =>
+      'Su decisión sobre la terapia electroconvulsiva (TEC), los estudios experimentales y los ensayos de medicamentos.';
+
+  @override
+  String get grGatherProceduresPoa =>
+      'Si su agente está autorizado a dar su consentimiento para la terapia electroconvulsiva (TEC), los estudios experimentales y los ensayos de medicamentos.';
+
+  @override
+  String get grGatherElse =>
+      'Algo más: qué ayuda en una crisis y qué la empeora, a quién avisar, quién puede ver sus registros, el cuidado de sus hijos y mascotas, su alimentación y su fe.';
+
+  @override
+  String get grGatherCapacityLetter =>
+      'Opcional: una carta de su médico tratante, de la época en que firma, que diga que usted tenía capacidad, para que sea más difícil impugnarla después.';
+
+  @override
+  String get grGatherVoice =>
+      '¿Prefiere hablar en vez de escribir? Grabe sus respuestas con el cuestionario de voz.';
+
+  @override
+  String get grGatherVoiceCta => 'Abrir el cuestionario de voz';
+
+  @override
+  String get grAfterCopies =>
+      'Dé copias a su agente y a su agente alternativo, a sus médicos, a su proveedor de atención de salud mental y a quien deba saberlo si usted no puede tomar decisiones.';
+
+  @override
+  String get grAfterKeep =>
+      'Guarde el original en un lugar seguro y dígale a alguien de confianza dónde está, para que pueda llegar a su médico en una crisis. Lleve en su billetera una tarjeta que diga que tiene una directiva y a quién llamar.';
+
+  @override
+  String get grAfterExpiry =>
+      'Es válida por dos años desde la fecha en que la firma, salvo que usted no pueda tomar decisiones de salud mental cuando venza; entonces sigue vigente hasta que pueda hacerlo.';
+
+  @override
+  String get grAfterRevoke =>
+      'Puede revocarla en cualquier momento, de palabra o por escrito, salvo que se haya determinado que no puede tomar estas decisiones o que esté bajo un internamiento involuntario. Termina cuando se le comunica a su médico o a su proveedor de atención de salud mental. Si la cambia o la cancela, avise a todos los que tienen una copia.';
+
+  @override
+  String get homeGettingReadyLead =>
+      'Antes de empezar: vea lo que necesitará y lo que hace válida su directiva.';
+
+  @override
+  String get moreSheetGettingReadyDetail =>
+      'Lo que necesitará y lo que la hace válida';
+
+  @override
+  String get moreSheetVoiceDetail =>
+      'Responda en voz alta y luego autocomplete con la grabación';
+
+  @override
   String get audioQPart1Title => 'Parte 1: usted y las personas de confianza';
 
   @override
@@ -7421,9 +7592,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tabPagePrivacyPolicy => 'Política de privacidad';
-
-  @override
-  String get tabPageAudioGuide => 'Guía de audio';
 
   @override
   String get tabPageAdmin => 'Herramienta de administración';

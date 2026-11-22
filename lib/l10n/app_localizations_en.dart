@@ -6456,6 +6456,175 @@ class AppLocalizationsEn extends AppLocalizations {
   String get audioQTitle => 'Voice questionnaire';
 
   @override
+  String get gettingReadyTitle => 'Getting ready';
+
+  @override
+  String get gettingReadyLead =>
+      'Everything you need to complete your directive: first what makes it valid, then what to gather step by step, then what to do after you sign.';
+
+  @override
+  String get gettingReadyPrintCta => 'Print the checklist';
+
+  @override
+  String get gettingReadyPrintError =>
+      'Couldn’t open the checklist to print. Please try again.';
+
+  @override
+  String gettingReadyForForm(String form) {
+    return 'Matched to your form: $form.';
+  }
+
+  @override
+  String get gettingReadyAllForms =>
+      'This covers every form. Items for only some forms say which.';
+
+  @override
+  String get gettingReadyTierValid => '1. What makes it valid';
+
+  @override
+  String get gettingReadyTierValidLead =>
+      'Without these, your directive isn’t valid.';
+
+  @override
+  String get gettingReadyTierGather => '2. What to gather';
+
+  @override
+  String get gettingReadyTierGatherLead =>
+      'In the order the app asks for it. The more you fill in, the more your care team knows.';
+
+  @override
+  String get gettingReadyTierAfter => '3. After you sign';
+
+  @override
+  String get gettingReadyTierAfterLead =>
+      'So your directive can be found and followed.';
+
+  @override
+  String gettingReadyStepTag(String step) {
+    return 'In the app: $step';
+  }
+
+  @override
+  String get gettingReadyFormsAgent => 'Combined or Power of Attorney form';
+
+  @override
+  String get gettingReadyFormsPreferences => 'Combined or Declaration form';
+
+  @override
+  String get grValidAge => 'You are 18 or older, or an emancipated minor.';
+
+  @override
+  String get grValidStatus =>
+      'When you make it, you are not under a guardianship a court appointed after finding you incapacitated, and not under an involuntary commitment.';
+
+  @override
+  String get grValidChoices =>
+      'It states your choices about mental health treatment — or, on a power of attorney, names your agent and what they may decide.';
+
+  @override
+  String get grValidSign =>
+      'You sign and date it. If you can’t sign, someone may sign for you at your direction — that person can’t be a witness.';
+
+  @override
+  String get grValidWitnesses =>
+      'Two witnesses, each 18 or older, are physically present when you sign, and sign it too. No notary is needed.';
+
+  @override
+  String get grValidWitnessWho =>
+      'Neither witness is your agent or the person signing for you — to be safe, not your alternate agent either. Your doctor, other providers and relatives may be witnesses.';
+
+  @override
+  String get grValidAgent =>
+      'Your agent is an adult — not your doctor or other mental health care provider or their employee, and not an owner, operator or employee of a residential facility where you receive care, unless they are your relative.';
+
+  @override
+  String get grGatherAboutYou =>
+      'Your full legal name, date of birth, home address with county, and phone. Have your ID handy — autofill can read it.';
+
+  @override
+  String get grGatherWhen =>
+      'When it should take effect — usually when a psychiatrist and one other professional find you can’t make your mental health decisions — and, if you want, a doctor you’d prefer to evaluate your capacity.';
+
+  @override
+  String get grGatherAgent =>
+      'Your agent and an alternate: names, how they’re related to you, addresses and phones. Ask them first and talk through your wishes.';
+
+  @override
+  String get grGatherAuthority =>
+      'What your agent may decide: whether they may consent to medication, and any limits.';
+
+  @override
+  String get grGatherGuardian =>
+      'Whether to nominate a guardian in case a court ever appoints one, and whether a guardian could override your directive.';
+
+  @override
+  String get grGatherCare =>
+      'Hospitals or treatment centers you prefer or want to avoid (names and towns), and room preferences.';
+
+  @override
+  String get grGatherDiagnoses =>
+      'Your diagnoses, and your primary doctor’s name, specialty and phone.';
+
+  @override
+  String get grGatherAllergies =>
+      'Each allergy, how serious it is, and what happens.';
+
+  @override
+  String get grGatherMeds =>
+      'Your current medications and doses (pill bottles or a pharmacy list help), ones that worked, ones you never want and why, and any limits.';
+
+  @override
+  String get grGatherProcedures =>
+      'Your choice about electroconvulsive therapy (ECT), experimental studies and drug trials.';
+
+  @override
+  String get grGatherProceduresPoa =>
+      'Whether your agent is authorized to consent to electroconvulsive therapy (ECT), experimental studies and drug trials.';
+
+  @override
+  String get grGatherElse =>
+      'Anything else: what helps in a crisis and what makes it worse, who to notify, who may see your records, care of children and pets, food and faith.';
+
+  @override
+  String get grGatherCapacityLetter =>
+      'Optional: a letter from your treating doctor, from the time you sign, saying you had capacity — so it is harder to challenge later.';
+
+  @override
+  String get grGatherVoice =>
+      'Rather talk than type? Record your answers with the voice questionnaire.';
+
+  @override
+  String get grGatherVoiceCta => 'Open the voice questionnaire';
+
+  @override
+  String get grAfterCopies =>
+      'Give copies to your agent and alternate, your doctors, your mental health care provider, and anyone who should be told if you can’t make decisions.';
+
+  @override
+  String get grAfterKeep =>
+      'Keep the original in a safe place and tell someone you trust where it is, so it can reach your doctor in a crisis. Carry a wallet card saying you have a directive and who to call.';
+
+  @override
+  String get grAfterExpiry =>
+      'It is valid for two years from the date you sign it, unless you can’t make mental health decisions when it would expire — then it stays in effect until you can.';
+
+  @override
+  String get grAfterRevoke =>
+      'You can revoke it at any time, out loud or in writing — unless you have been found unable to make these decisions or are involuntarily committed. It ends once your doctor or mental health care provider is told. If you change or cancel it, tell everyone who has a copy.';
+
+  @override
+  String get homeGettingReadyLead =>
+      'Before you start: see what you’ll need, and what makes your directive valid.';
+
+  @override
+  String get moreSheetGettingReadyDetail =>
+      'What you’ll need, and what makes it valid';
+
+  @override
+  String get moreSheetVoiceDetail =>
+      'Answer out loud, then autofill from the recording';
+
+  @override
   String get audioQPart1Title => 'Part 1 — You and the people you trust';
 
   @override
@@ -7289,9 +7458,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabPagePrivacyPolicy => 'Privacy policy';
-
-  @override
-  String get tabPageAudioGuide => 'Audio guide';
 
   @override
   String get tabPageAdmin => 'Admin tool';

@@ -2767,6 +2767,192 @@
   "@audioQTitle": {
     "description": "Voice questionnaire (Audio guide screen + its printout): a script the person reads aloud; lib/data/audio_questionnaire_content.dart builds it from these keys."
   },
+  "gettingReadyTitle": "Getting ready",
+  "@gettingReadyTitle": {
+    "description": "Getting-ready checklist: page title, nav label and tab title."
+  },
+  "gettingReadyLead": "Everything you need to complete your directive: first what makes it valid, then what to gather step by step, then what to do after you sign.",
+  "@gettingReadyLead": {
+    "description": "Getting-ready checklist: lead under the title."
+  },
+  "gettingReadyPrintCta": "Print the checklist",
+  "@gettingReadyPrintCta": {
+    "description": "Getting-ready checklist: print button."
+  },
+  "gettingReadyPrintError": "Couldn’t open the checklist to print. Please try again.",
+  "@gettingReadyPrintError": {
+    "description": "Getting-ready checklist: print failed."
+  },
+  "gettingReadyForForm": "Matched to your form: {form}.",
+  "@gettingReadyForForm": {
+    "description": "Getting-ready checklist: when opened for a directive; {form} is its form name.",
+    "placeholders": {
+      "form": {
+        "type": "String"
+      }
+    }
+  },
+  "gettingReadyAllForms": "This covers every form. Items for only some forms say which.",
+  "@gettingReadyAllForms": {
+    "description": "Getting-ready checklist: when opened without a directive."
+  },
+  "gettingReadyTierValid": "1. What makes it valid",
+  "@gettingReadyTierValid": {
+    "description": "Getting-ready checklist: first (highest-priority) section."
+  },
+  "gettingReadyTierValidLead": "Without these, your directive isn’t valid.",
+  "@gettingReadyTierValidLead": {
+    "description": "Getting-ready checklist: lead of the validity section."
+  },
+  "gettingReadyTierGather": "2. What to gather",
+  "@gettingReadyTierGather": {
+    "description": "Getting-ready checklist: second section."
+  },
+  "gettingReadyTierGatherLead": "In the order the app asks for it. The more you fill in, the more your care team knows.",
+  "@gettingReadyTierGatherLead": {
+    "description": "Getting-ready checklist: lead of the gather section."
+  },
+  "gettingReadyTierAfter": "3. After you sign",
+  "@gettingReadyTierAfter": {
+    "description": "Getting-ready checklist: third section."
+  },
+  "gettingReadyTierAfterLead": "So your directive can be found and followed.",
+  "@gettingReadyTierAfterLead": {
+    "description": "Getting-ready checklist: lead of the after-signing section."
+  },
+  "gettingReadyStepTag": "In the app: {step}",
+  "@gettingReadyStepTag": {
+    "description": "Getting-ready checklist: which wizard step an item belongs to.",
+    "placeholders": {
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "gettingReadyFormsAgent": "Combined or Power of Attorney form",
+  "@gettingReadyFormsAgent": {
+    "description": "Getting-ready checklist: item only for forms that name an agent."
+  },
+  "gettingReadyFormsPreferences": "Combined or Declaration form",
+  "@gettingReadyFormsPreferences": {
+    "description": "Getting-ready checklist: item only for forms with treatment preferences."
+  },
+  "grValidAge": "You are 18 or older, or an emancipated minor.",
+  "@grValidAge": {
+    "description": "Getting-ready, validity (booklet: What makes it valid, 1)."
+  },
+  "grValidStatus": "When you make it, you are not under a guardianship a court appointed after finding you incapacitated, and not under an involuntary commitment.",
+  "@grValidStatus": {
+    "description": "Getting-ready, validity (booklet: What makes it valid, 2)."
+  },
+  "grValidChoices": "It states your choices about mental health treatment — or, on a power of attorney, names your agent and what they may decide.",
+  "@grValidChoices": {
+    "description": "Getting-ready, validity (booklet: What makes it valid, 4-5)."
+  },
+  "grValidSign": "You sign and date it. If you can’t sign, someone may sign for you at your direction — that person can’t be a witness.",
+  "@grValidSign": {
+    "description": "Getting-ready, validity (statute + official form)."
+  },
+  "grValidWitnesses": "Two witnesses, each 18 or older, are physically present when you sign, and sign it too. No notary is needed.",
+  "@grValidWitnesses": {
+    "description": "Getting-ready, validity (statute; legal canon)."
+  },
+  "grValidWitnessWho": "Neither witness is your agent or the person signing for you — to be safe, not your alternate agent either. Your doctor, other providers and relatives may be witnesses.",
+  "@grValidWitnessWho": {
+    "description": "Getting-ready, validity (official form + legal canon)."
+  },
+  "grValidAgent": "Your agent is an adult — not your doctor or other mental health care provider or their employee, and not an owner, operator or employee of a residential facility where you receive care, unless they are your relative.",
+  "@grValidAgent": {
+    "description": "Getting-ready, validity, agent forms (20 Pa.C.S. § 5835)."
+  },
+  "grGatherAboutYou": "Your full legal name, date of birth, home address with county, and phone. Have your ID handy — autofill can read it.",
+  "@grGatherAboutYou": {
+    "description": "Getting-ready, gather: About you."
+  },
+  "grGatherWhen": "When it should take effect — usually when a psychiatrist and one other professional find you can’t make your mental health decisions — and, if you want, a doctor you’d prefer to evaluate your capacity.",
+  "@grGatherWhen": {
+    "description": "Getting-ready, gather: When this kicks in."
+  },
+  "grGatherAgent": "Your agent and an alternate: names, how they’re related to you, addresses and phones. Ask them first and talk through your wishes.",
+  "@grGatherAgent": {
+    "description": "Getting-ready, gather: People I trust."
+  },
+  "grGatherAuthority": "What your agent may decide: whether they may consent to medication, and any limits.",
+  "@grGatherAuthority": {
+    "description": "Getting-ready, gather: agent authority."
+  },
+  "grGatherGuardian": "Whether to nominate a guardian in case a court ever appoints one, and whether a guardian could override your directive.",
+  "@grGatherGuardian": {
+    "description": "Getting-ready, gather: guardian."
+  },
+  "grGatherCare": "Hospitals or treatment centers you prefer or want to avoid (names and towns), and room preferences.",
+  "@grGatherCare": {
+    "description": "Getting-ready, gather: Where I want care."
+  },
+  "grGatherDiagnoses": "Your diagnoses, and your primary doctor’s name, specialty and phone.",
+  "@grGatherDiagnoses": {
+    "description": "Getting-ready, gather: Diagnoses."
+  },
+  "grGatherAllergies": "Each allergy, how serious it is, and what happens.",
+  "@grGatherAllergies": {
+    "description": "Getting-ready, gather: Allergies."
+  },
+  "grGatherMeds": "Your current medications and doses (pill bottles or a pharmacy list help), ones that worked, ones you never want and why, and any limits.",
+  "@grGatherMeds": {
+    "description": "Getting-ready, gather: Medications."
+  },
+  "grGatherProcedures": "Your choice about electroconvulsive therapy (ECT), experimental studies and drug trials.",
+  "@grGatherProcedures": {
+    "description": "Getting-ready, gather: Procedures & research (Combined, Declaration)."
+  },
+  "grGatherProceduresPoa": "Whether your agent is authorized to consent to electroconvulsive therapy (ECT), experimental studies and drug trials.",
+  "@grGatherProceduresPoa": {
+    "description": "Getting-ready, gather: Procedures & research (Power of Attorney)."
+  },
+  "grGatherElse": "Anything else: what helps in a crisis and what makes it worse, who to notify, who may see your records, care of children and pets, food and faith.",
+  "@grGatherElse": {
+    "description": "Getting-ready, gather: Anything else."
+  },
+  "grGatherCapacityLetter": "Optional: a letter from your treating doctor, from the time you sign, saying you had capacity — so it is harder to challenge later.",
+  "@grGatherCapacityLetter": {
+    "description": "Getting-ready, gather (booklet: Do I need to include proof of my capacity?)."
+  },
+  "grGatherVoice": "Rather talk than type? Record your answers with the voice questionnaire.",
+  "@grGatherVoice": {
+    "description": "Getting-ready, gather: link to the voice questionnaire."
+  },
+  "grGatherVoiceCta": "Open the voice questionnaire",
+  "@grGatherVoiceCta": {
+    "description": "Getting-ready: button to the voice questionnaire."
+  },
+  "grAfterCopies": "Give copies to your agent and alternate, your doctors, your mental health care provider, and anyone who should be told if you can’t make decisions.",
+  "@grAfterCopies": {
+    "description": "Getting-ready, after signing (booklet: Execution)."
+  },
+  "grAfterKeep": "Keep the original in a safe place and tell someone you trust where it is, so it can reach your doctor in a crisis. Carry a wallet card saying you have a directive and who to call.",
+  "@grAfterKeep": {
+    "description": "Getting-ready, after signing (booklet: Execution)."
+  },
+  "grAfterExpiry": "It is valid for two years from the date you sign it, unless you can’t make mental health decisions when it would expire — then it stays in effect until you can.",
+  "@grAfterExpiry": {
+    "description": "Getting-ready, after signing (legal canon: validity)."
+  },
+  "grAfterRevoke": "You can revoke it at any time, out loud or in writing — unless you have been found unable to make these decisions or are involuntarily committed. It ends once your doctor or mental health care provider is told. If you change or cancel it, tell everyone who has a copy.",
+  "@grAfterRevoke": {
+    "description": "Getting-ready, after signing (legal canon: revocation)."
+  },
+  "homeGettingReadyLead": "Before you start: see what you’ll need, and what makes your directive valid.",
+  "@homeGettingReadyLead": {
+    "description": "Home: banner above the form choice."
+  },
+  "moreSheetGettingReadyDetail": "What you’ll need, and what makes it valid",
+  "@moreSheetGettingReadyDetail": {
+    "description": "More sheet: detail under Getting ready."
+  },
+  "moreSheetVoiceDetail": "Answer out loud, then autofill from the recording",
+  "@moreSheetVoiceDetail": {
+    "description": "More sheet: detail under Voice questionnaire."
+  },
   "audioQPart1Title": "Part 1 — You and the people you trust",
   "@audioQPart1Title": {
     "description": "Voice questionnaire: first recording (about you, when it takes effect, agents, guardian)."
@@ -3523,7 +3709,6 @@
   "tabPageWelcome": "Welcome",
   "tabPageAiSetup": "AI setup",
   "tabPagePrivacyPolicy": "Privacy policy",
-  "tabPageAudioGuide": "Audio guide",
   "tabPageAdmin": "Admin tool",
   "tabPageSign": "Sign on paper",
   "tabPageCrisisPlan": "Crisis plan",
