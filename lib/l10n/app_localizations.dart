@@ -5417,7 +5417,7 @@ abstract class AppLocalizations {
   /// Permissions screen intro on the web (replaces the native intro).
   ///
   /// In en, this message translates to:
-  /// **'On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.'**
+  /// **'PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.'**
   String get permissionsOverviewWebIntro;
 
   /// No description provided for @permissionsOverviewWhatThisAppMayAsk.
@@ -9943,6 +9943,36 @@ abstract class AppLocalizations {
   /// **'Not applicable on this platform'**
   String get permissionsOverviewNotApplicableOnThisPlatform;
 
+  /// Permissions page: status of a permission PA MHAD never asks for (biometrics, notifications, camera, contacts).
+  ///
+  /// In en, this message translates to:
+  /// **'Not used by PA MHAD'**
+  String get permissionsOverviewNotUsed;
+
+  /// Permissions page, Biometrics card.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD never asks for your fingerprint or face.'**
+  String get permissionsOverviewBiometricsWebUsedFor;
+
+  /// Permissions page, Notifications card (the calendar file is the renewal reminder on Download & print).
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD doesn’t send notifications. For a reminder before your directive’s two-year date, save the calendar file on Download & print.'**
+  String get permissionsOverviewNotificationsWebUsedFor;
+
+  /// Permissions page, Camera card (copy-and-paste AI: photos go to the person's own AI).
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD doesn’t use your camera. To fill in from a photo, attach it in your own AI on the Autofill page — on a phone, your AI’s app can take the photo.'**
+  String get permissionsOverviewCameraWebUsedFor;
+
+  /// Permissions page, Contacts card.
+  ///
+  /// In en, this message translates to:
+  /// **'PA MHAD never reads your address book — you type each person’s details.'**
+  String get permissionsOverviewContactsWebUsedFor;
+
   /// No description provided for @permissionsOverviewRemindingYouAboutWitnessSigning.
   ///
   /// In en, this message translates to:
@@ -12064,13 +12094,13 @@ abstract class AppLocalizations {
   /// Settings header status on the web when no locked copy is kept.
   ///
   /// In en, this message translates to:
-  /// **'● WEB APP · KEPT IN THIS TAB'**
+  /// **'● KEPT IN THIS TAB'**
   String get settingsStatusWebTab;
 
   /// Settings header status on the web when the person keeps a passphrase-locked progress copy.
   ///
   /// In en, this message translates to:
-  /// **'● WEB APP · LOCKED COPY ON THIS DEVICE'**
+  /// **'● LOCKED COPY ON THIS DEVICE'**
   String get settingsStatusWebLocked;
 
   /// No description provided for @settingsStatusNative.
@@ -13444,7 +13474,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportRenewalReminderBodyNoDate.
   ///
   /// In en, this message translates to:
-  /// **'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. This web app can’t send reminders, so this saves a calendar file with two reminders: {days} days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.'**
+  /// **'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. PA MHAD can’t send reminders, so this saves a calendar file with two reminders: {days} days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.'**
   String exportRenewalReminderBodyNoDate(int days);
 
   /// No description provided for @calendarWhenWillYouSign.
@@ -13906,7 +13936,7 @@ abstract class AppLocalizations {
   /// No description provided for @wizardExitWebBody.
   ///
   /// In en, this message translates to:
-  /// **'The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.'**
+  /// **'PA MHAD doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.'**
   String wizardExitWebBody(int minutes);
 
   /// No description provided for @aiSetupYourDirectiveDataIsHeld.

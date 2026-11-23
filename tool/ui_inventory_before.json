@@ -11,10 +11,12 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
     "button | Make it findable in a crisis Share copies, carry the wallet card, tell your people where i",
     "button | Power of attorney only Name a decision-maker without listing preferences.",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start now",
     "button | Start over",
@@ -31,12 +33,12 @@
     "button | Make it findable in a crisis Share copies, carry the wallet ",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
-    "button | Download to finish later",
-    "button | Start over"
+    "button | Download to finish later"
    ]
   },
   "/education": {
@@ -81,7 +83,7 @@
     "button | Designation of an Alternative Agent You may wish to designate an alternative person in cas",
     "button | Determination of Incapacity (§§5823, 5833) Under the statutory form language in 20 Pa.C.S.",
     "button | Discussing Your Directive Before signing your directive, discuss your treatment preference",
-    "button | Distribution Checklist After executing your directive, distribute copies to:",
+    "button | Distribution Checklist After executing your directive, distribute copies to: Your designat",
     "button | Do health care providers have to follow my instructions? Short answer: yes — and the law u",
     "button | Document Agent Discussions Keep a brief written record of discussions with your agent abou",
     "button | Download & print",
@@ -98,6 +100,7 @@
     "button | Find support Peer support · advocates · referrals",
     "button | Frequently asked, 21 sections. Common questions about MHADs Frequently asked Common questi",
     "button | Gemini",
+    "button | Getting ready",
     "button | Glossary",
     "button | Glossary, 26 sections. Every legal term, defined Glossary Every legal term, defined 26",
     "button | Governing Law & Execution Requirements Pennsylvania Mental Health Advance Directives are g",
@@ -105,7 +108,7 @@
     "button | Guardian vs. Your Directive and Agent Your directive is built to protect your autonomy eve",
     "button | Home",
     "button | How Chapter 54 (general health care) and Chapter 58 (mental health) work together Pennsylv",
-    "button | How do I find eligible witnesses? You need two adult witnesses (18+) who are NOT:",
+    "button | How do I find eligible witnesses? You need two adult witnesses (18+) who are NOT: Your des",
     "button | How does my directive interact with involuntary commitment (sections 302–305)? Having a Me",
     "button | How is my MHAD different from a regular health-care directive or living will? Pennsylvania",
     "button | How long is the directive valid?",
@@ -155,6 +158,7 @@
     "button | Revocations and Amendments Revocation means that you are canceling your Declaration. If yo",
     "button | Revocations and Amendments Revocation means that you are canceling your Power of Attorney.",
     "button | Revoke To cancel or end.",
+    "button | Revoke a directive",
     "button | Sample scenario: how a directive helps during admission Here is an anonymised, composite s",
     "button | Search articles, glossary, FAQs…",
     "button | Section 302 (emergency involuntary examination) Under 50 P.S. § 7302 of the Mental Health ",
@@ -230,11 +234,13 @@
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Home",
     "button | How long is the directive valid?",
     "button | Learn",
     "button | Open ChatGPT",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | Walk me through filling out my directive step by step",
@@ -278,11 +284,13 @@
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Home",
     "button | How long is the directive valid?",
     "button | Learn",
     "button | Open ChatGPT",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | Walk me through filling out my directive step by step",
@@ -325,12 +333,14 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
     "button | Legal disclaimer Terms, limitations, and your legal rights",
     "button | Light",
     "button | Privacy & permissions What permissions the app uses, and what we promise about each",
     "button | Privacy policy How your data is stored and protected",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -346,11 +356,11 @@
     "button | Admin: data update tool Maintainer only — passphrase require",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
-    "button | Settings",
-    "button | Download to finish later"
+    "button | Settings"
    ]
   },
   "/accessibility": {
@@ -365,10 +375,12 @@
     "button | English",
     "button | Español",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | How to use read-aloud",
     "button | Learn",
     "button | Reset accessibility settings",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "switch | Bold text Heavier text weight everywhere",
@@ -389,11 +401,11 @@
     "button | Reset accessibility settings",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
-    "button | Settings",
-    "button | Download to finish later"
+    "button | Settings"
    ]
   },
   "/privacy-policy": {
@@ -406,9 +418,11 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
     "button | Review legal disclaimer",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -417,18 +431,18 @@
     "button | Review legal disclaimer",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
     "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
     "button | Back Back",
-    "button | Review legal disclaimer",
-    "button | Home",
-    "button | Learn"
+    "button | Review legal disclaimer"
    ]
   },
   "/permissions": {
@@ -441,28 +455,30 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
    "unnamed_buttons": 0,
    "tab": [
     "(body)",
-    "flutter-view | HomeLearnAutofillAsk AIDownload & printSettingsDownload to f",
+    "flutter-view | HomeLearnGetting readyAutofillAsk AIDownload & printSettings",
     "button | Back Back",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
-    "button | Back Back",
-    "button | Home"
+    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
    ]
   },
   "/facilitator": {
@@ -476,10 +492,12 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | I’m helping someone",
     "button | Learn",
     "button | Open website",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start a guided session",
     "button | Start over"
@@ -494,17 +512,17 @@
     "button | I’m helping someone",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
-    "button | Start over",
-    "button | Find support Peer support · advocates · referrals"
+    "button | Revoke a directive"
    ]
   },
   "/audio-guide": {
-   "title": "Audio guide · PA MHAD",
+   "title": "Voice questionnaire · PA MHAD",
    "controls": [
     "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
     "button | Ask AI",
@@ -513,30 +531,32 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
     "button | Print",
     "button | Print the questionnaire",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
    "unnamed_buttons": 0,
    "tab": [
     "(body)",
-    "flutter-view | HomeLearnAutofillAsk AIDownload & printSettingsDownload to f",
+    "flutter-view | HomeLearnGetting readyAutofillAsk AIDownload & printSettings",
     "button | Back Back",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
-    "button | Back Back",
-    "button | Home"
+    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
    ]
   },
   "/wizard/1?step=0": {
@@ -566,6 +586,7 @@
     "button | Fill city, county & state from ZIP",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -573,6 +594,7 @@
     "button | Learn",
     "button | Open ChatGPT",
     "button | Pick date",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | Who should have a copy of my directive?",
@@ -580,7 +602,7 @@
     "input | Apt, suite, unit, etc.",
     "input | City",
     "input | County",
-    "input | Date of birth (MM/DD/YYYY) *",
+    "input | Date of birth *",
     "input | Full legal name *",
     "input | Phone number",
     "input | State",
@@ -590,7 +612,7 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
-    "input | Date of birth (MM/DD/YYYY) * MM/DD/YYYY",
+    "input | Date of birth * MM/DD/YYYY",
     "button | Pick date",
     "input | Street address",
     "input | Apt, suite, unit, etc.",
@@ -636,6 +658,7 @@
     "button | Find support",
     "button | Gemini",
     "button | Get an AI suggestion for this field Wording help for Effective Condition",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -643,6 +666,7 @@
     "button | Learn",
     "button | Open ChatGPT",
     "button | Open voice dictation",
+    "button | Revoke a directive",
     "button | See examples",
     "button | Settings",
     "button | Start over",
@@ -662,14 +686,14 @@
     "button | Open ChatGPT",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
-    "button | Start over",
-    "button | Find support",
-    "button | 988 · Crisis help"
+    "button | Revoke a directive",
+    "button | Start over"
    ]
   },
   "/wizard/1?step=2": {
@@ -701,6 +725,7 @@
     "button | Find support",
     "button | Gemini",
     "button | Get an AI suggestion for this field Wording help for Agent Authority Limitations",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -708,6 +733,7 @@
     "button | Learn",
     "button | Open ChatGPT",
     "button | Open voice dictation",
+    "button | Revoke a directive",
     "button | See examples",
     "button | Settings",
     "button | Should I name an alternate agent?",
@@ -724,11 +750,12 @@
     "input | State",
     "input | Street address",
     "input | ZIP",
-    "textarea | Additional limitations or instructions (optional)",
+    "textarea | Additional limitations or instructions",
     "textarea | Your question"
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Find support",
     "button | About you",
     "button | When this kicks in",
     "button | 4 If a court appoints a guardian",
@@ -742,8 +769,7 @@
     "button | Help",
     "button | Exit",
     "checkbox | Agent may consent to medication General psychiatric medicati",
-    "button | See examples",
-    "textarea | Additional limitations or instructions (optional)"
+    "button | See examples"
    ]
   },
   "/wizard/1?step=3": {
@@ -771,6 +797,7 @@
     "button | Exit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -781,6 +808,7 @@
     "button | No preference Let the court decide who to appoint.",
     "button | Open ChatGPT",
     "button | People I trust",
+    "button | Revoke a directive",
     "button | Same as my alternate agent",
     "button | Same as my primary agent",
     "button | Settings",
@@ -836,6 +864,7 @@
     "button | Facilities to avoid Facilities where you do not want to be treated Add facility to Facilit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -846,6 +875,7 @@
     "button | Open ChatGPT",
     "button | People I trust",
     "button | Preferred facilities Facilities where you would prefer to be treated Add facility to Prefe",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | What room and environment preferences can I list?",
@@ -867,16 +897,16 @@
     "button | Open ChatGPT",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support",
-    "button | 988 · Crisis help",
-    "button | About you",
-    "button | When this kicks in"
+    "button | 988 · Crisis help"
    ]
   },
   "/wizard/1?step=5": {
@@ -903,6 +933,7 @@
     "button | Exit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -912,6 +943,7 @@
     "button | Learn",
     "button | Open ChatGPT",
     "button | People I trust",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | When this kicks in",
@@ -925,6 +957,8 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | About you",
+    "button | When this kicks in",
     "button | People I trust",
     "button | If a court appoints a guardian",
     "button | Where I want care",
@@ -937,9 +971,7 @@
     "button | Help",
     "input | Search a condition (e.g. depression, ADHD)… ICD-10",
     "input | Doctor name Type a name to search the provider registry",
-    "input | Specialty",
-    "input | Phone",
-    "button | Describe a condition to find its official name Don’t know th"
+    "input | Specialty"
    ]
   },
   "/wizard/1?step=6": {
@@ -967,6 +999,7 @@
     "button | Find support",
     "button | Food (ICD-10) Food ICD-10",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -980,6 +1013,7 @@
     "button | Open ChatGPT",
     "button | Other (ICD-10) Other ICD-10",
     "button | People I trust",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Severe severity Severe anaphylaxis · ER",
     "button | Start over",
@@ -989,25 +1023,26 @@
     "button | Why does this section matter so much in an emergency?",
     "input | Search a drug or class… RxTerms",
     "input | e.g. Hives, Swelling, Throat closing",
-    "textarea | Your question"
+    "textarea | Your question",
+    "textarea | e.g. I carry an epinephrine pen"
    ],
    "unnamed_buttons": 0,
    "tab": [
     "button | Help",
-    "button | Exit",
     "button | Drug (RxTerms) Drug RxTerms",
     "button | Food (ICD-10) Food ICD-10",
     "button | Material (ICD-10) Material ICD-10",
     "button | Other (ICD-10) Other ICD-10",
+    "button | Exit",
     "input | Search a drug or class… RxTerms",
     "button | Mild severity Mild rash, mild GI",
     "button | Moderate severity Moderate hives, swelling",
     "button | Severe severity Severe anaphylaxis · ER",
     "input | e.g. Hives, Swelling, Throat closing",
+    "textarea | e.g. I carry an epinephrine pen",
     "button | Add allergy",
     "button | Back",
-    "button | Continue",
-    "button | What’s the difference between an allergy and a side effect?"
+    "button | Continue"
    ]
   },
   "/wizard/1?step=7": {
@@ -1035,10 +1070,14 @@
     "button | Exit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
     "button | Home",
+    "button | I consent to the medications that my treating physician recommends. Any exceptions, limits",
+    "button | I do not consent to the use of any medications. Your directive says no to all medications.",
+    "button | I have designated an agent to make decisions about my medications Your agent makes medicat",
     "button | If a court appoints a guardian",
     "button | Learn",
     "button | Medications I NEVER want These medications should not be administered Add medication to Me",
@@ -1047,17 +1086,18 @@
     "button | Open ChatGPT",
     "button | People I trust",
     "button | Preferred medications Medications that have worked well for you Add medication to Preferre",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Side effects you may be experiencing For the medications you take now, read the official F",
     "button | Start over",
     "button | What should I write about medications I refuse?",
     "button | When this kicks in",
     "button | Where I want care",
-    "checkbox | I have designated an agent to make decisions about my medications",
     "textarea | Your question"
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Are my medication preferences binding on doctors?",
     "button | What should I write about medications I refuse?",
     "button | Can I set limits on a medication?",
     "textarea | Your question",
@@ -1068,11 +1108,10 @@
     "button | Open ChatGPT",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
-    "button | Download & print",
-    "button | Settings",
-    "button | Download to finish later"
+    "button | Download & print"
    ]
   },
   "/wizard/1?step=8": {
@@ -1097,6 +1136,7 @@
     "button | Exit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
@@ -1115,6 +1155,7 @@
     "button | My agent will decide about ECT Authorize your agent to consent to or refuse ECT on your be",
     "button | Open ChatGPT",
     "button | People I trust",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | What happens if I say nothing about research studies?",
@@ -1125,7 +1166,7 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
-    "button | Start over",
+    "button | Settings",
     "button | About you",
     "button | When this kicks in",
     "button | People I trust",
@@ -1170,6 +1211,7 @@
     "button | Family notification",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Health history",
     "button | Help",
@@ -1188,6 +1230,7 @@
     "button | Records disclosure & limitations",
     "button | Religious & spiritual",
     "button | Reproductive health care",
+    "button | Revoke a directive",
     "button | See examples",
     "button | Self-binding (Ulysses) clause Acknowledge that, once a psychiatrist and one other professi",
     "button | Settings",
@@ -1238,6 +1281,7 @@
     "button | Exit",
     "button | Find support",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Guardian nomination. No information entered.",
     "button | Home",
@@ -1254,6 +1298,7 @@
     "button | Primary agent. No information entered.",
     "button | Procedures & research",
     "button | Procedures & research. No information entered.",
+    "button | Revoke a directive",
     "button | Run a consistency check",
     "button | Settings",
     "button | Start over",
@@ -1278,9 +1323,9 @@
     "button | Open ChatGPT",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
-    "button | Ask AI",
-    "button | Download & print"
+    "button | Ask AI"
    ]
   },
   "/upload/1": {
@@ -1300,6 +1345,7 @@
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Home",
     "button | Learn",
@@ -1307,6 +1353,7 @@
     "button | Paste it into a box instead",
     "button | Paste the answer",
     "button | Recording a voice file? See the questionnaire & how-to",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Skip — I’ll type it all",
     "button | Start over"
@@ -1341,8 +1388,10 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -1355,14 +1404,14 @@
     "button | + Add",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
-    "button | Start over",
-    "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
+    "button | Revoke a directive",
+    "button | Start over"
    ]
   },
   "/ulysses/1": {
@@ -1375,8 +1424,10 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "switch | I acknowledge this Recorded in your directive PDF."
@@ -1386,18 +1437,18 @@
     "switch | I acknowledge this Recorded in your directive PDF.",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
     "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
     "button | Back Back",
-    "switch | I acknowledge this Recorded in your directive PDF.",
-    "button | Home",
-    "button | Learn"
+    "switch | I acknowledge this Recorded in your directive PDF."
    ]
   },
   "/side-effects/1": {
@@ -1410,28 +1461,30 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
    "unnamed_buttons": 0,
    "tab": [
     "(body)",
-    "flutter-view | HomeLearnAutofillAsk AIDownload & printSettingsDownload to f",
+    "flutter-view | HomeLearnGetting readyAutofillAsk AIDownload & printSettings",
     "button | Back Back",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
-    "button | Back Back",
-    "button | Home"
+    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
    ]
   },
   "/findable/1": {
@@ -1444,10 +1497,12 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Give a copy to your care team Ask your psychiatrist, therapist, primary-care doctor, and a",
     "button | Home",
     "button | Learn",
     "button | Print and carry the wallet card A pocket card that tells responders you have a directive a",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Share it with your agent and a trusted person They should each have a copy before any cris",
     "button | Start over"
@@ -1459,16 +1514,16 @@
     "button | Print and carry the wallet card A pocket card that tells res",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
-    "button | Back Back",
-    "button | Share it with your agent and a trusted person They should ea"
+    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
    ]
   },
   "/ai-check/1": {
@@ -1485,11 +1540,13 @@
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
     "button | Gemini",
+    "button | Getting ready",
     "button | Grok",
     "button | Home",
     "button | Learn",
     "button | Looks good — continue",
     "button | Open ChatGPT",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -1504,12 +1561,12 @@
     "button | Looks good — continue",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
-    "button | Download to finish later",
-    "button | Start over"
+    "button | Download to finish later"
    ]
   },
   "/sign/1": {
@@ -1522,11 +1579,13 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
     "button | Home",
     "button | Learn",
     "button | Preview & open packet",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -1535,18 +1594,18 @@
     "button | Preview & open packet",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
     "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
     "button | Back to review Back to review",
-    "button | Preview & open packet",
-    "button | Home",
-    "button | Learn"
+    "button | Preview & open packet"
    ]
   },
   "/export/1": {
@@ -1574,6 +1633,7 @@
     "button | FHIR XML",
     "button | Find support",
     "button | Fit page to window FIT",
+    "button | Getting ready",
     "button | Go to page 1 Page 1",
     "button | Go to page 2 Page 2",
     "button | Go to page 3 Page 3",
@@ -1585,6 +1645,7 @@
     "button | Open wallet card (PDF)",
     "button | Plain (signable)",
     "button | Print a blank form (fill in by hand)",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over",
     "button | −",
@@ -1626,8 +1687,10 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
+    "button | Revoke a directive",
     "button | Revoke now",
     "button | Settings",
     "button | Start over",
@@ -1648,13 +1711,13 @@
     "input | Type REVOKE to confirm REVOKE",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
-    "button | Start over",
-    "button | Find support Peer support · advocates · referrals"
+    "button | Revoke a directive"
    ]
   },
   "/past/1": {
@@ -1667,11 +1730,13 @@
     "button | Download & print",
     "button | Download to finish later",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready",
     "button | Home",
     "button | Learn",
     "button | Open the PDF Print or save for your records",
     "button | Past directives Past directives",
     "button | Preview",
+    "button | Revoke a directive",
     "button | Settings",
     "button | Start over"
    ],
@@ -1682,16 +1747,16 @@
     "button | Delete from this device The directive remains Draft regardle",
     "button | Home",
     "button | Learn",
+    "button | Getting ready",
     "button | Autofill",
     "button | Ask AI",
     "button | Download & print",
     "button | Settings",
     "button | Download to finish later",
+    "button | Revoke a directive",
     "button | Start over",
     "button | Find support Peer support · advocates · referrals",
-    "button | 24/7 LIFELINE 988 · Crisis help Click for more information",
-    "button | Past directives Past directives",
-    "button | Preview"
+    "button | 24/7 LIFELINE 988 · Crisis help Click for more information"
    ]
   }
  },
@@ -1716,6 +1781,7 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Declaration only Treatment preferences without naming an age",
     "button | Power of attorney only Name a decision-maker without listing",
     "button | Take the 4-question quiz to choose a form Not sure which for",
     "progressbar | Continue your Combined form — 9% complete, last edited just ",
@@ -1729,8 +1795,7 @@
     "button | Settings",
     "button | More",
     "button | More",
-    "button | More",
-    "button | Power of attorney only Name a decision-maker without listing"
+    "button | Declaration only Treatment preferences without naming an age"
    ]
   },
   "/education": {
@@ -1747,7 +1812,6 @@
     "button | Attending Physician A physician who has primary responsibility for the treatment and care ",
     "button | Authority Granted to Your Agent You may grant full power and authority to your agent to ma",
     "button | Before signing — final verification Walk through this list with the printed directive in h",
-    "button | Beyond the booklet, 16 sections. Topics not covered in the official PA booklet Beyond the ",
     "button | Can I change or revoke my directive? You may revoke, or cancel, a part or the whole of you",
     "button | Can I include reproductive health preferences? Yes. If you are or may become pregnant, you",
     "button | Can a minor create a Mental Health Advance Directive? Under Pennsylvania law, the principa",
@@ -1756,20 +1820,18 @@
     "button | Checklists",
     "button | Choice of Treatment Facility If you have a preference for, or bad feelings toward, any par",
     "button | Combined Form Overview Pennsylvania's law allows you to make a combined Mental Health Decl",
-    "button | Combined form, 14 sections. Both an agent and treatment preferences Combined form Both an ",
     "button | Competence (vs. capacity) \"Competence\" is a legal status determined by a court (for exampl",
     "button | Conversation with your designated agent A directive only works if your agent understands a",
     "button | County MH/IDD program Each PA county operates a Mental Health / Intellectual Disabilities ",
     "button | Court Petition for Irreparable Harm Under 20 Pa.C.S. §5843, if an interested party believe",
     "button | Criminal Penalties for Tampering Under 20 Pa.C.S. §5806, it is a third-degree felony to wi",
     "button | Declaration A writing which expresses a person's wishes and instructions for mental health",
-    "button | Declaration Only, 12 sections. Treatment preferences without an agent Declaration Only Tre",
     "button | Declaration Overview A Declaration contains instructions to doctors, hospitals, and other ",
     "button | Designation of Agent You may name any adult who has capacity as your agent, with the follo",
     "button | Designation of an Alternative Agent You may wish to designate an alternative person in cas",
     "button | Determination of Incapacity (§§5823, 5833) Under the statutory form language in 20 Pa.C.S.",
     "button | Discussing Your Directive Before signing your directive, discuss your treatment preference",
-    "button | Distribution Checklist After executing your directive, distribute copies to:",
+    "button | Distribution Checklist After executing your directive, distribute copies to: Your designat",
     "button | Do health care providers have to follow my instructions? Short answer: yes — and the law u",
     "button | Document Agent Discussions Keep a brief written record of discussions with your agent abou",
     "button | Drug Trials Similarly, you may have the opportunity to participate in a trial related to n",
@@ -1781,22 +1843,18 @@
     "button | Experimental Studies Opportunities may exist for you to participate in experimental studie",
     "button | External Resources: NAMI, SAMHSA & More The following organizations provide valuable suppo",
     "button | FAQ",
-    "button | Frequently asked, 21 sections. Common questions about MHADs Frequently asked Common questi",
     "button | Glossary",
-    "button | Glossary, 26 sections. Every legal term, defined Glossary Every legal term, defined 26",
     "button | Governing Law & Execution Requirements Pennsylvania Mental Health Advance Directives are g",
     "button | Guardian vs. Your Directive and Agent Your directive is built to protect your autonomy eve",
     "button | Home",
     "button | How Chapter 54 (general health care) and Chapter 58 (mental health) work together Pennsylv",
-    "button | How do I find eligible witnesses? You need two adult witnesses (18+) who are NOT:",
+    "button | How do I find eligible witnesses? You need two adult witnesses (18+) who are NOT: Your des",
     "button | How does my directive interact with involuntary commitment (sections 302–305)? Having a Me",
     "button | How is my MHAD different from a regular health-care directive or living will? Pennsylvania",
     "button | How to Revoke Your Directive You can revoke your directive at any time while you have capa",
-    "button | If a provider refuses to follow your directive — step by step Pennsylvania law (20 Pa.C.S.",
     "button | Incapacity A clinical determination that a person lacks sufficient understanding or abilit",
     "button | Insurance, coverage, and provider-policy limits Your directive is about consent — it makes",
     "button | Interstate Validity Under 20 Pa.C.S. §5845, a mental health power of attorney executed in ",
-    "button | Introduction, 3 sections. What an MHAD is and who should sign one Introduction What an MHA",
     "button | Involuntary Commitment A legal process under Pennsylvania's Mental Health Procedures Act (",
     "button | Learn",
     "button | Least restrictive alternative A foundational principle in PA mental-health law: treatment ",
@@ -1823,7 +1881,6 @@
     "button | Planning for Renewal Your directive automatically expires two years from the execution dat",
     "button | Power of Attorney A writing made by a person naming someone else to make mental health car",
     "button | Power of Attorney Overview A Power of Attorney allows you to designate someone else, calle",
-    "button | Power of Attorney, 13 sections. Agent designation without preferences Power of Attorney Ag",
     "button | Preference as to a Court-Appointed Guardian If you become incapacitated, it is possible th",
     "button | Preferences Regarding Drug Trials Similarly, you may have the opportunity to participate i",
     "button | Preferences Regarding ECT In some cases, a doctor may find that ECT would be an effective ",
@@ -1857,7 +1914,6 @@
     "button | What is capacity, and do I need to prove it? Capacity is the basic ability to understand y",
     "button | What is the PA Mental Health Advance Directive? On November 3, 2004, Governor Rendell sign",
     "button | What makes a Mental Health Care Advance Directive valid? In simple terms: You must be 18 o",
-    "button | What to share with your providers Distributing the directive to your treatment team is the",
     "button | What types of instructions should I include? A Mental Health Advance Directive is a way to",
     "button | When Directives Conflict Under 20 Pa.C.S. §5844, if provisions of your mental health decla",
     "button | When an Agent Loses Authority (Removal & Divorce) Under 20 Pa.C.S. §5837, an agent may be ",
@@ -1868,11 +1924,17 @@
     "button | Where to Store Your Directive Keep the original in a safe but EASY TO FIND place — let oth",
     "button | Who should get a copy, and how do providers access it? The only way your providers will kn",
     "button | Why taking your time pays off Research on psychiatric advance directives consistently find",
-    "button | Will my PA directive be recognized if I travel or move to another state? Pennsylvania law ",
-    "button | Your checklist, 12 sections. Step-by-step distribution + revocation guides Your checklist "
+    "button | Will my PA directive be recognized if I travel or move to another state? Pennsylvania law "
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | How to Revoke Your Directive You can revoke your directive a",
+    "button | Document Agent Discussions Keep a brief written record of di",
+    "button | Update Emergency Contacts Annually Phone numbers and address",
+    "button | Before signing — final verification Walk through this list w",
+    "button | Conversation with your designated agent A directive only wor",
+    "button | What to share with your providers Distributing the directive",
+    "button | If a provider refuses to follow your directive — step by ste",
     "button | Introduction, 3 sections. What an MHAD is and who should sig",
     "button | Combined form, 14 sections. Both an agent and treatment pref",
     "button | Declaration Only, 12 sections. Treatment preferences without",
@@ -1880,14 +1942,7 @@
     "button | Frequently asked, 21 sections. Common questions about MHADs ",
     "button | Glossary, 26 sections. Every legal term, defined Glossary Ev",
     "button | Beyond the booklet, 16 sections. Topics not covered in the o",
-    "button | Your checklist, 12 sections. Step-by-step distribution + rev",
-    "button | Home",
-    "button | Ask",
-    "button | Settings",
-    "button | More",
-    "button | Introduction, 3 sections. What an MHAD is and who should sig",
-    "button | Combined form, 14 sections. Both an agent and treatment pref",
-    "button | Declaration Only, 12 sections. Treatment preferences without"
+    "button | Your checklist, 12 sections. Step-by-step distribution + rev"
    ]
   },
   "/assistant": {
@@ -2024,7 +2079,6 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
-    "switch | Dyslexia-friendly font Atkinson Hyperlegible — clearer, easi",
     "button | Back Back",
     "switch | Bold text Heavier text weight everywhere",
     "switch | Reduce motion Removes screen transitions and animations",
@@ -2038,7 +2092,8 @@
     "button | Ask",
     "button | Settings",
     "button | More",
-    "slider | "
+    "slider | ",
+    "switch | Dyslexia-friendly font Atkinson Hyperlegible — clearer, easi"
    ]
   },
   "/privacy-policy": {
@@ -2134,7 +2189,7 @@
    ]
   },
   "/audio-guide": {
-   "title": "Audio guide · PA MHAD",
+   "title": "Voice questionnaire · PA MHAD",
    "controls": [
     "button | Ask",
     "button | Back Back",
@@ -2189,7 +2244,7 @@
     "input | Apt, suite, unit, etc.",
     "input | City",
     "input | County",
-    "input | Date of birth (MM/DD/YYYY) *",
+    "input | Date of birth *",
     "input | Full legal name *",
     "input | Phone number",
     "input | State",
@@ -2198,7 +2253,7 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
-    "input | Date of birth (MM/DD/YYYY) * MM/DD/YYYY",
+    "input | Date of birth * MM/DD/YYYY",
     "button | Pick date",
     "input | Street address",
     "input | Apt, suite, unit, etc.",
@@ -2207,11 +2262,11 @@
     "input | State",
     "input | ZIP 12345 or 12345-6789",
     "button | Fill city, county & state from ZIP",
-    "button | Ask AI about this step",
     "input | Phone number (215) 555-1234",
     "button | Ask AI about this step",
     "button | Continue",
     "button | Go to step 1 of 11",
+    "button | Help",
     "button | Go to step 2 of 11"
    ]
   },
@@ -2256,12 +2311,12 @@
     "button | Go to step 9 of 11",
     "button | Go to step 10 of 11",
     "button | Go to step 11 of 11",
-    "group | A court determines I lack capacity",
-    "checkbox | ",
+    "group | I am involuntarily committed",
     "button | More",
     "button | Exit",
-    "group | I am involuntarily committed",
-    "checkbox | "
+    "checkbox | ",
+    "button | See examples",
+    "textarea | In your own words (optional)"
    ]
   },
   "/wizard/1?step=2": {
@@ -2299,7 +2354,7 @@
     "input | State",
     "input | Street address",
     "input | ZIP",
-    "textarea | Additional limitations or instructions (optional)"
+    "textarea | Additional limitations or instructions"
    ],
    "unnamed_buttons": 0,
    "tab": [
@@ -2448,6 +2503,7 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Help",
     "input | Search a condition (e.g. depression, ADHD)… ICD-10",
     "input | Doctor name Type a name to search the provider registry",
     "input | Specialty",
@@ -2461,8 +2517,7 @@
     "button | Go to step 3 of 11",
     "button | Go to step 4 of 11",
     "button | Go to step 5 of 11",
-    "button | Go to step 6 of 11",
-    "button | Go to step 7 of 11"
+    "button | Go to step 6 of 11"
    ]
   },
   "/wizard/1?step=6": {
@@ -2495,25 +2550,26 @@
     "button | Other (ICD-10) Other ICD-10",
     "button | Severe severity Severe anaphylaxis · ER",
     "input | Search a drug or class… RxTerms",
-    "input | e.g. Hives, Swelling, Throat closing"
+    "input | e.g. Hives, Swelling, Throat closing",
+    "textarea | e.g. I carry an epinephrine pen"
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Go to step 7 of 11",
     "button | Go to step 8 of 11",
     "button | Go to step 9 of 11",
-    "button | Other (ICD-10) Other ICD-10",
     "button | Go to step 10 of 11",
     "button | Go to step 11 of 11",
-    "input | Search a drug or class… RxTerms",
+    "button | More",
+    "button | Exit",
     "button | Mild severity Mild rash, mild GI",
     "button | Moderate severity Moderate hives, swelling",
     "button | Severe severity Severe anaphylaxis · ER",
     "input | e.g. Hives, Swelling, Throat closing",
+    "textarea | e.g. I carry an epinephrine pen",
     "button | Add allergy",
     "button | Ask AI about this step",
-    "button | Back",
-    "button | Continue",
-    "button | Go to step 1 of 11"
+    "button | Back"
    ]
   },
   "/wizard/1?step=7": {
@@ -2537,16 +2593,21 @@
     "button | Go to step 9 of 11",
     "button | Help",
     "button | Help for this step. Opens help sheet.",
+    "button | I consent to the medications that my treating physician recommends. Any exceptions, limits",
+    "button | I do not consent to the use of any medications. Your directive says no to all medications.",
+    "button | I have designated an agent to make decisions about my medications Your agent makes medicat",
     "button | Medications I NEVER want These medications should not be administered Add medication to Me",
     "button | Medications I am currently taking For your care team’s reference — not a preference Add me",
     "button | Medications with limitations May be given but with restrictions Add medication to Medicati",
     "button | More",
     "button | Preferred medications Medications that have worked well for you Add medication to Preferre",
-    "button | Side effects you may be experiencing For the medications you take now, read the official F",
-    "checkbox | I have designated an agent to make decisions about my medications"
+    "button | Side effects you may be experiencing For the medications you take now, read the official F"
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Continue",
+    "button | Add medication",
+    "button | Go to step 1 of 11",
     "button | Go to step 2 of 11",
     "button | Go to step 3 of 11",
     "button | Go to step 4 of 11",
@@ -2558,10 +2619,7 @@
     "button | Go to step 10 of 11",
     "button | Go to step 11 of 11",
     "button | More",
-    "button | Exit",
-    "button | Add medication",
-    "button | Add medication",
-    "button | Add medication"
+    "button | Exit"
    ]
   },
   "/wizard/1?step=8": {
@@ -2597,9 +2655,11 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
-    "button | Ask AI about this step",
-    "button | Back",
-    "button | Continue",
+    "button | Help",
+    "button | I do not consent I refuse participation in drug trials.",
+    "button | I consent to drug trials I am willing to participate in clin",
+    "button | I consent under specific conditions Describe the conditions ",
+    "button | My agent will decide Authorize your agent to consent or refu",
     "button | Go to step 1 of 11",
     "button | Go to step 2 of 11",
     "button | Go to step 3 of 11",
@@ -2609,9 +2669,7 @@
     "button | Go to step 7 of 11",
     "button | Go to step 8 of 11",
     "button | Go to step 9 of 11",
-    "button | Go to step 10 of 11",
-    "button | Go to step 11 of 11",
-    "button | More"
+    "button | Go to step 10 of 11"
    ]
   },
   "/wizard/1?step=9": {
@@ -2654,6 +2712,9 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Go to step 11 of 11",
+    "button | Pet care",
+    "button | More",
     "button | Exit",
     "button | Reproductive health care",
     "button | Other instructions",
@@ -2662,13 +2723,10 @@
     "button | Ask AI about this step",
     "button | Back",
     "button | Continue",
+    "button | Children & custody",
+    "button | Family notification",
     "button | Records disclosure & limitations",
-    "button | Go to step 1 of 11",
-    "button | Go to step 2 of 11",
-    "button | Go to step 3 of 11",
-    "button | Go to step 4 of 11",
-    "button | Go to step 5 of 11",
-    "button | Go to step 6 of 11"
+    "button | Go to step 1 of 11"
    ]
   },
   "/wizard/1?step=10": {
@@ -2704,6 +2762,11 @@
    ],
    "unnamed_buttons": 0,
    "tab": [
+    "button | Go to step 2 of 11",
+    "button | Go to step 3 of 11",
+    "button | Go to step 4 of 11",
+    "button | Go to step 5 of 11",
+    "button | Go to step 6 of 11",
     "button | Go to step 7 of 11",
     "button | Go to step 8 of 11",
     "button | Go to step 9 of 11",
@@ -2713,12 +2776,7 @@
     "button | Exit",
     "button | Ask AI about this step",
     "button | Back",
-    "button | Preview",
-    "button | Go to step 1 of 11",
-    "button | Run a consistency check",
-    "button | Go to step 2 of 11",
-    "button | Go to step 3 of 11",
-    "button | Go to step 4 of 11"
+    "button | Preview"
    ]
   },
   "/upload/1": {
@@ -3088,12 +3146,14 @@
     "button | Download & print Preview and export your directive packet",
     "button | Download to finish later A locked file you can open on any device",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready What you’ll need, and what makes it valid",
     "button | Home",
     "button | Learn",
     "button | More",
     "button | Revoke a directive Cancel one you signed, and who to tell",
     "button | Settings",
-    "button | Start over Erase this session and start fresh"
+    "button | Start over Erase this session and start fresh",
+    "button | Voice questionnaire Answer out loud, then autofill from the recording"
    ],
    "unnamed_buttons": 0,
    "tab": [
@@ -3124,11 +3184,13 @@
     "button | Download & print Preview and export your directive packet",
     "button | Download to finish later A locked file you can open on any device",
     "button | Find support Peer support · advocates · referrals",
+    "button | Getting ready What you’ll need, and what makes it valid",
     "button | Home",
     "button | Learn",
     "button | Revoke a directive Cancel one you signed, and who to tell",
     "button | Settings",
-    "button | Start over Erase this session and start fresh"
+    "button | Start over Erase this session and start fresh",
+    "button | Voice questionnaire Answer out loud, then autofill from the recording"
    ],
    "unnamed_buttons": 0,
    "tab": [

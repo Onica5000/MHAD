@@ -3128,7 +3128,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionsOverviewWebIntro =>
-      'On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.';
+      'PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.';
 
   @override
   String get permissionsOverviewWhatThisAppMayAsk =>
@@ -5899,6 +5899,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Not applicable on this platform';
 
   @override
+  String get permissionsOverviewNotUsed => 'Not used by PA MHAD';
+
+  @override
+  String get permissionsOverviewBiometricsWebUsedFor =>
+      'PA MHAD never asks for your fingerprint or face.';
+
+  @override
+  String get permissionsOverviewNotificationsWebUsedFor =>
+      'PA MHAD doesn’t send notifications. For a reminder before your directive’s two-year date, save the calendar file on Download & print.';
+
+  @override
+  String get permissionsOverviewCameraWebUsedFor =>
+      'PA MHAD doesn’t use your camera. To fill in from a photo, attach it in your own AI on the Autofill page — on a phone, your AI’s app can take the photo.';
+
+  @override
+  String get permissionsOverviewContactsWebUsedFor =>
+      'PA MHAD never reads your address book — you type each person’s details.';
+
+  @override
   String get permissionsOverviewRemindingYouAboutWitnessSigning =>
       'Reminding you about witness signing, renewals, and check-ins.';
 
@@ -7268,11 +7287,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeDark => 'Dark';
 
   @override
-  String get settingsStatusWebTab => '● WEB APP · KEPT IN THIS TAB';
+  String get settingsStatusWebTab => '● KEPT IN THIS TAB';
 
   @override
-  String get settingsStatusWebLocked =>
-      '● WEB APP · LOCKED COPY ON THIS DEVICE';
+  String get settingsStatusWebLocked => '● LOCKED COPY ON THIS DEVICE';
 
   @override
   String settingsStatusNative(String mode, String auth) {
@@ -8097,7 +8115,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String exportRenewalReminderBodyNoDate(int days) {
-    return 'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. This web app can’t send reminders, so this saves a calendar file with two reminders: $days days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.';
+    return 'Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. PA MHAD can’t send reminders, so this saves a calendar file with two reminders: $days days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.';
   }
 
   @override
@@ -8372,7 +8390,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String wizardExitWebBody(int minutes) {
-    return 'The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.';
+    return 'PA MHAD doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until $minutes minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.';
   }
 
   @override

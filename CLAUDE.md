@@ -6,7 +6,9 @@ Pennsylvania Mental Health Advance Directive app — Flutter/Dart.
 **Primary target (2026-06-16 pivot): the Chrome/Edge WEB app — responsive for both PC and
 mobile browsers. This is the ONLY actively-developed surface.**
 
-**Native mobile (Android + iOS) and desktop (macOS) are POSTPONED INDEFINITELY.** Do not
+**Only the web app exists.** Native mobile (Android + iOS) and desktop (macOS) are POSTPONED
+INDEFINITELY and may never ship (user, 2026-11-23) — **no user-facing text may suggest another app
+or a feature "coming" later** (`only_web_copy_test`). Do not
 spend effort on Android/iOS-specific behavior, and never let native concerns compromise the
 PC/Mobile web app's functionality — web is what ships. When a feature is mobile-only by
 nature (camera/gallery, NFC, biometrics, notifications), it stays gracefully degraded/absent
@@ -23,7 +25,7 @@ The shipped UI/UX is the source of truth: the **2026-11 design system** (see *De
 system* below) — extend it, don't fork it. The old Claude Design artboard/handoff bundle
 was removed 2026-06-28; do not reintroduce it or design against it.
 
-Source PDF: `PA MHAD.pdf`. Improvement backlog: `docs/GAP_ANALYSIS_V4.md`.
+Source PDF: `docs/PA MHAD.pdf`. Improvement backlog: `docs/GAP_ANALYSIS_V4.md`.
 
 ## Flutter / Dart
 - Flutter 3.47.9, Dart 3.13.7 (CI pins the same version in `deploy-web.yml`; keep local and CI in step)
@@ -50,10 +52,12 @@ lib/
     document_extractor.dart / smart_fill_service.dart -- multimodal autofill / smart-fill
     handoff/                   -- copy-and-paste handoff (what users see): task, prompt, parser, wait
   ui/
-    theme/        -- app_theme.dart (teal Material3 theme)
+    theme/        -- app_theme.dart (DesignTokens + MhadPalette; navy by default, Material 3)
     home/         -- HomeScreen
     wizard/       -- Step-by-step form flow (adaptive per FormType)
     education/    -- FAQ, instructions, glossary
+    getting_ready/ -- Getting ready checklist (+ PDF)
+    audio_guide/  -- voice questionnaire (+ PDF)
     ai/           -- handoff card, Ask AI page, step helper, "Back to paste" banner
     assistant/    -- AI chat UI (API path — hidden)
     export/       -- PDF preview & export options
@@ -178,8 +182,8 @@ key would need a **relay server** — keys never ship to the browser.
   the AI rail isn't shown). It MEASURES its fit (theme text styles × text size — the app's
   default is 1.2×): label → ✦ icon → no Ask (More still has Ask AI). Never stack a second bar.
 - `app_drawer.dart` was deleted — do not reintroduce a Scaffold `drawer:`.
-- Secondary destinations (New directive, Export, AI setup, Privacy policy) are reached
-  contextually or via the More sheet / sidebar.
+- Secondary destinations (New directive, Getting ready, Voice questionnaire, Export, AI setup,
+  Privacy policy) are reached contextually or via the More sheet / sidebar.
 
 ## Design system (2026-11 refresh — extend, don't fork)
 | Piece | Where | Rule |
@@ -191,9 +195,9 @@ key would need a **relay server** — keys never ship to the browser.
 | Pills | `ActionPill`, `RemovablePill` (`widgets/design/pills.dart`) | Never `ActionChip` / `InputChip`: Flutter web announces every chip as a checkbox (`web_chip_semantics_rule_test`). `FilterChip` / `ChoiceChip` are fine (they are selectable) |
 | Tab titles | `ui/route_titles.dart` | Every route has one (`route_titles_test`) |
 | Art pipeline | `tool/art/art_manifest.json` (single source) → `tool/art/generate_art.py` (Grok `image_gen`, verified, WebP); see `assets/images/README.md` | People photos name a **diverse cast** (user, 2026-11-17); review every image |
-| Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal") |
+| Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal"); never suggest another app or a future release (`only_web_copy_test`) |
 | File names | `mhadFileName()` (`lib/utils/file_names.dart`) | Never hand-build a download name (blank parts were leaving `PA_MHAD_.pdf`) |
-| Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change |
+| Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change. Baseline re-captured from main 3ac9c24 (2026-11-23) after PR #26's diff was explained — re-capture after each explained diff |
 | Wizard step padding | `DesignTokens.pagePadding` | Every step's own list uses it, so the form lines up with the step header (`wizard_step_padding_rule_test`) |
 | Step header (phones) | `StepHead(compact:)` | Collapses to one line while the step is scrolled, expands at the top — never toggled by the keyboard (R5) |
 | Welcome photo (phones) | `SplitHeroBanner` | Placed by the screen as the first item of its own scroll, so it scrolls away; the consent row + CTA stay pinned |

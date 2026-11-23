@@ -3191,7 +3191,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get permissionsOverviewWebIntro =>
-      'En la web, PA MHAD le pide a su navegador un solo permiso: el micrófono, y solo cuando usted toca el micrófono para dictar. No se recopila nada en segundo plano.';
+      'PA MHAD le pide a su navegador un solo permiso: el micrófono, y solo cuando usted toca el micrófono para dictar. No se recopila nada en segundo plano.';
 
   @override
   String get permissionsOverviewWhatThisAppMayAsk =>
@@ -6010,6 +6010,25 @@ class AppLocalizationsEs extends AppLocalizations {
       'No aplica en esta plataforma';
 
   @override
+  String get permissionsOverviewNotUsed => 'PA MHAD no lo usa';
+
+  @override
+  String get permissionsOverviewBiometricsWebUsedFor =>
+      'PA MHAD nunca pide su huella ni su rostro.';
+
+  @override
+  String get permissionsOverviewNotificationsWebUsedFor =>
+      'PA MHAD no envía notificaciones. Para que se le recuerde antes de la fecha de dos años de su directiva, guarde el archivo de calendario en Descargar e imprimir.';
+
+  @override
+  String get permissionsOverviewCameraWebUsedFor =>
+      'PA MHAD no usa su cámara. Para completar datos a partir de una foto, adjúntela en su propia IA desde la página Autocompletar; en un teléfono, la aplicación de su IA puede tomar la foto.';
+
+  @override
+  String get permissionsOverviewContactsWebUsedFor =>
+      'PA MHAD nunca lee su libreta de direcciones; usted escribe los datos de cada persona.';
+
+  @override
   String get permissionsOverviewRemindingYouAboutWitnessSigning =>
       'Recordatorios sobre la firma de testigos, renovaciones y revisiones periódicas.';
 
@@ -7396,12 +7415,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsThemeDark => 'Oscuro';
 
   @override
-  String get settingsStatusWebTab =>
-      '● APLICACIÓN WEB · SE CONSERVA EN ESTA PESTAÑA';
+  String get settingsStatusWebTab => '● SE CONSERVA EN ESTA PESTAÑA';
 
   @override
-  String get settingsStatusWebLocked =>
-      '● APLICACIÓN WEB · COPIA BLOQUEADA EN ESTE DISPOSITIVO';
+  String get settingsStatusWebLocked => '● COPIA BLOQUEADA EN ESTE DISPOSITIVO';
 
   @override
   String settingsStatusNative(String mode, String auth) {
@@ -8238,7 +8255,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String exportRenewalReminderBodyNoDate(int days) {
-    return 'Su directiva es válida por dos años desde el día en que la firma; más tiempo si usted no puede tomar decisiones de salud mental cuando vencería. Esta aplicación web no puede enviar recordatorios, así que esto guarda un archivo de calendario con dos recordatorios: $days días antes del vencimiento y el mismo día. Usted elige el día en que firma; el archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.';
+    return 'Su directiva es válida por dos años desde el día en que la firma; más tiempo si usted no puede tomar decisiones de salud mental cuando vencería. PA MHAD no puede enviar recordatorios, así que esto guarda un archivo de calendario con dos recordatorios: $days días antes del vencimiento y el mismo día. Usted elige el día en que firma; el archivo se crea en su dispositivo y solo contiene los títulos de los recordatorios, nunca su nombre ni su directiva.';
   }
 
   @override
@@ -8516,7 +8533,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String wizardExitWebBody(int minutes) {
-    return 'La aplicación web no conserva su progreso por mucho tiempo.\n\nSi eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga. De lo contrario, su trabajo se borra al cerrar esta pestaña. Para terminar otro día, descargue su progreso, o exporte o imprima su documento.';
+    return 'PA MHAD no conserva su progreso por mucho tiempo.\n\nSi eligió una copia bloqueada, esta queda en este dispositivo, protegida con su frase de acceso, hasta $minutes minutos después de que usted salga. De lo contrario, su trabajo se borra al cerrar esta pestaña. Para terminar otro día, descargue su progreso, o exporte o imprima su documento.';
   }
 
   @override
