@@ -43,9 +43,11 @@ void main() {
       expect(steps, isNot(contains(WizardStep.diagnoses)));
       expect(steps, isNot(contains(WizardStep.medications)));
       expect(steps, isNot(contains(WizardStep.allergies)));
-      expect(steps, isNot(contains(WizardStep.proceduresResearch)));
-      // aboutYou, whenItKicksIn, peopleITrust, guardian, reviewAndSign
-      expect(steps.length, 5);
+      // The official POA form asks whether the agent may consent to ECT,
+      // experimental studies and drug trials (part D.3-5).
+      expect(steps, contains(WizardStep.proceduresResearch));
+      // aboutYou, whenItKicksIn, peopleITrust, guardian, procedures, review
+      expect(steps.length, 6);
     });
 
     test('combined form has more steps than declaration', () {

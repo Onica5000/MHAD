@@ -10,9 +10,33 @@ part of 'document_pipeline_flow.dart';
 
 // Display-only badges appended to review values: whether a medication or
 // drug allergy matched RxNorm, a condition an ICD-10-CM code, a facility the
-// NPI organization registry. Removed again before anything is saved (see
-// `_facilityValue` and `medFromReview` in pipeline_apply_service.dart).
+// NPI organization registry. Removed again before anything is saved
+// ([stripReviewBadge]).
 String _reviewBadge(String word) => ' [$word]';
+
+/// [value] without the display-only badge it may end with — the one place
+/// apply removes badges, so badge text never lands in the directive.
+String stripReviewBadge(String value) {
+  final v = value.trim();
+  for (final badge in allReviewBadges) {
+    if (v.endsWith(badge)) {
+      return v.substring(0, v.length - badge.length).trimRight();
+    }
+  }
+  return v;
+}
+
+/// An allergy's review row in the reader's language:
+/// "substance (Severity) — reactions". Read back by [allergyFromReview].
+String allergyReviewText(ExtractedAllergy a, AppLocalizations l) {
+  final sev = switch (a.severity) {
+    'mild' => l.allergiesSeverityMild,
+    'severe' => l.allergiesSeveritySevere,
+    _ => l.allergiesSeverityModerate,
+  };
+  final r = a.reactions?.trim() ?? '';
+  return r.isEmpty ? '${a.substance} ($sev)' : '${a.substance} ($sev) — $r';
+}
 
 /// Every badge in every supported language, so apply removes whichever one
 /// the person saw — badge text never lands in the directive.
@@ -26,6 +50,7 @@ List<String> _badgeWords(AppLocalizations l) => [
       l.reviewBadgeRxNormVerified,
       l.reviewBadgeNpiVerified,
       l.reviewBadgeUnverified,
+      l.reviewBadgeNoIcdMatch,
     ];
 
 /// The title of a smart-fill suggestion row. The keys stay English
@@ -149,20 +174,35 @@ extension _PipelineReviewUi on _PipelineScreenState {
       _reviewChecked['family_notification'] = true;
       _reviewEdited['family_notification'] = v.familyNotification!;
     }
+    if (v.recordsAuthorized != null) {
+      _reviewChecked['records_authorized'] = true;
+      _reviewEdited['records_authorized'] = v.recordsAuthorized!;
+    }
+    if (v.recordsNotAuthorized != null) {
+      _reviewChecked['records_not_authorized'] = true;
+      _reviewEdited['records_not_authorized'] = v.recordsNotAuthorized!;
+    }
     if (v.recordsDisclosure != null) {
       _reviewChecked['records_disclosure'] = true;
       _reviewEdited['records_disclosure'] = v.recordsDisclosure!;
+    }
+    if (v.reproductiveHealth != null) {
+      _reviewChecked['reproductive_health'] = true;
+      _reviewEdited['reproductive_health'] = v.reproductiveHealth!;
     }
     if (v.other != null) {
       _reviewChecked['other'] = true;
       _reviewEdited['other'] = v.other!;
     }
 
-    // ── Diagnoses — one review key per diagnosis
+    // ── Diagnoses — one review key per diagnosis. A code ICD-10-CM doesn't
+    // have is flagged (a note under the row says how to fix it).
     for (final d in v.diagnoses) {
       final key = 'diag_${d.name}';
       _reviewChecked[key] = true;
-      _reviewEdited[key] = d.display;
+      final badge =
+          d.codeFound == false ? _reviewBadge(l.reviewBadgeNoIcdMatch) : '';
+      _reviewEdited[key] = '${d.display}$badge';
     }
 
     // ── Allergies — one review key per allergy. Drug allergies carry an
@@ -176,7 +216,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
               ? l.reviewBadgeRxNormVerified
               : l.reviewBadgeUnverified)
           : '';
-      _reviewEdited[key] = '${a.display}$badge';
+      _reviewEdited[key] = '${allergyReviewText(a, l)}$badge';
     }
 
     // ── Currently-taking medications (reference list) — the one category that
@@ -268,6 +308,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
         'men' => ' (${l.facilityRoommateMen.toLowerCase()})',
         'sameAsIdentity' =>
           ' (${l.facilityRoommateSameAsIdentity.toLowerCase()})',
+        final String s when s.startsWith(kRoommateSpecifyPrefix) =>
+          ' (${s.substring(kRoommateSpecifyPrefix.length).trim()})',
         _ => '',
       };
       _reviewChecked['roommate_same_gender'] = true;
@@ -276,10 +318,14 @@ extension _PipelineReviewUi on _PipelineScreenState {
     }
     // Room-preference chips beyond the same-gender one — a single
     // confirmable row; apply reads the ids from the validated result.
+    // Every chip but same-gender (it has its own row above).
     final chipLabels = {
       'singleRoom': l.facilityRoomSingle,
       'windowIfPossible': l.facilityRoomWindow,
       'quietFloor': l.facilityRoomQuietFloor,
+      'noRoommate': l.facilityRoomNoRoommate,
+      'transAffirmingStaff': l.facilityRoomTransAffirming,
+      'lowStimulationUnit': l.facilityRoomLowStimulation,
     };
     final extraChips = v.roomPreferenceChips
         .where(chipLabels.containsKey)
@@ -446,6 +492,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
         agents.where((a) => a.agentType == 'alternate').toList();
     final altAgent = altAgents.isEmpty ? null : altAgents.first;
     final guardian = await repo.getGuardianNomination(id);
+    final otherSections = OtherInstructions.parse(instr?.other ?? '');
+    final records = RecordsDisclosure.parse(instr?.recordsDisclosure ?? '');
     final existing = <String, String>{
       'facility_prefer': prefs?.preferredFacilityName ?? '',
       'facility_avoid': prefs?.avoidFacilityName ?? '',
@@ -457,8 +505,11 @@ extension _PipelineReviewUi on _PipelineScreenState {
       'pet_custody': instr?.petCustody ?? '',
       'children_custody': instr?.childrenCustody ?? '',
       'family_notification': instr?.familyNotification ?? '',
-      'records_disclosure': instr?.recordsDisclosure ?? '',
-      'other': instr?.other ?? '',
+      'records_authorized': records.authorized,
+      'records_not_authorized': records.notAuthorized,
+      'records_disclosure': records.otherLimits,
+      'reproductive_health': otherSections.reproductive,
+      'other': otherSections.other,
       'hh_note': instr?.healthHistory ?? '',
       // Declarant — split address fields
       'person_name': directive?.fullName ?? '',
@@ -553,7 +604,10 @@ extension _PipelineReviewUi on _PipelineScreenState {
     if (key == 'pet_custody') return l.reviewStepPetCare;
     if (key == 'children_custody') return l.reviewLabelChildrenCustody;
     if (key == 'family_notification') return l.reviewLabelFamilyNotification;
-    if (key == 'records_disclosure') return l.reviewStepRecordsDisclosure;
+    if (key == 'records_authorized') return l.addlInstrRecordsReleaseLabel;
+    if (key == 'records_not_authorized') return l.addlInstrRecordsWithholdLabel;
+    if (key == 'records_disclosure') return l.addlInstrRecordsOtherLabel;
+    if (key == 'reproductive_health') return l.addlInstrReproTitle;
     if (key == 'other') return l.reviewStepOther;
     // Personal info (PII) — declarant
     if (key == 'person_name') return l.reviewLabelPersonName;
@@ -789,6 +843,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        const CrisisSupportBanner(),
+        if (_reviewWarnings.isNotEmpty ||
+            (_validated?.checkNotes.isNotEmpty ?? false)) ...[
+          _pleaseCheckCard(p, _validated?.checkNotes ?? const []),
+          const SizedBox(height: 16),
+        ],
         if (_piiStripped.isNotEmpty) ...[
           Container(
             padding: const EdgeInsets.all(12),
@@ -842,7 +902,9 @@ extension _PipelineReviewUi on _PipelineScreenState {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  context.l10n.reviewPhotoDiscarded,
+                  appData.ai.apiModeVisible
+                      ? context.l10n.reviewPhotoDiscarded
+                      : context.l10n.reviewPhotoHandoff,
                   style: TextStyle(
                     fontSize: 12,
                     color: p.textMuted, height: MhadType.leadingParagraph,
@@ -902,6 +964,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
             onEdit: () => _editField(key),
           ),
           _agentInitialsNote(key, p),
+          _formatWarning(key, p),
+          _rowNote(key, p),
         ],
       );
     }
@@ -952,6 +1016,8 @@ extension _PipelineReviewUi on _PipelineScreenState {
           onEdit: () => _editField(it.key),
         ),
         _agentInitialsNote(it.key, p),
+        _formatWarning(it.key, p),
+        _rowNote(it.key, p),
       ],
     );
   }
@@ -1084,6 +1150,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
             ),
           ],
           _agentInitialsNote(it.key, p),
+          _formatWarning(it.key, p),
         ],
       ),
     );
@@ -1148,6 +1215,150 @@ extension _PipelineReviewUi on _PipelineScreenState {
   /// experimental studies, or drug trials to the agent, the directive must
   /// grant that specifically (the official form asks for the declarant's
   /// initials). Surfaced here so the user confirms the AI's assumption deliberately.
+  /// Flags autofilled dates of birth, ZIPs and phones the wizard would
+  /// reject and starts them unchecked, so the person decides (field audit O3).
+  void _applyFormatChecks() {
+    final l = context.l10n;
+    _reviewWarnings = {};
+    _reviewNotes = {};
+    for (final e in _reviewEdited.entries) {
+      final problem = reviewFormatProblem(e.key, e.value, l);
+      if (problem != null) {
+        _reviewWarnings[e.key] = problem;
+        _reviewChecked[e.key] = false;
+      }
+    }
+    // The app's own 988 check on everything the AI read, and its notes
+    // (P-18): app-driven, so it shows whatever the AI did.
+    if (_reviewEdited.values.any(looksLikeCrisis) ||
+        (_validated?.checkNotes.any(looksLikeCrisis) ?? false)) {
+      ref.read(crisisSupportShownProvider.notifier).state = true;
+    }
+    // An allergy whose severity the AI didn't state is still worth adding —
+    // it stays checked, but the person is told what will be saved (P-12).
+    for (final a in _validated?.allergies ?? const <ExtractedAllergy>[]) {
+      final key = 'allergy_${a.substance}';
+      if (!a.severityStated && _reviewEdited.containsKey(key)) {
+        _reviewNotes[key] = l.reviewAllergySeverityNotStated;
+      }
+    }
+    for (final d in _validated?.diagnoses ?? const <ExtractedDiagnosis>[]) {
+      final key = 'diag_${d.name}';
+      if (d.codeFound == false && _reviewEdited.containsKey(key)) {
+        _reviewNotes[key] = l.reviewDiagnosisCodeNotFound;
+      }
+    }
+  }
+
+  /// A plain note under a row (not a problem): e.g. what an allergy with no
+  /// stated severity will be saved as.
+  Widget _rowNote(String key, MhadPalette p) {
+    final note = _reviewNotes[key];
+    if (note == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.info_outline, size: 14, color: p.textMuted),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              note,
+              style: TextStyle(
+                fontSize: 12, height: MhadType.leadingParagraph,
+                color: p.textMuted,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// "Check this: …" under a row whose value fails the wizard's check.
+  Widget _formatWarning(String key, MhadPalette p) {
+    final problem = _reviewWarnings[key];
+    if (problem == null) return const SizedBox.shrink();
+    final warn = Theme.of(context).brightness == Brightness.dark
+        ? SemanticColors.warningTextDark
+        : SemanticColors.warningTextLight;
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.error_outline, size: 14, color: warn),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              context.l10n.reviewCheckThis(problem),
+              style: TextStyle(
+                fontSize: 12, height: MhadType.leadingParagraph,
+                fontWeight: FontWeight.w600, color: warn,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The card at the top of the review: the AI's own "please check" notes
+  /// (field audit O2) and how many values failed the wizard's checks (O3).
+  Widget _pleaseCheckCard(MhadPalette p, List<String> notes) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final ink = dark ? SemanticColors.warningTextDark : SemanticColors.warningTextLight;
+    final bg = dark ? SemanticColors.warningBgDark : SemanticColors.warningBgLight;
+    final l = context.l10n;
+    final body = TextStyle(fontSize: 14, height: MhadType.leadingParagraph, color: p.text);
+    return Semantics(
+      container: true,
+      label: l.reviewPleaseCheckTitle,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bg,
+          border: Border.all(color: ink.withValues(alpha: 0.35)),
+          borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Icon(Icons.fact_check_outlined, size: 18, color: ink),
+              const SizedBox(width: 8),
+              Text(l.reviewPleaseCheckTitle,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink)),
+            ]),
+            if (_reviewWarnings.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(l.reviewPleaseCheckFormat(_reviewWarnings.length), style: body),
+            ],
+            if (notes.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(l.reviewPleaseCheckFromAi,
+                  style: body.copyWith(fontSize: 12, color: p.textMuted)),
+              const SizedBox(height: 4),
+              for (final n in notes)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('•  ', style: body),
+                      Expanded(child: Text(n, style: body)),
+                    ],
+                  ),
+                ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _agentInitialsNote(String key, MhadPalette p) {
     const procedureKeys = {
       'ect_consent',

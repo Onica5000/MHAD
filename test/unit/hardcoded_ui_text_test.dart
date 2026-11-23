@@ -23,10 +23,6 @@ const _allowed = <String, String>{
       'code-system name, unchanged in Spanish (docs/SPANISH_STYLE.md)',
   'lib/ui/wizard/steps/people_i_trust_step.dart|20 Pa.C.S. § 5836':
       'statute citation, unchanged in Spanish (docs/SPANISH_STYLE.md)',
-  'lib/ui/wizard/widgets/pipeline_apply_service.dart|De-escalation':
-      'written into the person’s directive text, not shown as app UI',
-  'lib/ui/wizard/widgets/pipeline_apply_service.dart|Known triggers':
-      'written into the person’s directive text, not shown as app UI',
   'lib/ui/wizard/widgets/pipeline_apply_service.dart|Preferred facility type':
       'written into the person’s directive text, not shown as app UI',
   'lib/ui/wizard/widgets/pipeline_apply_service.dart|Facility settings to avoid':

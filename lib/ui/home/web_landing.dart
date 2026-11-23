@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/progress/progress_gate.dart' show startDirective;
 import 'package:mhad/ui/widgets/design/editorial_heading.dart';
@@ -74,6 +75,14 @@ class WebDashboardLanding extends ConsumerWidget {
 
         // ── Form choice (reusable — also shown on the returning dashboard so
         //    "Start a new directive" lands on the same picker) ──────────────
+        // Before choosing: what you'll need and what makes it valid.
+        InfoBanner(
+          icon: Icons.checklist_outlined,
+          text: context.l10n.homeGettingReadyLead,
+          actionLabel: context.l10n.gettingReadyTitle,
+          onAction: () => context.push(AppRoutes.gettingReady),
+        ),
+        const SizedBox(height: 16),
         const DirectiveFormChoice(),
         const SizedBox(height: 24),
 

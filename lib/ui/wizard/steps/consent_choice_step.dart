@@ -32,6 +32,10 @@ class ConsentChoiceConfig {
   final String Function(AppLocalizations l) agentDescription;
   final String Function(AppLocalizations l) conditionalHint;
 
+  /// The official POA form's two choices for this treatment (word for word).
+  final String Function(AppLocalizations l) poaAuthorizedTitle;
+  final String Function(AppLocalizations l) poaNotAuthorizedTitle;
+
   /// Read this treatment's stored consent string from the prefs row.
   final String Function(DirectivePref pref) read;
 
@@ -52,6 +56,8 @@ class ConsentChoiceConfig {
     required this.agentTitle,
     required this.agentDescription,
     required this.conditionalHint,
+    required this.poaAuthorizedTitle,
+    required this.poaNotAuthorizedTitle,
     required this.read,
     required this.write,
   });
@@ -70,6 +76,8 @@ class ConsentChoiceConfig {
     agentTitle: (l) => l.consentChoiceEctAgentTitle,
     agentDescription: (l) => l.consentChoiceEctAgentDescription,
     conditionalHint: (l) => l.consentChoiceEctConditionalHint,
+    poaAuthorizedTitle: (l) => l.consentChoiceEctPoaAuthorized,
+    poaNotAuthorizedTitle: (l) => l.consentChoiceEctPoaNotAuthorized,
     read: (pref) => pref.ectConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), ectConsent: Value(value)),
@@ -89,6 +97,8 @@ class ConsentChoiceConfig {
     agentTitle: (l) => l.consentChoiceAgentDecidesTitle,
     agentDescription: (l) => l.consentChoiceAgentDecidesDescription,
     conditionalHint: (l) => l.consentChoiceExperimentalConditionalHint,
+    poaAuthorizedTitle: (l) => l.consentChoiceExperimentalPoaAuthorized,
+    poaNotAuthorizedTitle: (l) => l.consentChoiceExperimentalPoaNotAuthorized,
     read: (pref) => pref.experimentalConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), experimentalConsent: Value(value)),
@@ -108,6 +118,8 @@ class ConsentChoiceConfig {
     agentTitle: (l) => l.consentChoiceAgentDecidesTitle,
     agentDescription: (l) => l.consentChoiceAgentDecidesDescription,
     conditionalHint: (l) => l.consentChoiceDrugTrialsConditionalHint,
+    poaAuthorizedTitle: (l) => l.consentChoiceDrugTrialsPoaAuthorized,
+    poaNotAuthorizedTitle: (l) => l.consentChoiceDrugTrialsPoaNotAuthorized,
     read: (pref) => pref.drugTrialConsent,
     write: (id, value) => DirectivePrefsCompanion(
         directiveId: Value(id), drugTrialConsent: Value(value)),
@@ -140,6 +152,10 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
   final _conditionsCtrl = TextEditingController();
   bool _hasAgentSections = false;
 
+  /// The POA offers only the official form's two choices: agent authorized
+  /// (stored as agentDecides) or not authorized (no).
+  bool _isPoa = false;
+
   @override
   void initState() {
     super.initState();
@@ -166,6 +182,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           orElse: () => FormType.declaration,
         );
         _hasAgentSections = formType.hasAgentSections;
+        _isPoa = formType == FormType.poa;
       }
 
       if (pref != null) {
@@ -179,6 +196,12 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
             (e) => e.name == raw,
             orElse: () => ConsentOption.no,
           );
+        }
+        // On the POA anything but "agent authorized" prints as "not
+        // authorized" (the PDF's rule) — show it that way.
+        if (_isPoa && _consent != ConsentOption.agentDecides) {
+          _consent = ConsentOption.no;
+          _conditionsCtrl.clear();
         }
       }
     });
@@ -216,7 +239,7 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
             widget.embedded ? const NeverScrollableScrollPhysics() : null,
         padding: widget.embedded
             ? const EdgeInsets.symmetric(horizontal: 4)
-            : const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            : DesignTokens.pagePadding,
         children: [
           SectionLabel(c.sectionLabel(l)),
           const SizedBox(height: 6),
@@ -238,6 +261,23 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
           const SizedBox(height: 8),
           WizardHelpButton(helpText: c.helpText(l), stepId: c.stepId),
           const SizedBox(height: 16),
+          if (_isPoa) ...[
+            ConsentOptionTile(
+              icon: Icons.person_outline,
+              title: c.poaAuthorizedTitle(l),
+              description: l.consentChoicePoaAuthorizedNote,
+              selected: _consent == ConsentOption.agentDecides,
+              onTap: () =>
+                  setState(() => _consent = ConsentOption.agentDecides),
+            ),
+            ConsentOptionTile(
+              icon: Icons.block,
+              title: c.poaNotAuthorizedTitle(l),
+              description: l.consentChoicePoaNotAuthorizedNote,
+              selected: _consent == ConsentOption.no,
+              onTap: () => setState(() => _consent = ConsentOption.no),
+            ),
+          ] else ...[
           ConsentOptionTile(
             icon: Icons.block,
             title: c.noTitle(l),
@@ -269,7 +309,8 @@ class _ConsentChoiceStepState extends ConsumerState<ConsentChoiceStep>
               onTap: () =>
                   setState(() => _consent = ConsentOption.agentDecides),
             ),
-          if (_consent == ConsentOption.conditional) ...[
+          ],
+          if (!_isPoa && _consent == ConsentOption.conditional) ...[
             const SizedBox(height: 6),
             TextFormField(
               controller: _conditionsCtrl,

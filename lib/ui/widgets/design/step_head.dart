@@ -31,6 +31,11 @@ class StepHead extends StatelessWidget {
   final VoidCallback? onMore;
   final EdgeInsetsGeometry padding;
 
+  /// Phones, while the step is scrolled: the caption row (with Exit/More)
+  /// and the title only — the subtitle and photo come back at the top of the
+  /// step. The spoken announcement is unchanged.
+  final bool compact;
+
   const StepHead({
     required this.stepNumber,
     required this.totalSteps,
@@ -40,6 +45,7 @@ class StepHead extends StatelessWidget {
     this.onExit,
     this.onMore,
     this.padding = const EdgeInsets.fromLTRB(20, 12, 20, 16),
+    this.compact = false,
     super.key,
   });
 
@@ -128,7 +134,34 @@ class StepHead extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
-            Row(
+            AnimatedSize(
+              duration: MediaQuery.of(context).disableAnimations
+                  ? Duration.zero
+                  : const Duration(milliseconds: 180),
+              alignment: Alignment.topLeft,
+              child: compact
+                  ? ExcludeSemantics(
+                      child: Text(
+                        title,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: MhadType.trackingTitle,
+                          height: MhadType.leadingTitle,
+                          color: p.text,
+                        ),
+                      ),
+                    )
+                  : _fullHead(p, photo),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _fullHead(MhadPalette p, double photo) => Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
@@ -169,10 +202,5 @@ class StepHead extends StatelessWidget {
                   ),
                 ],
               ],
-            ),
-          ],
-        );
-      }),
-    );
-  }
+            );
 }

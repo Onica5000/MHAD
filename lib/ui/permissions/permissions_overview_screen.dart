@@ -262,8 +262,11 @@ class _PermissionCard extends StatelessWidget {
               color: p.text, height: MhadType.leadingParagraph,
             ),
           ),
-          const SizedBox(height: 12),
           // Promises block — the prototype's "What we use it for" 4-check list.
+          // Only when it has lines: on the web the native-only cards have none,
+          // and an empty box showed as a stray pale circle (visual review).
+          if (promises.isNotEmpty) ...[
+          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -296,6 +299,7 @@ class _PermissionCard extends StatelessWidget {
               ],
             ),
           ),
+          ],
         ],
       ),
     );

@@ -1,4 +1,6 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:mhad/domain/model/other_instructions.dart';
+import 'package:mhad/domain/model/records_disclosure.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:drift/drift.dart' show Value;
@@ -114,94 +116,41 @@ class _AdditionalInstructionsStepState
     }
   }
 
-  // The database has one "other" column. We store de-escalation, triggers,
-  // and reproductive health in it with tagged sections, and parse them back.
-  static const _deescTag = '[DE-ESCALATION] ';
-  static const _trigTag = '[TRIGGERS] ';
-  static const _reproTag = '[REPRODUCTIVE] ';
-
+  // The database has one "other" column holding de-escalation, triggers,
+  // reproductive health and the person's own other instructions —
+  // OtherInstructions is the one format (shared with the PDF and autofill).
   void _parseOtherField(String raw) {
-    final lines = raw.split('\n');
-    final otherLines = <String>[];
-    for (final line in lines) {
-      if (line.startsWith(_deescTag)) {
-        _deescalationCtrl.text = line.substring(_deescTag.length);
-      } else if (line.startsWith(_trigTag)) {
-        _triggersCtrl.text = line.substring(_trigTag.length);
-      } else if (line.startsWith(_reproTag)) {
-        _reproductiveCtrl.text = line.substring(_reproTag.length);
-      } else {
-        otherLines.add(line);
-      }
-    }
-    _otherCtrl.text = otherLines.join('\n').trim();
+    final o = OtherInstructions.parse(raw);
+    _deescalationCtrl.text = o.deescalation;
+    _triggersCtrl.text = o.triggers;
+    _reproductiveCtrl.text = o.reproductive;
+    _otherCtrl.text = o.other;
   }
 
   String _buildOtherField() {
-    final parts = <String>[];
-    final deesc = _deescalationCtrl.text.trim();
-    final trig = _triggersCtrl.text.trim();
-    final repro = _reproductiveCtrl.text.trim();
-    final other = _otherCtrl.text.trim();
-    if (deesc.isNotEmpty) parts.add('$_deescTag$deesc');
-    if (trig.isNotEmpty) parts.add('$_trigTag$trig');
-    if (repro.isNotEmpty) parts.add('$_reproTag$repro');
-    if (other.isNotEmpty) parts.add(other);
-    return parts.join('\n');
+    return OtherInstructions(
+      deescalation: _deescalationCtrl.text,
+      triggers: _triggersCtrl.text,
+      reproductive: _reproductiveCtrl.text,
+      other: _otherCtrl.text,
+    ).serialize();
   }
 
-  // Records disclosure round-trips through the single `recordsDisclosure`
-  // column as labeled prose blocks. These exact labels are also what shows in
-  // the PDF / FHIR export / review screen, so they are written to read well.
-  static const _relTag = 'Authorized to receive my records:';
-  static const _witTag = 'Not authorized to receive my records:';
-  static const _othTag = 'Other limitations on disclosure:';
-
+  // Records disclosure: three labeled blocks in one column —
+  // RecordsDisclosure is the one format (shared with autofill).
   String _buildRecordsDisclosure() {
-    final rel = _recordsReleaseCtrl.text.trim();
-    final wit = _recordsWithholdCtrl.text.trim();
-    final oth = _recordsOtherCtrl.text.trim();
-    final parts = <String>[];
-    if (rel.isNotEmpty) parts.add('$_relTag $rel');
-    if (wit.isNotEmpty) parts.add('$_witTag $wit');
-    if (oth.isNotEmpty) parts.add('$_othTag $oth');
-    return parts.join('\n\n');
+    return RecordsDisclosure(
+      authorized: _recordsReleaseCtrl.text,
+      notAuthorized: _recordsWithholdCtrl.text,
+      otherLimits: _recordsOtherCtrl.text,
+    ).serialize();
   }
 
   void _parseRecordsDisclosure(String raw) {
-    if (raw.trim().isEmpty) return;
-    const tags = {
-      'rel': _relTag,
-      'wit': _witTag,
-      'oth': _othTag,
-    };
-    final positions = <String, int>{};
-    tags.forEach((key, tag) {
-      final i = raw.indexOf(tag);
-      if (i >= 0) positions[key] = i;
-    });
-    if (positions.isEmpty) {
-      // Legacy free-text records disclosure — preserve it in "other".
-      _recordsOtherCtrl.text = raw.trim();
-      return;
-    }
-    final ordered = positions.entries.toList()
-      ..sort((a, b) => a.value.compareTo(b.value));
-    for (var idx = 0; idx < ordered.length; idx++) {
-      final key = ordered[idx].key;
-      final start = ordered[idx].value + tags[key]!.length;
-      final end =
-          idx + 1 < ordered.length ? ordered[idx + 1].value : raw.length;
-      final val = raw.substring(start, end).trim();
-      switch (key) {
-        case 'rel':
-          _recordsReleaseCtrl.text = val;
-        case 'wit':
-          _recordsWithholdCtrl.text = val;
-        case 'oth':
-          _recordsOtherCtrl.text = val;
-      }
-    }
+    final r = RecordsDisclosure.parse(raw);
+    _recordsReleaseCtrl.text = r.authorized;
+    _recordsWithholdCtrl.text = r.notAuthorized;
+    _recordsOtherCtrl.text = r.otherLimits;
   }
 
   @override

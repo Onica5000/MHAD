@@ -230,7 +230,8 @@ class _TreatmentFacilityStepState
               onSelect: (id) => setState(() => _roommateOption = id),
             ),
           ],
-          const SizedBox(height: 12),
+          // 24: the same gap as between the facility cards above.
+          const SizedBox(height: 24),
           // Free-form room preferences, in addition to the chips above.
           TextField(
             controller: _roomNoteCtrl,

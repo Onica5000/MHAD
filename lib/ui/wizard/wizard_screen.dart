@@ -63,6 +63,13 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   // Transient "✓ Saved" hint after a successful autosave (UX audit B5) —
   // users otherwise get no feedback that navigation persisted their step.
   bool _showSavedHint = false;
+
+  /// Phones: the step header is one line while this step is scrolled.
+  /// The desktop AI-help column's scroll (its scrollbar shows there's more).
+  final _railScroll = ScrollController();
+
+  bool _headCompact = false;
+  int _headCompactStep = -1;
   DateTime? _lastSavedFlash;
   Timer? _savedHintTimer;
   // Set once we've canonicalised the URL with a step param (or arrived with
@@ -90,6 +97,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   void dispose() {
     _autosave.unregisterOpenStep(widget.directiveId);
     _savedHintTimer?.cancel();
+    _railScroll.dispose();
     super.dispose();
   }
 
@@ -372,8 +380,36 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                           ? null
                           : () => showMoreSheet(context, ref,
                               includePrimaryNav: true),
+                      // Phones: one line while the step is scrolled, so the
+                      // form gets the screen (visual review 2026-11-22).
+                      compact: !shellActive &&
+                          _headCompact &&
+                          _headCompactStep == _stepIndex,
                     ),
                     Expanded(
+                      child: NotificationListener<ScrollUpdateNotification>(
+                        onNotification: (n) {
+                          // The step's own list only (not lists inside it).
+                          if (shellActive ||
+                              n.depth != 0 ||
+                              n.metrics.axis != Axis.vertical) {
+                            return false;
+                          }
+                          // Collapse past 40px; expand only back at the top
+                          // (no flicker in between).
+                          final was = _headCompact &&
+                              _headCompactStep == _stepIndex;
+                          final now = was
+                              ? n.metrics.pixels > 0
+                              : n.metrics.pixels > 40;
+                          if (now != was) {
+                            setState(() {
+                              _headCompact = now;
+                              _headCompactStep = _stepIndex;
+                            });
+                          }
+                          return false;
+                        },
                       // Stack so the transient "✓ Saved" chip (UX audit B5)
                       // overlays the step content without shifting layout.
                       child: Stack(
@@ -419,6 +455,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                             ),
                           ),
                         ],
+                      ),
                       ),
                     ),
                     // AI help without the 320px rail (phones, and the desktop
@@ -521,14 +558,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                             : Container(
                                 width: 320,
                                 color: p.card,
-                                child: SingleChildScrollView(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 24, 20, 24),
-                                  child: AiStepHelper(
-                                    formType: formType.name,
-                                    step: currentStep,
-                                    stepName: currentStep.displayName,
-                                    directiveId: directive.id,
+                                // A visible scrollbar: the help card is taller
+                                // than a 900px window and nothing showed that
+                                // the rest (Copy / Open) is below (visual review).
+                                child: Scrollbar(
+                                  controller: _railScroll,
+                                  thumbVisibility: true,
+                                  child: SingleChildScrollView(
+                                    controller: _railScroll,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 24, 20, 24),
+                                    child: AiStepHelper(
+                                      formType: formType.name,
+                                      step: currentStep,
+                                      stepName: currentStep.displayName,
+                                      directiveId: directive.id,
+                                    ),
                                   ),
                                 ),
                               ),

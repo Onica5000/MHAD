@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/services/geo_service.dart';
-import 'package:mhad/utils/date_format.dart';
 import 'package:mhad/ui/wizard/widgets/wizard_help_button.dart';
 import 'package:mhad/ui/wizard/wizard_mixins.dart';
 
@@ -187,28 +186,8 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
     return true;
   }
 
-  String? _validateAge(String? value) {
-    if (value == null || value.isEmpty) return context.l10n.required;
-    final parts = value.split('/');
-    if (parts.length != 3) return context.l10n.personalInfoStepDateFormat;
-    final month = int.tryParse(parts[0]);
-    final day = int.tryParse(parts[1]);
-    final year = int.tryParse(parts[2]);
-    if (month == null || day == null || year == null) return context.l10n.personalInfoStepInvalidDate;
-    final dob = DateTime(year, month, day);
-    // The DateTime constructor normalizes overflow (02/30 → Mar 1), so an
-    // impossible date is caught by checking the components round-trip.
-    if (dob.year != year || dob.month != month || dob.day != day) {
-      return context.l10n.personalInfoStepInvalidDate;
-    }
-    if (dob.isAfter(DateTime.now())) {
-      return context.l10n.personalInfoStepDobFuture;
-    }
-    if (!isAdult(dob)) {
-      return context.l10n.personalInfoStepMustBeAdult;
-    }
-    return null;
-  }
+  String? _validateAge(String? value) =>
+      dateOfBirthValidator(value, context.l10n);
 
   Future<void> _pickDateOfBirth() async {
     final now = DateTime.now();
@@ -309,6 +288,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             ),
             const SizedBox(height: 16),
             Row(
+              // Top-aligned: a field's hint/error must not push its
+              // neighbour down (State sat ~24px below ZIP).
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -339,6 +321,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             ),
             const SizedBox(height: 16),
             Row(
+              // Top-aligned: a field's hint/error must not push its
+              // neighbour down (State sat ~24px below ZIP).
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -385,14 +370,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     inputFormatters: const [ZipInputFormatter()],
-                    validator: (v) {
-                      if (v == null || v.trim().isEmpty) return null;
-                      final digits = v.replaceAll(RegExp(r'\D'), '');
-                      if (digits.length != 5 && digits.length != 9) {
-                        return context.l10n.personalInfoStepZipInvalid;
-                      }
-                      return null;
-                    },
+                    validator: (v) => optionalZipValidator(v, context.l10n),
                   ),
                 ),
               ],
@@ -409,14 +387,7 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
               inputFormatters: const [PhoneInputFormatter()],
-              validator: (v) {
-                if (v == null || v.trim().isEmpty) return null;
-                final digits = v.replaceAll(RegExp(r'\D'), '');
-                if (digits.length < 10) {
-                  return context.l10n.personalInfoStepPhoneInvalid;
-                }
-                return null;
-              },
+              validator: (v) => optionalPhoneValidator(v, context.l10n),
             ),
           ],
         ),

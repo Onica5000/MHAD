@@ -71,6 +71,13 @@ class WebSidebar extends ConsumerWidget {
         onTap: () => appRouter.go(AppRoutes.education),
       ),
       _SidebarItem(
+        icon: Icons.checklist_outlined,
+        activeIcon: Icons.checklist,
+        label: context.l10n.gettingReadyTitle,
+        isActive: activeRoute == AppRoutes.gettingReady,
+        onTap: () => appRouter.go(AppRoutes.gettingReady),
+      ),
+      _SidebarItem(
         icon: Icons.document_scanner_outlined,
         activeIcon: Icons.document_scanner,
         label: context.l10n.navAutofill,

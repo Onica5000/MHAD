@@ -186,6 +186,50 @@ void main() {
       );
     });
 
+    // The official form's medication-consent choice. An autofilled 'no' or
+    // conditional consent used to be saved back as 'yes' the first time the
+    // step was opened and left (the screen only had an "agent" checkbox).
+    for (final (form, stored) in const [
+      (FormType.declaration, 'no'),
+      (FormType.combined, 'no'),
+      (FormType.combined, 'conditional: oral medications only'),
+      (FormType.combined, 'agentDecides'),
+    ]) {
+      testWidgets('medication consent "$stored" on ${form.name} is kept', (
+        tester,
+      ) async {
+        final id = await repo.createDirective(form);
+        await repo.upsertPreferences(DirectivePrefsCompanion(
+          directiveId: Value(id),
+          medicationConsent: Value(stored),
+        ));
+        final key = GlobalKey<State<MedicationsStep>>();
+        await pump(tester, MedicationsStep(key: key, directiveId: id, formType: form));
+        await save(key);
+        final prefs = await repo.getPreferences(id);
+        expect(prefs!.medicationConsent, stored);
+        await unmountAndClose(tester);
+      });
+    }
+
+    testWidgets('choosing "I do not consent" on a Declaration saves no', (
+      tester,
+    ) async {
+      final id = await repo.createDirective(FormType.declaration);
+      final key = GlobalKey<State<MedicationsStep>>();
+      await pump(
+        tester,
+        MedicationsStep(key: key, directiveId: id, formType: FormType.declaration),
+      );
+      expect(find.text('I have designated an agent to make decisions about my medications'),
+          findsNothing, reason: 'no agent option on a Declaration');
+      await tester.tap(find.text('I do not consent to the use of any medications.'));
+      await tester.pump();
+      await save(key);
+      expect((await repo.getPreferences(id))!.medicationConsent, 'no');
+      await unmountAndClose(tester);
+    });
+
     testWidgets('empty rows are not saved', (tester) async {
       final id = await repo.createDirective(FormType.declaration);
       final key = GlobalKey<State<MedicationsStep>>();

@@ -401,6 +401,16 @@ Re-scoped for the web-first pivot (2026-06-20):
 | Deferred — native | 3 | V4-C1 (privacy URL), V4-C2 (Play org account), V4-H5 (Apple AI rule) |
 | Closed since V4 | 2 | V4-H7 (orphan `AppStrings` deleted), V4-M9 (draw-to-sign pad dropped) |
 
+**Update 2026-11-22 (branch `audit/ai-fields-2026-11-21`, not merged):** a field-by-field
+audit of all 81 fields against the AI instructions found and fixed 20 gaps (one format each
+for the packed columns, medication consent no longer flips, the POA medication rows,
+smart-fill now sees the person's entries, Spanish names come back in English for the
+registry checks, never-authorized permissions and ID numbers kept out of autofill). Write-up
+and the **open items O1–O7** (one home for de-escalation, an AI "check this" channel in the
+autofill review, date/ZIP/phone checks in the review, Spanish date order, AI-limit wording,
+a repeated medication with a new dose): `docs/FIELD_AND_AI_AUDIT_2026-11-21.md`. The manual
+AI tests that measure them (EN + ES, valid and planted errors) are in the desktop test kit.
+
 **Update 2026-11-20:** two more PRs shipped. **#22 (language audit):** every legal
 statement checked against 20 Pa.C.S. Ch. 58 and the official booklet; three options the
 official forms don't have were removed; signing date left blank for the person to write;

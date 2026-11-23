@@ -7,6 +7,7 @@ import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
+import 'package:mhad/ui/widgets/design/photo_action_card.dart' show EqualHeightRow;
 import 'package:mhad/ui/widgets/design/design_card.dart';
 import 'package:mhad/ui/widgets/design/crisis_sheet.dart';
 
@@ -77,20 +78,25 @@ class ToolsGrid extends ConsumerWidget {
       ),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final colWidth = (constraints.maxWidth - 10) / 2;
-        return Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: tiles
-              .map((t) => SizedBox(
-                    width: colWidth,
-                    child: _ToolTileCard(tile: t, palette: p),
-                  ))
-              .toList(growable: false),
-        );
-      },
+    // Pairs of equal-height tiles (a Wrap let each tile size to its own
+    // text — the two in a row differed by ~23px; user rule 2026-11-17).
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < tiles.length; i += 2) ...[
+          if (i > 0) const SizedBox(height: 12),
+          EqualHeightRow(
+            gap: 12,
+            children: [
+              _ToolTileCard(tile: tiles[i], palette: p),
+              if (i + 1 < tiles.length)
+                _ToolTileCard(tile: tiles[i + 1], palette: p)
+              else
+                const SizedBox.shrink(),
+            ],
+          ),
+        ],
+      ],
     );
   }
 }

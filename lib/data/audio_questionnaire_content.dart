@@ -1,187 +1,397 @@
-/// Content for the spoken-questionnaire feature — a script the user reads aloud
-/// to record an audio file for AI autofill. Single source of truth shared by
-/// the in-app audio-guide screen and the printable questionnaire PDF.
+/// The voice questionnaire — a read-aloud script for recording what autofill
+/// turns into the directive. ONE definition, shared by the in-app page
+/// (`/audio-guide`) and its printable PDF.
 ///
-/// The words are ARB keys (`audioQ*`, English + Spanish), so the script and
-/// its printout follow the app language; this file only fixes the structure.
+/// It runs alongside the web app (user, 2026-11-22): one section per wizard
+/// step, in the SAME order with the SAME titles ([WizardStepL10n.title]), and
+/// every prompt quotes the step's own labels and hints, so a renamed field
+/// renames its prompt too. Sections follow the person's form
+/// ([FormType.steps]); without a form every section shows, tagged with the
+/// forms it is on. It is recorded in three parts — one recording, one
+/// autofill run each — instead of a clip per section.
 ///
-/// Every prompt maps to a field the autofill extractor can capture (see
-/// `document_extractor.dart`'s response schema). Things audio CAN'T fill are in
-/// [AudioQuestionnaire.cantDo].
+/// Every prompt names the autofill keys it asks for ([AudioQPrompt.keys]);
+/// `audio_questionnaire_test` checks that every key the autofill prompt can
+/// fill is asked for somewhere.
 library;
 
 import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/l10n/app_localizations.dart';
+import 'package:mhad/l10n/model_labels.dart';
+
+/// One recording = one part = one autofill run.
+enum AudioQPart { you, care, more }
+
+class AudioQPrompt {
+  const AudioQPrompt(this.text, [this.keys = const []]);
+
+  /// What to say, in the app's language.
+  final String text;
+
+  /// The autofill keys this prompt asks for (document_extractor's answer
+  /// keys; personal details as `personal_info.<key>`).
+  final List<String> keys;
+}
 
 class AudioQSection {
-  final String number;
-  final String title;
-
-  /// Shown in muted italics under the title, e.g. "only if you're naming an
-  /// agent". Null when the section always applies.
-  final String? appliesWhen;
-
-  /// One spoken prompt per bullet.
-  final List<String> prompts;
-
-  /// Optional example of how to phrase the answer out loud.
-  final String? example;
-
-  /// Optional caveat shown beneath the prompts.
-  final String? note;
-
   const AudioQSection({
-    required this.number,
     required this.title,
+    required this.part,
+    required this.forms,
     required this.prompts,
-    this.appliesWhen,
+    this.step,
     this.example,
     this.note,
   });
+
+  /// The wizard step this section mirrors; null for the crisis plan, which
+  /// is its own page.
+  final WizardStep? step;
+  final String title;
+  final AudioQPart part;
+
+  /// The forms this section is on (the step's own forms).
+  final Set<FormType> forms;
+  final List<AudioQPrompt> prompts;
+
+  /// How it might sound — marked "don't read this aloud".
+  final String? example;
+  final String? note;
 }
 
-/// The questionnaire in the language of [l].
+const _allForms = {FormType.combined, FormType.declaration, FormType.poa};
+const _agentForms = {FormType.combined, FormType.poa};
+const _preferenceForms = {FormType.combined, FormType.declaration};
+
+/// The questionnaire in the language of [l], for [form] (null = every form).
 class AudioQuestionnaire {
-  const AudioQuestionnaire(this.l);
+  const AudioQuestionnaire(this.l, {this.form});
 
   final AppLocalizations l;
+  final FormType? form;
 
   String get title => l.audioQTitle;
 
-  /// How to record, for the AI path in view (copy-and-paste unless the API
-  /// path is shown), then the speaking tips.
+  /// How to record, for the AI path in view, then the speaking tips.
   String get intro =>
       '${appData.ai.apiModeVisible ? l.audioQIntroApi : l.audioQIntroHandoff}'
       '\n\n${l.audioQIntroTips}';
 
-  List<AudioQSection> get sections => [
+  /// Says whether the list follows the person's form.
+  String get formNote =>
+      form == null ? l.audioQAllForms : l.audioQForForm(form!.label(l));
+
+  /// Agent options show unless the form is known to have no agent.
+  bool get _agent => form?.hasAgentSections ?? true;
+
+  String _q(String label) => '“$label”';
+
+  List<AudioQSection> get allSections => [
         AudioQSection(
-          number: '1',
-          title: l.audioQ1Title,
+          step: WizardStep.aboutYou,
+          title: WizardStep.aboutYou.title(l),
+          part: AudioQPart.you,
+          forms: _allForms,
           prompts: [
-            l.audioQ1Prompt1,
-            l.audioQ1Prompt2,
-            l.audioQ1Prompt3,
-            l.audioQ1Prompt4,
+            AudioQPrompt(l.audioQAboutName, ['personal_info.full_name']),
+            AudioQPrompt(l.audioQAboutDob, ['personal_info.date_of_birth']),
+            AudioQPrompt(l.audioQAboutAddress, [
+              'personal_info.address_line1',
+              'personal_info.address_line2',
+              'personal_info.city',
+              'personal_info.county',
+              'personal_info.state',
+              'personal_info.zip',
+            ]),
+            AudioQPrompt(l.audioQAboutPhone, ['personal_info.phone']),
           ],
-          example: l.audioQ1Example,
+          example: l.audioQAboutExample,
         ),
         AudioQSection(
-          number: '2',
-          title: l.audioQ2Title,
-          prompts: [l.audioQ2Prompt1, l.audioQ2Prompt2],
-        ),
-        AudioQSection(
-          number: '3',
-          title: l.audioQ3Title,
-          appliesWhen: l.audioQ3AppliesWhen,
-          prompts: [l.audioQ3Prompt1, l.audioQ3Prompt2],
-          example: l.audioQ3Example,
-        ),
-        AudioQSection(
-          number: '4',
-          title: l.audioQ4Title,
-          appliesWhen: l.audioQ4AppliesWhen,
-          prompts: [l.audioQ4Prompt1],
-        ),
-        AudioQSection(
-          number: '5',
-          title: l.audioQ5Title,
-          prompts: [l.audioQ5Prompt1],
-        ),
-        AudioQSection(
-          number: '6',
-          title: l.audioQ6Title,
-          prompts: [l.audioQ6Prompt1],
-          example: l.audioQ6Example,
-        ),
-        AudioQSection(
-          number: '7',
-          title: l.audioQ7Title,
+          step: WizardStep.whenItKicksIn,
+          title: WizardStep.whenItKicksIn.title(l),
+          part: AudioQPart.you,
+          forms: _allForms,
           prompts: [
-            l.audioQ7Prompt1,
-            l.audioQ7Prompt2,
-            l.audioQ7Prompt3,
-            l.audioQ7Prompt4,
-            l.audioQ7Prompt5,
+            AudioQPrompt(
+                l.audioQWhenTriggers(l.effCondTriggerTwoTitle,
+                    l.effCondTriggerCourtTitle, l.effCondTriggerCommitTitle),
+                const [
+                  'trigger_two_professionals',
+                  'trigger_court_order',
+                  'trigger_involuntary_commitment',
+                ]),
+            AudioQPrompt(l.audioQWhenOwnWords, const ['effective_condition']),
+            AudioQPrompt(l.audioQWhenDoctor, const [
+              'personal_info.preferred_evaluating_doctor_name',
+              'personal_info.preferred_evaluating_doctor_contact',
+            ]),
           ],
-          example: l.audioQ7Example,
-          note: l.audioQ7Note,
+          note: form == FormType.poa ? null : l.audioQWhenNote,
         ),
         AudioQSection(
-          number: '8',
-          title: l.audioQ8Title,
-          prompts: [l.audioQ8Prompt1],
-          example: l.audioQ8Example,
-        ),
-        AudioQSection(
-          number: '9',
-          title: l.audioQ9Title,
-          prompts: [l.audioQ9Prompt1, l.audioQ9Prompt2],
-        ),
-        AudioQSection(
-          number: '10',
-          title: l.audioQ10Title,
-          prompts: [l.audioQ10Prompt1],
-        ),
-        AudioQSection(
-          number: '11',
-          title: l.audioQ11Title,
+          step: WizardStep.peopleITrust,
+          title: WizardStep.peopleITrust.title(l),
+          part: AudioQPart.you,
+          forms: _agentForms,
           prompts: [
-            l.audioQ11Prompt1,
-            l.audioQ11Prompt2,
-            l.audioQ11Prompt3,
-            l.audioQ11Prompt4,
+            AudioQPrompt(l.audioQAgent, const ['personal_info.agent']),
+            AudioQPrompt(l.audioQAlternate, const ['personal_info.alternate_agent']),
+            AudioQPrompt(l.audioQAgentMeds(l.agentAuthMedication),
+                const ['agent_can_consent_medication']),
+            AudioQPrompt(l.audioQAgentLimits, const ['agent_authority_limitations']),
           ],
-          example: l.audioQ11Example,
-          note: l.audioQ11Note,
+          example: l.audioQAgentExample,
+          note: l.audioQAgentNote,
         ),
         AudioQSection(
-          number: '12',
-          title: l.audioQ12Title,
-          appliesWhen: l.audioQ12AppliesWhen,
-          prompts: [l.audioQ12Prompt1],
-        ),
-        AudioQSection(
-          number: '13',
-          title: l.audioQ13Title,
+          step: WizardStep.guardianNomination,
+          title: WizardStep.guardianNomination.title(l),
+          part: AudioQPart.you,
+          forms: _allForms,
           prompts: [
-            l.audioQ13Prompt1,
-            l.audioQ13Prompt2,
-            l.audioQ13Prompt3,
-            l.audioQ13Prompt4,
-            l.audioQ13Prompt5,
-            l.audioQ13Prompt6,
-            l.audioQ13Prompt7,
-            l.audioQ13Prompt8,
-            l.audioQ13Prompt9,
-            l.audioQ13Prompt10,
-            l.audioQ13Prompt11,
+            AudioQPrompt(
+                _agent
+                    ? l.audioQGuardianWho(l.guardianNomSameAsPrimary,
+                        l.guardianNomSameAsAlternate, l.guardianNomNoPreference)
+                    : l.audioQGuardianWhoNoAgent(l.guardianNomNoPreference),
+                const ['personal_info.guardian']),
+            AudioQPrompt(l.audioQGuardianOverride(l.guardianNomCanOverride),
+                const ['guardian_can_revoke', 'guardian_can_revoke_note']),
           ],
+        ),
+        AudioQSection(
+          step: WizardStep.whereIWantCare,
+          title: WizardStep.whereIWantCare.title(l),
+          part: AudioQPart.care,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(l.audioQCarePrefer(l.facilityPreferredTitle),
+                const ['preferred_facility']),
+            AudioQPrompt(l.audioQCareAvoid(l.facilityAvoidTitle),
+                const ['avoid_facility']),
+            AudioQPrompt(
+                l.audioQCareRoom([
+                  l.facilityRoomSingle,
+                  l.facilityRoomWindow,
+                  l.facilityRoomQuietFloor,
+                  l.facilityRoomLowStimulation,
+                  l.facilityRoomNoRoommate,
+                  l.facilityRoomTransAffirming,
+                  l.facilityRoomSameGender,
+                ].map(_q).join(', ')),
+                const ['room_preference_chips', 'same_gender_roommate']),
+            AudioQPrompt(
+                l.audioQCareRoommateMatch(l.facilityRoommateWomen,
+                    l.facilityRoommateMen, l.facilityRoommateSameAsIdentity),
+                const ['roommate_gender_match']),
+            AudioQPrompt(l.audioQCareRoomOther(l.facilityOtherRoomPrefsLabel),
+                const ['room_preferences_note']),
+          ],
+        ),
+        AudioQSection(
+          step: WizardStep.diagnoses,
+          title: WizardStep.diagnoses.title(l),
+          part: AudioQPart.care,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(l.audioQDiagList, const ['diagnoses']),
+            AudioQPrompt(l.audioQDiagDoctor, const [
+              'personal_info.primary_doctor_name',
+              'personal_info.primary_doctor_specialty',
+              'personal_info.primary_doctor_phone',
+            ]),
+          ],
+          example: l.audioQDiagExample,
+        ),
+        AudioQSection(
+          step: WizardStep.allergies,
+          title: WizardStep.allergies.title(l),
+          part: AudioQPart.care,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(
+                l.audioQAllergyEach(
+                    l.allergiesKindDrug,
+                    l.allergiesKindFood,
+                    l.allergiesKindMaterial,
+                    l.allergiesSeverityMild,
+                    l.allergiesSeverityModerate,
+                    l.allergiesSeveritySevere),
+                const ['allergies']),
+          ],
+          example: l.audioQAllergyExample,
+        ),
+        AudioQSection(
+          step: WizardStep.medications,
+          title: WizardStep.medications.title(l),
+          part: AudioQPart.care,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(l.audioQMedsCurrent(l.medsStepCurrentTitle),
+                const ['medications_current']),
+            AudioQPrompt(l.audioQMedsPreferred(l.medsStepPreferredTitle),
+                const ['medications_preferred']),
+            AudioQPrompt(l.audioQMedsNever(l.medsStepNeverTitle),
+                const ['medications_to_avoid']),
+            AudioQPrompt(l.audioQMedsLimit(l.medsStepLimitTitle),
+                const ['medications_limited']),
+            AudioQPrompt(
+                _agent
+                    ? l.audioQMedsConsent(l.medsConsentYes, l.medsStepAgentDecides,
+                        l.medsConsentNo)
+                    : l.audioQMedsConsentNoAgent(l.medsConsentYes, l.medsConsentNo),
+                const ['medication_consent']),
+          ],
+          example: l.audioQMedsExample,
+          note: l.audioQMedsNote,
+        ),
+        AudioQSection(
+          step: WizardStep.proceduresResearch,
+          title: WizardStep.proceduresResearch.title(l),
+          part: AudioQPart.care,
+          forms: _allForms,
+          prompts: [
+            AudioQPrompt(
+                form == FormType.poa
+                    ? l.audioQProcEachPoa
+                    : _agent
+                    ? l.audioQProcEach(
+                        l.consentChoiceConsentTitle,
+                        l.consentChoiceNoConsentTitle,
+                        l.consentChoiceAgentDecidesTitle,
+                        l.consentChoiceConditionalTitle)
+                    : l.audioQProcEachNoAgent(l.consentChoiceConsentTitle,
+                        l.consentChoiceNoConsentTitle, l.consentChoiceConditionalTitle),
+                const ['ect_consent', 'experimental_consent', 'drug_trial_consent']),
+          ],
+          example: form == FormType.poa
+              ? l.audioQProcExamplePoa
+              : _agent
+                  ? l.audioQProcExample
+                  : l.audioQProcExampleNoAgent,
+          note: form == FormType.poa
+              ? l.audioQProcNotePoa
+              : _agent
+                  ? l.audioQProcNote
+                  : null,
+        ),
+        AudioQSection(
+          step: WizardStep.anythingElse,
+          title: WizardStep.anythingElse.title(l),
+          part: AudioQPart.more,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(l.audioQElseLead),
+            AudioQPrompt(
+                l.audioQLabeled(l.addlInstrActivitiesTitle, l.addlInstrActivitiesHint),
+                const ['activities']),
+            AudioQPrompt(l.audioQLabeled(l.reviewLabelCrisis, l.addlInstrCrisisHint),
+                const ['crisis_intervention']),
+            AudioQPrompt(l.audioQLabeled(l.addlInstrDeescTitle, l.addlInstrDeescHint),
+                const ['crisis_intervention']),
+            AudioQPrompt(
+                l.audioQLabeled(l.addlInstrTriggersTitle, l.addlInstrTriggersHint),
+                const ['crisis_plan']),
+            AudioQPrompt(l.audioQLabeled(l.reviewLabelHh, l.addlInstrHealthHistoryHint),
+                const ['health_history']),
+            AudioQPrompt(l.audioQLabeled(l.addlInstrDietaryTitle, l.addlInstrDietaryHint),
+                const ['dietary']),
+            AudioQPrompt(
+                l.audioQLabeled(l.addlInstrReligiousTitle, l.addlInstrReligiousHint),
+                const ['religious']),
+            AudioQPrompt(
+                l.audioQLabeled(l.addlInstrChildrenTitle, l.addlInstrChildrenHint),
+                const ['children_custody']),
+            AudioQPrompt(
+                l.audioQLabeled(l.addlInstrFamilyNotifyTitle, l.addlInstrFamilyNotifyHint),
+                const ['family_notification']),
+            AudioQPrompt(
+                l.audioQRecords(
+                    l.addlInstrRecordsTitle,
+                    l.addlInstrRecordsReleaseLabel,
+                    l.addlInstrRecordsWithholdLabel,
+                    l.addlInstrRecordsOtherLabel),
+                const ['records_authorized', 'records_not_authorized', 'records_disclosure']),
+            AudioQPrompt(l.audioQLabeled(l.reviewStepPetCare, l.addlInstrPetCareHint),
+                const ['pet_custody']),
+            AudioQPrompt(l.audioQLabeled(l.addlInstrReproTitle, l.addlInstrReproHint),
+                const ['reproductive_health']),
+            AudioQPrompt(l.audioQLabeled(l.addlInstrOtherTitle, l.addlInstrOtherHint),
+                const ['other']),
+            AudioQPrompt(l.audioQUlysses(l.addlInstrUlyssesTitle),
+                const ['self_binding_ulysses']),
+          ],
+        ),
+        AudioQSection(
+          title: l.tabPageCrisisPlan,
+          part: AudioQPart.more,
+          forms: _preferenceForms,
+          prompts: [
+            AudioQPrompt(
+                l.audioQCrisisPlan(
+                    l.crisisPlanEarlyWarningSigns,
+                    l.crisisPlanTriggersToWatchFor,
+                    l.crisisPlanThingsThatGenuinelyHelp,
+                    l.crisisPlanThingsToSayToMe,
+                    l.crisisPlanDonTDoThese),
+                const ['crisis_plan']),
+          ],
+          note: l.audioQCrisisPlanNote,
         ),
       ];
 
-  /// Things the recording can NOT fill — the user must do these in the app.
+  /// The sections for [form] (every section when the form isn't known).
+  List<AudioQSection> get sections => form == null
+      ? allSections
+      : allSections.where((s) => s.forms.contains(form)).toList();
+
+  /// The recordings this form needs, in order.
+  List<AudioQPart> get parts => [
+        for (final p in AudioQPart.values)
+          if (sections.any((s) => s.part == p)) p,
+      ];
+
+  List<AudioQSection> sectionsIn(AudioQPart p) =>
+      sections.where((s) => s.part == p).toList();
+
+  String partTitle(AudioQPart p) => switch (p) {
+        AudioQPart.you => l.audioQPart1Title,
+        AudioQPart.care => l.audioQPart2Title,
+        AudioQPart.more => l.audioQPart3Title,
+      };
+
+  String partHow(AudioQPart p) => l.audioQPartHow(p.index + 1);
+
+  /// "Step 3 of 11" — the wizard's own numbering for the person's form
+  /// (Combined when unknown); null for the crisis plan.
+  String? stepLabel(AudioQSection s) {
+    final steps = (form ?? FormType.combined).steps;
+    final i = s.step == null ? -1 : steps.indexOf(s.step!);
+    return i < 0 ? null : l.stepDotsStepOf(i + 1, steps.length);
+  }
+
+  /// Which forms a section is on — only when the form isn't known.
+  String? formsLabel(AudioQSection s) {
+    if (form != null || s.forms.length == _allForms.length) return null;
+    return s.forms.contains(FormType.poa)
+        ? l.audioQFormsAgent
+        : l.audioQFormsPreferences;
+  }
+
+  /// What the recording can't fill — the person does these in the app.
   List<String> get cantDo => [
         l.audioQCantDoSignatures,
-        l.audioQCantDoInitials,
-        l.audioQCantDoSideEffects,
+        if (_agent) l.audioQCantDoInitials,
+        if (form != FormType.poa) l.audioQCantDoSideEffects,
       ];
 
-  /// Things the recording CAN fill if said clearly — called out so people
-  /// know they're worth speaking aloud.
-  List<String> get nowCaptured => [
-        l.audioQCapturedMedAuthority,
-        l.audioQCapturedUlysses,
-        l.audioQCapturedDosages,
-        l.audioQCapturedRoom,
-        l.audioQCapturedCrisisPlan,
-      ];
-
-  /// Autofill fills the form the directive already uses; the person can
-  /// switch form types later.
-  String get formTypeNote => l.audioQFormTypeNote;
-
-  /// Closing reminder shown after the questionnaire.
   String get closing => l.audioQClosing;
+
+  /// Every autofill key the questionnaire asks for.
+  Set<String> get coveredKeys => {
+        for (final s in allSections)
+          for (final p in s.prompts) ...p.keys,
+      };
 }

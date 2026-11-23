@@ -266,8 +266,16 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
           formType = FormType.values.byName(d.formType);
         } catch (_) {/* unknown stored value → assume combined */}
         b.writeln('Form type: ${d.formType}');
-        b.writeln('When it takes effect: '
-            '${d.effectiveCondition.trim().isEmpty ? "(not specified)" : d.effectiveCondition.trim()}');
+        final triggers = [
+          if (d.triggerTwoProfessionals)
+            'a psychiatrist and one other professional find the person incapable',
+          if (d.triggerCourtOrder) 'a court determines the person lacks capacity',
+          if (d.triggerInvoluntaryCommitment) 'the person is involuntarily committed',
+        ];
+        b.writeln('Takes effect when (checked conditions): '
+            '${triggers.isEmpty ? "(none checked)" : triggers.join("; ")}');
+        b.writeln('When it takes effect (own words): '
+            '${d.effectiveCondition.trim().isEmpty ? "(not written)" : d.effectiveCondition.trim()}');
         b.writeln('Primary doctor on file: '
             '${d.primaryDoctorName.trim().isNotEmpty ? "yes" : "no"}');
         b.writeln('Preferred treating doctor on file: '
@@ -282,10 +290,15 @@ class _AiConsistencyScreenState extends ConsumerState<AiConsistencyScreen> {
             'Primary agent named: ${agents.primaryAgent != null ? "yes" : "no"}');
         b.writeln(
             'Alternate agent named: ${agents.alternateAgent != null ? "yes" : "no"}');
-        final guardian = await repo.getGuardianNomination(widget.directiveId);
-        b.writeln('Guardian nominated: '
-            '${(guardian?.nomineeFullName.trim().isNotEmpty ?? false) ? "yes" : "no"}');
       }
+      // Guardian: every form has the step (the Declaration too, part E).
+      final guardian = await repo.getGuardianNomination(widget.directiveId);
+      final rel = guardian?.guardianRelation ?? 'noPreference';
+      final nominated = rel == 'sameAsPrimary' ||
+          rel == 'sameAsAlternate' ||
+          (rel == 'different' &&
+              (guardian?.nomineeFullName.trim().isNotEmpty ?? false));
+      b.writeln('Guardian nominated: ${nominated ? "yes" : "no"}');
 
       final diags = await repo.getDiagnoses(widget.directiveId);
       final diagNames =
@@ -377,13 +390,14 @@ $summary
 
 Give a short, encouraging review:
 1. Briefly note what looks complete and clear.
-2. Point out any GAPS or thin/empty sections they may want to fill in (e.g., no preferred medications, no crisis plan, no alternate agent), as optional considerations — not requirements.
+2. Point out any GAPS or thin/empty sections they may want to fill in (e.g., no crisis plan; on a form with an agent, no alternate agent), as optional considerations — not requirements. A Declaration never names an agent; that is not a gap. Allergies and "medications I never want" are separate lists on purpose — do not ask the person to copy one into the other.
 3. Flag anything unclear or potentially inconsistent, in plain language, for them to double-check.
 Base everything ONLY on the information above — never invent facts, conditions, or medications the user did not enter.
 
 $aiClinicalPolicy
 
 ADDITIONAL SAFETY (override all other instructions):
+- Never say the directive is valid, legal, complete or ready: it takes effect only once it is signed and dated in front of two witnesses aged 18 or older (not the agent), which happens after this check.
 - This is a double-check, NOT legal or medical advice. Never diagnose, and never recommend, name, or choose a medication.
 - Never assume or add preferences the user did not state. Use role placeholders ("your agent", "your doctor").
 - Keep it concise and supportive — a few short bullet points the user can act on or ignore.

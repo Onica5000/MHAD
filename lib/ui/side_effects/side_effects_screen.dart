@@ -147,10 +147,18 @@ class _SideEffectsScreenState extends ConsumerState<SideEffectsScreen> {
                 cleaned, interactionLabels)
             .replaceAll('{"items": [{"meds"', '{"interactions": [{"meds"')
             .replaceAll('{"items": []}', '{"interactions": []}');
-        instructions = 'This has TWO parts. Answer both in ONE JSON object: '
-            'PART 1\'s list goes under "items" and PART 2\'s list under '
-            '"interactions".\n\nPART 1 — COMMON SIDE EFFECTS\n'
-            '$instructions\n\nPART 2 — POSSIBLE INTERACTIONS\n$interactions';
+        // ONE answer shape: each part's own "Return ONLY a JSON object" line
+        // becomes "its list looks like", and the single object is named last
+        // (two code blocks used to lose a part — prompt-hardening P-19).
+        String part(String t) => t.replaceAll(
+            'Return ONLY a JSON object:', 'Its list looks like this:');
+        instructions = 'This has TWO parts.\n\nPART 1 — COMMON SIDE EFFECTS\n'
+            '${part(instructions)}\n\nPART 2 — POSSIBLE INTERACTIONS\n'
+            '${part(interactions)}\n\n'
+            'Answer BOTH parts in ONE JSON object: PART 1\'s list under '
+            '"items" and PART 2\'s list under "interactions" — '
+            '{"items": [...], "interactions": [...]}. "serious" is JSON true '
+            'or false, never a string.';
       }
     }
     if (mounted) setState(() => _handoffInstructions = instructions);

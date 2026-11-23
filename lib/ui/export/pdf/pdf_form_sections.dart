@@ -289,6 +289,20 @@ List<pw.Widget> _sharedMedTables({
       ],
     ];
 
+/// Which of the POA form's three medication rows is checked. They follow
+/// the agent-authority answer (a POA has no Medications step).
+({bool consent, bool consentWithLists, bool notAuthorized}) poaMedicationChecks(
+  DirectivePref prefs, {
+  required bool hasLists,
+}) {
+  final agentMay = prefs.agentCanConsentMedication;
+  return (
+    consent: agentMay && !hasLists,
+    consentWithLists: agentMay && hasLists,
+    notAuthorized: !agentMay,
+  );
+}
+
 List<pw.Widget> medicationPreferencesSection({
   required DirectivePref? prefs,
   required List<MedicationEntry> exceptions,
@@ -364,26 +378,29 @@ List<pw.Widget> medicationPreferencesSection({
         ),
       ];
     case MedsSectionVariant.poa:
+      // The POA form's medication section IS the agent's medication
+      // authority. A POA directive has no Medications step, so these rows
+      // follow the agent-authority answer ("Agent may consent to
+      // medication"), not medicationConsent — which a POA person can never
+      // set and which defaults to 'yes' (it used to check "I consent to the
+      // medications that my agent agrees to" even when the person said the
+      // agent may not).
+      final c = poaMedicationChecks(prefs, hasLists: hasLists);
       return [
         checkRow(
           'I consent to the medications that my agent agrees to after consultation '
           'with my treating physician and any other persons my agent considers appropriate.',
-          checked: (prefs.medicationConsent == consentYes ||
-                  prefs.medicationConsent == consentAgentDecides) &&
-              !hasLists,
+          checked: c.consent,
         ),
         checkRow(
           'I consent to the medications that my agent agrees to, with the following '
           'exceptions, limitations, and/or preferences:',
-          checked: (prefs.medicationConsent == consentYes ||
-                  prefs.medicationConsent == consentAgentDecides) &&
-              hasLists,
+          checked: c.consentWithLists,
         ),
         ...tables,
-        ...conditionalRows,
         checkRow(
           'My agent is not authorized to consent to the use of any medications.',
-          checked: prefs.medicationConsent == consentNo,
+          checked: c.notAuthorized,
         ),
       ];
   }

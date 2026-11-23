@@ -6,6 +6,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/crisis_detector.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
 import 'package:mhad/ui/ai/ai_handoff_panel.dart';
 import 'package:mhad/ai/handoff/handoff_task.dart';
@@ -21,6 +23,8 @@ import 'package:mhad/ai/document_extractor.dart';
 import 'package:mhad/ai/smart_fill_service.dart';
 import 'package:mhad/data/database/app_database.dart';
 import 'package:mhad/domain/model/directive.dart';
+import 'package:mhad/domain/model/other_instructions.dart';
+import 'package:mhad/domain/model/records_disclosure.dart';
 import 'package:mhad/providers/app_providers.dart';
 import 'package:mhad/providers/assistant_providers.dart';
 import 'package:mhad/providers/kept_documents_provider.dart';
@@ -30,6 +34,7 @@ import 'package:mhad/services/geo_service.dart';
 import 'package:mhad/ui/router.dart';
 import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:mhad/utils/a11y_announce.dart';
+import 'package:mhad/utils/input_formatters.dart';
 import 'package:mhad/ui/widgets/ai_consent_dialog.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:mhad/ui/widgets/friendly_error.dart';
@@ -149,6 +154,8 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _validated = null;
     _reviewChecked = {};
     _reviewEdited = {};
+    _reviewWarnings = {};
+    _reviewNotes = {};
     _smartResult = null;
     _smartChecked = {};
     _smartEdited = {};
@@ -354,6 +361,13 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   ValidatedExtractionResult? _validated;
   Map<String, bool> _reviewChecked = {};
   Map<String, String> _reviewEdited = {};
+
+  /// Review key → what's wrong with its date of birth / ZIP / phone (the
+  /// wizard's own checks, field audit O3). Such a row starts unchecked.
+  Map<String, String> _reviewWarnings = {};
+
+  /// Review key → a plain note shown under the row (not a problem).
+  Map<String, String> _reviewNotes = {};
 
   /// Reconciliation items (priority + conflict) for the review step, built from
   /// the extracted values vs the directive's current values.
@@ -583,10 +597,16 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     }
 
     if (merged == null || merged.isEmpty) {
+      // Nothing to fill — but the AI may have said why (unreadable, cut off).
+      final notes = merged?.checkNotes ?? const <String>[];
       setState(() {
-        _error = fileCount == 1
+        final base = fileCount == 1
             ? context.l10n.pipelineNoMedicalInfoSingle
             : context.l10n.pipelineNoMedicalInfoMulti(fileCount);
+        _error = notes.isEmpty
+            ? base
+            : '$base\n\n${context.l10n.pipelineAiNotes}\n'
+                '${notes.map((n) => '• $n').join('\n')}';
         _step = _PipelineStep.pick;
       });
       return;
@@ -611,6 +631,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     if (cancelled()) return;
     await _buildReconciliation();
     if (cancelled()) return;
+    _applyFormatChecks();
 
     setState(() => _step = _PipelineStep.review);
   }

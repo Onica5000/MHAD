@@ -90,10 +90,17 @@ class DocumentExtractionResult {
   final String? activities;
   final String? crisisIntervention;
   final String? petCustody;
+  final String? reproductiveHealth;
   final String? childrenCustody;
   final String? familyNotification;
   final String? recordsDisclosure;
+  final String? recordsAuthorized;
+  final String? recordsNotAuthorized;
   final String? other;
+
+  /// The AI's "please check" notes — shown at the top of the review, never
+  /// applied (field audit O2). Filtered by [parseCheckNotes].
+  final List<String> checkNotes;
 
   // ── Personal information (PII) ───────────────────────────────────────────
   // Autofill is the ONE place the AI is allowed to read/return PII, so the
@@ -137,10 +144,14 @@ class DocumentExtractionResult {
     this.activities,
     this.crisisIntervention,
     this.petCustody,
+    this.reproductiveHealth,
     this.childrenCustody,
     this.familyNotification,
     this.recordsDisclosure,
+    this.recordsAuthorized,
+    this.recordsNotAuthorized,
     this.other,
+    this.checkNotes = const [],
     this.personalInfo = const ExtractedPersonalInfo(),
   });
 
@@ -176,9 +187,12 @@ class DocumentExtractionResult {
       activities == null &&
       crisisIntervention == null &&
       petCustody == null &&
+      reproductiveHealth == null &&
       childrenCustody == null &&
       familyNotification == null &&
       recordsDisclosure == null &&
+      recordsAuthorized == null &&
+      recordsNotAuthorized == null &&
       other == null &&
       personalInfo.isEmpty;
 
@@ -229,9 +243,19 @@ class DocumentExtractionResult {
       activities: _mergeText(activities, other.activities),
       crisisIntervention: _mergeText(crisisIntervention, other.crisisIntervention),
       petCustody: _mergeText(petCustody, other.petCustody),
+      reproductiveHealth:
+          _mergeText(reproductiveHealth, other.reproductiveHealth),
       childrenCustody: _mergeText(childrenCustody, other.childrenCustody),
       familyNotification: _mergeText(familyNotification, other.familyNotification),
       recordsDisclosure: _mergeText(recordsDisclosure, other.recordsDisclosure),
+      recordsAuthorized: _mergeText(recordsAuthorized, other.recordsAuthorized),
+      recordsNotAuthorized:
+          _mergeText(recordsNotAuthorized, other.recordsNotAuthorized),
+      checkNotes: [
+        ...checkNotes,
+        for (final n in other.checkNotes)
+          if (!checkNotes.contains(n)) n,
+      ].take(kMaxMergedCheckNotes).toList(),
       other: _mergeText(this.other, other.other),
       personalInfo: personalInfo.merge(other.personalInfo),
     );
@@ -369,12 +393,12 @@ class DocumentExtractionResult {
       experimentalConsent: optStr(json['experimental_consent']),
       drugTrialConsent: optStr(json['drug_trial_consent']),
       medicationConsent: optStr(json['medication_consent']),
-      triggerTwoProfessionals: json['trigger_two_professionals'] as bool?,
-      triggerCourtOrder: json['trigger_court_order'] as bool?,
+      triggerTwoProfessionals: optBool(json['trigger_two_professionals']),
+      triggerCourtOrder: optBool(json['trigger_court_order']),
       triggerInvoluntaryCommitment:
-          json['trigger_involuntary_commitment'] as bool?,
+          optBool(json['trigger_involuntary_commitment']),
       roomPreferencesNote: optStr(json['room_preferences_note']),
-      sameGenderRoommate: json['same_gender_roommate'] as bool?,
+      sameGenderRoommate: optBool(json['same_gender_roommate']),
       roomPreferenceChips: json['room_preference_chips'] is List
           ? (json['room_preference_chips'] as List)
               .map((e) => e.toString())
@@ -382,23 +406,27 @@ class DocumentExtractionResult {
               .toList()
           : const [],
       roommateGenderMatch: optStr(json['roommate_gender_match']),
-      guardianCanRevoke: json['guardian_can_revoke'] as bool?,
+      guardianCanRevoke: optBool(json['guardian_can_revoke']),
       guardianCanRevokeNote: optStr(json['guardian_can_revoke_note']),
       crisisPlan: json['crisis_plan'] is Map<String, dynamic>
           ? ExtractedCrisisPlan.fromJson(
               json['crisis_plan'] as Map<String, dynamic>)
           : null,
-      agentCanConsentMedication: json['agent_can_consent_medication'] as bool?,
-      selfBindingUlysses: json['self_binding_ulysses'] as bool?,
+      agentCanConsentMedication: optBool(json['agent_can_consent_medication']),
+      selfBindingUlysses: optBool(json['self_binding_ulysses']),
       healthHistory: optStr(json['health_history']),
       dietary: optStr(json['dietary']),
       religious: optStr(json['religious']),
       activities: optStr(json['activities']),
       crisisIntervention: optStr(json['crisis_intervention']),
       petCustody: optStr(json['pet_custody']),
+      reproductiveHealth: optStr(json['reproductive_health']),
       childrenCustody: optStr(json['children_custody']),
       familyNotification: optStr(json['family_notification']),
       recordsDisclosure: optStr(json['records_disclosure']),
+      recordsAuthorized: optStr(json['records_authorized']),
+      recordsNotAuthorized: optStr(json['records_not_authorized']),
+      checkNotes: parseCheckNotes(json['check_notes']),
       other: optStr(json['other']),
       personalInfo: ExtractedPersonalInfo.fromJson(
           json['personal_info'] is Map<String, dynamic>
@@ -439,9 +467,14 @@ class DocumentExtractionResult {
         .whereType<Map<String, dynamic>>()
         .map((a) => ExtractedAllergy(
               substance: a['substance']?.toString() ?? '',
-              kind: a['kind']?.toString() ?? 'drug',
-              severity: a['severity']?.toString() ?? 'moderate',
-              reactions: optStr(a['reactions']),
+              // Unknown kind is "other", never "drug" (a peanut or latex
+              // allergy is not a drug allergy); an unstated severity stays
+              // "moderate" for storage but is flagged in the review (P-12).
+              kind: optStr(a['kind']) ?? 'other',
+              severity: optStr(a['severity']) ?? 'moderate',
+              severityStated: const {'mild', 'moderate', 'severe'}
+                  .contains(optStr(a['severity'])?.toLowerCase()),
+              reactions: optStr(a['reactions'], listSeparator: ', '),
               notes: optStr(a['notes']),
             ))
         .where((a) => a.substance.isNotEmpty)
@@ -551,7 +584,14 @@ class ExtractedDiagnosis {
   final String name;
   final String? icdCode;
 
-  const ExtractedDiagnosis({required this.name, this.icdCode});
+  /// Whether [icdCode] is a real ICD-10-CM code (checked against the NLM
+  /// registry during review). Null = no code, or not checked.
+  final bool? codeFound;
+
+  const ExtractedDiagnosis({required this.name, this.icdCode, this.codeFound});
+
+  ExtractedDiagnosis withCodeFound(bool found) =>
+      ExtractedDiagnosis(name: name, icdCode: icdCode, codeFound: found);
 
   String get display => icdCode != null && icdCode!.isNotEmpty
       ? '$name [$icdCode]'
@@ -577,16 +617,22 @@ class ExtractedAllergy {
     required this.substance,
     this.kind = 'drug',
     this.severity = 'moderate',
+    this.severityStated = true,
     this.reactions,
     this.notes,
     this.rxNormVerified = false,
   });
+
+  /// False when the AI gave no recognisable severity — the review says it
+  /// will be saved as "moderate" so the person can change it (P-12).
+  final bool severityStated;
 
   /// Copy with an updated [rxNormVerified] flag (other fields unchanged).
   ExtractedAllergy withVerified(bool verified) => ExtractedAllergy(
         substance: substance,
         kind: kind,
         severity: severity,
+        severityStated: severityStated,
         reactions: reactions,
         notes: notes,
         rxNormVerified: verified,
@@ -796,4 +842,42 @@ class ExtractedPersonalInfo {
       guardian: ExtractedPerson.maybe(j['guardian']),
     );
   }
+}
+
+/// At most this many "please check" notes from one AI answer, and after
+/// merging the answers for several documents.
+const kMaxCheckNotes = 8;
+const kMaxMergedCheckNotes = 12;
+const _kMaxCheckNoteChars = 280;
+
+final _linkLike = RegExp(r'https?://|www\.|[\w.+-]+@[\w-]+\.[a-z]{2,}',
+    caseSensitive: false);
+final _digitRun = RegExp(r'\d[\d\s().\-/]*\d');
+final _dateLike = RegExp(r'^\d{1,2}[/.\-]\d{1,2}[/.\-]\d{2,4}$');
+
+/// The AI's "please check" notes (field audit O2), made safe to show. The AI
+/// read an untrusted document, so a note with a link or an email address is
+/// dropped, and a long run of digits (a phone, ID or account number) is
+/// masked — a note must never hand the person a number to call or echo an ID
+/// number. Dates stay: a note may say which date looks wrong.
+List<String> parseCheckNotes(Object? raw) {
+  if (raw is String) raw = [raw];
+  if (raw is! List) return const [];
+  final out = <String>[];
+  for (final item in raw) {
+    if (item is! String) continue;
+    var note = item.replaceAll(RegExp(r'\s+'), ' ').trim();
+    if (note.isEmpty || _linkLike.hasMatch(note)) continue;
+    note = note.replaceAllMapped(_digitRun, (m) {
+      final s = m[0]!;
+      final digits = s.replaceAll(RegExp(r'\D'), '').length;
+      return digits >= 7 && !_dateLike.hasMatch(s) ? '…' : s;
+    });
+    if (note.length > _kMaxCheckNoteChars) {
+      note = '${note.substring(0, _kMaxCheckNoteChars - 1).trimRight()}…';
+    }
+    if (!out.contains(note)) out.add(note);
+    if (out.length == kMaxCheckNotes) break;
+  }
+  return out;
 }

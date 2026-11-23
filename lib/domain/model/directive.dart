@@ -73,13 +73,15 @@ extension FormTypeExt on FormType {
       this == FormType.combined || this == FormType.poa;
 
   /// Returns the visible steps in display order for this form type.
-  /// Combined 11 / Declaration 9 / POA 5.
+  /// Combined 11 / Declaration 10 / POA 6.
   ///
-  /// Declaration omits People I trust + Guardian (no agent flow).
-  /// POA drops the clinically-specific preference steps (Where I want care,
-  /// Diagnoses, Medications, Allergies, Procedures & research) AND "Anything
-  /// else" — the POA is purely about appointing the agent, who then decides
-  /// what isn't written.
+  /// Declaration omits People I trust (no agent flow).
+  /// POA drops the preference steps (Where I want care, Diagnoses,
+  /// Medications, Allergies) AND "Anything else" — the POA appoints the agent,
+  /// who decides what isn't written. It KEEPS Procedures & research: the
+  /// official POA form asks whether the agent is authorized to consent to ECT,
+  /// experimental studies and drug trials (part D.3-5), and offers only those
+  /// two choices (user, 2026-11-22).
   List<WizardStep> get steps {
     final isPoa = this == FormType.poa;
     return [
@@ -98,7 +100,9 @@ extension FormTypeExt on FormType {
       // cross-fills the other.
       if (!isPoa) WizardStep.allergies,
       if (!isPoa) WizardStep.medications,
-      if (!isPoa) WizardStep.proceduresResearch,
+      // Every form: on the POA it holds only "my agent is / is not
+      // authorized" (the official form's two choices).
+      WizardStep.proceduresResearch,
       // "Anything else" free-form step: Declaration + Combined only. POA omits
       // it — that form is purely about appointing the agent.
       if (!isPoa) WizardStep.anythingElse,

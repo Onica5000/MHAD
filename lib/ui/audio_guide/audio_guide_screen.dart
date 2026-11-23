@@ -1,4 +1,5 @@
 import 'package:mhad/data/app_data/app_data.dart' show appData;
+import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/utils/file_names.dart';
 import 'package:flutter/material.dart';
 import 'package:mhad/ui/widgets/design/back_link.dart';
@@ -14,16 +15,20 @@ import 'package:mhad/ui/widgets/design/info_banner.dart';
 import 'package:mhad/ui/widgets/design/section_label.dart';
 import 'package:printing/printing.dart';
 
-/// In-app guide for the voice-autofill feature: how to record an audio file
-/// that fills the directive, plus the read-aloud questionnaire (printable).
+/// The voice questionnaire, online and printable: how to record, then the
+/// read-aloud script — one section per wizard step, grouped into the three
+/// recordings. [form] (from `?form=` when opened for a directive) shows only
+/// that form's steps, numbered as in the app.
 class AudioGuideScreen extends StatelessWidget {
-  const AudioGuideScreen({super.key});
+  const AudioGuideScreen({super.key, this.form});
+
+  final FormType? form;
 
   Future<void> _printQuestionnaire(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
     try {
-      final bytes = await buildAudioQuestionnairePdf(l10n);
+      final bytes = await buildAudioQuestionnairePdf(l10n, form: form);
       await Printing.layoutPdf(
         onLayout: (_) async => bytes,
         name: mhadFileName([kFileNamePrefix, 'voice-questionnaire']),
@@ -31,8 +36,7 @@ class AudioGuideScreen extends StatelessWidget {
     } catch (e) {
       debugPrint('Audio questionnaire print failed: $e');
       messenger.showSnackBar(
-        SnackBar(
-            content: Text(l10n.audioGuideCouldnTOpenTheQuestionnaire)),
+        SnackBar(content: Text(l10n.audioGuideCouldnTOpenTheQuestionnaire)),
       );
     }
   }
@@ -40,7 +44,8 @@ class AudioGuideScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Theme.of(context).mhadPalette;
-    final q = AudioQuestionnaire(context.l10n);
+    final l = context.l10n;
+    final q = AudioQuestionnaire(l, form: form);
     return Scaffold(
       backgroundColor: p.scaffoldBackground,
       body: Column(
@@ -49,134 +54,130 @@ class AudioGuideScreen extends StatelessWidget {
           const BackLink(),
           Expanded(
             child: ListView(
-        padding: DesignTokens.pagePadding,
-        children: [
-          PageHero(
-            art: AppArt.flowAudio,
-            title: EditorialHeading(
-              text: context.l10n.audioGuideRecordYourWishesByVoice,
-            ),
-            lead: (appData.ai.apiModeVisible ? context.l10n.audioGuideDescribeYourWishesOutLoud : context.l10n.audioGuideDescribeYourWishesOutLoudHandoff),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: () => _printQuestionnaire(context),
-              icon: const Icon(Icons.print_outlined, size: 18),
-              label: Text(context.l10n.audioGuidePrintTheQuestionnaire),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            context.l10n.audioGuidePrintItToReadAloud,
-            style: TextStyle(
-              fontSize: 12,
-              color: p.textMuted,
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // ── Recording tips & limits ──
-          SectionLabel(context.l10n.audioGuideHowToRecord),
-          const SizedBox(height: 8),
-          _tip(p, Icons.high_quality_outlined,
-              context.l10n.audioGuideTipQualityDoesnTMatterAny),
-          _tip(p, Icons.timer_outlined,
-              (appData.ai.apiModeVisible ? context.l10n.audioGuideTipKeepEachClipShortUnder : context.l10n.audioGuideTipKeepEachClipShortUnderHandoff)),
-          _tip(p, Icons.spellcheck_outlined,
-              context.l10n.audioGuideTipSayMedicationAndDoctorNames),
-          const SizedBox(height: 12),
-          InfoBanner(
-            icon: Icons.privacy_tip_outlined,
-            variant: InfoBannerVariant.warning,
-            text: (appData.ai.apiModeVisible ? context.l10n.audioGuideToTranscribeYourRecordingIncluding : context.l10n.audioGuideToTranscribeYourRecordingIncludingHandoff),
-          ),
-          const SizedBox(height: 24),
-
-          // ── The questionnaire ──
-          Row(
-            children: [
-              Expanded(child: SectionLabel(q.title)),
-              TextButton.icon(
-                onPressed: () => _printQuestionnaire(context),
-                icon: const Icon(Icons.print_outlined, size: 16),
-                label: Text(context.l10n.audioGuidePrint),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minimumSize: const Size(0, 32),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: DesignTokens.pagePadding,
+              children: [
+                PageHero(
+                  art: AppArt.flowAudio,
+                  title: EditorialHeading(text: l.audioGuideRecordYourWishesByVoice),
+                  lead: appData.ai.apiModeVisible
+                      ? l.audioGuideDescribeYourWishesOutLoud
+                      : l.audioGuideDescribeYourWishesOutLoudHandoff,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            q.intro,
-            style: TextStyle(
-              fontSize: 14, height: MhadType.leadingParagraph,
-              color: p.textMuted,
-            ),
-          ),
-          const SizedBox(height: 12),
-          for (final s in q.sections) _section(context, p, s),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: () => _printQuestionnaire(context),
+                    icon: const Icon(Icons.print_outlined, size: 18),
+                    label: Text(l.audioGuidePrintTheQuestionnaire),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(l.audioGuidePrintItToReadAloud,
+                    style: TextStyle(fontSize: 12, color: p.textMuted)),
+                const SizedBox(height: 20),
 
-          const SizedBox(height: 16),
-          SectionLabel(context.l10n.audioGuideWhatTheRecordingCanT),
-          const SizedBox(height: 4),
-          Text(
-            context.l10n.audioGuideSetTheseInTheApp,
-            style: TextStyle(
-              fontSize: 14,
-              color: p.textMuted,
+                // ── How to record ──
+                SectionLabel(l.audioGuideHowToRecord),
+                const SizedBox(height: 8),
+                _tip(p, Icons.high_quality_outlined, l.audioGuideTipQualityDoesnTMatterAny),
+                _tip(
+                    p,
+                    Icons.timer_outlined,
+                    appData.ai.apiModeVisible
+                        ? l.audioGuideTipKeepEachClipShortUnder
+                        : l.audioGuideTipKeepEachClipShortUnderHandoff),
+                _tip(p, Icons.spellcheck_outlined, l.audioGuideTipSayMedicationAndDoctorNames),
+                const SizedBox(height: 12),
+                InfoBanner(
+                  icon: Icons.privacy_tip_outlined,
+                  variant: InfoBannerVariant.warning,
+                  text: appData.ai.apiModeVisible
+                      ? l.audioGuideToTranscribeYourRecordingIncluding
+                      : l.audioGuideToTranscribeYourRecordingIncludingHandoff,
+                ),
+                const SizedBox(height: 24),
+
+                // ── The questionnaire ──
+                Row(
+                  children: [
+                    Expanded(child: SectionLabel(q.title)),
+                    TextButton.icon(
+                      onPressed: () => _printQuestionnaire(context),
+                      icon: const Icon(Icons.print_outlined, size: 16),
+                      label: Text(l.audioGuidePrint),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: const Size(0, 32),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(q.intro,
+                    style: TextStyle(
+                        fontSize: 14, height: MhadType.leadingParagraph, color: p.textMuted)),
+                const SizedBox(height: 8),
+                Text(q.formNote,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        height: MhadType.leadingParagraph,
+                        color: p.text)),
+                const SizedBox(height: 16),
+                for (final part in q.parts) ...[
+                  _partHeader(p, q.partTitle(part), q.partHow(part)),
+                  const SizedBox(height: 8),
+                  for (final s in q.sectionsIn(part)) _section(context, p, q, s),
+                  const SizedBox(height: 12),
+                ],
+
+                SectionLabel(l.audioGuideWhatTheRecordingCanT),
+                const SizedBox(height: 4),
+                Text(l.audioGuideSetTheseInTheApp,
+                    style: TextStyle(fontSize: 14, color: p.textMuted)),
+                const SizedBox(height: 6),
+                for (final item in q.cantDo) _bullet(p, item, muted: true),
+                const SizedBox(height: 16),
+                Text(q.closing,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        height: MhadType.leadingParagraph,
+                        color: p.text)),
+              ],
             ),
-          ),
-          const SizedBox(height: 6),
-          for (final item in q.cantDo) _bullet(p, item, muted: true),
-          const SizedBox(height: 16),
-          Text(
-            context.l10n.audioGuideWorthSayingOutLoudAutofill,
-            style: TextStyle(
-              fontSize: 14,
-              color: p.textMuted,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final item in q.nowCaptured) _bullet(p, item, muted: true),
-          const SizedBox(height: 6),
-          _bullet(p, q.formTypeNote, muted: true),
-          const SizedBox(height: 16),
-          Text(
-            q.closing,
-            style: TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
-              color: p.text,
-            ),
-          ),
-        ],
-      ),
           ),
         ],
       ),
     );
   }
 
+  Widget _partHeader(MhadPalette p, String title, String how) => Semantics(
+        header: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: p.primary)),
+            const SizedBox(height: 2),
+            Text(how, style: TextStyle(fontSize: 14, color: p.textMuted)),
+          ],
+        ),
+      );
+
   Widget _tip(MhadPalette p, IconData icon, String text) => Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 17, color: p.primary),
+            Icon(icon, size: 16, color: p.primary),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 14, height: MhadType.leadingParagraph,
-                  color: p.text,
-                ),
-              ),
+              child: Text(text,
+                  style: TextStyle(
+                      fontSize: 14, height: MhadType.leadingParagraph, color: p.text)),
             ),
           ],
         ),
@@ -188,89 +189,87 @@ class AudioGuideScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('•  ',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: muted ? p.textMuted : p.text)),
+                style: TextStyle(fontSize: 14, color: muted ? p.textMuted : p.text)),
             Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 14, height: MhadType.leadingParagraph,
-                  color: muted ? p.textMuted : p.text,
-                ),
-              ),
+              child: Text(text,
+                  style: TextStyle(
+                      fontSize: 14,
+                      height: MhadType.leadingParagraph,
+                      color: muted ? p.textMuted : p.text)),
             ),
           ],
         ),
       );
 
-  Widget _section(BuildContext context, MhadPalette p, AudioQSection s) => DesignCard(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        radius: DesignTokens.inputRadius,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${s.number}.  ${s.title}',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: p.text,
+  Widget _section(BuildContext context, MhadPalette p, AudioQuestionnaire q, AudioQSection s) {
+    final stepLabel = q.stepLabel(s);
+    final formsLabel = q.formsLabel(s);
+    return DesignCard(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      radius: DesignTokens.inputRadius,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(s.title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: p.text)),
               ),
-            ),
-            if (s.appliesWhen != null) ...[
-              const SizedBox(height: 1),
-              Text(
-                s.appliesWhen!,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontStyle: FontStyle.italic,
-                  color: p.textMuted,
-                ),
-              ),
+              if (stepLabel != null) ...[
+                const SizedBox(width: 8),
+                Text(stepLabel.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: MhadType.trackingLabel,
+                        color: p.textMuted)),
+              ],
             ],
-            const SizedBox(height: 8),
-            for (final prompt in s.prompts) _bullet(p, prompt),
-            if (s.example != null) ...[
-              const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: p.surface,
-                  borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
-                ),
-                child: Text(
-                  context.l10n.audioGuideExample(s.example!),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic, height: MhadType.leadingParagraph,
-                    color: p.textMuted,
-                  ),
-                ),
-              ),
-            ],
-            if (s.note != null) ...[
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.info_outline, size: 14, color: p.textMuted),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      s.note!,
-                      style: TextStyle(
-                        fontSize: 12, height: MhadType.leadingParagraph,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          ),
+          if (formsLabel != null) ...[
+            const SizedBox(height: 2),
+            Text(formsLabel,
+                style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: p.textMuted)),
           ],
-        ),
-      );
+          const SizedBox(height: 8),
+          for (final prompt in s.prompts) _bullet(p, prompt.text),
+          if (s.example != null) ...[
+            const SizedBox(height: 6),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: p.surface,
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSm),
+              ),
+              child: Text(context.l10n.audioGuideExample(s.example!),
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      height: MhadType.leadingParagraph,
+                      color: p.textMuted)),
+            ),
+          ],
+          if (s.note != null) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.info_outline, size: 14, color: p.textMuted),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(s.note!,
+                      style: TextStyle(
+                          fontSize: 12, height: MhadType.leadingParagraph, color: p.textMuted)),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }

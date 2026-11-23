@@ -611,7 +611,37 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   //   1. Your official directive — configure (copy type, language) then Download.
   //   2. Keep a copy — wallet card + an editable progress file.
   //   3. Advanced — machine-readable data exports.
-  List<Widget> _buildDistributionChildren() => [
+  /// The primary action with its one-line explanation. Wide layout: pinned
+  /// under the scrolling rail, so it's always in view.
+  Widget _openPdfAction() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _railBody(
+            context.l10n.exportThisOpensYourDirectiveIn,
+          ),
+          const SizedBox(height: 8),
+          // Opens the PDF in a viewer rather than force-downloading (see
+          // _generateAndShare).
+          // Its own node: in one block with the sentence above, a phone's
+          // screen reader merged the two into one "button" (inventory diff).
+          Semantics(
+            container: true,
+            button: true,
+            label: context.l10n.exportOpenThePdfDirectiveIn,
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: _isGenerating ? null : _generateAndShare,
+                icon: const Icon(Icons.open_in_new),
+                label: Text(context.l10n.exportOpenPdf),
+              ),
+            ),
+          ),
+        ],
+      );
+
+  List<Widget> _buildDistributionChildren({bool includeOpenPdf = true}) => [
         // ── 1. Your official directive ───────────────────────────────────
         // Group headers (UX audit C5): the narrow layout renders this list
         // as one long scroll, so the three groups get visible SectionLabel
@@ -646,6 +676,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
         const SizedBox(height: 8),
         SegmentedButton<bool>(
+          // Full width, equal halves; the fill shows the choice (the extra
+          // check made "Legal (info only)" wrap on phones).
+          expandedInsets: EdgeInsets.zero,
+          showSelectedIcon: false,
           segments: [
             ButtonSegment(
               value: false,
@@ -670,25 +704,11 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                 ),
           ),
         ],
-        const SizedBox(height: 16),
-        _railBody(
-          context.l10n.exportThisOpensYourDirectiveIn,
-        ),
-        const SizedBox(height: 8),
-        // Primary action — placed after the settings that control it. Opens the
-        // PDF in a viewer rather than force-downloading (see _generateAndShare).
-        Semantics(
-          button: true,
-          label: context.l10n.exportOpenThePdfDirectiveIn,
-          child: SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: _isGenerating ? null : _generateAndShare,
-              icon: const Icon(Icons.open_in_new),
-              label: Text(context.l10n.exportOpenPdf),
-            ),
-          ),
-        ),
+        // Primary action — placed after the settings that control it.
+        if (includeOpenPdf) ...[
+          const SizedBox(height: 16),
+          _openPdfAction(),
+        ],
         if (_directive != null) ...[
           const SizedBox(height: 20),
           const Divider(),
@@ -853,26 +873,44 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
             color: p.card,
             shape: Border(left: BorderSide(color: p.border)),
             child: FocusTraversalGroup(
-            child: SingleChildScrollView(
-              padding: DesignTokens.pagePadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (_isGenerating)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: LinearProgressIndicator(
-                          borderRadius: BorderRadius.circular(DesignTokens.radiusXs)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: DesignTokens.pagePadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (_isGenerating)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: LinearProgressIndicator(
+                                borderRadius: BorderRadius.circular(DesignTokens.radiusXs)),
+                          ),
+                        _buildLegalDisclaimerCard(),
+                        const SizedBox(height: 16),
+                        ..._buildSectionCheckboxChildren(),
+                        const SizedBox(height: 16),
+                        _buildUnencryptedBanner(),
+                        const SizedBox(height: 4),
+                        ..._buildDistributionChildren(includeOpenPdf: false),
+                      ],
                     ),
-                  _buildLegalDisclaimerCard(),
-                  const SizedBox(height: 16),
-                  ..._buildSectionCheckboxChildren(),
-                  const SizedBox(height: 16),
-                  _buildUnencryptedBanner(),
-                  const SizedBox(height: 4),
-                  ..._buildDistributionChildren(),
-                ],
-              ),
+                  ),
+                ),
+                // Always in view: the page's main action (it was below the
+                // fold at 900px, visual review 2026-11-22).
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border(top: BorderSide(color: p.border)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                    child: _openPdfAction(),
+                  ),
+                ),
+              ],
             ),
           ),
         )),

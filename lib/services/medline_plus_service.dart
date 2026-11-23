@@ -34,12 +34,14 @@ class MedlinePlusService {
 
   /// Look up plain-language education for an ICD-10-CM [code]
   /// (e.g. `F33.1`). Returns null when MedlinePlus has nothing for the code.
-  static Future<MedlinePlusTopic?> forIcd10(String code) async {
+  static Future<MedlinePlusTopic?> forIcd10(String code,
+      {String languageCode = 'en'}) async {
     final c = code.trim();
     if (c.isEmpty) return null;
-    final key = 'icd:$c';
+    final lang = _lang(languageCode);
+    final key = 'icd:$lang:$c';
     if (_cache.containsKey(key)) return _cache[key];
-    final topic = await _forCode(_icd10Cs, c);
+    final topic = await _forCode(_icd10Cs, c, lang);
     _cache[key] = topic;
     return topic;
   }
@@ -48,23 +50,25 @@ class MedlinePlusService {
   /// name → RxCUI via RxNav first (MedlinePlus keys meds off RxNorm codes),
   /// then fetches the topic. Returns null when the drug can't be resolved or
   /// MedlinePlus has nothing for it.
-  static Future<MedlinePlusTopic?> forMedication(String medName) async {
+  static Future<MedlinePlusTopic?> forMedication(String medName,
+      {String languageCode = 'en'}) async {
     final base = _drugBaseName(medName);
     if (base.length < 2) return null;
-    final key = 'med:$base';
+    final lang = _lang(languageCode);
+    final key = 'med:$lang:$base';
     if (_cache.containsKey(key)) return _cache[key];
     MedlinePlusTopic? topic;
     final rxcui = await _rxcuiForName(base);
     if (rxcui != null) {
       // 1) Try the concept the name resolved to directly.
-      topic = await _forCode(_rxNormCs, rxcui);
+      topic = await _forCode(_rxNormCs, rxcui, lang);
       // 2) Fallback: MedlinePlus often carries consumer content only at the
       //    INGREDIENT (generic) level, not for a specific strength or brand.
       //    If the exact concept has no topic, retry with its ingredient RxCUI.
       if (topic == null) {
         final ingredient = await _ingredientRxcui(rxcui);
         if (ingredient != null && ingredient != rxcui) {
-          topic = await _forCode(_rxNormCs, ingredient);
+          topic = await _forCode(_rxNormCs, ingredient, lang);
         }
       }
     }
@@ -73,10 +77,16 @@ class MedlinePlusService {
   }
 
   /// Fetch + parse a MedlinePlus Connect topic for a code in code-system [cs].
-  static Future<MedlinePlusTopic?> _forCode(String cs, String code) async {
+  /// MedlinePlus Connect answers in English or Spanish
+  /// (`informationRecipient.languageCode.c`; verified 2026-11-22).
+  static String _lang(String code) => code == 'es' ? 'es' : 'en';
+
+  static Future<MedlinePlusTopic?> _forCode(
+      String cs, String code, String lang) async {
     final uri = Uri.parse('$_base?knowledgeResponseType=application/json'
         '&mainSearchCriteria.v.cs=$cs'
-        '&mainSearchCriteria.v.c=${Uri.encodeComponent(code)}');
+        '&mainSearchCriteria.v.c=${Uri.encodeComponent(code)}'
+        '&informationRecipient.languageCode.c=$lang');
     try {
       final resp =
           await _client.get(uri).timeout(appData.config.clinicalApiTimeout);

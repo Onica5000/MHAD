@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
+import 'package:mhad/ai/crisis_detector.dart';
+import 'package:mhad/ui/widgets/design/crisis_support_banner.dart';
 import 'package:mhad/data/app_data/app_data.dart' show appData;
 import 'package:mhad/ui/ai/ai_handoff_panel.dart';
 import 'package:mhad/ai/pii_stripper.dart';
@@ -127,7 +129,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
     showMedlinePlusDialog(
       context,
       title: name,
-      future: MedlinePlusService.forIcd10(icdCode),
+      future: MedlinePlusService.forIcd10(icdCode,
+          languageCode: context.l10n.localeName),
     );
   }
 
@@ -479,7 +482,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.all(16),
+          : DesignTokens.pagePadding,
       children: [
         WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
         const SizedBox(height: 8),
@@ -745,8 +748,11 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               ),
             ),
           ),
-        const SizedBox(height: 8),
+        // 16: the floating labels sit on the border, so 8 looked cramped.
+        const SizedBox(height: 16),
         Row(
+          // Top-aligned: the phone field's error must not push Specialty down.
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,
@@ -856,7 +862,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
 /// description; [onSuggest] returns AI-suggested conditions already confirmed
 /// against the ICD-10 registry; tapping one calls [onAdd]. Suggestion-only — it
 /// never asserts a diagnosis.
-class _DescribeConditionDialog extends StatefulWidget {
+class _DescribeConditionDialog extends ConsumerStatefulWidget {
   final Future<List<IcdCondition>> Function(String description) onSuggest;
   final Future<bool> Function(IcdCondition condition) onAdd;
 
@@ -874,11 +880,12 @@ class _DescribeConditionDialog extends StatefulWidget {
   });
 
   @override
-  State<_DescribeConditionDialog> createState() =>
+  ConsumerState<_DescribeConditionDialog> createState() =>
       _DescribeConditionDialogState();
 }
 
-class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
+class _DescribeConditionDialogState
+    extends ConsumerState<_DescribeConditionDialog> {
   final _ctrl = TextEditingController();
   bool _loading = false;
   bool _searched = false;
@@ -952,6 +959,7 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const CrisisSupportBanner(),
             Text(
               l10n.diagnosesDescribeIntro,
               style: TextStyle(
@@ -966,7 +974,14 @@ class _DescribeConditionDialogState extends State<_DescribeConditionDialog> {
               maxLines: 4,
               autofocus: true,
               textInputAction: TextInputAction.search,
-              onChanged: (_) => setState(() {}),
+              onChanged: (v) {
+                // The app's own 988 check (free, no AI) — this box asks
+                // people to describe what they experience (P-18).
+                if (looksLikeCrisis(v)) {
+                  ref.read(crisisSupportShownProvider.notifier).state = true;
+                }
+                setState(() {});
+              },
               onSubmitted: (_) =>
                   widget.onConfirmNames == null ? _find() : null,
               decoration: InputDecoration(

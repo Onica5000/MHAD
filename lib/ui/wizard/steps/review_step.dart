@@ -2,6 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mhad/data/database/app_database.dart';
+import 'package:mhad/constants.dart';
 import 'package:mhad/domain/agent_ext.dart';
 import 'package:mhad/l10n/l10n.dart';
 import 'package:mhad/utils/address_format.dart';
@@ -94,6 +95,41 @@ class _ReviewRowData {
     if (parts.isEmpty) return l10n.reviewStepNotProvidedYet;
     return parts.join(' · ');
   }
+}
+
+/// A stored consent value in the words its step shows — never the raw value
+/// ("agentDecides", "conditional:…"); '' when unset or unrecognized.
+/// [medication]: the medication step's own option titles. [poa]: the POA's
+/// official two choices (agent authorized / not authorized).
+String reviewConsentText(String? raw, AppLocalizations l,
+    {bool poa = false, bool medication = false}) {
+  final v = (raw ?? '').trim();
+  if (v.isEmpty) return '';
+  if (v.startsWith(consentConditionalPrefix)) {
+    final c = v.substring(consentConditionalPrefix.length).trim();
+    final t =
+        medication ? l.medsConsentConditional : l.consentChoiceConditionalTitle;
+    return c.isEmpty ? t : '$t: $c';
+  }
+  if (poa) {
+    return v == consentAgentDecides
+        ? l.reviewValueAgentAuthorized
+        : l.reviewValueAgentNotAuthorized;
+  }
+  if (medication) {
+    return switch (v) {
+      consentYes => l.medsConsentYes,
+      consentNo => l.medsConsentNo,
+      consentAgentDecides => l.medsStepAgentDecides,
+      _ => '',
+    };
+  }
+  return switch (v) {
+    consentYes => l.consentChoiceConsentTitle,
+    consentNo => l.consentChoiceNoConsentTitle,
+    consentAgentDecides => l.consentChoiceAgentDecidesTitle,
+    _ => '',
+  };
 }
 
 class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
@@ -225,22 +261,47 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.whereIWantCare:
+          // Facility names (stored "Name | place" per line), not the raw
+          // prefer / avoid / noPreference value.
+          String names(String? s) => (s ?? '')
+              .split('\n')
+              .map((x) => x.split('|').first.trim())
+              .where((x) => x.isNotEmpty)
+              .join(', ');
+          final preferredF = names(prefs?.preferredFacilityName);
+          final avoidF = names(prefs?.avoidFacilityName);
           rows.add(row(step, l.stepTitleWhereIWantCare, {
-            l.reviewStepTreatmentFacility: prefs?.treatmentFacilityPref ?? '',
-            l.reviewStepMedicationConsent: prefs?.medicationConsent ?? '',
+            l.reviewStepTreatmentFacility: preferredF.isNotEmpty
+                ? '${l.reviewStepPreferred}: $preferredF'
+                : (avoidF.isEmpty &&
+                        prefs?.treatmentFacilityPref == 'noPreference')
+                    ? l.guardianNomNoPreference
+                    : '',
+            l.reviewLabelFacilityAvoid:
+                avoidF.isEmpty ? '' : '${l.reviewLabelFacilityAvoid}: $avoidF',
+            l.reviewStepMedicationConsent: reviewConsentText(
+                prefs?.medicationConsent, l,
+                medication: true),
           }));
 
         case WizardStep.diagnoses:
           rows.add(row(step, l.reviewStepMedicalDiagnoses, {
-            for (final dx in data.diagnoses) dx.icdCode: dx.name,
+            // Keyed by position: diagnoses with no code (autofill can add
+            // them) were collapsing into one under the empty key.
+            for (final (i, dx) in data.diagnoses.indexed) 'dx$i': dx.name,
           }));
 
         case WizardStep.allergies:
           rows.add(row(step, l.stepTitleAllergies, {
             l.reviewStepAllergies: data.allergies
-                .map((a) => a.severity.isNotEmpty
-                    ? '${a.substance} (${a.severity})'
-                    : a.substance)
+                // Severity in the reader's words, not the stored value.
+                .map((a) => switch (a.severity) {
+                      'mild' => '${a.substance} (${l.allergiesSeverityMild})',
+                      'moderate' =>
+                        '${a.substance} (${l.allergiesSeverityModerate})',
+                      'severe' => '${a.substance} (${l.allergiesSeveritySevere})',
+                      _ => a.substance,
+                    })
                 .where((s) => s.trim().isNotEmpty)
                 .join(', '),
           }));
@@ -256,10 +317,19 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
           }));
 
         case WizardStep.proceduresResearch:
+          // Each choice in the words its screen shows, named by treatment.
+          final poa = widget.formType == FormType.poa;
+          String choice(String label, String? raw) {
+            final t = reviewConsentText(raw, l, poa: poa);
+            return t.isEmpty ? '' : '$label: $t';
+          }
           rows.add(row(step, l.stepTitleProceduresResearch, {
-            l.reviewStepEctConsent: prefs?.ectConsent ?? '',
-            l.procResearchExperimentalLabel: prefs?.experimentalConsent ?? '',
-            l.reviewStepDrugTrials: prefs?.drugTrialConsent ?? '',
+            l.reviewStepEctConsent:
+                choice(l.reviewStepEctConsent, prefs?.ectConsent),
+            l.procResearchExperimentalLabel: choice(
+                l.procResearchExperimentalLabel, prefs?.experimentalConsent),
+            l.reviewStepDrugTrials:
+                choice(l.reviewStepDrugTrials, prefs?.drugTrialConsent),
           }));
 
         case WizardStep.anythingElse:
@@ -339,7 +409,7 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.fromLTRB(20, 4, 20, 16),
+          : DesignTokens.pagePadding,
       children: [
         // The wizard's StepHead already shows the "Review" title and its
         // subtitle ("One last look… Tap any section to edit.") — this step
@@ -533,7 +603,8 @@ class _ReviewRow extends StatelessWidget {
                     data.hasContent
                         ? data.summary(context.l10n)
                         : context.l10n.reviewStepNoInfoEntered,
-                    maxLines: 1,
+                    // Up to three lines: one line cut most summaries short.
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12, height: MhadType.leadingUi,

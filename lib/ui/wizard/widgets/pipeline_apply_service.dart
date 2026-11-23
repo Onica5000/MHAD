@@ -11,6 +11,57 @@ part of 'document_pipeline_flow.dart';
 extension _PipelineApplyLogic on _PipelineScreenState {
   // ── Smart Fill generation ───────────────────────────────────────────
 
+  /// Smart-fill input: the document's conditions and medications plus what
+  /// the person already entered, so suggestions build on it and never
+  /// contradict it. (Nothing passed the person's entries before 2026-11-21:
+  /// the prompt "built on" empty fields and read the default consent values
+  /// as the person's choices.)
+  Future<SmartFillInput> _smartFillInput() async {
+    final repo = ref.read(directiveRepositoryProvider);
+    final id = widget.directiveId;
+    final d = await repo.getDirectiveById(id);
+    final p = await repo.getPreferences(id);
+    final instr = await repo.getAdditionalInstructions(id);
+    final meds = await repo.getMedications(id);
+    final other = OtherInstructions.parse(instr?.other ?? '');
+    List<String> medsOf(MedicationEntryType type) => [
+          for (final m in meds)
+            if (m.entryType == type.name && m.medicationName.trim().isNotEmpty)
+              m.medicationName.trim(),
+        ];
+    return SmartFillInput(
+      conditions: _validated!.icdConditions,
+      currentMedications: _validated!.validatedPreferredMedNames,
+      medicationsToAvoid: _validated!.validatedAvoidMedNames,
+      formType: widget.formType,
+      existingEffectiveCondition: d?.effectiveCondition ?? '',
+      existingFacilityPref: p?.treatmentFacilityPref ?? 'noPreference',
+      existingPreferredFacility: p?.preferredFacilityName ?? '',
+      existingAvoidFacility: p?.avoidFacilityName ?? '',
+      existingMedicationConsent: p?.medicationConsent ?? consentYes,
+      existingEctConsent: p?.ectConsent ?? consentNo,
+      existingExperimentalConsent: p?.experimentalConsent ?? consentNo,
+      existingDrugTrialConsent: p?.drugTrialConsent ?? consentNo,
+      existingAgentCanConsentMedication: p?.agentCanConsentMedication ?? true,
+      existingAgentAuthorityLimitations: p?.agentAuthorityLimitations ?? '',
+      existingHealthHistory: instr?.healthHistory ?? '',
+      existingCrisisIntervention: instr?.crisisIntervention ?? '',
+      existingActivities: instr?.activities ?? '',
+      existingDietary: instr?.dietary ?? '',
+      existingReligious: instr?.religious ?? '',
+      existingChildrenCustody: instr?.childrenCustody ?? '',
+      existingFamilyNotification: instr?.familyNotification ?? '',
+      existingRecordsDisclosure: instr?.recordsDisclosure ?? '',
+      existingPetCustody: instr?.petCustody ?? '',
+      existingOther: other.other,
+      existingDeescalation: other.deescalation,
+      existingTriggers: other.triggers,
+      existingPreferredMeds: medsOf(MedicationEntryType.preferred),
+      existingLimitationMeds: medsOf(MedicationEntryType.limitation),
+      existingAvoidMeds: medsOf(MedicationEntryType.exception),
+    );
+  }
+
   Future<void> _runSmartFill() async {
     if (!appData.ai.apiModeVisible) {
       await _runSmartFillHandoff();
@@ -31,20 +82,17 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         provider: aiCfg.provider,
         model: aiCfg.model,
       );
-      final response = await service.generate(SmartFillInput(
-        conditions: _validated!.icdConditions,
-        currentMedications: _validated!.validatedPreferredMedNames,
-        medicationsToAvoid: _validated!.validatedAvoidMedNames,
-        formType: widget.formType,
-      ));
+      final input = await _smartFillInput();
+      final response = await service.generate(input);
 
       final result = response.result;
       ref.read(geminiRateTrackerProvider).recordRequest(
           estimatedTokens: response.totalTokens);
 
       if (!mounted) return;
+      final display = result.cleanedDisplayMap(input);
 
-      if (result.isEmpty) {
+      if (display.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(context.l10n.pipelineNoAdditionalSuggestions)),
         );
@@ -53,7 +101,6 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         return;
       }
 
-      final display = result.toDisplayMap();
       _smartResult = result;
       _smartChecked = {for (final k in display.keys) k: true};
       _smartEdited = Map<String, String>.from(display);
@@ -79,12 +126,9 @@ extension _PipelineApplyLogic on _PipelineScreenState {
   /// where every suggestion is reviewed before it is added.
   Future<void> _runSmartFillHandoff() async {
     if (_validated == null) return;
-    final prompt = SmartFillService.buildPrompt(SmartFillInput(
-      conditions: _validated!.icdConditions,
-      currentMedications: _validated!.validatedPreferredMedNames,
-      medicationsToAvoid: _validated!.validatedAvoidMedNames,
-      formType: widget.formType,
-    ).sanitized());
+    final input = await _smartFillInput();
+    final prompt = SmartFillService.buildPrompt(input.sanitized());
+    if (!mounted) return;
     await showDialog<void>(
       context: context,
       builder: (dctx) => AlertDialog(
@@ -107,14 +151,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
                 final result = SmartFillResult.fromJson(json);
                 if (dctx.mounted) Navigator.pop(dctx);
                 if (!mounted) return true;
-                if (result.isEmpty) {
+                final display = result.cleanedDisplayMap(input);
+                if (display.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
                           Text(context.l10n.pipelineNoAdditionalSuggestions)));
                   await _applyAll();
                   return true;
                 }
-                final display = result.toDisplayMap();
                 _smartResult = result;
                 _smartChecked = {for (final k in display.keys) k: true};
                 _smartEdited = Map<String, String>.from(display);
@@ -138,20 +182,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
   /// A facility's review value with the display-only NPI badge removed, so the
   /// badge text never gets saved into the facility name.
-  String _facilityValue(String key) {
-    var v = (_reviewEdited[key] ?? '').trim();
-    for (final badge in allReviewBadges) {
-      if (v.endsWith(badge)) {
-        v = v.substring(0, v.length - badge.length).trim();
-        break;
-      }
-    }
-    return v;
-  }
+  String _facilityValue(String key) =>
+      stripReviewBadge(_reviewEdited[key] ?? '');
 
   Future<void> _applyAll() async {
     final repo = ref.read(directiveRepositoryProvider);
     final id = widget.directiveId;
+    // Read before any await (the context isn't safe to use after one).
+    final l10n = context.l10n;
 
     // ── Apply extracted + validated data ─────────────────────────────
     final existingMeds = await repo.getMedications(id);
@@ -183,13 +221,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       String dosage = '',
       bool isCurrent = false,
     }) {
-      var v = (_reviewEdited[key] ?? '').trim();
-      for (final badge in allReviewBadges) {
-        if (v.endsWith(badge)) {
-          v = v.substring(0, v.length - badge.length).trimRight();
-          break;
-        }
-      }
+      final v = stripReviewBadge(_reviewEdited[key] ?? '');
       // The composite as originally displayed: current meds show
       // 'name (dosage)' (their reason is never displayed, so it is always
       // preserved); the preference categories show 'name — reason'.
@@ -314,6 +346,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
 
     // Additional instruction text fields
     final instrMap = <String, String>{};
+    // Sections stored as tagged lines in `other` (OtherInstructions).
+    var otherSections = OtherInstructions(
+      reproductive: _reviewChecked['reproductive_health'] == true
+          ? (_reviewEdited['reproductive_health'] ?? '')
+          : '',
+    );
     void addInstr(String reviewKey, String instrField) {
       if (_reviewChecked[reviewKey] == true &&
           _reviewEdited[reviewKey] != null) {
@@ -331,7 +369,15 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     addInstr('pet_custody', 'petCustody');
     addInstr('children_custody', 'childrenCustody');
     addInstr('family_notification', 'familyNotification');
-    addInstr('records_disclosure', 'recordsDisclosure');
+    // Records: three blocks in one column (RecordsDisclosure).
+    String? reviewed(String key) => _reviewChecked[key] == true
+        ? _reviewEdited[key]?.trim()
+        : null;
+    var recordsAdd = RecordsDisclosure(
+      authorized: reviewed('records_authorized') ?? '',
+      notAuthorized: reviewed('records_not_authorized') ?? '',
+      otherLimits: reviewed('records_disclosure') ?? '',
+    );
     addInstr('other', 'other');
 
     // ── Apply Smart Fill results ─────────────────────────────────────
@@ -372,13 +418,15 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       addSmart('Religious/Spiritual', 'religious');
       addSmart('Children/Dependent Care', 'childrenCustody');
       addSmart('Family Notification', 'familyNotification');
-      addSmart('Records Disclosure', 'recordsDisclosure');
+      recordsAdd =
+          recordsAdd.append(otherLimits: smartVal('Records Disclosure'));
       addSmart('Pet Care', 'petCustody');
-      // Crisis-adjacent guidance joins the crisis-intervention narrative.
-      addSmart('De-escalation Techniques', 'crisisIntervention',
-          label: 'De-escalation');
-      addSmart('Crisis Triggers', 'crisisIntervention',
-          label: 'Known triggers');
+      // De-escalation and triggers have their own sections on the
+      // Anything-else step (tagged lines in `other`).
+      otherSections = otherSections.append(
+        deescalation: smartVal('De-escalation Techniques'),
+        triggers: smartVal('Crisis Triggers'),
+      );
       // Facility NOTES describe the kind of setting (not a facility name),
       // so they can't go into the name columns — keep them, labeled, in
       // "Other instructions".
@@ -395,8 +443,33 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     }
 
     // Write all accumulated instruction fields
-    if (instrMap.isNotEmpty) {
+    final hasSections = otherSections.serialize().isNotEmpty;
+    final hasRecords = recordsAdd.serialize().isNotEmpty;
+    if (instrMap.isNotEmpty || hasSections || hasRecords) {
       final existing = await repo.getAdditionalInstructions(id);
+      final recordsValue = hasRecords
+          ? RecordsDisclosure.parse(existing?.recordsDisclosure ?? '')
+              .append(
+                authorized: recordsAdd.authorized,
+                notAuthorized: recordsAdd.notAuthorized,
+                otherLimits: recordsAdd.otherLimits,
+              )
+              .serialize()
+          : null;
+      // Untagged text joins "Other instructions"; sections join their own.
+      String? otherValue;
+      if (instrMap.containsKey('other') || hasSections) {
+        final old = OtherInstructions.parse(existing?.other ?? '');
+        final s = otherSections;
+        otherValue = old
+            .append(
+              deescalation: s.deescalation,
+              triggers: s.triggers,
+              reproductive: s.reproductive,
+              other: instrMap['other'],
+            )
+            .serialize();
+      }
       String merge(String? old, String? add) {
         if (add == null) return old ?? '';
         if (old == null || old.trim().isEmpty) return add;
@@ -432,13 +505,10 @@ extension _PipelineApplyLogic on _PipelineScreenState {
               ? Value(merge(
                   existing?.familyNotification, instrMap['familyNotification']))
               : const Value.absent(),
-          recordsDisclosure: instrMap.containsKey('recordsDisclosure')
-              ? Value(merge(
-                  existing?.recordsDisclosure, instrMap['recordsDisclosure']))
+          recordsDisclosure: recordsValue != null
+              ? Value(recordsValue)
               : const Value.absent(),
-          other: instrMap.containsKey('other')
-              ? Value(merge(existing?.other, instrMap['other']))
-              : const Value.absent(),
+          other: otherValue != null ? Value(otherValue) : const Value.absent(),
         ),
       );
     }
@@ -452,11 +522,16 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final d in validated.diagnoses) {
         final key = 'diag_${d.name}';
         if (_reviewChecked[key] != true) continue;
-        if (existingDiagNames.contains(d.name.toLowerCase())) continue;
+        // The row as the person left it (edits were once dropped here).
+        final r = diagnosisFromReview(_reviewEdited[key] ?? '', d);
+        if (r.name.isEmpty ||
+            !existingDiagNames.add(r.name.toLowerCase())) {
+          continue;
+        }
         await repo.insertDiagnosis(DiagnosisEntriesCompanion.insert(
           directiveId: id,
-          name: Value(d.name),
-          icdCode: Value(d.icdCode ?? ''),
+          name: Value(r.name),
+          icdCode: Value(r.code),
           sortOrder: Value(diagOrder++),
         ));
         applied++;
@@ -476,23 +551,25 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       for (final a in validated.allergies) {
         final key = 'allergy_${a.substance}';
         if (_reviewChecked[key] != true) continue;
-        if (existingSubstances.contains(a.substance.toLowerCase())) continue;
-        // Clamp kind and severity to the values the app understands.
+        // The row as the person left it (edits were once dropped here).
+        final r = allergyFromReview(_reviewEdited[key] ?? '', a, l10n);
+        if (r.substance.isEmpty ||
+            !existingSubstances.add(r.substance.toLowerCase())) {
+          continue;
+        }
+        // Clamp kind to the values the app understands (severity already is).
         const validKinds = {'drug', 'food', 'material', 'other'};
-        const validSeverities = {'mild', 'moderate', 'severe'};
         final kind = validKinds.contains(a.kind) ? a.kind : 'other';
-        final severity =
-            validSeverities.contains(a.severity) ? a.severity : 'moderate';
         await repo.addAllergy(DirectiveAllergiesCompanion.insert(
           directiveId: id,
           kind: Value(kind),
-          substance: Value(a.substance),
-          severity: Value(severity),
-          reactions: Value(a.reactions ?? ''),
+          substance: Value(r.substance),
+          severity: Value(r.severity),
+          reactions: Value(r.reactions),
           notes: Value(a.notes ?? ''),
           sortOrder: Value(allergyOrder++),
         ));
-        if (kind == 'drug') appliedDrugAllergens.add(a.substance);
+        if (kind == 'drug') appliedDrugAllergens.add(r.substance);
         applied++;
       }
     }
@@ -668,9 +745,28 @@ extension _PipelineApplyLogic on _PipelineScreenState {
         gPhone != null ||
         gCanRevoke != null) {
       final cur = await repo.getGuardianNomination(id);
+      // A nominee from the document must show: the step and the PDF read
+      // the nominee fields only when the relation is 'different' (an
+      // earlier "no preference" choice used to hide the autofilled name).
+      String? relation;
+      if (gName != null) {
+        final agentsNow = await repo.getAgents(id);
+        String nameOf(String type) => agentsNow
+            .where((a) => a.agentType == type)
+            .map((a) => a.fullName.trim().toLowerCase())
+            .firstWhere((_) => true, orElse: () => '');
+        final n = gName.trim().toLowerCase();
+        relation = n == nameOf('primary')
+            ? 'sameAsPrimary'
+            : n == nameOf('alternate')
+                ? 'sameAsAlternate'
+                : 'different';
+      }
       await repo.upsertGuardianNomination(GuardianNominationsCompanion(
         id: cur != null ? Value(cur.id) : const Value.absent(),
         directiveId: Value(id),
+        guardianRelation:
+            relation != null ? Value(relation) : const Value.absent(),
         nomineeFullName: Value(gName ?? cur?.nomineeFullName ?? ''),
         nomineeRelationship: Value(gRel ?? cur?.nomineeRelationship ?? ''),
         nomineeAddress: Value(gAddr1 ?? cur?.nomineeAddress ?? ''),
@@ -705,8 +801,11 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // ── Apply ECT / experimental / drug trial / medication consent ────
     // Map extracted "yes"/"agent"/"no"/"conditional: <text>" → the canonical
     // stored values (ConsentOption.name, or the 'conditional:' prefix form).
+    final isPoa = formTypeFromName(_activeFormType) == FormType.poa;
     String? toConsentValue(String? extracted) {
       if (extracted == null) return null;
+      // The POA offers only "agent authorized" / "not authorized".
+      if (isPoa && extracted != 'agent' && extracted != 'no') return null;
       if (extracted.startsWith('conditional:')) {
         final restriction =
             extracted.substring('conditional:'.length).trim();
@@ -716,7 +815,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       }
       switch (extracted) {
         case 'yes': return ConsentOption.yes.name;
-        case 'agent': return ConsentOption.agentDecides.name;
+        // No agent on this form (a Declaration): "my agent decides" can't
+        // be stored — it would leave the step with no visible choice (P-10).
+        case 'agent':
+          return (formTypeFromName(_activeFormType)?.hasAgentSections ?? true)
+              ? ConsentOption.agentDecides.name
+              : null;
         case 'no': return ConsentOption.no.name;
         default: return null;
       }
@@ -739,12 +843,7 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     // Room-preference chips: union of the confirmed extracted chips, the
     // same-gender chip, and whatever the user already selected in the wizard
     // (never clobber existing chips with a replacement csv).
-    const validRoomChips = {
-      'singleRoom',
-      'windowIfPossible',
-      'quietFloor',
-      'sameGenderRoommate',
-    };
+    final validRoomChips = kRoomPreferenceChipIds.toSet();
     final confirmedChips = _reviewChecked['room_pref_chips'] == true
         ? (validated?.roomPreferenceChips ?? const <String>[])
             .where(validRoomChips.contains)
@@ -766,10 +865,12 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       }.join(',');
     }
     // The extracted match detail wins over the default same-as-identity.
+    final extractedMatch = validated?.roommateGenderMatch?.trim() ?? '';
     final genderMatch = applyRoommate
-        ? (const {'women', 'men', 'sameAsIdentity'}
-                .contains(validated?.roommateGenderMatch)
-            ? validated!.roommateGenderMatch!
+        ? (const {'women', 'men', 'sameAsIdentity'}.contains(extractedMatch) ||
+                (extractedMatch.startsWith(kRoommateSpecifyPrefix) &&
+                    extractedMatch.length > kRoommateSpecifyPrefix.length)
+            ? extractedMatch
             : 'sameAsIdentity')
         : null;
     if (ectVal != null ||
@@ -916,6 +1017,14 @@ extension _PipelineApplyLogic on _PipelineScreenState {
     if (result != null && mounted) {
       setState(() {
         _reviewEdited[key] = result;
+        // The person has looked at this row — its note has done its job.
+        _reviewNotes.remove(key);
+        final problem = reviewFormatProblem(key, result, context.l10n);
+        if (problem == null) {
+          _reviewWarnings.remove(key);
+        } else {
+          _reviewWarnings[key] = problem;
+        }
         if (result.trim().isNotEmpty) _reviewChecked[key] = true;
       });
     }
@@ -954,6 +1063,80 @@ extension _PipelineApplyLogic on _PipelineScreenState {
       });
     }
   }
+}
+
+/// What's wrong with an autofilled date of birth, ZIP or phone, or null — the
+/// SAME checks the wizard runs (input_formatters.dart), so the review flags a
+/// value before it is added (field audit O3).
+/// A diagnosis row read back: unchanged → the AI's name and code; edited →
+/// "name [code]" (a removed code is honored). The badge is ignored.
+({String name, String code}) diagnosisFromReview(
+    String value, ExtractedDiagnosis d) {
+  final v = stripReviewBadge(value);
+  if (v.isEmpty || v == d.display) {
+    return (name: d.name.trim(), code: (d.icdCode ?? '').trim());
+  }
+  final m = RegExp(r'^(.*?)\s*\[([^\[\]]*)\]$').firstMatch(v);
+  if (m != null && m.group(1)!.trim().isNotEmpty) {
+    return (name: m.group(1)!.trim(), code: m.group(2)!.trim().toUpperCase());
+  }
+  return (name: v, code: '');
+}
+
+/// An allergy row read back: unchanged → the AI's values; edited →
+/// "substance (Severity) — reactions", the severity word in any shipped
+/// language (an unknown word stays part of the substance). A removed
+/// reaction is honored.
+({String substance, String severity, String reactions}) allergyFromReview(
+    String value, ExtractedAllergy a, AppLocalizations l) {
+  const valid = {'mild', 'moderate', 'severe'};
+  final severity = valid.contains(a.severity) ? a.severity : 'moderate';
+  final v = stripReviewBadge(value);
+  if (v.isEmpty || v == allergyReviewText(a, l)) {
+    return (
+      substance: a.substance.trim(),
+      severity: severity,
+      reactions: (a.reactions ?? '').trim(),
+    );
+  }
+  final words = <String, String>{
+    for (final s in valid) s: s,
+    for (final locale in AppLocalizations.supportedLocales)
+      ...() {
+        final t = lookupAppLocalizations(locale);
+        return {
+          t.allergiesSeverityMild.toLowerCase(): 'mild',
+          t.allergiesSeverityModerate.toLowerCase(): 'moderate',
+          t.allergiesSeveritySevere.toLowerCase(): 'severe',
+        };
+      }(),
+  };
+  var head = v;
+  var reactions = '';
+  final dash = v.indexOf(' — ');
+  if (dash > 0) {
+    head = v.substring(0, dash).trim();
+    reactions = v.substring(dash + 3).trim();
+  }
+  var sev = severity;
+  final open = head.lastIndexOf(' (');
+  if (open > 0 && head.endsWith(')')) {
+    final word = head.substring(open + 2, head.length - 1).trim().toLowerCase();
+    final known = words[word];
+    if (known != null) {
+      sev = known;
+      head = head.substring(0, open).trim();
+    }
+  }
+  return (substance: head, severity: sev, reactions: reactions);
+}
+
+String? reviewFormatProblem(String key, String value, AppLocalizations l) {
+  if (value.trim().isEmpty) return null;
+  if (key.endsWith('_dob')) return dateOfBirthValidator(value, l);
+  if (key.endsWith('_zip')) return optionalZipValidator(value, l);
+  if (key.endsWith('_phone')) return optionalPhoneValidator(value, l);
+  return null;
 }
 
 /// The keyboard for an Autofill-review field that takes only a number, or

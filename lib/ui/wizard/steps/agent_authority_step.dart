@@ -87,7 +87,7 @@ class _AgentAuthorityStepState
             widget.embedded ? const NeverScrollableScrollPhysics() : null,
         padding: widget.embedded
             ? const EdgeInsets.symmetric(horizontal: 4)
-            : const EdgeInsets.all(16),
+            : DesignTokens.pagePadding,
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'agentAuthority'),
           const SizedBox(height: 8),
@@ -202,6 +202,8 @@ class _AgentAuthorityStepState
             maxLength: appData.config.textFieldMaxChars,
             decoration: InputDecoration(
               labelText: context.l10n.agentAuthLimitationsLabel,
+              // Extras live in the hint, so the label fits on a phone.
+              hintText: context.l10n.peopleTrustOptional,
               border: const OutlineInputBorder(),
               suffixIcon: Row(
                 mainAxisSize: MainAxisSize.min,

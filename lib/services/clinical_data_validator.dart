@@ -73,6 +73,39 @@ class ClinicalDataValidator {
     return results;
   }
 
+  /// Check each extracted diagnosis CODE against ICD-10-CM. A code the
+  /// registry doesn't have is flagged (often mistyped or made up — the review
+  /// says so); the name and code are never rewritten. A diagnosis with no code
+  /// passes through unchecked.
+  static Future<List<ExtractedDiagnosis>> validateDiagnoses(
+      List<ExtractedDiagnosis> raw) async {
+    final out = <ExtractedDiagnosis>[];
+    for (final d in raw) {
+      final code = (d.icdCode ?? '').trim();
+      if (code.isEmpty) {
+        out.add(d);
+        continue;
+      }
+      List<IcdCondition> matches;
+      try {
+        matches = await ClinicalDataService.searchConditions(code, count: 7);
+      } catch (_) {
+        matches = const [];
+      }
+      out.add(d.withCodeFound(icdCodeFound(code, matches)));
+    }
+    return out;
+  }
+
+  /// Whether [code] appears EXACTLY among [matches] (the registry search is a
+  /// prefix search: "F45.9" would also return "F45.99" if that existed).
+  /// Case and the dot are ignored ("f3181" = "F31.81").
+  static bool icdCodeFound(String code, List<IcdCondition> matches) {
+    String norm(String s) => s.trim().toUpperCase().replaceAll('.', '');
+    final want = norm(code);
+    return want.isNotEmpty && matches.any((m) => norm(m.code) == want);
+  }
+
   /// Validate DRUG allergies against RxTerms (RxNorm). A recognized drug name
   /// is flagged verified; an unrecognized one is left unverified so the user
   /// double-checks it (usually a spelling slip). The substance text is NEVER
@@ -123,7 +156,7 @@ class ClinicalDataValidator {
       currentMeds: futures[2] as List<ValidatedMedication>,
       limitedMeds: await validateMedications(raw.medicationsLimited),
       conditions: futures[3] as List<ValidatedCondition>,
-      diagnoses: raw.diagnoses,
+      diagnoses: await validateDiagnoses(raw.diagnoses),
       allergies: await validateAllergies(raw.allergies),
       preferredFacilityVerified: prefFacilityName.isNotEmpty &&
           await ClinicalDataService.isKnownFacility(prefFacilityName),
@@ -163,9 +196,13 @@ class ClinicalDataValidator {
       agentCanConsentMedication: raw.agentCanConsentMedication,
       selfBindingUlysses: raw.selfBindingUlysses,
       petCustody: raw.petCustody,
+      reproductiveHealth: raw.reproductiveHealth,
       childrenCustody: raw.childrenCustody,
       familyNotification: raw.familyNotification,
       recordsDisclosure: raw.recordsDisclosure,
+      recordsAuthorized: raw.recordsAuthorized,
+      recordsNotAuthorized: raw.recordsNotAuthorized,
+      checkNotes: raw.checkNotes,
       other: raw.other,
       // Personal info (PII) passes straight through — no NIH validation needed.
       personalInfo: raw.personalInfo,
@@ -254,10 +291,14 @@ class ValidatedExtractionResult {
   final bool? agentCanConsentMedication;
   final bool? selfBindingUlysses;
   final String? petCustody;
+  final String? reproductiveHealth;
   final String? childrenCustody;
   final String? familyNotification;
   final String? recordsDisclosure;
+  final String? recordsAuthorized;
+  final String? recordsNotAuthorized;
   final String? other;
+  final List<String> checkNotes;
   // Personal info (PII) extracted for autofill — pass-through, no validation.
   final ExtractedPersonalInfo personalInfo;
 
@@ -297,10 +338,14 @@ class ValidatedExtractionResult {
     this.agentCanConsentMedication,
     this.selfBindingUlysses,
     this.petCustody,
+    this.reproductiveHealth,
     this.childrenCustody,
     this.familyNotification,
     this.recordsDisclosure,
+    this.recordsAuthorized,
+    this.recordsNotAuthorized,
     this.other,
+    this.checkNotes = const [],
     this.personalInfo = const ExtractedPersonalInfo(),
   });
 
