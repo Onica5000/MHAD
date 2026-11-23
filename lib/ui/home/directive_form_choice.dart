@@ -338,41 +338,64 @@ class _HelpMeChooseBanner extends StatelessWidget {
               borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
               border: Border.all(color: p.primary.withValues(alpha: 0.20)),
             ),
-            child: Row(
-              children: [
-                Icon(Icons.auto_awesome, size: 18, color: p.primary),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    context.l10n.directiveFormChoiceNotSureWhichFormFits,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: p.onPrimaryLight,
-                    ),
-                  ),
+            child: LayoutBuilder(builder: (context, box) {
+              final icon = Icon(Icons.auto_awesome, size: 18, color: p.primary);
+              final prompt = Text(
+                context.l10n.directiveFormChoiceNotSureWhichFormFits,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: p.onPrimaryLight,
                 ),
-                const SizedBox(width: 8),
-                // Flexible so a longer translation wraps instead of starving
-                // the prompt text (Spanish overflowed at phone width), and
-                // aligned to the END of the banner — as a plain Flexible it
-                // sat at the start of its half, mid-banner on desktop.
-                Flexible(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: Text(
-                      context.l10n.directiveFormChoiceHelpMeChoose,
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: p.primary,
+              );
+              final cta = Text(
+                context.l10n.directiveFormChoiceHelpMeChoose,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: p.primary,
+                ),
+              );
+              // Phones: the link goes under the prompt, in line with its
+              // text — side by side each got half the width and the arrow
+              // wrapped onto its own line (visual review 2026-11-22).
+              if (box.maxWidth < 440) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    icon,
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          prompt,
+                          const SizedBox(height: 8),
+                          cta,
+                        ],
                       ),
                     ),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  icon,
+                  const SizedBox(width: 8),
+                  Expanded(child: prompt),
+                  const SizedBox(width: 8),
+                  // Flexible so a longer translation wraps instead of
+                  // starving the prompt, aligned to the END of the banner.
+                  Flexible(
+                    child: Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: cta,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ),
         ),
       ),

@@ -740,6 +740,18 @@ abstract class AppLocalizations {
   /// **'Drug trials'**
   String get reviewStepDrugTrials;
 
+  /// Review step, Power of Attorney: the official form's 'agent is authorized to consent' choice, short.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is authorized'**
+  String get reviewValueAgentAuthorized;
+
+  /// Review step, Power of Attorney: the official form's 'agent is not authorized' choice, short.
+  ///
+  /// In en, this message translates to:
+  /// **'My agent is not authorized'**
+  String get reviewValueAgentNotAuthorized;
+
   /// No description provided for @reviewStepActivities.
   ///
   /// In en, this message translates to:
@@ -1331,7 +1343,7 @@ abstract class AppLocalizations {
   /// No description provided for @agentAuthLimitationsLabel.
   ///
   /// In en, this message translates to:
-  /// **'Additional limitations or instructions (optional)'**
+  /// **'Additional limitations or instructions'**
   String get agentAuthLimitationsLabel;
 
   /// No description provided for @guardianNomNoPreference.
@@ -2033,13 +2045,19 @@ abstract class AppLocalizations {
   /// No description provided for @medsStepDosageLabel.
   ///
   /// In en, this message translates to:
-  /// **'Dosage (e.g. 20 mg twice daily)'**
+  /// **'Dosage'**
   String get medsStepDosageLabel;
+
+  /// Medications step: hint inside the empty Dosage field (moved out of the label, which was cut off on phones).
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 20 mg twice daily'**
+  String get medsStepDosageHint;
 
   /// No description provided for @medsStepReasonLabel.
   ///
   /// In en, this message translates to:
-  /// **'Reason / notes (optional)'**
+  /// **'Reason / notes'**
   String get medsStepReasonLabel;
 
   /// No description provided for @medsStepLearnAbout.

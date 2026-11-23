@@ -361,6 +361,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reviewStepDrugTrials => 'Ensayos de medicamentos';
 
   @override
+  String get reviewValueAgentAuthorized => 'Mi agente está autorizado';
+
+  @override
+  String get reviewValueAgentNotAuthorized => 'Mi agente no está autorizado';
+
+  @override
   String get reviewStepActivities => 'Actividades';
 
   @override
@@ -709,7 +715,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agentAuthLimitationsLabel =>
-      'Limitaciones o instrucciones adicionales (opcional)';
+      'Limitaciones o instrucciones adicionales';
 
   @override
   String get guardianNomNoPreference => 'Sin preferencia';
@@ -1142,10 +1148,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Tiroides: se receta a menudo junto con el litio';
 
   @override
-  String get medsStepDosageLabel => 'Dosis (p. ej., 20 mg dos veces al día)';
+  String get medsStepDosageLabel => 'Dosis';
 
   @override
-  String get medsStepReasonLabel => 'Motivo / notas (opcional)';
+  String get medsStepDosageHint => 'p. ej., 20 mg dos veces al día';
+
+  @override
+  String get medsStepReasonLabel => 'Motivo / notas';
 
   @override
   String medsStepLearnAbout(String name) {

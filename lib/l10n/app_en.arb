@@ -144,6 +144,14 @@
   "reviewStepPreferred": "Preferred",
   "reviewStepEctConsent": "ECT consent",
   "reviewStepDrugTrials": "Drug trials",
+  "reviewValueAgentAuthorized": "My agent is authorized",
+  "@reviewValueAgentAuthorized": {
+    "description": "Review step, Power of Attorney: the official form's 'agent is authorized to consent' choice, short."
+  },
+  "reviewValueAgentNotAuthorized": "My agent is not authorized",
+  "@reviewValueAgentNotAuthorized": {
+    "description": "Review step, Power of Attorney: the official form's 'agent is not authorized' choice, short."
+  },
   "reviewStepActivities": "Activities",
   "reviewStepDietary": "Dietary",
   "reviewStepReligious": "Religious",
@@ -277,7 +285,7 @@
   "agentAuthExamplesField": "Agent limitations",
   "agentAuthExample1": "My agent may not consent to electroconvulsive therapy (ECT) under any circumstances.",
   "agentAuthExample2": "My agent should consult with my therapist, Dr. Smith, before agreeing to any changes in my medication regimen.",
-  "agentAuthLimitationsLabel": "Additional limitations or instructions (optional)",
+  "agentAuthLimitationsLabel": "Additional limitations or instructions",
   "guardianNomNoPreference": "No preference",
   "guardianNomNoPreferenceHint": "Let the court decide who to appoint.",
   "guardianNomSameAsPrimary": "Same as my primary agent",
@@ -485,8 +493,12 @@
   "medNtiNoteBloodThinner": "Blood thinner — commonly co-prescribed, strict monitoring",
   "medNtiNoteRespiratory": "Respiratory — commonly co-prescribed, strict monitoring",
   "medNtiNoteThyroid": "Thyroid — commonly co-prescribed with lithium",
-  "medsStepDosageLabel": "Dosage (e.g. 20 mg twice daily)",
-  "medsStepReasonLabel": "Reason / notes (optional)",
+  "medsStepDosageLabel": "Dosage",
+  "medsStepDosageHint": "e.g. 20 mg twice daily",
+  "@medsStepDosageHint": {
+    "description": "Medications step: hint inside the empty Dosage field (moved out of the label, which was cut off on phones)."
+  },
+  "medsStepReasonLabel": "Reason / notes",
   "medsStepLearnAbout": "Learn about {name}",
   "@medsStepLearnAbout": {
     "placeholders": {

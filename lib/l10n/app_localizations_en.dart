@@ -359,6 +359,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewStepDrugTrials => 'Drug trials';
 
   @override
+  String get reviewValueAgentAuthorized => 'My agent is authorized';
+
+  @override
+  String get reviewValueAgentNotAuthorized => 'My agent is not authorized';
+
+  @override
   String get reviewStepActivities => 'Activities';
 
   @override
@@ -702,7 +708,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agentAuthLimitationsLabel =>
-      'Additional limitations or instructions (optional)';
+      'Additional limitations or instructions';
 
   @override
   String get guardianNomNoPreference => 'No preference';
@@ -1122,10 +1128,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Thyroid — commonly co-prescribed with lithium';
 
   @override
-  String get medsStepDosageLabel => 'Dosage (e.g. 20 mg twice daily)';
+  String get medsStepDosageLabel => 'Dosage';
 
   @override
-  String get medsStepReasonLabel => 'Reason / notes (optional)';
+  String get medsStepDosageHint => 'e.g. 20 mg twice daily';
+
+  @override
+  String get medsStepReasonLabel => 'Reason / notes';
 
   @override
   String medsStepLearnAbout(String name) {

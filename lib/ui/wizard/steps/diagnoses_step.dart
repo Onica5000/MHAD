@@ -482,7 +482,7 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.all(16),
+          : DesignTokens.pagePadding,
       children: [
         WizardHelpButton(helpText: helpText, stepId: 'diagnoses'),
         const SizedBox(height: 8),
@@ -750,6 +750,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
           ),
         const SizedBox(height: 8),
         Row(
+          // Top-aligned: the phone field's error must not push Specialty down.
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,

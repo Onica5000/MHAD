@@ -115,7 +115,7 @@ class _EffectiveConditionStepState
             widget.embedded ? const NeverScrollableScrollPhysics() : null,
         padding: widget.embedded
             ? const EdgeInsets.symmetric(horizontal: 4)
-            : const EdgeInsets.all(16),
+            : DesignTokens.pagePadding,
         children: [
           WizardHelpButton(helpText: helpText, stepId: 'effectiveCondition'),
           Text(

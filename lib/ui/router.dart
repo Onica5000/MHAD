@@ -272,12 +272,16 @@ GoRouter _buildRouter(DisclaimerNotifier disclaimer,
           path: AppRoutes.audioGuide,
           // `?form=` (from a directive's Autofill page) shows only that
           // form's steps, numbered as in the app.
+          // Keyed by form: switching form starts fresh (top of page, no ticks).
           builder: (_, state) => AudioGuideScreen(
+              key: ValueKey('AudioGuideScreen:${state.uri.queryParameters['form']}'),
               form: formTypeFromName(state.uri.queryParameters['form'] ?? '')),
         ),
         GoRoute(
           path: AppRoutes.gettingReady,
+          // Keyed by form: switching form starts fresh (top of page, no ticks).
           builder: (_, state) => GettingReadyScreen(
+              key: ValueKey('GettingReadyScreen:${state.uri.queryParameters['form']}'),
               form: formTypeFromName(state.uri.queryParameters['form'] ?? '')),
         ),
         GoRoute(

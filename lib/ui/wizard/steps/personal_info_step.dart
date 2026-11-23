@@ -288,6 +288,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             ),
             const SizedBox(height: 16),
             Row(
+              // Top-aligned: a field's hint/error must not push its
+              // neighbour down (State sat ~24px below ZIP).
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -318,6 +321,9 @@ class _PersonalInfoStepState extends ConsumerState<PersonalInfoStep>
             ),
             const SizedBox(height: 16),
             Row(
+              // Top-aligned: a field's hint/error must not push its
+              // neighbour down (State sat ~24px below ZIP).
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: TextFormField(

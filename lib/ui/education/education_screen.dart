@@ -302,7 +302,9 @@ class _EditorialLearnHub extends StatelessWidget {
             if (MediaQuery.sizeOf(context).width >= kWideLayoutBreakpoint) {
               columns = (constraints.maxWidth / 360).floor().clamp(2, 4);
             } else {
-              columns = 2;
+              // Phones: one column — two at 390px clipped titles
+              // mid-word and cut excerpts to a line (visual review).
+              columns = constraints.maxWidth < 520 ? 1 : 2;
             }
             // Rows of EQUAL height (cards in a row match the tallest; a
             // short last row is padded so card widths stay even).

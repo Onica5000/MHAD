@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhad/ui/theme/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:mhad/data/database/app_database.dart';
@@ -131,7 +132,7 @@ class _AgentDesignationStepState
               widget.embedded ? const NeverScrollableScrollPhysics() : null,
           padding: widget.embedded
               ? const EdgeInsets.symmetric(horizontal: 4)
-              : const EdgeInsets.all(16),
+              : DesignTokens.pagePadding,
           children: [
             WizardHelpButton(helpText: helpText, stepId: 'agentDesignation'),
             const SizedBox(height: 8),

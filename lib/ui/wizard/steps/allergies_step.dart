@@ -252,7 +252,7 @@ class _AllergiesStepState extends ConsumerState<AllergiesStep>
       physics: widget.embedded ? const NeverScrollableScrollPhysics() : null,
       padding: widget.embedded
           ? const EdgeInsets.symmetric(horizontal: 4)
-          : const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          : DesignTokens.pagePadding,
       children: [
         WizardHelpButton(
           helpText: l10n.allergiesHelpText,

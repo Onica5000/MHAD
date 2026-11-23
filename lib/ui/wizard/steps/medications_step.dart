@@ -562,6 +562,7 @@ class _MedTable extends StatelessWidget {
                               controller: rows[i].dosageCtrl,
                               decoration: InputDecoration(
                                 labelText: context.l10n.medsStepDosageLabel,
+                                hintText: context.l10n.medsStepDosageHint,
                                 border: const OutlineInputBorder(),
                                 isDense: true,
                               ),
@@ -573,6 +574,7 @@ class _MedTable extends StatelessWidget {
                             maxLength: appData.config.medicationNoteMaxChars,
                             decoration: InputDecoration(
                               labelText: context.l10n.medsStepReasonLabel,
+                              hintText: context.l10n.peopleTrustOptional,
                               border: const OutlineInputBorder(),
                               isDense: true,
                             ),

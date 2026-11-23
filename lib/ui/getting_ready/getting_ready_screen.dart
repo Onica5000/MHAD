@@ -105,28 +105,41 @@ class _GettingReadyScreenState extends State<GettingReadyScreen> {
                     ),
                   ),
                   if (tier == GettingReadyTier.gather) ...[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
+                    // The sentence and its link share one left edge, under
+                    // the mic icon's column.
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.mic_none, size: 16, color: p.primary),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Icon(Icons.mic_none, size: 16, color: p.primary),
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Text(l.grGatherVoice,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  height: MhadType.leadingParagraph,
-                                  color: p.text)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(l.grGatherVoice,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      height: MhadType.leadingParagraph,
+                                      color: p.text)),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: const Size(0, 44),
+                                  alignment: Alignment.centerLeft,
+                                ),
+                                onPressed: () => appRouter.push(widget.form == null
+                                    ? AppRoutes.audioGuide
+                                    : AppRoutes.audioGuideFor(widget.form!.name)),
+                                child: Text(l.grGatherVoiceCta),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () => appRouter.push(widget.form == null
-                            ? AppRoutes.audioGuide
-                            : AppRoutes.audioGuideFor(widget.form!.name)),
-                        child: Text(l.grGatherVoiceCta),
-                      ),
                     ),
                   ],
                   const SizedBox(height: 20),
