@@ -239,7 +239,7 @@
   "personalInfoStepHelp": "Provide your legal name as it appears on official documents. You must be 18 years of age or older, or an emancipated minor, to create a Mental Health Advance Directive under PA Act 194 of 2004.",
   "personalInfoStepFullLegalName": "Full legal name *",
   "personalInfoStepFullLegalNameHelper": "Use your full legal name as it appears on official ID",
-  "personalInfoStepDobLabel": "Date of birth (MM/DD/YYYY) *",
+  "personalInfoStepDobLabel": "Date of birth *",
   "personalInfoStepDobHelper": "Used to verify your identity on the directive",
   "personalInfoStepPickDate": "Pick date",
   "personalInfoStepStreetAddress": "Street address",

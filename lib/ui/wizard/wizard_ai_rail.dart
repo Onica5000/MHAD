@@ -594,6 +594,9 @@ class _RailInput extends ConsumerWidget {
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
+                // The box around it is the border; the theme's fill made a grey
+                // box inside it (visual review).
+                filled: false,
                 hintText: context.l10n.wizardAiRailAskAboutThisStep,
               ),
             ),

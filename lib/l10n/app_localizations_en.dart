@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use your full legal name as it appears on official ID';
 
   @override
-  String get personalInfoStepDobLabel => 'Date of birth (MM/DD/YYYY) *';
+  String get personalInfoStepDobLabel => 'Date of birth *';
 
   @override
   String get personalInfoStepDobHelper =>

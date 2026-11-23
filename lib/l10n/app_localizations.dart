@@ -1067,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalInfoStepDobLabel.
   ///
   /// In en, this message translates to:
-  /// **'Date of birth (MM/DD/YYYY) *'**
+  /// **'Date of birth *'**
   String get personalInfoStepDobLabel;
 
   /// No description provided for @personalInfoStepDobHelper.

@@ -554,7 +554,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Use su nombre legal completo tal como aparece en su identificación oficial';
 
   @override
-  String get personalInfoStepDobLabel => 'Fecha de nacimiento (MM/DD/AAAA) *';
+  String get personalInfoStepDobLabel => 'Fecha de nacimiento *';
 
   @override
   String get personalInfoStepDobHelper =>
@@ -714,8 +714,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Mi agente debe consultar con mi terapeuta, el Dr. Smith, antes de aceptar cualquier cambio en mi régimen de medicamentos.';
 
   @override
-  String get agentAuthLimitationsLabel =>
-      'Limitaciones o instrucciones adicionales';
+  String get agentAuthLimitationsLabel => 'Otros límites o instrucciones';
 
   @override
   String get guardianNomNoPreference => 'Sin preferencia';
@@ -1760,7 +1759,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get medAutoFieldLabel => 'Nombre del medicamento';
+  String get medAutoFieldLabel => 'Medicamento';
 
   @override
   String get medAutoSearchingA11y => 'Buscando medicamentos';
@@ -2977,7 +2976,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Orientación para leer; no se guarda en su formulario. Indique su decisión en Procedimientos e investigación.';
 
   @override
-  String get reviewAutofillInformation => 'Información de autocompletado';
+  String get reviewAutofillInformation => 'Añadir a su directiva';
 
   @override
   String get reviewApplyAll => 'Aplicar todo';
