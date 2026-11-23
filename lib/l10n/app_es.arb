@@ -801,6 +801,7 @@
   "reviewPleaseCheckTitle": "Revise",
   "reviewPleaseCheckFromAi": "Su IA señaló lo siguiente. Viene de la IA, no de PA MHAD: compare cada punto con su documento.",
   "reviewPleaseCheckFormat": "{count, plural, =1{1 dato de abajo no parece correcto, así que empieza sin marcar. Corríjalo con el lápiz o déjelo fuera.} other{{count} datos de abajo no parecen correctos, así que empiezan sin marcar. Corríjalos con el lápiz o déjelos fuera.}}",
+  "reviewPleaseCheckIgnoredKeys": "Su IA también envió campos que PA MHAD no lee, así que no se completó nada con ellos: {keys}. Si falta algo abajo, copie el mensaje de nuevo y pídale a su IA que use exactamente ese formato.",
   "reviewCheckThis": "Revise esto: {problem}",
   "reviewAllergySeverityNotStated": "No se indicó la gravedad, así que se guardará como “moderada”; cámbiela en el paso de alergias si no es correcta.",
   "reviewDiagnosisCodeNotFound": "Este código no está en la CIE-10-MC. Compárelo con su documento: corríjalo con el lápiz o borre el código y deje el nombre.",

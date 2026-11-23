@@ -2885,6 +2885,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String reviewPleaseCheckIgnoredKeys(String keys) {
+    return 'Su IA también envió campos que PA MHAD no lee, así que no se completó nada con ellos: $keys. Si falta algo abajo, copie el mensaje de nuevo y pídale a su IA que use exactamente ese formato.';
+  }
+
+  @override
   String reviewCheckThis(String problem) {
     return 'Revise esto: $problem';
   }

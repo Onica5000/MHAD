@@ -4904,6 +4904,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 value below doesn’t look right, so it starts unchecked. Fix it with the pencil, or leave it out.} other{{count} values below don’t look right, so they start unchecked. Fix them with the pencil, or leave them out.}}'**
   String reviewPleaseCheckFormat(int count);
 
+  /// Autofill review, Please-check card (app's own line, not the AI's): field names in a pasted answer the app ignores (prompt hardening P-6). {keys} = the field names as the AI wrote them.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI also sent fields PA MHAD doesn’t read, so nothing from them was filled in: {keys}. If something is missing below, copy the message again and ask your AI to use its exact format.'**
+  String reviewPleaseCheckIgnoredKeys(String keys);
+
   /// Autofill review: shown under a date of birth / ZIP / phone that fails the wizard's check; {problem} is that check's own message (e.g. "Invalid date").
   ///
   /// In en, this message translates to:

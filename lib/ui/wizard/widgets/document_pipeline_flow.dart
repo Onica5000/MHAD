@@ -160,6 +160,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     _smartChecked = {};
     _smartEdited = {};
     _piiStripped = [];
+    _ignoredAnswerKeys = const [];
     _sourceDocs = const [];
     // Reset only the EXTRACTION state, not the source documents. The held
     // batch lives in the session-scoped [keptDocumentsProvider], so the
@@ -357,6 +358,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   // PII
   List<String> _piiStripped = [];
 
+  /// Keys of a pasted answer the app doesn't read (shown in "Please check").
+  List<String> _ignoredAnswerKeys = const [];
+
   // Validated extraction
   ValidatedExtractionResult? _validated;
   Map<String, bool> _reviewChecked = {};
@@ -553,6 +557,7 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
 
       if (cancelled()) return;
       _piiStripped = allPii;
+      _ignoredAnswerKeys = const [];
       await _reviewExtraction(
         merged: merged,
         anyRelevant: anyRelevant,
@@ -659,6 +664,9 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
     setState(() {
       _error = null;
       _piiStripped = const [];
+      // Keys the app doesn't read — said in the review, not dropped
+      // silently (prompt hardening P-6).
+      _ignoredAnswerKeys = DocumentExtractor.unknownAnswerKeys(json);
     });
     try {
       await _reviewExtraction(

@@ -103,4 +103,38 @@ void main() {
       expect(d, contains('never answer "agent" for ect_consent'));
     });
   });
+
+  // P-6 (part 2): keys the app doesn't read are reported, not dropped silently.
+  group('unknownAnswerKeys', () {
+    test('wrong keys are named', () {
+      expect(
+          DocumentExtractor.unknownAnswerKeys({
+            'mhad_task': 'mhad-autofill',
+            'medications': [
+              {'name': 'lithium'}
+            ],
+            'agent': 'Keisha, sister',
+            'personal_info': {'full_name': 'Darnell', 'agent_name': 'Keisha'},
+          }),
+          ['medications', 'agent', 'personal_info.agent_name']);
+    });
+
+    test('every key the prompt lists is known; envelope and empty keys pass', () {
+      final json = <String, dynamic>{
+        'mhad_task': 'mhad-autofill',
+        'mhad_ref': 'd1',
+        'personal_info': <String, dynamic>{},
+        'something_else': null,
+        'also_empty': '',
+      };
+      for (final k in DocumentExtractor.answerKeys) {
+        if (k.startsWith('personal_info.')) {
+          (json['personal_info'] as Map<String, dynamic>)[k.substring(14)] = 'x';
+        } else {
+          json[k] = 'x';
+        }
+      }
+      expect(DocumentExtractor.unknownAnswerKeys(json), isEmpty);
+    });
+  });
 }

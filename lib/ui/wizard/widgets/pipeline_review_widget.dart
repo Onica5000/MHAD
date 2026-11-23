@@ -846,6 +846,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       children: [
         const CrisisSupportBanner(),
         if (_reviewWarnings.isNotEmpty ||
+            _ignoredAnswerKeys.isNotEmpty ||
             (_validated?.checkNotes.isNotEmpty ?? false)) ...[
           _pleaseCheckCard(p, _validated?.checkNotes ?? const []),
           const SizedBox(height: 16),
@@ -1365,6 +1366,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
             if (_reviewWarnings.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(l.reviewPleaseCheckFormat(_reviewWarnings.length), style: body),
+            ],
+            if (_ignoredAnswerKeys.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                  l.reviewPleaseCheckIgnoredKeys(_ignoredAnswerKeys.join(', ')),
+                  style: body),
             ],
             if (notes.isNotEmpty) ...[
               const SizedBox(height: 8),
