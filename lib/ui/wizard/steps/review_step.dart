@@ -294,9 +294,14 @@ class _ReviewStepState extends ConsumerState<ReviewStep> with WizardStepMixin {
         case WizardStep.allergies:
           rows.add(row(step, l.stepTitleAllergies, {
             l.reviewStepAllergies: data.allergies
-                .map((a) => a.severity.isNotEmpty
-                    ? '${a.substance} (${a.severity})'
-                    : a.substance)
+                // Severity in the reader's words, not the stored value.
+                .map((a) => switch (a.severity) {
+                      'mild' => '${a.substance} (${l.allergiesSeverityMild})',
+                      'moderate' =>
+                        '${a.substance} (${l.allergiesSeverityModerate})',
+                      'severe' => '${a.substance} (${l.allergiesSeveritySevere})',
+                      _ => a.substance,
+                    })
                 .where((s) => s.trim().isNotEmpty)
                 .join(', '),
           }));

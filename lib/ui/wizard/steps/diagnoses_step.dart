@@ -748,7 +748,8 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
               ),
             ),
           ),
-        const SizedBox(height: 8),
+        // 16: the floating labels sit on the border, so 8 looked cramped.
+        const SizedBox(height: 16),
         Row(
           // Top-aligned: the phone field's error must not push Specialty down.
           crossAxisAlignment: CrossAxisAlignment.start,

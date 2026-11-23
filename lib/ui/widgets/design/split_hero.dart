@@ -10,8 +10,10 @@ import 'package:mhad/ui/widgets/design/responsive_shell.dart';
 ///   signal, not this widget's box; review R15): a tall photo panel beside the
 ///   content, so the first screens fill the window instead of floating as a
 ///   narrow strip.
-/// - **Phone**: a wide photo banner above the content (skipped on very short
-///   windows, where it would crowd the form and its pinned footer).
+/// - **Phone**: a wide photo banner at the top of the content — placed by the
+///   screen with [SplitHeroBanner] as the first item of its OWN scroll view,
+///   so it scrolls away with the text instead of staying pinned (visual
+///   review 2026-11-22). Skipped on very short windows.
 ///
 /// [child] keeps its own layout, including any pinned footer. On desktop it
 /// gets a TIGHT width of at most [contentMaxWidth] (the loose
@@ -69,21 +71,38 @@ class SplitHero extends StatelessWidget {
       );
     }
     if (size.height < _bannerMinWindowHeight) return child;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-              DesignTokens.space20, DesignTokens.space12, DesignTokens.space20, 0),
-          child: ArtImage(
-            wideArt,
-            height: _bannerHeight,
-            expand: true,
-            radius: DesignTokens.radiusLg,
-          ),
-        ),
-        Expanded(child: child),
-      ],
+    return _SplitHeroBannerScope(art: wideArt, child: child);
+  }
+}
+
+class _SplitHeroBannerScope extends InheritedWidget {
+  const _SplitHeroBannerScope({required this.art, required super.child});
+
+  final AppArt art;
+
+  @override
+  bool updateShouldNotify(_SplitHeroBannerScope old) => old.art != art;
+}
+
+/// The phone photo banner of the enclosing [SplitHero] — put it first in the
+/// screen's scrolling content. Nothing on desktop (the photo is the side
+/// panel there) or on very short windows.
+class SplitHeroBanner extends StatelessWidget {
+  const SplitHeroBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final scope =
+        context.dependOnInheritedWidgetOfExactType<_SplitHeroBannerScope>();
+    if (scope == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: DesignTokens.space16),
+      child: ArtImage(
+        scope.art,
+        height: SplitHero._bannerHeight,
+        expand: true,
+        radius: DesignTokens.radiusLg,
+      ),
     );
   }
 }

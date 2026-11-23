@@ -673,6 +673,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
         ),
         const SizedBox(height: 8),
         SegmentedButton<bool>(
+          // Full width, equal halves; the fill shows the choice (the extra
+          // check made "Legal (info only)" wrap on phones).
+          expandedInsets: EdgeInsets.zero,
+          showSelectedIcon: false,
           segments: [
             ButtonSegment(
               value: false,

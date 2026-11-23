@@ -65,6 +65,9 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   bool _showSavedHint = false;
 
   /// Phones: the step header is one line while this step is scrolled.
+  /// The desktop AI-help column's scroll (its scrollbar shows there's more).
+  final _railScroll = ScrollController();
+
   bool _headCompact = false;
   int _headCompactStep = -1;
   DateTime? _lastSavedFlash;
@@ -94,6 +97,7 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
   void dispose() {
     _autosave.unregisterOpenStep(widget.directiveId);
     _savedHintTimer?.cancel();
+    _railScroll.dispose();
     super.dispose();
   }
 
@@ -554,14 +558,22 @@ class _WizardScreenState extends ConsumerState<WizardScreen> {
                             : Container(
                                 width: 320,
                                 color: p.card,
-                                child: SingleChildScrollView(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 24, 20, 24),
-                                  child: AiStepHelper(
-                                    formType: formType.name,
-                                    step: currentStep,
-                                    stepName: currentStep.displayName,
-                                    directiveId: directive.id,
+                                // A visible scrollbar: the help card is taller
+                                // than a 900px window and nothing showed that
+                                // the rest (Copy / Open) is below (visual review).
+                                child: Scrollbar(
+                                  controller: _railScroll,
+                                  thumbVisibility: true,
+                                  child: SingleChildScrollView(
+                                    controller: _railScroll,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 24, 20, 24),
+                                    child: AiStepHelper(
+                                      formType: formType.name,
+                                      step: currentStep,
+                                      stepName: currentStep.displayName,
+                                      directiveId: directive.id,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -125,6 +125,8 @@ class OnboardingScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Phones: the photo scrolls with the intro.
+                  const SplitHeroBanner(),
                   // The photo (SplitHero) replaced the small voice sketch.
                   SectionLabel(context.l10n.onboardingPaMhadAct194),
                   const SizedBox(height: 20),
@@ -143,14 +145,16 @@ class OnboardingScreen extends ConsumerWidget {
                     style: EditorialHeading.styleFor(context, HeadingLevel.display).copyWith(color: p.text),
                   ),
                   const SizedBox(height: 24),
-                  // Cap the measure at 320 via right padding, not a
+                  // Cap the measure at 560 (the width of the box and buttons
+                  // below — 320 left a narrow column beside them) via right
+                  // padding, not a
                   // ConstrainedBox: SliverFillRemaining sizes this column by
                   // intrinsic height, and ConstrainedBox measures its child at
                   // the full width (fewer lines), so the column came up short
                   // and the CTAs overflowed (51 px at 1280x900).
                   Padding(
                     padding: EdgeInsets.only(
-                      right: math.max(0, box.maxWidth - 56 - 320),
+                      right: math.max(0, box.maxWidth - 56 - 560),
                     ),
                     child: Text(
                       context.l10n.onboardingWeLlWalkYouThrough,
@@ -205,6 +209,9 @@ class OnboardingScreen extends ConsumerWidget {
                       color: p.textMuted,
                     ),
                   ),
+                  // A real gap even when the window is short (the Spacer
+                  // shrank to 0 and the caption touched the button).
+                  const SizedBox(height: 16),
                   const Spacer(),
                   // Primary "Get started" (prototype L82-84).
                   SizedBox(

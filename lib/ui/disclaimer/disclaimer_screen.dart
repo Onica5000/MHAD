@@ -150,6 +150,8 @@ class _GateLayout extends StatelessWidget {
                       // validity and the PA P&A / attorney resources live in
                       // the full legal sections ("Read full disclaimer").
                       children: [
+                        // Phones: the photo scrolls with the cards too.
+                        const SplitHeroBanner(),
                         // Header scrolls with the cards (2026-11): pinned,
                         // the hero title + intro left the cards no room on a
                         // phone in Spanish (32px overflow). Only the consent
