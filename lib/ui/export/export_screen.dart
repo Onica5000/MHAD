@@ -623,7 +623,10 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
           const SizedBox(height: 8),
           // Opens the PDF in a viewer rather than force-downloading (see
           // _generateAndShare).
+          // Its own node: in one block with the sentence above, a phone's
+          // screen reader merged the two into one "button" (inventory diff).
           Semantics(
+            container: true,
             button: true,
             label: context.l10n.exportOpenThePdfDirectiveIn,
             child: SizedBox(
