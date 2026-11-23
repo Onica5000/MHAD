@@ -53,8 +53,11 @@ class ArticleDetailScreen extends StatelessWidget {
             ref: 'learn',
             panelTitle: context.l10n.askAiPanelTitle,
             panelSubtitle: context.l10n.askAiPanelSubtitle,
-            instructions: () =>
-                '${LlmAssistant.systemPromptFor(null)}\n$articleLine',
+            // The article's own title leads the relevance, so its text is in.
+            instructions: (q) => '${LlmAssistant.systemPromptFor(null,
+                question: '${section.title} $q',
+                referenceBudget: LlmAssistant.handoffReferenceChars)}\n'
+                '$articleLine',
           ),
         ],
       ),

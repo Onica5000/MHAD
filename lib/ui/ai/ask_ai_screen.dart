@@ -52,8 +52,10 @@ class _AskAiScreenState extends ConsumerState<AskAiScreen> {
             initialQuestion: widget.assistantContext?.openingPrompt,
             // The same instructions the in-app chat sends (shared builder);
             // wizard context when opened from a step.
-            instructions: () =>
-                LlmAssistant.systemPromptFor(widget.assistantContext),
+            instructions: (q) => LlmAssistant.systemPromptFor(
+                widget.assistantContext,
+                question: q,
+                referenceBudget: LlmAssistant.handoffReferenceChars),
           ),
           const SizedBox(height: 16),
           Text(

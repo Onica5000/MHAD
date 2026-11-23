@@ -105,6 +105,7 @@ key would need a **relay server** — keys never ship to the browser.
 | API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
 | Review screen | `pipeline_review_widget.dart`, `reviewFormatProblem`, `diagnosisFromReview` / `allergyFromReview` | The AI's `check_notes` show in a "Please check" card (filtered: no links, numbers masked); DOB / ZIP / phone get the wizard's own checks and start unchecked; diagnosis codes are checked against ICD-10-CM; every row honors the person's edits; 988 banner on crisis words |
 | Voice questionnaire | `AudioQuestionnaire` (`lib/data/audio_questionnaire_content.dart`) → `/audio-guide?form=` + PDF | Same steps, order and labels as the wizard, per form; prompts quote the screen's own labels |
+| Ask prompt size | `selectReferenceSections`, `LlmAssistant.handoffReferenceChars` | A copied Ask prompt carries only the Learn sections relevant to the question / step / article (budget) + the titles of the rest; all of them (~127K chars, ~32K tokens) overflowed free ChatGPT (~27K) and Gemini (32K) — Nov 2026. `reference_selection_test` keeps it under 60K chars. The hidden API path still sends every section |
 | Mock simulation | method in memory `field-ai-audit-2026-11-21` | A stand-in AI answers the REAL copied prompt for a test file; paste its reply into the release build and score against the kit's answer key. A Claude stand-in is not ChatGPT/Gemini — say so |
 
 ## AI API path (hidden backup — multi-provider, see lib/ai/)
