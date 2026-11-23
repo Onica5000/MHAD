@@ -1397,7 +1397,7 @@
   "crisisPlanDonTDoThese": "Don’t do these",
   "crisisPlanTypeAShortNote": "Type a short note",
   "permissionsOverviewPaMhadRequestsSystemPermissions": "PA MHAD requests system permissions only for features you actively use. Nothing is collected in the background. Each section below explains exactly what a permission unlocks, what the app does with the result, and what it never does.",
-  "permissionsOverviewWebIntro": "On the web, PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.",
+  "permissionsOverviewWebIntro": "PA MHAD asks your browser for one permission: the microphone, and only when you tap the microphone to dictate. Nothing is collected in the background.",
   "@permissionsOverviewWebIntro": {
     "description": "Permissions screen intro on the web (replaces the native intro)."
   },
@@ -2594,6 +2594,26 @@
   "permissionsOverviewNoBiometricDataIsSent": "No biometric data is sent to any server",
   "permissionsOverviewFallsBackToAPasscode": "Falls back to a passcode you choose if biometrics fail",
   "permissionsOverviewNotApplicableOnThisPlatform": "Not applicable on this platform",
+  "permissionsOverviewNotUsed": "Not used by PA MHAD",
+  "@permissionsOverviewNotUsed": {
+    "description": "Permissions page: status of a permission PA MHAD never asks for (biometrics, notifications, camera, contacts)."
+  },
+  "permissionsOverviewBiometricsWebUsedFor": "PA MHAD never asks for your fingerprint or face.",
+  "@permissionsOverviewBiometricsWebUsedFor": {
+    "description": "Permissions page, Biometrics card."
+  },
+  "permissionsOverviewNotificationsWebUsedFor": "PA MHAD doesn’t send notifications. For a reminder before your directive’s two-year date, save the calendar file on Download & print.",
+  "@permissionsOverviewNotificationsWebUsedFor": {
+    "description": "Permissions page, Notifications card (the calendar file is the renewal reminder on Download & print)."
+  },
+  "permissionsOverviewCameraWebUsedFor": "PA MHAD doesn’t use your camera. To fill in from a photo, attach it in your own AI on the Autofill page — on a phone, your AI’s app can take the photo.",
+  "@permissionsOverviewCameraWebUsedFor": {
+    "description": "Permissions page, Camera card (copy-and-paste AI: photos go to the person's own AI)."
+  },
+  "permissionsOverviewContactsWebUsedFor": "PA MHAD never reads your address book — you type each person’s details.",
+  "@permissionsOverviewContactsWebUsedFor": {
+    "description": "Permissions page, Contacts card."
+  },
   "permissionsOverviewRemindingYouAboutWitnessSigning": "Reminding you about witness signing, renewals, and check-ins.",
   "permissionsOverviewYouChooseWhichRemindersTo": "You choose which reminders to enable",
   "permissionsOverviewNotificationsAreScheduledLocallyOn": "Notifications are scheduled locally on this device",
@@ -3649,11 +3669,11 @@
   "settingsThemeAuto": "Auto",
   "settingsThemeLight": "Light",
   "settingsThemeDark": "Dark",
-  "settingsStatusWebTab": "● WEB APP · KEPT IN THIS TAB",
+  "settingsStatusWebTab": "● KEPT IN THIS TAB",
   "@settingsStatusWebTab": {
     "description": "Settings header status on the web when no locked copy is kept."
   },
-  "settingsStatusWebLocked": "● WEB APP · LOCKED COPY ON THIS DEVICE",
+  "settingsStatusWebLocked": "● LOCKED COPY ON THIS DEVICE",
   "@settingsStatusWebLocked": {
     "description": "Settings header status on the web when the person keeps a passphrase-locked progress copy."
   },
@@ -3935,7 +3955,7 @@
   "learnOpenInGlossary": "Open in the glossary",
   "educationSourceTranslated": "Translated from English",
   "guardianNomConditionsIntroDeclaration": "If a court appoints a guardian, choose whether the guardian may revoke, suspend or end this declaration. Any notes you add are guidance for the court.",
-  "exportRenewalReminderBodyNoDate": "Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. This web app can’t send reminders, so this saves a calendar file with two reminders: {days} days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.",
+  "exportRenewalReminderBodyNoDate": "Your directive is valid for two years from the day you sign it — longer if you can’t make mental health decisions when it would expire. PA MHAD can’t send reminders, so this saves a calendar file with two reminders: {days} days before it expires, and on the day itself. You pick the day you sign; the file is made on your device and holds only the reminder titles, never your name or your directive.",
   "@exportRenewalReminderBodyNoDate": {"placeholders": {"days": {"type": "int"}}},
   "calendarWhenWillYouSign": "When will you sign it?",
   "moreSheetRevokeADirective": "Revoke a directive",
@@ -4023,7 +4043,7 @@
   "@importKeepCopyBody": {"placeholders": {"minutes": {"type": "int"}}},
   "importKeepCopyYes": "Keep a locked copy",
   "importKeepCopyNo": "Keep nothing",
-  "wizardExitWebBody": "The web app doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.",
+  "wizardExitWebBody": "PA MHAD doesn’t keep your progress for long.\n\nIf you chose a locked copy, it stays on this device, locked with your passphrase, until {minutes} minutes after you leave. Otherwise your work is erased when you close this tab. To finish another day, download your progress, or export or print your document.",
   "@wizardExitWebBody": {"placeholders": {"minutes": {"type": "int"}}},
   "aiSetupYourDirectiveDataIsHeld": "- Your directive data stays in your browser: in this tab only or, if you chose, in a copy locked with your passphrase that expires {minutes} minutes after you leave; never on a server\n- AI features are optional and the app works without them\n- Only text you explicitly send via AI chat or AI Suggest leaves your device\n- This app is not a medical or legal service\n- This app is not HIPAA-compliant",
   "@aiSetupYourDirectiveDataIsHeld": {"placeholders": {"minutes": {"type": "int"}}},

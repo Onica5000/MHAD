@@ -56,7 +56,11 @@ class PermissionsOverviewScreen extends StatelessWidget {
           _PermissionCard(
             icon: Icons.fingerprint,
             title: context.l10n.permissionsOverviewBiometricsPasscode,
-            usedFor: context.l10n.permissionsOverviewUnlockingEncryptedOnDeviceStorage,
+            // Web: what PA MHAD does and doesn't do — never a "native app" or a
+            // "later release" (only the web app exists; user, 2026-11-23).
+            usedFor: kIsWeb
+                ? context.l10n.permissionsOverviewBiometricsWebUsedFor
+                : context.l10n.permissionsOverviewUnlockingEncryptedOnDeviceStorage,
             // Native-only promises would read as claims on the web.
             promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewUsedOnlyToVerifyYour,
@@ -64,34 +68,40 @@ class PermissionsOverviewScreen extends StatelessWidget {
               context.l10n.permissionsOverviewNoBiometricDataIsSent,
               context.l10n.permissionsOverviewFallsBackToAPasscode,
             ],
-            statusLine: !kIsWeb && platformIsMobile
-                ? context.l10n.permissionsOverviewAvailableOsManaged
-                : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
+            statusLine: kIsWeb
+                ? context.l10n.permissionsOverviewNotUsed
+                : platformIsMobile
+                    ? context.l10n.permissionsOverviewAvailableOsManaged
+                    : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
             statusOk: !kIsWeb && platformIsMobile,
           ),
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.notifications_outlined,
             title: context.l10n.permissionsOverviewNotifications,
-            usedFor:
-                context.l10n.permissionsOverviewRemindingYouAboutWitnessSigning,
+            usedFor: kIsWeb
+                ? context.l10n.permissionsOverviewNotificationsWebUsedFor
+                : context.l10n.permissionsOverviewRemindingYouAboutWitnessSigning,
             promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewYouChooseWhichRemindersTo,
               context.l10n.permissionsOverviewNotificationsAreScheduledLocallyOn,
               context.l10n.permissionsOverviewNoContentPiiDirectiveText,
               context.l10n.permissionsOverviewDisablePerCategoryInDevice,
             ],
-            statusLine: !kIsWeb && platformIsMobile
-                ? context.l10n.permissionsOverviewAvailableOsManaged
-                : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
+            statusLine: kIsWeb
+                ? context.l10n.permissionsOverviewNotUsed
+                : platformIsMobile
+                    ? context.l10n.permissionsOverviewAvailableOsManaged
+                    : context.l10n.permissionsOverviewNotApplicableOnThisPlatform,
             statusOk: !kIsWeb && platformIsMobile,
           ),
           const SizedBox(height: 12),
           _PermissionCard(
             icon: Icons.camera_alt_outlined,
             title: context.l10n.permissionsOverviewCamera,
-            usedFor:
-                context.l10n.permissionsOverviewSnappingAPhotoOfYour,
+            usedFor: kIsWeb
+                ? context.l10n.permissionsOverviewCameraWebUsedFor
+                : context.l10n.permissionsOverviewSnappingAPhotoOfYour,
             // The web app never uses the camera: with the copy-and-paste AI,
             // photos are attached in the person's own AI service.
             promises: kIsWeb ? const <String>[] : [
@@ -101,7 +111,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
               context.l10n.permissionsOverviewYouReviewEveryFieldBefore,
             ],
             statusLine: kIsWeb
-                ? context.l10n.permissionsOverviewNotApplicableOnThisPlatform
+                ? context.l10n.permissionsOverviewNotUsed
                 : context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
@@ -135,8 +145,9 @@ class PermissionsOverviewScreen extends StatelessWidget {
           _PermissionCard(
             icon: Icons.contacts_outlined,
             title: context.l10n.permissionsOverviewContacts,
-            usedFor:
-                context.l10n.permissionsOverviewPickingAnAgentOrWitness,
+            usedFor: kIsWeb
+                ? context.l10n.permissionsOverviewContactsWebUsedFor
+                : context.l10n.permissionsOverviewPickingAnAgentOrWitness,
             promises: kIsWeb ? const <String>[] : [
               context.l10n.permissionsOverviewWeNeverUploadYourContacts,
               context.l10n.permissionsOverviewSearchRunsLocallyOnThis,
@@ -144,7 +155,7 @@ class PermissionsOverviewScreen extends StatelessWidget {
               context.l10n.permissionsOverviewYouCanRevokeAccessIn,
             ],
             statusLine: kIsWeb
-                ? context.l10n.permissionsOverviewNotApplicableOnThisPlatform
+                ? context.l10n.permissionsOverviewNotUsed
                 : context.l10n.permissionsOverviewNotYetWiredFeatureIn,
             statusOk: false,
           ),
