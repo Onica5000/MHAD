@@ -149,6 +149,11 @@ Every fix has a test: `room_chips_test`, `other_instructions_test`, `records_dis
 
 ## Open — not changed (your call)
 
+**Status 2026-11-22** (branch `feat/getting-ready-2026-11-22`): O2 done (`check_notes` →
+"Please check" card), O3 done (review checks DOB / ZIP / phone), O4 done (day-first rule in
+the prompt), O6 done (prompt says the box is "Reason / notes"). Still open: O1, O5 (waits on
+TEST-PLAN part A), O7.
+
 | # | Question | Recommendation |
 |---|---|---|
 | O1 | Autofill puts a document's de-escalation into "Crisis intervention" and its triggers into the Crisis plan list; smart-fill and the person use the "De-escalation techniques" / "Potential crisis triggers" boxes. All of them print. | Pick one home for each, after the batch-2 tests show what the AIs do |

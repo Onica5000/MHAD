@@ -77,7 +77,10 @@ This regenerates `app_database.g.dart`.
 ## Form Types & Wizard Steps
 - COMBINED: all steps including agent designation, alternate agent, agent authority
 - DECLARATION: no agent sections (guardian nomination included — official form part E)
-- POA: all steps including agent sections
+- POA: About you, When, People I trust, Guardian, Procedures & research, Review (6). Its
+  procedures offer ONLY the official form's two choices per treatment ("My agent is / is not
+  authorized to consent…") — user, 2026-11-22; this rule is for that case only, the app's
+  extra information sections elsewhere stay
 - `FormType.steps` getter returns the correct step list per type
 
 ## PDF Generation (Phase 6)
@@ -100,6 +103,9 @@ key would need a **relay server** — keys never ship to the browser.
 | After a paste | panel | Clipboard cleared; a failed paste says a fresh copy may be needed |
 | Fields ↔ AI keys | `docs/FIELD_AND_AI_AUDIT_2026-11-21.md` (all 81 fields) | A new field needs its autofill key, apply, review row and a test. Packed columns: `OtherInstructions` / `RecordsDisclosure` (`domain/model`) — never hand-parse their tags; room chips: `kRoomPreferenceChipIds` |
 | API-only extras | Consolidate, rate limits, AI setup | Hidden with the API path; return when it's shown |
+| Review screen | `pipeline_review_widget.dart`, `reviewFormatProblem`, `diagnosisFromReview` / `allergyFromReview` | The AI's `check_notes` show in a "Please check" card (filtered: no links, numbers masked); DOB / ZIP / phone get the wizard's own checks and start unchecked; diagnosis codes are checked against ICD-10-CM; every row honors the person's edits; 988 banner on crisis words |
+| Voice questionnaire | `AudioQuestionnaire` (`lib/data/audio_questionnaire_content.dart`) → `/audio-guide?form=` + PDF | Same steps, order and labels as the wizard, per form; prompts quote the screen's own labels |
+| Mock simulation | method in memory `field-ai-audit-2026-11-21` | A stand-in AI answers the REAL copied prompt for a test file; paste its reply into the release build and score against the kit's answer key. A Claude stand-in is not ChatGPT/Gemini — say so |
 
 ## AI API path (hidden backup — multi-provider, see lib/ai/)
 - **Provider-agnostic** since 2026-06-28. `AiProvider` (lib/ai/ai_provider.dart) is the
@@ -187,6 +193,10 @@ key would need a **relay server** — keys never ship to the browser.
 | Copy | `lib/l10n/app_{en,es}.arb` | Sentence case (form names, orgs, acronyms excepted); ’ “ ” … not ' " ... (`arb_typography_test`); one key per meaning (merge, don't copy); "PA MHAD" = the app, "directive" / es "DASM" = the document; plain words for legal terms ("the person who made it", not "principal") |
 | File names | `mhadFileName()` (`lib/utils/file_names.dart`) | Never hand-build a download name (blank parts were leaving `PA_MHAD_.pdf`) |
 | Nothing-removed check | `tool/ui_inventory.py --build build/web --out after.json`, then `--diff tool/ui_inventory_before.json after.json` | Explain every missing control before merging a UI change |
+| Wizard step padding | `DesignTokens.pagePadding` | Every step's own list uses it, so the form lines up with the step header (`wizard_step_padding_rule_test`) |
+| Step header (phones) | `StepHead(compact:)` | Collapses to one line while the step is scrolled, expands at the top — never toggled by the keyboard (R5) |
+| Welcome photo (phones) | `SplitHeroBanner` | Placed by the screen as the first item of its own scroll, so it scrolls away; the consent row + CTA stay pinned |
+| Getting ready | `GettingReadyChecklist` (`lib/data/getting_ready_content.dart`) → `/getting-ready?form=` + PDF | One definition for page and PDF; validity facts only from the legal canon / booklet (Jev-checked) |
 
 **Widget tests:** size the VIEW (`tester.view.physicalSize` + `devicePixelRatio = 1`), never
 `binding.setSurfaceSize` — it leaves MediaQuery at 800×600, so "desktop" cases silently
