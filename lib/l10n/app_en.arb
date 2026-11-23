@@ -239,7 +239,7 @@
   "personalInfoStepHelp": "Provide your legal name as it appears on official documents. You must be 18 years of age or older, or an emancipated minor, to create a Mental Health Advance Directive under PA Act 194 of 2004.",
   "personalInfoStepFullLegalName": "Full legal name *",
   "personalInfoStepFullLegalNameHelper": "Use your full legal name as it appears on official ID",
-  "personalInfoStepDobLabel": "Date of birth (MM/DD/YYYY) *",
+  "personalInfoStepDobLabel": "Date of birth *",
   "personalInfoStepDobHelper": "Used to verify your identity on the directive",
   "personalInfoStepPickDate": "Pick date",
   "personalInfoStepStreetAddress": "Street address",
@@ -1221,6 +1221,15 @@
       }
     }
   },
+  "reviewPleaseCheckIgnoredKeys": "Your AI also sent fields PA MHAD doesn’t read, so nothing from them was filled in: {keys}. If something is missing below, copy the message again and ask your AI to use its exact format.",
+  "@reviewPleaseCheckIgnoredKeys": {
+    "description": "Autofill review, Please-check card (app's own line, not the AI's): field names in a pasted answer the app ignores (prompt hardening P-6). {keys} = the field names as the AI wrote them.",
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
   "reviewCheckThis": "Check this: {problem}",
   "@reviewCheckThis": {
     "description": "Autofill review: shown under a date of birth / ZIP / phone that fails the wizard's check; {problem} is that check's own message (e.g. \"Invalid date\").",
@@ -1237,6 +1246,28 @@
   "reviewDiagnosisCodeNotFound": "This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.",
   "@reviewDiagnosisCodeNotFound": {
     "description": "Autofill review: note under a diagnosis whose code the ICD-10-CM registry doesn't have."
+  },
+  "reviewMedDoseOnList": "Already on your list as {dose}. Unchecked keeps that; checked replaces it with the dose above.",
+  "@reviewMedDoseOnList": {
+    "description": "Autofill review, under a current medication that is already on the person's list with a different dose (audit O7). {dose} = the dose on the list.",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewMedDoseOnListNoDose": "Already on your list without a dose. Checked adds the dose above to it.",
+  "@reviewMedDoseOnListNoDose": {
+    "description": "Autofill review, under a current medication already on the list with no dose."
+  },
+  "reviewMedOtherFileDose": "Your files give different doses — another one says {doses}. Correct the dose with the pencil if needed, then check it.",
+  "@reviewMedOtherFileDose": {
+    "description": "Autofill review, under a current medication whose dose differs between uploaded files (audit O7). {doses} = the other file(s)' dose(s).",
+    "placeholders": {
+      "doses": {
+        "type": "String"
+      }
+    }
   },
   "reviewAddToDirective": "Add to your directive",
   "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
@@ -2003,9 +2034,9 @@
   "accessibilitySettingsMakeItReadable": "Make it readable.",
   "accessibilitySettingsLegalTextIsAlwaysRendered": "Legal text is always rendered in English to preserve PA Act 194 wording.",
   "facilitatorYouDonTHaveTo": "You don’t have to do this alone.",
-  "facilitatorPeerSpecialistAdvocateReferral": "♥ Peer specialist / advocate referral",
-  "facilitatorSomeoneIAlreadyTrust": "👥 Someone I already trust",
-  "facilitatorMyCareTeam": "🧠 My care team",
+  "facilitatorPeerSpecialistAdvocateReferral": "Peer specialist / advocate referral",
+  "facilitatorSomeoneIAlreadyTrust": "Someone I already trust",
+  "facilitatorMyCareTeam": "My care team",
   "facilitatorPreferToDoItYourself": "Prefer to do it yourself? That’s fine — keep going from where you left off.",
   "moreSheetCallOrText98824": "Call or text 988 · 24/7 support",
   "moreSheetUploadADocumentPhotoOr": "Upload a document, photo, or recording",
@@ -3597,7 +3628,7 @@
   "@dateInputHint": {
     "description": "Placeholder for typed dates. The field parses US month/day/year order, so translations must keep that order (e.g. es: MM/DD/AAAA)."
   },
-  "facilitatorGuidedTag": "GUIDED SESSION · IN THE APP",
+  "facilitatorGuidedTag": "Guided session · in the app",
   "facilitatorGuidedTitle": "Talk it through, one question at a time",
   "facilitatorGuidedBody": "The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn’t decide.",
   "facilitatorGuidedMetaPace": "Stop any time",

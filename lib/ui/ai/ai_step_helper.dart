@@ -126,7 +126,10 @@ class _AiStepHelperState extends ConsumerState<AiStepHelper> {
           panelSubtitle: context.l10n.aiStepHelpPanelSubtitle,
           // The same instructions the in-app chat sends, with this step and
           // what's filled so far (values PII-stripped by the builder).
-          instructions: () => LlmAssistant.systemPromptFor(AssistantContext(
+          instructions: (q) => LlmAssistant.systemPromptFor(
+              question: q,
+              referenceBudget: LlmAssistant.handoffReferenceChars,
+              AssistantContext(
             formType: widget.formType,
             stepName: widget.stepName,
             filledFields: _filled,

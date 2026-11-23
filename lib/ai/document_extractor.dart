@@ -195,6 +195,32 @@ ${_skeleton(_extractionSchema)}''';
             e.key,
       ];
 
+  /// Keys of a pasted answer that the app doesn't read — top level and inside
+  /// `personal_info` — so the review can say nothing came from them (P-6).
+  /// The envelope's own keys and empty values don't count.
+  static List<String> unknownAnswerKeys(Map<String, dynamic> json) {
+    const envelope = {'mhad_task', 'mhad_ref'};
+    final known = answerKeys.toSet();
+    bool empty(Object? v) =>
+        v == null ||
+        (v is String && v.trim().isEmpty) ||
+        (v is List && v.isEmpty) ||
+        (v is Map && v.isEmpty);
+    final out = <String>[];
+    for (final e in json.entries) {
+      if (envelope.contains(e.key) || empty(e.value)) continue;
+      if (e.key == 'personal_info' && e.value is Map) {
+        for (final p in (e.value as Map).entries) {
+          final k = 'personal_info.${p.key}';
+          if (!known.contains(k) && !empty(p.value)) out.add(k);
+        }
+        continue;
+      }
+      if (!known.contains(e.key)) out.add(e.key);
+    }
+    return out;
+  }
+
   static String _skeleton(Schema s) => switch (s.type) {
         SchemaType.object => '{${(s.properties ?? const <String, Schema>{}).entries.map((e) => '"${e.key}": ${_skeleton(e.value)}').join(', ')}}',
         SchemaType.array => s.items?.type == SchemaType.object

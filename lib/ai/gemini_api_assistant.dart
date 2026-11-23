@@ -12,6 +12,7 @@ import 'package:mhad/ai/pii_stripper.dart';
 import 'package:mhad/ai/side_effect_item.dart';
 import 'package:mhad/data/app_data/app_data.dart';
 import 'package:mhad/data/educational_content.dart';
+import 'package:mhad/ai/reference_selection.dart';
 import 'package:mhad/domain/model/directive.dart';
 import 'package:mhad/services/openfda_service.dart';
 import 'package:mhad/utils/json_utils.dart';
@@ -598,13 +599,31 @@ class LlmAssistant implements AiAssistant {
   /// The assistant's full instructions (role, guided walkthrough, PA
   /// reference, guidelines) for [context]. ONE definition, shared by the API
   /// chat and the copy-and-paste handoff's "Ask AI" prompt.
-  static String systemPromptFor(AssistantContext? context) =>
-      _buildSystemPrompt(context);
+  ///
+  /// [question] + [referenceBudget] (the copy-and-paste path): only the Learn
+  /// sections most relevant to the question and step, up to [referenceBudget]
+  /// characters, plus a title list of the rest — the full set (~113K chars)
+  /// overflowed the free ChatGPT / Gemini windows. Null budget = every
+  /// section (the API path).
+  static String systemPromptFor(AssistantContext? context,
+          {String question = '', int? referenceBudget}) =>
+      _buildSystemPrompt(context,
+          question: question, referenceBudget: referenceBudget);
 
-  static String _buildSystemPrompt(AssistantContext? context) {
+  /// The Learn reference budget for a copied Ask prompt (the title list of
+  /// the other sections comes on top, ~6K): the whole message
+  /// then stays near ~55K characters (~14K tokens), inside the free ChatGPT
+  /// (~27K tokens) and Gemini (32K tokens) windows with room for the answer
+  /// (Nov 2026 — check again when those plans change).
+  static const int handoffReferenceChars = 34000;
+
+  static String _buildSystemPrompt(AssistantContext? context,
+      {String question = '', int? referenceBudget}) {
     return _buildRoleSection(context) +
         _buildWalkthroughSection() +
-        _buildReferenceSection() +
+        _buildReferenceSection(
+            query: '$question ${context?.stepName ?? ''}',
+            budget: referenceBudget) +
         _buildGuidelinesSection();
   }
 
@@ -827,7 +846,7 @@ class LlmAssistant implements AiAssistant {
     return buf.toString();
   }
 
-  static String _buildReferenceSection() {
+  static String _buildReferenceSection({String query = '', int? budget}) {
     final buf = StringBuffer();
 
     buf.writeln('--- PENNSYLVANIA MHAD REFERENCE INFORMATION ---\n');
@@ -835,10 +854,28 @@ class LlmAssistant implements AiAssistant {
         'Source: PA Act 194 of 2004 (Mental Health Advance Directive booklet, '
         'Disabilities Law Project)\n');
 
-    for (final section in allEducationSections) {
+    final sections = budget == null
+        ? allEducationSections
+        : selectReferenceSections(query, budget);
+    for (final section in sections) {
       buf.writeln('## ${section.category.displayName}: ${section.title}');
       buf.writeln(section.content);
       buf.writeln();
+    }
+    if (budget != null) {
+      final rest = [
+        for (final s in allEducationSections)
+          if (!sections.contains(s)) s,
+      ];
+      if (rest.isNotEmpty) {
+        buf.writeln('OTHER TOPICS (titles only, not included here — the person '
+            "can read them in the app's Learn section; point to one when it "
+            'fits the question better than what is above):');
+        for (final s in rest) {
+          buf.writeln('- ${s.category.displayName}: ${s.title}');
+        }
+        buf.writeln();
+      }
     }
 
     buf.writeln('--- END REFERENCE ---\n');

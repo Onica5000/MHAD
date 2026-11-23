@@ -335,6 +335,9 @@ class _DiagnosesStepState extends ConsumerState<DiagnosesStep>
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 border: InputBorder.none,
+                // The box around it is the border; the theme's fill made a grey
+                // box inside it (visual review).
+                filled: false,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 hintText: context.l10n.diagnosesSearchHint,

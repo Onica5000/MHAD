@@ -1067,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @personalInfoStepDobLabel.
   ///
   /// In en, this message translates to:
-  /// **'Date of birth (MM/DD/YYYY) *'**
+  /// **'Date of birth *'**
   String get personalInfoStepDobLabel;
 
   /// No description provided for @personalInfoStepDobHelper.
@@ -4904,6 +4904,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 value below doesn’t look right, so it starts unchecked. Fix it with the pencil, or leave it out.} other{{count} values below don’t look right, so they start unchecked. Fix them with the pencil, or leave them out.}}'**
   String reviewPleaseCheckFormat(int count);
 
+  /// Autofill review, Please-check card (app's own line, not the AI's): field names in a pasted answer the app ignores (prompt hardening P-6). {keys} = the field names as the AI wrote them.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI also sent fields PA MHAD doesn’t read, so nothing from them was filled in: {keys}. If something is missing below, copy the message again and ask your AI to use its exact format.'**
+  String reviewPleaseCheckIgnoredKeys(String keys);
+
   /// Autofill review: shown under a date of birth / ZIP / phone that fails the wizard's check; {problem} is that check's own message (e.g. "Invalid date").
   ///
   /// In en, this message translates to:
@@ -4921,6 +4927,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.'**
   String get reviewDiagnosisCodeNotFound;
+
+  /// Autofill review, under a current medication that is already on the person's list with a different dose (audit O7). {dose} = the dose on the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Already on your list as {dose}. Unchecked keeps that; checked replaces it with the dose above.'**
+  String reviewMedDoseOnList(String dose);
+
+  /// Autofill review, under a current medication already on the list with no dose.
+  ///
+  /// In en, this message translates to:
+  /// **'Already on your list without a dose. Checked adds the dose above to it.'**
+  String get reviewMedDoseOnListNoDose;
+
+  /// Autofill review, under a current medication whose dose differs between uploaded files (audit O7). {doses} = the other file(s)' dose(s).
+  ///
+  /// In en, this message translates to:
+  /// **'Your files give different doses — another one says {doses}. Correct the dose with the pencil if needed, then check it.'**
+  String reviewMedOtherFileDose(String doses);
 
   /// No description provided for @reviewAddToDirective.
   ///
@@ -8855,19 +8879,19 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorPeerSpecialistAdvocateReferral.
   ///
   /// In en, this message translates to:
-  /// **'♥ Peer specialist / advocate referral'**
+  /// **'Peer specialist / advocate referral'**
   String get facilitatorPeerSpecialistAdvocateReferral;
 
   /// No description provided for @facilitatorSomeoneIAlreadyTrust.
   ///
   /// In en, this message translates to:
-  /// **'👥 Someone I already trust'**
+  /// **'Someone I already trust'**
   String get facilitatorSomeoneIAlreadyTrust;
 
   /// No description provided for @facilitatorMyCareTeam.
   ///
   /// In en, this message translates to:
-  /// **'🧠 My care team'**
+  /// **'My care team'**
   String get facilitatorMyCareTeam;
 
   /// No description provided for @facilitatorPreferToDoItYourself.
@@ -11914,7 +11938,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorGuidedTag.
   ///
   /// In en, this message translates to:
-  /// **'GUIDED SESSION · IN THE APP'**
+  /// **'Guided session · in the app'**
   String get facilitatorGuidedTag;
 
   /// No description provided for @facilitatorGuidedTitle.

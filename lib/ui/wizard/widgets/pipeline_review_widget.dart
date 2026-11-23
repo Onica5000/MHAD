@@ -492,6 +492,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
         agents.where((a) => a.agentType == 'alternate').toList();
     final altAgent = altAgents.isEmpty ? null : altAgents.first;
     final guardian = await repo.getGuardianNomination(id);
+    _existingMeds = await repo.getMedications(id);
     final otherSections = OtherInstructions.parse(instr?.other ?? '');
     final records = RecordsDisclosure.parse(instr?.recordsDisclosure ?? '');
     final existing = <String, String>{
@@ -845,6 +846,7 @@ extension _PipelineReviewUi on _PipelineScreenState {
       children: [
         const CrisisSupportBanner(),
         if (_reviewWarnings.isNotEmpty ||
+            _ignoredAnswerKeys.isNotEmpty ||
             (_validated?.checkNotes.isNotEmpty ?? false)) ...[
           _pleaseCheckCard(p, _validated?.checkNotes ?? const []),
           const SizedBox(height: 16),
@@ -1248,6 +1250,35 @@ extension _PipelineReviewUi on _PipelineScreenState {
         _reviewNotes[key] = l.reviewDiagnosisCodeNotFound;
       }
     }
+    // A current medication given another dose — by another uploaded file,
+    // or already on the list — is a choice, not dropped (audit O7). Like any
+    // conflict it starts unchecked; adding a dose to one listed without a
+    // dose is not a conflict and stays checked.
+    for (final m in _validated?.currentMeds ?? const <ValidatedMedication>[]) {
+      final key = 'med_current_${m.originalName}';
+      if (!_reviewEdited.containsKey(key)) continue;
+      if (m.otherDosages.isNotEmpty) {
+        _reviewNotes[key] = l.reviewMedOtherFileDose(m.otherDosages.join(' · '));
+        _reviewChecked[key] = false;
+        continue;
+      }
+      if (m.dosage.trim().isEmpty) continue;
+      final name = m.displayName.toLowerCase();
+      for (final e in _existingMeds) {
+        if (e.entryType != MedicationEntryType.current.name ||
+            e.medicationName.toLowerCase() != name ||
+            sameMedicationDose(e.dosage, m.dosage)) {
+          continue;
+        }
+        if (e.dosage.trim().isEmpty) {
+          _reviewNotes[key] = l.reviewMedDoseOnListNoDose;
+        } else {
+          _reviewNotes[key] = l.reviewMedDoseOnList(e.dosage.trim());
+          _reviewChecked[key] = false;
+        }
+        break;
+      }
+    }
   }
 
   /// A plain note under a row (not a problem): e.g. what an allergy with no
@@ -1335,6 +1366,12 @@ extension _PipelineReviewUi on _PipelineScreenState {
             if (_reviewWarnings.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(l.reviewPleaseCheckFormat(_reviewWarnings.length), style: body),
+            ],
+            if (_ignoredAnswerKeys.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                  l.reviewPleaseCheckIgnoredKeys(_ignoredAnswerKeys.join(', ')),
+                  style: body),
             ],
             if (notes.isNotEmpty) ...[
               const SizedBox(height: 8),

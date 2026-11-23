@@ -18,7 +18,9 @@ class NlmAttribution extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      // Vertical only: every list it sits in is already padded (its own 16px
+      // indented it from the content edge).
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Text(
         context.l10n.nlmAttributionSourceUSNationalLibrary(
             context.l10n.nlmNoMedicalAdvice),

@@ -375,7 +375,17 @@ class _PacketRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: p.primary),
+          // The 36px tinted tile the app's other lists use (a bare 16px icon
+          // looked unfinished beside them — visual review).
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: p.primaryLight,
+              borderRadius: BorderRadius.circular(DesignTokens.inputRadius),
+            ),
+            child: Icon(icon, size: 20, color: p.primary),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

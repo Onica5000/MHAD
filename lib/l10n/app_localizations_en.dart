@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use your full legal name as it appears on official ID';
 
   @override
-  String get personalInfoStepDobLabel => 'Date of birth (MM/DD/YYYY) *';
+  String get personalInfoStepDobLabel => 'Date of birth *';
 
   @override
   String get personalInfoStepDobHelper =>
@@ -2824,6 +2824,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String reviewPleaseCheckIgnoredKeys(String keys) {
+    return 'Your AI also sent fields PA MHAD doesn’t read, so nothing from them was filled in: $keys. If something is missing below, copy the message again and ask your AI to use its exact format.';
+  }
+
+  @override
   String reviewCheckThis(String problem) {
     return 'Check this: $problem';
   }
@@ -2835,6 +2840,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get reviewDiagnosisCodeNotFound =>
       'This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.';
+
+  @override
+  String reviewMedDoseOnList(String dose) {
+    return 'Already on your list as $dose. Unchecked keeps that; checked replaces it with the dose above.';
+  }
+
+  @override
+  String get reviewMedDoseOnListNoDose =>
+      'Already on your list without a dose. Checked adds the dose above to it.';
+
+  @override
+  String reviewMedOtherFileDose(String doses) {
+    return 'Your files give different doses — another one says $doses. Correct the dose with the pencil if needed, then check it.';
+  }
 
   @override
   String get reviewAddToDirective => 'Add to your directive';
@@ -5140,13 +5159,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
-      '♥ Peer specialist / advocate referral';
+      'Peer specialist / advocate referral';
 
   @override
-  String get facilitatorSomeoneIAlreadyTrust => '👥 Someone I already trust';
+  String get facilitatorSomeoneIAlreadyTrust => 'Someone I already trust';
 
   @override
-  String get facilitatorMyCareTeam => '🧠 My care team';
+  String get facilitatorMyCareTeam => 'My care team';
 
   @override
   String get facilitatorPreferToDoItYourself =>
@@ -7180,7 +7199,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateInputHint => 'MM/DD/YYYY';
 
   @override
-  String get facilitatorGuidedTag => 'GUIDED SESSION · IN THE APP';
+  String get facilitatorGuidedTag => 'Guided session · in the app';
 
   @override
   String get facilitatorGuidedTitle =>

@@ -554,7 +554,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Use su nombre legal completo tal como aparece en su identificación oficial';
 
   @override
-  String get personalInfoStepDobLabel => 'Fecha de nacimiento (MM/DD/AAAA) *';
+  String get personalInfoStepDobLabel => 'Fecha de nacimiento *';
 
   @override
   String get personalInfoStepDobHelper =>
@@ -714,8 +714,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Mi agente debe consultar con mi terapeuta, el Dr. Smith, antes de aceptar cualquier cambio en mi régimen de medicamentos.';
 
   @override
-  String get agentAuthLimitationsLabel =>
-      'Limitaciones o instrucciones adicionales';
+  String get agentAuthLimitationsLabel => 'Otros límites o instrucciones';
 
   @override
   String get guardianNomNoPreference => 'Sin preferencia';
@@ -1760,7 +1759,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get medAutoFieldLabel => 'Nombre del medicamento';
+  String get medAutoFieldLabel => 'Medicamento';
 
   @override
   String get medAutoSearchingA11y => 'Buscando medicamentos';
@@ -2885,6 +2884,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String reviewPleaseCheckIgnoredKeys(String keys) {
+    return 'Su IA también envió campos que PA MHAD no lee, así que no se completó nada con ellos: $keys. Si falta algo abajo, copie el mensaje de nuevo y pídale a su IA que use exactamente ese formato.';
+  }
+
+  @override
   String reviewCheckThis(String problem) {
     return 'Revise esto: $problem';
   }
@@ -2896,6 +2900,20 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get reviewDiagnosisCodeNotFound =>
       'Este código no está en la CIE-10-MC. Compárelo con su documento: corríjalo con el lápiz o borre el código y deje el nombre.';
+
+  @override
+  String reviewMedDoseOnList(String dose) {
+    return 'Ya está en su lista con $dose. Sin marcar, se conserva; marcado, se reemplaza por la dosis de arriba.';
+  }
+
+  @override
+  String get reviewMedDoseOnListNoDose =>
+      'Ya está en su lista sin dosis. Marcado, se le añade la dosis de arriba.';
+
+  @override
+  String reviewMedOtherFileDose(String doses) {
+    return 'Sus archivos indican dosis distintas: otro dice $doses. Corrija la dosis con el lápiz si hace falta y luego márquelo.';
+  }
 
   @override
   String get reviewAddToDirective => 'Añadir a su directiva';
@@ -2958,7 +2976,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Orientación para leer; no se guarda en su formulario. Indique su decisión en Procedimientos e investigación.';
 
   @override
-  String get reviewAutofillInformation => 'Información de autocompletado';
+  String get reviewAutofillInformation => 'Añadir a su directiva';
 
   @override
   String get reviewApplyAll => 'Aplicar todo';
@@ -5243,13 +5261,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
-      '♥ Derivación a especialista de apoyo entre pares / defensor';
+      'Derivación a especialista de apoyo entre pares / defensor';
 
   @override
-  String get facilitatorSomeoneIAlreadyTrust => '👥 Alguien en quien ya confío';
+  String get facilitatorSomeoneIAlreadyTrust => 'Alguien en quien ya confío';
 
   @override
-  String get facilitatorMyCareTeam => '🧠 Mi equipo de atención';
+  String get facilitatorMyCareTeam => 'Mi equipo de atención';
 
   @override
   String get facilitatorPreferToDoItYourself =>
@@ -7310,7 +7328,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dateInputHint => 'MM/DD/AAAA';
 
   @override
-  String get facilitatorGuidedTag => 'SESIÓN GUIADA · EN LA APLICACIÓN';
+  String get facilitatorGuidedTag => 'Sesión guiada · en la app';
 
   @override
   String get facilitatorGuidedTitle => 'Háblelo, una pregunta a la vez';

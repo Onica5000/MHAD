@@ -267,6 +267,12 @@ class DirectiveRepository {
   Future<int> insertMedication(MedicationEntriesCompanion entry) =>
       _db.into(_db.medicationEntries).insert(entry);
 
+  /// Change one medication's dose (autofill: the person chose the dose a
+  /// new document gives for a medication already on their list — audit O7).
+  Future<void> updateMedicationDosage(int id, String dosage) =>
+      (_db.update(_db.medicationEntries)..where((t) => t.id.equals(id)))
+          .write(MedicationEntriesCompanion(dosage: Value(dosage)));
+
   Future<void> replaceMedications(
     int directiveId,
     List<MedicationEntriesCompanion> newEntries,

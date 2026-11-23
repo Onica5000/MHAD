@@ -28,6 +28,15 @@ void main() {
           'Short answer: yes.');
     });
 
+    test('a lead-in ending with a colon carries on into its list', () {
+      // Learn's witnesses card ended on "…who are NOT:" (visual review).
+      expect(
+          plainExcerpt('You need two adult witnesses who are NOT:\n\n'
+              '• your agent\n• the person signing for you'),
+          'You need two adult witnesses who are NOT: your agent; '
+          'the person signing for you');
+    });
+
     test('cuts at a word boundary with an ellipsis, never mid-word', () {
       final long = List.filled(40, 'word').join(' ');
       final out = plainExcerpt(long, maxChars: 50);

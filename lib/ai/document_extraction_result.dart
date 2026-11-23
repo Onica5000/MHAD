@@ -272,9 +272,34 @@ class DocumentExtractionResult {
       List<ExtractedMedication> a, List<ExtractedMedication> b) {
     final merged = [...a];
     for (final med in b) {
-      final exists = merged.any(
+      final i = merged.indexWhere(
           (m) => m.name.toLowerCase() == med.name.toLowerCase());
-      if (!exists) merged.add(med);
+      if (i < 0) {
+        merged.add(med);
+        continue;
+      }
+      // The same medication from another file. A dose the first one lacked
+      // is taken; a DIFFERENT dose is kept as a choice for the review, not
+      // dropped (audit O7: lithium 2×300 mg in one file, 300 mg in another).
+      final first = merged[i];
+      final d = med.dosage.trim();
+      if (d.isEmpty) continue;
+      if (first.dosage.trim().isEmpty) {
+        merged[i] = ExtractedMedication(
+          name: first.name,
+          reason: first.reason.isNotEmpty ? first.reason : med.reason,
+          dosage: d,
+          otherDosages: first.otherDosages,
+        );
+      } else if (!sameMedicationDose(first.dosage, d) &&
+          !first.otherDosages.any((x) => sameMedicationDose(x, d))) {
+        merged[i] = ExtractedMedication(
+          name: first.name,
+          reason: first.reason,
+          dosage: first.dosage,
+          otherDosages: [...first.otherDosages, d],
+        );
+      }
     }
     return merged;
   }
@@ -560,6 +585,14 @@ class ExtractedCrisisPlan {
   }
 }
 
+/// Whether two written doses say the same thing (case and spacing ignored) —
+/// the ONE rule for "a different dose" (merge, review, apply; audit O7).
+bool sameMedicationDose(String a, String b) {
+  String norm(String s) =>
+      s.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
+  return norm(a) == norm(b);
+}
+
 class ExtractedMedication {
   final String name;
   final String reason;
@@ -567,10 +600,15 @@ class ExtractedMedication {
   // medications; empty for the preference categories.
   final String dosage;
 
+  /// Other doses another file gave for this same medication (merged
+  /// uploads) — shown as a choice in the review, never dropped (audit O7).
+  final List<String> otherDosages;
+
   const ExtractedMedication({
     required this.name,
     this.reason = '',
     this.dosage = '',
+    this.otherDosages = const [],
   });
 
   String get display {

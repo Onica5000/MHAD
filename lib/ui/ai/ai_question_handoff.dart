@@ -33,7 +33,9 @@ List<String> generalAiQuestions(AppLocalizations l) => [
 /// same system prompt the in-app chat sends, plus any page context).
 class AiQuestionHandoff extends ConsumerStatefulWidget {
   final List<String> suggestions;
-  final String Function() instructions;
+  /// Gets the typed question, so the prompt can carry only the Learn
+  /// sections relevant to it (free-plan size — LlmAssistant.systemPromptFor).
+  final String Function(String question) instructions;
 
   /// Identifies the context (e.g. `general`, `d12`, `learn`).
   final String ref;
@@ -130,7 +132,7 @@ class _AiQuestionHandoffState extends ConsumerState<AiQuestionHandoff> {
           disabledHint: context.l10n.aiHandoffNeedQuestion,
           buildTask: (_) => HandoffTask(
             kind: HandoffTaskKind.ask,
-            instructions: widget.instructions(),
+            instructions: widget.instructions(_question.text),
             ref: widget.ref,
             question: PiiStripper.strip(_question.text),
           ),

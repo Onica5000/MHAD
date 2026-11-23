@@ -151,8 +151,9 @@ Every fix has a test: `room_chips_test`, `other_instructions_test`, `records_dis
 
 **Status 2026-11-22** (branch `feat/getting-ready-2026-11-22`): O2 done (`check_notes` →
 "Please check" card), O3 done (review checks DOB / ZIP / phone), O4 done (day-first rule in
-the prompt), O6 done (prompt says the box is "Reason / notes"). Still open: O1, O5 (waits on
-TEST-PLAN part A), O7.
+the prompt), O6 done (prompt says the box is "Reason / notes"). O7 done 2026-11-23 (a different dose —
+from another file, or already on the list — is a choice in the review). Still open: O1, O5
+(both wait on the TEST-PLAN results).
 
 | # | Question | Recommendation |
 |---|---|---|

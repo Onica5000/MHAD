@@ -595,6 +595,17 @@ extension _PipelineApplyLogic on _PipelineScreenState {
             sortOrder: Value(medOrder++),
           ));
           applied++;
+        } else if (r.dosage.trim().isNotEmpty) {
+          // Already on the list: checked means "use this dose" — the review
+          // said so (and started it unchecked when the doses differ). It was
+          // silently skipped before (audit O7).
+          final onList = existingMeds.firstWhere((m) =>
+              m.entryType == MedicationEntryType.current.name &&
+              m.medicationName.toLowerCase() == r.name.toLowerCase());
+          if (!sameMedicationDose(onList.dosage, r.dosage)) {
+            await repo.updateMedicationDosage(onList.id, r.dosage.trim());
+            applied++;
+          }
         }
       }
     }

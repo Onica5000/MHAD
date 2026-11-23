@@ -155,7 +155,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionLabel(context.l10n.revocationHowRevocationWorksInPa),
+                  SectionLabel(context.l10n.revocationHowRevocationWorksInPa, padding: const EdgeInsets.only(bottom: 8)),
                   SizedBox(height: 12),
                   _RevokeStep(
                     n: 1,
@@ -182,7 +182,7 @@ class _RevocationScreenState extends ConsumerState<RevocationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionLabel(context.l10n.revocationStatutoryRevocationStatement),
+                  SectionLabel(context.l10n.revocationStatutoryRevocationStatement, padding: const EdgeInsets.only(bottom: 8)),
                   const SizedBox(height: 6),
                   Text(
                     context.l10n.revocationThisDeclarationMayBeRevoked,
