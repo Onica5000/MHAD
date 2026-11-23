@@ -28,6 +28,7 @@ class ClinicalDataValidator {
         rxNormMatch: bestMatch,
         reason: med.reason,
         dosage: med.dosage,
+        otherDosages: med.otherDosages,
         isValidated: bestMatch != null,
       ));
     }
@@ -216,6 +217,9 @@ class ValidatedMedication {
   final String reason;
   // Dosage — only populated for currently-taking meds (empty otherwise).
   final String dosage;
+
+  /// Doses other uploaded files gave for this medication (audit O7).
+  final List<String> otherDosages;
   final bool isValidated;
 
   const ValidatedMedication({
@@ -223,6 +227,7 @@ class ValidatedMedication {
     this.rxNormMatch,
     this.reason = '',
     this.dosage = '',
+    this.otherDosages = const [],
     required this.isValidated,
   });
 

@@ -1238,6 +1238,28 @@
   "@reviewDiagnosisCodeNotFound": {
     "description": "Autofill review: note under a diagnosis whose code the ICD-10-CM registry doesn't have."
   },
+  "reviewMedDoseOnList": "Already on your list as {dose}. Unchecked keeps that; checked replaces it with the dose above.",
+  "@reviewMedDoseOnList": {
+    "description": "Autofill review, under a current medication that is already on the person's list with a different dose (audit O7). {dose} = the dose on the list.",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewMedDoseOnListNoDose": "Already on your list without a dose. Checked adds the dose above to it.",
+  "@reviewMedDoseOnListNoDose": {
+    "description": "Autofill review, under a current medication already on the list with no dose."
+  },
+  "reviewMedOtherFileDose": "Your files give different doses — another one says {doses}. Correct the dose with the pencil if needed, then check it.",
+  "@reviewMedOtherFileDose": {
+    "description": "Autofill review, under a current medication whose dose differs between uploaded files (audit O7). {doses} = the other file(s)' dose(s).",
+    "placeholders": {
+      "doses": {
+        "type": "String"
+      }
+    }
+  },
   "reviewAddToDirective": "Add to your directive",
   "reviewPhotoDiscarded": "Your photo was sent to the AI to read, then discarded. Nothing is stored after you confirm or discard.",
   "reviewPhotoHandoff": "PA MHAD never received your file: you attached it in your own AI, and that service’s terms apply to it. Only the answer you pasted is used here.",

@@ -369,6 +369,10 @@ class _PipelineScreenState extends ConsumerState<PipelineScreen> {
   /// Review key → a plain note shown under the row (not a problem).
   Map<String, String> _reviewNotes = {};
 
+  /// The directive's medication lists as they were when the review opened
+  /// (a dose already on the list is shown as a choice — audit O7).
+  List<MedicationEntry> _existingMeds = const [];
+
   /// Reconciliation items (priority + conflict) for the review step, built from
   /// the extracted values vs the directive's current values.
   List<ReconItem> _reconItems = [];

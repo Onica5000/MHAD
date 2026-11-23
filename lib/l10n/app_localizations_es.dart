@@ -2898,6 +2898,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'Este código no está en la CIE-10-MC. Compárelo con su documento: corríjalo con el lápiz o borre el código y deje el nombre.';
 
   @override
+  String reviewMedDoseOnList(String dose) {
+    return 'Ya está en su lista con $dose. Sin marcar, se conserva; marcado, se reemplaza por la dosis de arriba.';
+  }
+
+  @override
+  String get reviewMedDoseOnListNoDose =>
+      'Ya está en su lista sin dosis. Marcado, se le añade la dosis de arriba.';
+
+  @override
+  String reviewMedOtherFileDose(String doses) {
+    return 'Sus archivos indican dosis distintas: otro dice $doses. Corrija la dosis con el lápiz si hace falta y luego márquelo.';
+  }
+
+  @override
   String get reviewAddToDirective => 'Añadir a su directiva';
 
   @override

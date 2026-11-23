@@ -2837,6 +2837,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'This code isn’t in ICD-10-CM. Check it against your document — fix it with the pencil, or delete the code and keep the name.';
 
   @override
+  String reviewMedDoseOnList(String dose) {
+    return 'Already on your list as $dose. Unchecked keeps that; checked replaces it with the dose above.';
+  }
+
+  @override
+  String get reviewMedDoseOnListNoDose =>
+      'Already on your list without a dose. Checked adds the dose above to it.';
+
+  @override
+  String reviewMedOtherFileDose(String doses) {
+    return 'Your files give different doses — another one says $doses. Correct the dose with the pencil if needed, then check it.';
+  }
+
+  @override
   String get reviewAddToDirective => 'Add to your directive';
 
   @override
