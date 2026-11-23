@@ -545,6 +545,13 @@ class _AiHandoffPanelState extends ConsumerState<AiHandoffPanel> {
                 ),
                 if (!_manual)
                   TextButton(
+                    // Flush with the buttons above (default padding indented
+                    // it ~11px); still a 44px tap target.
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(0, 44),
+                      alignment: AlignmentDirectional.centerStart,
+                    ),
                     onPressed: () => setState(() => _manual = true),
                     child: Text(l10n.aiHandoffPasteManual),
                   ),

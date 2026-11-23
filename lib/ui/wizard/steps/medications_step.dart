@@ -379,7 +379,7 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // Centred: the arrow sat at the top of a 3-line card.
             children: [
               Container(
                 width: 36,
@@ -397,10 +397,9 @@ class _MedicationsStepState extends ConsumerState<MedicationsStep>
                   children: [
                     Text(
                       context.l10n.medsStepSideEffectsTitle,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      // The same title style as the step's other cards.
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700, color: p.text),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -511,6 +510,9 @@ class _MedTable extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
+                  // Top: the info / remove icons sit by the NAME field they
+                  // act on (centred, they floated level with the notes).
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
@@ -583,7 +585,10 @@ class _MedTable extends StatelessWidget {
                       ),
                     ),
                     if (onMedlineInfo != null || onFdaInfo != null)
-                      ListenableBuilder(
+                      Padding(
+                        // Centres the 48px button on the name field.
+                        padding: const EdgeInsets.only(top: 4),
+                        child: ListenableBuilder(
                         listenable: rows[i].nameCtrl,
                         builder: (context, _) {
                           final name = rows[i].nameCtrl.text.trim();
@@ -610,15 +615,19 @@ class _MedTable extends StatelessWidget {
                           );
                         },
                       ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.remove_circle_outline),
-                      color: cs.error,
-                      tooltip: rows[i].nameCtrl.text.isEmpty
-                          ? context.l10n.medsStepRemoveDefault
-                          : context.l10n.removeNamed(
-                              rows[i].nameCtrl.text),
-                      onPressed: () => onRemove(i),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: IconButton(
+                        icon:
+                            const Icon(Icons.remove_circle_outline),
+                        color: cs.error,
+                        tooltip: rows[i].nameCtrl.text.isEmpty
+                            ? context.l10n.medsStepRemoveDefault
+                            : context.l10n.removeNamed(
+                                rows[i].nameCtrl.text),
+                        onPressed: () => onRemove(i),
+                      ),
                     ),
                   ],
                 ),

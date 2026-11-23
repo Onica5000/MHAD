@@ -66,6 +66,7 @@ class FacilitatorScreen extends StatelessWidget {
                 // Pathway 1 — Referral to PA partners
                 _PathwayCard(
                   primary: true,
+                  icon: Icons.favorite_outline,
                   tag: context.l10n.facilitatorPeerSpecialistAdvocateReferral,
                   title: context.l10n.facilitatorTalkToSomeoneTrained,
                   body: context
@@ -100,6 +101,7 @@ class FacilitatorScreen extends StatelessWidget {
                 // who you trust → choices). Two ways in: for yourself, or as the
                 // helper sitting with someone.
                 _PathwayCard(
+                  icon: Icons.auto_awesome_outlined,
                   tag: context.l10n.facilitatorGuidedTag,
                   title: context.l10n.facilitatorGuidedTitle,
                   body: (appData.ai.apiModeVisible ? context.l10n.facilitatorGuidedBody : context.l10n.facilitatorGuidedBodyHandoff),
@@ -138,6 +140,7 @@ class FacilitatorScreen extends StatelessWidget {
 
                 // Pathway 2 — print + review in person
                 _PathwayCard(
+                  icon: Icons.group_outlined,
                   tag: context.l10n.facilitatorSomeoneIAlreadyTrust,
                   title: context.l10n.facilitatorPrintReviewItTogether,
                   body: context.l10n.facilitatorPrintOrScreenShareYour,
@@ -151,6 +154,7 @@ class FacilitatorScreen extends StatelessWidget {
 
                 // Pathway 3 — email draft to clinician
                 _PathwayCard(
+                  icon: Icons.medical_services_outlined,
                   tag: context.l10n.facilitatorMyCareTeam,
                   title: context.l10n.facilitatorEmailADraftToMy,
                   body: context.l10n.facilitatorGenerateThePdfInExport,
@@ -177,6 +181,9 @@ class FacilitatorScreen extends StatelessWidget {
 
 class _PathwayCard extends StatelessWidget {
   final bool primary;
+
+  /// One Material icon beside the label — the same style on every card.
+  final IconData icon;
   final String tag;
   final String title;
   final String body;
@@ -186,6 +193,7 @@ class _PathwayCard extends StatelessWidget {
   final List<Widget> actions;
   const _PathwayCard({
     this.primary = false,
+    required this.icon,
     required this.tag,
     required this.title,
     required this.body,
@@ -203,13 +211,26 @@ class _PathwayCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              tag,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700, letterSpacing: MhadType.trackingLabel,
-                color: primary ? cs.onPrimary : cs.onSurfaceVariant,
-              ),
+            Row(
+              children: [
+                ExcludeSemantics(
+                  child: Icon(icon,
+                      size: 16,
+                      color: primary ? cs.onPrimary : cs.onSurfaceVariant),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    tag,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: MhadType.trackingLabel,
+                      color: primary ? cs.onPrimary : cs.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 6),
             Text(

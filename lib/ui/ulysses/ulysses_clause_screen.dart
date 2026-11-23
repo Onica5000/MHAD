@@ -206,7 +206,7 @@ class _BoundariesCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionLabel(context.l10n.ulyssesClauseBoundariesOnThisClause),
+            SectionLabel(context.l10n.ulyssesClauseBoundariesOnThisClause, padding: const EdgeInsets.only(bottom: 8)),
             const SizedBox(height: 8),
             for (final b in boundaries)
               Padding(

@@ -2025,9 +2025,9 @@
   "accessibilitySettingsMakeItReadable": "Make it readable.",
   "accessibilitySettingsLegalTextIsAlwaysRendered": "Legal text is always rendered in English to preserve PA Act 194 wording.",
   "facilitatorYouDonTHaveTo": "You don’t have to do this alone.",
-  "facilitatorPeerSpecialistAdvocateReferral": "♥ Peer specialist / advocate referral",
-  "facilitatorSomeoneIAlreadyTrust": "👥 Someone I already trust",
-  "facilitatorMyCareTeam": "🧠 My care team",
+  "facilitatorPeerSpecialistAdvocateReferral": "Peer specialist / advocate referral",
+  "facilitatorSomeoneIAlreadyTrust": "Someone I already trust",
+  "facilitatorMyCareTeam": "My care team",
   "facilitatorPreferToDoItYourself": "Prefer to do it yourself? That’s fine — keep going from where you left off.",
   "moreSheetCallOrText98824": "Call or text 988 · 24/7 support",
   "moreSheetUploadADocumentPhotoOr": "Upload a document, photo, or recording",
@@ -3619,7 +3619,7 @@
   "@dateInputHint": {
     "description": "Placeholder for typed dates. The field parses US month/day/year order, so translations must keep that order (e.g. es: MM/DD/AAAA)."
   },
-  "facilitatorGuidedTag": "GUIDED SESSION · IN THE APP",
+  "facilitatorGuidedTag": "Guided session · in the app",
   "facilitatorGuidedTitle": "Talk it through, one question at a time",
   "facilitatorGuidedBody": "The AI assistant asks the questions a trained facilitator would, in the same order: what a crisis looks like for you, what has helped or made things worse, who you trust, and then your choices. You fill in the form yourself — the assistant explains, it doesn’t decide.",
   "facilitatorGuidedMetaPace": "Stop any time",

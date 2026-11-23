@@ -5257,13 +5257,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
-      '♥ Derivación a especialista de apoyo entre pares / defensor';
+      'Derivación a especialista de apoyo entre pares / defensor';
 
   @override
-  String get facilitatorSomeoneIAlreadyTrust => '👥 Alguien en quien ya confío';
+  String get facilitatorSomeoneIAlreadyTrust => 'Alguien en quien ya confío';
 
   @override
-  String get facilitatorMyCareTeam => '🧠 Mi equipo de atención';
+  String get facilitatorMyCareTeam => 'Mi equipo de atención';
 
   @override
   String get facilitatorPreferToDoItYourself =>
@@ -7324,7 +7324,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dateInputHint => 'MM/DD/AAAA';
 
   @override
-  String get facilitatorGuidedTag => 'SESIÓN GUIADA · EN LA APLICACIÓN';
+  String get facilitatorGuidedTag => 'Sesión guiada · en la app';
 
   @override
   String get facilitatorGuidedTitle => 'Háblelo, una pregunta a la vez';

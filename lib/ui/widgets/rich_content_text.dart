@@ -127,12 +127,23 @@ String stripInlineMarkdown(String text) => text
 /// word boundary (never mid-word) with an ellipsis when longer than
 /// [maxChars].
 String plainExcerpt(String content, {int maxChars = 140}) {
-  final firstPara = content
+  final paras = content
       .replaceAll('\r\n', '\n')
       .split(RegExp(r'\n\s*\n'))
       .map((p) => p.trim())
-      .firstWhere((p) => p.isNotEmpty, orElse: () => '');
-  final plain = stripInlineMarkdown(firstPara);
+      .where((p) => p.isNotEmpty)
+      .toList();
+  var plain = paras.isEmpty ? '' : stripInlineMarkdown(paras.first);
+  // A lead-in ending with ":" introduces a list: carry on into the list's
+  // items instead of stopping on a dangling colon ("…who are NOT:").
+  if (plain.endsWith(':') && paras.length > 1) {
+    final items = paras[1]
+        .split('\n')
+        .map((l) => stripInlineMarkdown(
+            l.replaceFirst(RegExp(r'^\s*([•\-*]|\d+[.)])\s*'), '')).trim())
+        .where((l) => l.isNotEmpty);
+    if (items.isNotEmpty) plain = '$plain ${items.join('; ')}';
+  }
   if (plain.length <= maxChars) return plain;
   final cut = plain.substring(0, maxChars);
   final lastSpace = cut.lastIndexOf(' ');

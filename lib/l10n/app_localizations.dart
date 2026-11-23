@@ -8873,19 +8873,19 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorPeerSpecialistAdvocateReferral.
   ///
   /// In en, this message translates to:
-  /// **'♥ Peer specialist / advocate referral'**
+  /// **'Peer specialist / advocate referral'**
   String get facilitatorPeerSpecialistAdvocateReferral;
 
   /// No description provided for @facilitatorSomeoneIAlreadyTrust.
   ///
   /// In en, this message translates to:
-  /// **'👥 Someone I already trust'**
+  /// **'Someone I already trust'**
   String get facilitatorSomeoneIAlreadyTrust;
 
   /// No description provided for @facilitatorMyCareTeam.
   ///
   /// In en, this message translates to:
-  /// **'🧠 My care team'**
+  /// **'My care team'**
   String get facilitatorMyCareTeam;
 
   /// No description provided for @facilitatorPreferToDoItYourself.
@@ -11932,7 +11932,7 @@ abstract class AppLocalizations {
   /// No description provided for @facilitatorGuidedTag.
   ///
   /// In en, this message translates to:
-  /// **'GUIDED SESSION · IN THE APP'**
+  /// **'Guided session · in the app'**
   String get facilitatorGuidedTag;
 
   /// No description provided for @facilitatorGuidedTitle.

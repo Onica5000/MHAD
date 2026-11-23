@@ -242,7 +242,7 @@ class _TextSizeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionLabel(context.l10n.accessibilitySettingsTextSize),
+            SectionLabel(context.l10n.accessibilitySettingsTextSize, padding: const EdgeInsets.only(bottom: 8)),
             const SizedBox(height: 12),
             Text(
               context.l10n.accessibilitySettingsPeopleWhoITrustWill,

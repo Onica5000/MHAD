@@ -41,6 +41,10 @@ class WizardHelpButton extends StatelessWidget {
             foregroundColor: Theme.of(context).colorScheme.primary,
             textStyle: const TextStyle(fontSize: 14),
             visualDensity: VisualDensity.compact,
+            // Flush with the step's content edge (the default padding
+            // indented the icon ~11px); still a 44px tap target.
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(0, 44),
           ),
         ),
       ),

@@ -5154,13 +5154,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get facilitatorPeerSpecialistAdvocateReferral =>
-      '♥ Peer specialist / advocate referral';
+      'Peer specialist / advocate referral';
 
   @override
-  String get facilitatorSomeoneIAlreadyTrust => '👥 Someone I already trust';
+  String get facilitatorSomeoneIAlreadyTrust => 'Someone I already trust';
 
   @override
-  String get facilitatorMyCareTeam => '🧠 My care team';
+  String get facilitatorMyCareTeam => 'My care team';
 
   @override
   String get facilitatorPreferToDoItYourself =>
@@ -7194,7 +7194,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateInputHint => 'MM/DD/YYYY';
 
   @override
-  String get facilitatorGuidedTag => 'GUIDED SESSION · IN THE APP';
+  String get facilitatorGuidedTag => 'Guided session · in the app';
 
   @override
   String get facilitatorGuidedTitle =>
